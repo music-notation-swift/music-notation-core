@@ -8,10 +8,9 @@
 
 import Foundation
 
-public enum Repeat {
-	
-	case RepeatNone
-	case RepeatOnce
-	case RepeatInfinite
-	case RepeatMany
+public enum Repeat: Int {
+	case None
+	case Once
+	case Infinite
+	case Many
 }

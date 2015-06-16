@@ -11,4 +11,9 @@ public struct Tone {
 	public let accidental: Accidental
 	public let noteLetter: NoteLetter
 	// TODO: Octave
+	
+	public init(accidental: Accidental, noteLetter: NoteLetter) {
+		self.accidental = accidental
+		self.noteLetter = noteLetter
+	}
 }

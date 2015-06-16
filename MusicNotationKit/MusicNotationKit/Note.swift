@@ -6,9 +6,16 @@
 //  Copyright (c) 2015 Kyle Sherman. All rights reserved.
 //
 
-import Foundation
-
 public struct Note {
 	
+	public let noteDuration: NoteDuration
+	public let tone: Tone
 	
+	public var isRest: Bool
+	
+	public var dot: Dot = .None
+	public var accent: Accent = .None
+	public var isStaccato: Bool = false
+	public var dynamics: Dynamics = .None
+	public var striking: Striking = .None
 }

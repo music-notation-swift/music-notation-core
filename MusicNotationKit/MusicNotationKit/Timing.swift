@@ -10,7 +10,14 @@ import Foundation
 
 public struct Timing {
 	
-	private var topNumber: Int
-	private var bottomNumber: Int
-	private var tempo: Int
+	public let topNumber: Int
+	public let bottomNumber: Int
+	public let tempo: Int
+	
+	init(topNumber: Int, bottomNumber: Int, tempo: Int) {
+		// TODO: Check the validity of all these values
+		self.topNumber = topNumber
+		self.bottomNumber = bottomNumber
+		self.tempo = tempo
+	}
 }

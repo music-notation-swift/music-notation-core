@@ -14,6 +14,13 @@
 		270CC53F1B2C06B700CA1A56 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 270CC53B1B2C06B700CA1A56 /* Note.swift */; };
 		270CC5401B2C06B700CA1A56 /* Timing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 270CC53C1B2C06B700CA1A56 /* Timing.swift */; };
 		270CC5411B2C06B700CA1A56 /* Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = 270CC53D1B2C06B700CA1A56 /* Types.swift */; };
+		270F46A31B2FE4D900FDF4FF /* NoteHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 270F46A21B2FE4D900FDF4FF /* NoteHolder.swift */; };
+		270F46A51B2FE76E00FDF4FF /* Repeat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 270F46A41B2FE76E00FDF4FF /* Repeat.swift */; };
+		270F46A71B2FE8B400FDF4FF /* NoteGrouping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 270F46A61B2FE8B400FDF4FF /* NoteGrouping.swift */; };
+		270F46A91B2FE97F00FDF4FF /* Tie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 270F46A81B2FE97F00FDF4FF /* Tie.swift */; };
+		270F46AB1B2FEA3900FDF4FF /* Tone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 270F46AA1B2FEA3900FDF4FF /* Tone.swift */; };
+		270F46AD1B2FEC5500FDF4FF /* NoteCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 270F46AC1B2FEC5500FDF4FF /* NoteCollection.swift */; };
+		278D19501B2EB4E7004ACE99 /* Staff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 278D194F1B2EB4E7004ACE99 /* Staff.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,6 +44,13 @@
 		270CC53B1B2C06B700CA1A56 /* Note.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
 		270CC53C1B2C06B700CA1A56 /* Timing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Timing.swift; sourceTree = "<group>"; };
 		270CC53D1B2C06B700CA1A56 /* Types.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Types.swift; sourceTree = "<group>"; };
+		270F46A21B2FE4D900FDF4FF /* NoteHolder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoteHolder.swift; sourceTree = "<group>"; };
+		270F46A41B2FE76E00FDF4FF /* Repeat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Repeat.swift; sourceTree = "<group>"; };
+		270F46A61B2FE8B400FDF4FF /* NoteGrouping.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoteGrouping.swift; sourceTree = "<group>"; };
+		270F46A81B2FE97F00FDF4FF /* Tie.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tie.swift; sourceTree = "<group>"; };
+		270F46AA1B2FEA3900FDF4FF /* Tone.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tone.swift; sourceTree = "<group>"; };
+		270F46AC1B2FEC5500FDF4FF /* NoteCollection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoteCollection.swift; sourceTree = "<group>"; };
+		278D194F1B2EB4E7004ACE99 /* Staff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Staff.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,6 +98,13 @@
 				270CC53B1B2C06B700CA1A56 /* Note.swift */,
 				270CC53C1B2C06B700CA1A56 /* Timing.swift */,
 				270CC53D1B2C06B700CA1A56 /* Types.swift */,
+				278D194F1B2EB4E7004ACE99 /* Staff.swift */,
+				270F46A21B2FE4D900FDF4FF /* NoteHolder.swift */,
+				270F46A41B2FE76E00FDF4FF /* Repeat.swift */,
+				270F46A61B2FE8B400FDF4FF /* NoteGrouping.swift */,
+				270F46A81B2FE97F00FDF4FF /* Tie.swift */,
+				270F46AA1B2FEA3900FDF4FF /* Tone.swift */,
+				270F46AC1B2FEC5500FDF4FF /* NoteCollection.swift */,
 				270CC5211B2C06A200CA1A56 /* Supporting Files */,
 			);
 			path = MusicNotationKit;
@@ -222,10 +243,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				278D19501B2EB4E7004ACE99 /* Staff.swift in Sources */,
+				270F46A51B2FE76E00FDF4FF /* Repeat.swift in Sources */,
 				270CC53E1B2C06B700CA1A56 /* Measure.swift in Sources */,
+				270F46AB1B2FEA3900FDF4FF /* Tone.swift in Sources */,
 				270CC5401B2C06B700CA1A56 /* Timing.swift in Sources */,
 				270CC53F1B2C06B700CA1A56 /* Note.swift in Sources */,
 				270CC5411B2C06B700CA1A56 /* Types.swift in Sources */,
+				270F46A91B2FE97F00FDF4FF /* Tie.swift in Sources */,
+				270F46A71B2FE8B400FDF4FF /* NoteGrouping.swift in Sources */,
+				270F46AD1B2FEC5500FDF4FF /* NoteCollection.swift in Sources */,
+				270F46A31B2FE4D900FDF4FF /* NoteHolder.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

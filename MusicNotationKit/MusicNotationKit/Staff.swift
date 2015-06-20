@@ -11,5 +11,26 @@ public struct Staff {
 	public let clef: Clef
 	public let instrument: Instrument
 	
-	private(set) var measures: [NotesHolder]
+	private(set) var notesHolders: [NotesHolder] = []
+	
+	init(clef: Clef, instrument: Instrument) {
+		self.clef = clef
+		self.instrument = instrument
+	}
+	
+	public mutating func appendMeasure(measure: Measure) {
+		self.notesHolders.append(measure)
+	}
+	
+	public mutating func appendRepeat(repeatedMeasures: Repeat) {
+		self.notesHolders.append(repeatedMeasures)
+	}
+	
+	public mutating func insertMeasure(measure: Measure, atIndex index: Int) {
+		self.notesHolders.insert(measure, atIndex: index)
+	}
+	
+	public mutating func insertRepeat(repeatedMeasures: Repeat, atIndex index: Int) {
+		self.notesHolders.insert(repeatedMeasures, atIndex: index)
+	}
 }

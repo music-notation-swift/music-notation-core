@@ -11,9 +11,9 @@ import XCTest
 
 class NoteGroupingTests: XCTestCase {
 
-	let tone1 = Tone(accidental: .None, noteLetter: .A)
-	let tone2 = Tone(accidental: .Sharp, noteLetter: .B)
-	let tone3 = Tone(accidental: .Natural, noteLetter: .D)
+	let tone1 = Tone(accidental: .None, noteLetter: .A, octave: .Octave1)
+	let tone2 = Tone(accidental: .Sharp, noteLetter: .B, octave: .Octave1)
+	let tone3 = Tone(accidental: .Natural, noteLetter: .D, octave: .Octave1)
 	let quarterRest = Note(noteDuration: .Quarter)
 	let eighthRest = Note(noteDuration: .Eighth)
 	var quarterNote1: Note!

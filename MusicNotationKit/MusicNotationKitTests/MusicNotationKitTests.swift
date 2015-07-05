@@ -20,7 +20,8 @@ class MusicNotationKitTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
     }
-    
+	
+	/*
     func testExample() {
         // This is an example of a functional test case.
         XCTAssert(true, "Pass")
@@ -32,5 +33,5 @@ class MusicNotationKitTests: XCTestCase {
             // Put the code you want to measure the time of here.
         }
     }
-    
+    */
 }

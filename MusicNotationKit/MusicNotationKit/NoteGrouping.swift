@@ -99,7 +99,6 @@ public struct NoteGrouping {
 
 extension NoteGrouping: NoteCollection {
 	
-	
 }
 
 public enum NoteGroupingError: ErrorType {

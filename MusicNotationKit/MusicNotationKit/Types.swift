@@ -6,7 +6,19 @@
 //  Copyright (c) 2015 Kyle Sherman. All rights reserved.
 //
 
-// TODO: Octave
+public enum Octave {
+	case OctaveNegative1
+	case Octave0
+	case Octave1
+	case Octave2
+	case Octave3
+	case Octave4
+	case Octave5
+	case Octave6
+	case Octave7
+	case Octave8
+	case Octave9
+}
 
 public enum Striking {
 	case None

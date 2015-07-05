@@ -10,10 +10,11 @@ public struct Tone {
 	
 	public let accidental: Accidental
 	public let noteLetter: NoteLetter
-	// TODO: Octave
+	public let octave: Octave
 	
-	public init(accidental: Accidental, noteLetter: NoteLetter) {
+	public init(accidental: Accidental, noteLetter: NoteLetter, octave: Octave) {
 		self.accidental = accidental
 		self.noteLetter = noteLetter
+		self.octave = octave
 	}
 }

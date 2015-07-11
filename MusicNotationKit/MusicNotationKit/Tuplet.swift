@@ -1,5 +1,5 @@
 //
-//  NoteGrouping.swift
+//  Tuplet.swift
 //  MusicNotationKit
 //
 //  Created by Kyle Sherman on 6/15/15.
@@ -9,7 +9,7 @@
 /**
 Represents Duplet, Triplet, ... Septuplet
 */
-public struct NoteGrouping {
+public struct Tuplet {
 	
 	public var duration: NoteDuration {
 		return notes[0].noteDuration
@@ -20,11 +20,11 @@ public struct NoteGrouping {
 	public init(notes: [Note]) throws {
 		switch notes.count {
 		case 2...7:
-			try NoteGrouping.verifySameDuration(notes)
-			try NoteGrouping.verifyNoRests(notes)
+			try Tuplet.verifySameDuration(notes)
+			try Tuplet.verifyNoRests(notes)
 			self.notes = notes
 		default:
-			throw NoteGroupingError.InvalidNumberOfNotes
+			throw TupletError.InvalidNumberOfNotes
 		}
 	}
 	
@@ -39,17 +39,17 @@ public struct NoteGrouping {
 	public mutating func insertNote(note: Note, atIndex index: Int) throws {
 		try verifyNewNote(note)
 		if index > 6 {
-			throw NoteGroupingError.InvalidIndex
+			throw TupletError.InvalidIndex
 		}
 		notes.insert(note, atIndex: index)
 	}
 	
 	public mutating func removeNoteAtIndex(index: Int) throws {
 		guard notes.count <= 2 else {
-			throw NoteGroupingError.TooFewNotes
+			throw TupletError.TooFewNotes
 		}
 		guard index < notes.count else {
-			throw NoteGroupingError.InvalidIndex
+			throw TupletError.InvalidIndex
 		}
 		notes.removeAtIndex(index)
 	}
@@ -60,7 +60,7 @@ public struct NoteGrouping {
 	private func verifyNewNote(note: Note) throws {
 		try verifyNotFull()
 		try verifySameDuration(newNote: note)
-		try NoteGrouping.verifyNotRest(note)
+		try Tuplet.verifyNotRest(note)
 	}
 	
 	private static func verifyNoRests(notes: [Note]) throws {
@@ -71,7 +71,7 @@ public struct NoteGrouping {
 	
 	private static func verifyNotRest(note: Note) throws {
 		if note.isRest == true {
-			throw NoteGroupingError.RestsNotValid
+			throw TupletError.RestsNotValid
 		}
 	}
 	
@@ -80,28 +80,28 @@ public struct NoteGrouping {
 		// If set has more than 1 member, it is invalid
 		let durations: Set<NoteDuration> = Set(notes.map { $0.noteDuration })
 		if durations.count > 1 {
-			throw NoteGroupingError.NotSameDuration
+			throw TupletError.NotSameDuration
 		}
 	}
 	
 	private func verifySameDuration(newNote newNote: Note) throws {
 		if newNote.noteDuration != duration {
-			throw NoteGroupingError.NotSameDuration
+			throw TupletError.NotSameDuration
 		}
 	}
 	
 	private func verifyNotFull() throws {
 		if notes.count >= 7 {
-			throw NoteGroupingError.GroupingFull
+			throw TupletError.GroupingFull
 		}
 	}
 }
 
-extension NoteGrouping: NoteCollection {
+extension Tuplet: NoteCollection {
 	
 }
 
-public enum NoteGroupingError: ErrorType {
+public enum TupletError: ErrorType {
 	case InvalidNumberOfNotes
 	case GroupingFull
 	case TooFewNotes

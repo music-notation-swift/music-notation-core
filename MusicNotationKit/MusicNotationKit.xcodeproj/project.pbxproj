@@ -17,7 +17,6 @@
 		270F46A31B2FE4D900FDF4FF /* NoteHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 270F46A21B2FE4D900FDF4FF /* NoteHolder.swift */; };
 		270F46A51B2FE76E00FDF4FF /* Repeat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 270F46A41B2FE76E00FDF4FF /* Repeat.swift */; };
 		270F46A71B2FE8B400FDF4FF /* Tuplet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 270F46A61B2FE8B400FDF4FF /* Tuplet.swift */; };
-		270F46A91B2FE97F00FDF4FF /* Tie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 270F46A81B2FE97F00FDF4FF /* Tie.swift */; };
 		270F46AB1B2FEA3900FDF4FF /* Tone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 270F46AA1B2FEA3900FDF4FF /* Tone.swift */; };
 		270F46AD1B2FEC5500FDF4FF /* NoteCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 270F46AC1B2FEC5500FDF4FF /* NoteCollection.swift */; };
 		270F46AF1B2FF2A100FDF4FF /* NoteTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 270F46AE1B2FF2A100FDF4FF /* NoteTests.swift */; };
@@ -50,7 +49,6 @@
 		270F46A21B2FE4D900FDF4FF /* NoteHolder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoteHolder.swift; sourceTree = "<group>"; };
 		270F46A41B2FE76E00FDF4FF /* Repeat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Repeat.swift; sourceTree = "<group>"; };
 		270F46A61B2FE8B400FDF4FF /* Tuplet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tuplet.swift; sourceTree = "<group>"; };
-		270F46A81B2FE97F00FDF4FF /* Tie.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tie.swift; sourceTree = "<group>"; };
 		270F46AA1B2FEA3900FDF4FF /* Tone.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tone.swift; sourceTree = "<group>"; };
 		270F46AC1B2FEC5500FDF4FF /* NoteCollection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoteCollection.swift; sourceTree = "<group>"; };
 		270F46AE1B2FF2A100FDF4FF /* NoteTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoteTests.swift; sourceTree = "<group>"; };
@@ -108,7 +106,6 @@
 				270F46A21B2FE4D900FDF4FF /* NoteHolder.swift */,
 				270F46A41B2FE76E00FDF4FF /* Repeat.swift */,
 				270F46A61B2FE8B400FDF4FF /* Tuplet.swift */,
-				270F46A81B2FE97F00FDF4FF /* Tie.swift */,
 				270F46AA1B2FEA3900FDF4FF /* Tone.swift */,
 				270F46AC1B2FEC5500FDF4FF /* NoteCollection.swift */,
 				27A0AA451B52351400635541 /* Key.swift */,
@@ -260,7 +257,6 @@
 				27A0AA461B52351400635541 /* Key.swift in Sources */,
 				270CC53F1B2C06B700CA1A56 /* Note.swift in Sources */,
 				270CC5411B2C06B700CA1A56 /* Types.swift in Sources */,
-				270F46A91B2FE97F00FDF4FF /* Tie.swift in Sources */,
 				270F46A71B2FE8B400FDF4FF /* Tuplet.swift in Sources */,
 				270F46AD1B2FEC5500FDF4FF /* NoteCollection.swift in Sources */,
 				270F46A31B2FE4D900FDF4FF /* NoteHolder.swift in Sources */,

@@ -19,6 +19,8 @@ public struct Note {
 	public var dynamics: Dynamics?
 	public var striking: Striking?
 	
+	internal var tie: Tie?
+	
 	/**
 	Initialize a rest.
 	*/

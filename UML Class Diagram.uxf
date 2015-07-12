@@ -318,18 +318,6 @@ m2=   *</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
-    <type>com.baselet.element.old.element.Relation</type>
-    <coordinates>
-      <x>210</x>
-      <y>410</y>
-      <w>150</w>
-      <h>80</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;&lt;-&gt;
-m2= 2</panel_attributes>
-    <additional_attributes>30;60;130;60;130;30</additional_attributes>
-  </element>
-  <element>
     <id>UMLClass</id>
     <coordinates>
       <x>350</x>
@@ -410,17 +398,6 @@ m2=   *</panel_attributes>
     <additional_attributes>10.0;10.0;10.0;60.0</additional_attributes>
   </element>
   <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>210</x>
-      <y>350</y>
-      <w>170</w>
-      <h>130</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
-    <additional_attributes>150.0;10.0;150.0;40.0;10.0;40.0;10.0;110.0</additional_attributes>
-  </element>
-  <element>
     <id>UMLClass</id>
     <coordinates>
       <x>530</x>
@@ -490,5 +467,17 @@ KeyType</panel_attributes>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-&gt;
 m2=1</panel_attributes>
     <additional_attributes>30;80;30;30;90;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.baselet.element.old.element.Relation</type>
+    <coordinates>
+      <x>210</x>
+      <y>410</y>
+      <w>150</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-&gt;
+m2=1</panel_attributes>
+    <additional_attributes>130;30;130;60;30;60</additional_attributes>
   </element>
 </diagram>

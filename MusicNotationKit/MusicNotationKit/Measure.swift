@@ -28,6 +28,12 @@ public struct Measure {
 	public mutating func removeNoteAtIndex(index: Int) throws {
 		// TODO: Implement
 	}
+	
+	public func startTieAtIndex(index: Int) throws {
+		// TODO: Implement
+		// Fails if there is no next note
+		// Needs to use that index to index into tuplets if needed
+	}
 }
 
 extension Measure: NotesHolder {

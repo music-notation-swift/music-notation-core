@@ -13,11 +13,11 @@ public struct Note {
 	
 	public let isRest: Bool
 	
-	public var dot: Dot = .None
-	public var accent: Accent = .None
+	public var dot: Dot?
+	public var accent: Accent?
 	public var isStaccato: Bool = false
-	public var dynamics: Dynamics = .None
-	public var striking: Striking = .None
+	public var dynamics: Dynamics?
+	public var striking: Striking?
 	
 	/**
 	Initialize a rest.

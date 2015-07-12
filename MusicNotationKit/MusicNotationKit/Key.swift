@@ -10,9 +10,9 @@ public struct Key {
 	
 	private let type: KeyType
 	private let noteLetter: NoteLetter
-	private let accidental: Accidental
+	private let accidental: Accidental?
 	
-	public init(noteLetter: NoteLetter, accidental: Accidental = .None, type: KeyType = .Major) {
+	public init(noteLetter: NoteLetter, accidental: Accidental? = nil, type: KeyType = .Major) {
 		self.noteLetter = noteLetter
 		self.accidental = accidental
 		self.type = type

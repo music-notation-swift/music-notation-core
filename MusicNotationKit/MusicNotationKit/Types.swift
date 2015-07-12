@@ -21,7 +21,6 @@ public enum Octave {
 }
 
 public enum Striking {
-	case None
 	case Left, Up
 	case Right, Down
 }
@@ -37,7 +36,6 @@ public enum NoteDuration {
 }
 
 public enum Accidental {
-	case None
 	case Sharp
 	case DoubleSharp
 	case Flat
@@ -66,19 +64,16 @@ public enum Instrument {
 }
 
 public enum Dot {
-	case None
 	case Single
 	case Double
 }
 
 public enum Accent {
-	case None
 	case Standard
 	case Strong
 }
 
 public enum Dynamics {
-	case None
 	case Ppp
 	case Pp
 	case P

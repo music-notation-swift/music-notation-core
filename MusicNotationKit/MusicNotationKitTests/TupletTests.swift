@@ -157,14 +157,4 @@ class TupletTests: XCTestCase {
 			XCTFail("\(error)")
 		}
 	}
-	
-	// MARK: - Helpers
-	
-	private func expected(expected: TupletError, actual: ErrorType) {
-		XCTFail("Expected: \(expected), Actual: \(actual)")
-	}
-	
-	private func shouldFail() {
-		XCTFail("Should have failed, but didn't")
-	}
 }

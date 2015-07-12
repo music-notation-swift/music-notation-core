@@ -48,3 +48,7 @@ public struct Note {
 		self.tones = tones
 	}
 }
+
+extension Note: NoteCollection {
+	
+}

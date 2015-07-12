@@ -11,7 +11,6 @@ public struct Measure {
 	private(set) var timeSignature: TimeSignature
 	private(set) var key: Key
 	private(set) var notes: [NoteCollection] = []
-	private(set) var isComplete: Bool = false
 	
 	public mutating func addNote(note: Note) throws {
 		// TODO: Implement

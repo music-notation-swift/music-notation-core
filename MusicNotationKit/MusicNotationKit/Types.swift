@@ -145,3 +145,8 @@ public enum AugInterval: Int {
 	case Aug14
 	case Aug15
 }
+
+public enum KeyType {
+	case Major
+	case Minor
+}

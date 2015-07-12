@@ -48,12 +48,12 @@
   <element>
     <type>com.baselet.element.old.element.Class</type>
     <coordinates>
-      <x>80</x>
+      <x>70</x>
       <y>240</y>
-      <w>100</w>
+      <w>110</w>
       <h>30</h>
     </coordinates>
-    <panel_attributes>Timing</panel_attributes>
+    <panel_attributes>TimeSignature</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -419,5 +419,76 @@ m2=   *</panel_attributes>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;.</panel_attributes>
     <additional_attributes>150.0;10.0;150.0;40.0;10.0;40.0;10.0;110.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>530</x>
+      <y>150</y>
+      <w>100</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>Key</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.baselet.element.old.element.Relation</type>
+    <coordinates>
+      <x>520</x>
+      <y>150</y>
+      <w>50</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-&gt;
+m2=   1</panel_attributes>
+    <additional_attributes>30;30;30;90</additional_attributes>
+  </element>
+  <element>
+    <type>com.baselet.element.old.element.Relation</type>
+    <coordinates>
+      <x>400</x>
+      <y>130</y>
+      <w>150</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-&gt;
+m2=1</panel_attributes>
+    <additional_attributes>30;130;60;130;60;80;100;80;100;30;130;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.baselet.element.old.element.Relation</type>
+    <coordinates>
+      <x>600</x>
+      <y>140</y>
+      <w>180</w>
+      <h>390</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-&gt;
+m2=   1</panel_attributes>
+    <additional_attributes>30;30;160;30;160;370;90;370</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>650</x>
+      <y>90</y>
+      <w>100</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;enum&gt;&gt;
+KeyType</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.baselet.element.old.element.Relation</type>
+    <coordinates>
+      <x>560</x>
+      <y>70</y>
+      <w>110</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-&gt;
+m2=1</panel_attributes>
+    <additional_attributes>30;80;30;30;90;30</additional_attributes>
   </element>
 </diagram>

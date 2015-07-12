@@ -8,7 +8,8 @@
 
 public struct Measure {
 	
-	private(set) var timing: Timing
+	private(set) var timeSignature: TimeSignature
+	private(set) var key: Key
 	private(set) var notes: [NoteCollection] = []
 	private(set) var isComplete: Bool = false
 	

@@ -1,5 +1,5 @@
 //
-//  Timing.swift
+//  TimeSignature.swift
 //  MusicNotation
 //
 //  Created by Kyle Sherman on 6/12/15.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct Timing {
+public struct TimeSignature {
 	
 	public let topNumber: Int
 	public let bottomNumber: Int

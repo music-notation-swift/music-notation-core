@@ -51,4 +51,5 @@ public struct Note {
 
 extension Note: NoteCollection {
 	
+	internal var noteCount: Int { return 1 }
 }

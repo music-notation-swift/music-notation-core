@@ -12,19 +12,41 @@ public struct Measure {
 	private(set) var key: Key
 	private(set) var notes: [NoteCollection] = []
 	
-	public mutating func addNote(note: Note) throws {
-		// TODO: Implement
+	public init(timeSignature: TimeSignature, key: Key) {
+		self.init(timeSignature: timeSignature, key: key, notes: [])
+	}
+	
+	internal init(timeSignature: TimeSignature, key: Key, notes: [NoteCollection]) {
+		self.timeSignature = timeSignature
+		self.key = key
+		self.notes = notes
+	}
+	
+	public mutating func addNote(note: Note) {
+		notes.append(note)
 	}
 	
 	public mutating func insertNote(note: Note, atIndex index: Int) throws {
 		// TODO: Implement
 	}
 	
-	public mutating func removeNote(note: Note) throws {
+	public mutating func removeNoteAtIndex(index: Int) throws {
 		// TODO: Implement
 	}
 	
-	public mutating func removeNoteAtIndex(index: Int) throws {
+	public mutating func removeNotesInRange(indexRange: Range<Int>) throws {
+		// TODO: Implement
+	}
+	
+	public mutating func addTuplet(tuplet: Tuplet) {
+		// TODO: Implement
+	}
+	
+	public mutating func insertTuplet(tuplet: Tuplet, atIndex index: Int) throws {
+		// TODO: Implement
+	}
+	
+	public mutating func removeTuplet(tuplet: Tuplet, atIndex index: Int) throws {
 		// TODO: Implement
 	}
 	
@@ -33,8 +55,19 @@ public struct Measure {
 		// Fails if there is no next note
 		// Needs to use that index to index into tuplets if needed
 	}
+	
+	internal func noteCollectionIndexFromNoteIndex(index: Int) -> Int? {
+		// TODO: Implement
+		// Gets the index of the given element in the notes array by translating the index of the
+		// single note within the NoteCollection array.
+		return nil
+	}
 }
 
 extension Measure: NotesHolder {
+	
+}
+
+public enum MeasureError: ErrorType {
 	
 }

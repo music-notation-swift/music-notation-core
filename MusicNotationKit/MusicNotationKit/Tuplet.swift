@@ -99,6 +99,7 @@ public struct Tuplet {
 
 extension Tuplet: NoteCollection {
 	
+	internal var noteCount: Int { return notes.count }
 }
 
 public enum TupletError: ErrorType {

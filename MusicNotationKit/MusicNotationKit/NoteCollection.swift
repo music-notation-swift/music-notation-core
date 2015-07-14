@@ -8,5 +8,5 @@
 
 internal protocol NoteCollection {
 	
-	
+	var noteCount: Int { get }
 }

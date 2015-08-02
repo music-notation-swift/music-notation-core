@@ -62,11 +62,36 @@ public struct Measure {
 	}
 	
 	internal func noteCollectionIndexFromNoteIndex(index: Int) -> (noteIndex: Int, tupletIndex: Int?)? {
-		// TODO: Implement
 		// Gets the index of the given element in the notes array by translating the index of the
 		// single note within the NoteCollection array.
-		
-		return nil
+		guard index >= 0 && notes.count > 0 else { return nil }
+		// Expand notes into indexes. Value is -1 if it is note, and >= 0 if it is tuplet
+		// with the value equaling the index into the tuplet
+		// AND
+		// Mirror noteIndexes array with array of indexes into the note array of the measure
+		// TODO: Move this into a method that is called on didSet of notes??
+		var singleNoteIndexes: [Int] = []
+		var notesIndexes: [Int] = []
+		for (i, noteCollection) in notes.enumerate() {
+			switch noteCollection.noteCount {
+			case 1:
+				singleNoteIndexes.append(-1)
+				notesIndexes.append(i)
+			case let count:
+				for j in 0..<count {
+					singleNoteIndexes.append(j)
+					notesIndexes.append(i)
+				}
+			}
+		}
+		guard index < singleNoteIndexes.count else { return nil }
+		let tupletIndex: Int?
+		if singleNoteIndexes[index] == -1 {
+			tupletIndex = nil
+		} else {
+			tupletIndex = singleNoteIndexes[index]
+		}
+		return (notesIndexes[index], tupletIndex)
 	}
 }
 

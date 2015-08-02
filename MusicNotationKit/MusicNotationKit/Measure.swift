@@ -56,10 +56,11 @@ public struct Measure {
 		// Needs to use that index to index into tuplets if needed
 	}
 	
-	internal func noteCollectionIndexFromNoteIndex(index: Int) -> Int? {
+	internal func noteCollectionIndexFromNoteIndex(index: Int) -> (noteIndex: Int, tupletIndex: Int?)? {
 		// TODO: Implement
 		// Gets the index of the given element in the notes array by translating the index of the
 		// single note within the NoteCollection array.
+		
 		return nil
 	}
 }

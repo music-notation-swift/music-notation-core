@@ -56,6 +56,11 @@ public struct Measure {
 		// Needs to use that index to index into tuplets if needed
 	}
 	
+	public func removeTieAtIndex(index: Int) throws {
+		// TODO: Implement
+		// Fails if there the tie does not begin at the given index
+	}
+	
 	internal func noteCollectionIndexFromNoteIndex(index: Int) -> (noteIndex: Int, tupletIndex: Int?)? {
 		// TODO: Implement
 		// Gets the index of the given element in the notes array by translating the index of the
@@ -70,6 +75,6 @@ extension Measure: NotesHolder {
 }
 
 public enum MeasureError: ErrorType {
-	
 	case NoNextNoteToTie
+	case NoTieBeginsAtIndex
 }

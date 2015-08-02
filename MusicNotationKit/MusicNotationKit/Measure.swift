@@ -70,4 +70,5 @@ extension Measure: NotesHolder {
 
 public enum MeasureError: ErrorType {
 	
+	case NoNextNoteToTie
 }

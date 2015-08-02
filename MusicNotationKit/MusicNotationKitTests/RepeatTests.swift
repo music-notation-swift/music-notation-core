@@ -23,21 +23,21 @@ class RepeatTests: XCTestCase {
 	func testInitSuccess() {
 		// 1 Measure given
 		do {
-			try Repeat(measures: [measure1])
+			let _ = try Repeat(measures: [measure1])
 		} catch {
 			XCTFail("\(error)")
 		}
 		
 		// > 1 Measure given
 		do {
-			try Repeat(measures: [measure1, measure2])
+			let _ = try Repeat(measures: [measure1, measure2])
 		} catch {
 			XCTFail("\(error)")
 		}
 		
 		// Repeat count is 1
 		do {
-			try Repeat(measures: [measure1], repeatCount: 1)
+			let _ = try Repeat(measures: [measure1], repeatCount: 1)
 		} catch {
 			XCTFail("\(error)")
 		}
@@ -52,7 +52,7 @@ class RepeatTests: XCTestCase {
 		
 		// Repeat count is > 1
 		do {
-			try Repeat(measures: [measure1, measure2], repeatCount: 2)
+			let _ = try Repeat(measures: [measure1, measure2], repeatCount: 2)
 		} catch {
 			XCTFail("\(error)")
 		}
@@ -61,14 +61,14 @@ class RepeatTests: XCTestCase {
 	func testInitFailure() {
 		// 0 Measures given
 		do {
-			try Repeat(measures: [])
+			let _ = try Repeat(measures: [])
 		} catch RepeatError.NoMeasures {
 		} catch {
 			expected(RepeatError.NoMeasures, actual: error)
 		}
 		
 		do {
-			try Repeat(measures: [], repeatCount: 1)
+			let _ = try Repeat(measures: [], repeatCount: 1)
 		} catch RepeatError.NoMeasures {
 		} catch {
 			expected(RepeatError.NoMeasures, actual: error)
@@ -76,7 +76,7 @@ class RepeatTests: XCTestCase {
 		
 		// Repeat count is negative
 		do {
-			try Repeat(measures: [measure1], repeatCount: -1)
+			let _ = try Repeat(measures: [measure1], repeatCount: -1)
 		} catch RepeatError.InvalidRepeatCount {
 		} catch {
 			expected(RepeatError.InvalidRepeatCount, actual: error)
@@ -84,7 +84,7 @@ class RepeatTests: XCTestCase {
 		
 		// Repeat count is 0
 		do {
-			try Repeat(measures: [measure1, measure2], repeatCount: 0)
+			let _ = try Repeat(measures: [measure1, measure2], repeatCount: 0)
 		} catch RepeatError.InvalidRepeatCount {
 		} catch {
 			expected(RepeatError.InvalidRepeatCount, actual: error)
@@ -92,7 +92,7 @@ class RepeatTests: XCTestCase {
 		
 		// 0 measures and invalid repeat count
 		do {
-			try Repeat(measures: [], repeatCount: 0)
+			let _ = try Repeat(measures: [], repeatCount: 0)
 		} catch RepeatError.NoMeasures {
 		} catch {
 			expected(RepeatError.NoMeasures, actual: error)

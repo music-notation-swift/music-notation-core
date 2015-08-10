@@ -144,6 +144,7 @@ public enum AugInterval: Int {
 public enum Tie {
 	case Begin
 	case End
+	case BeginAndEnd
 }
 
 public enum KeyType {

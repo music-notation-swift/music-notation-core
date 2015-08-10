@@ -42,14 +42,85 @@ class MeasureTests: XCTestCase {
 		} catch {
 			expected(MeasureError.NoNextNoteToTie, actual: error)
 		}
+		let note = measure.notes[0] as! Note
+		// TODO: XCTAssertNil was not working for some reason
+		XCTAssert(note.tie == nil)
 		
 		// Succeed if there is a next note
 		measure.addNote(Note(noteDuration: .Eighth,
 			tone: Tone(noteLetter: .C, octave: .Octave1)))
 		do {
 			try measure.startTieAtIndex(0)
+			let note1 = measure.notes[0] as! Note
+			let note2 = measure.notes[1] as! Note
+			// TODO: XCTAssertNotNil was not working for some reason
+			XCTAssert(note1.tie != nil)
+			XCTAssert(note1.tie == .Begin)
+			XCTAssert(note2.tie != nil)
+			XCTAssert(note2.tie == .End)
 		} catch {
-			XCTFail()
+			XCTFail(String(error))
+		}
+		
+		// Fail if the note is already the beginning of a tie
+		do {
+			try measure.startTieAtIndex(0)
+			shouldFail()
+		} catch MeasureError.NoteAlreadyTied {
+		} catch {
+			expected(MeasureError.NoteAlreadyTied, actual: error)
+		}
+		
+		// Succeed if there is a next note and it's in a tuplet
+		measure.addNote(Note(noteDuration: .Eighth,
+			tone: Tone(noteLetter: .C, octave: .Octave1)))
+		let notes = [
+			Note(noteDuration: .Eighth, tone: Tone(noteLetter: .A, octave: .Octave1)),
+			Note(noteDuration: .Eighth, tone: Tone(noteLetter: .A, octave: .Octave1)),
+			Note(noteDuration: .Eighth, tone: Tone(noteLetter: .A, octave: .Octave1))
+		]
+		do {
+			let tuplet = try Tuplet(notes: notes)
+			measure.addTuplet(tuplet)
+			try measure.startTieAtIndex(2)
+			let note1 = measure.notes[2] as! Note
+			let tuplet2 = measure.notes[3] as! Tuplet
+			XCTAssert(note1.tie == .Begin)
+			XCTAssert(tuplet2.notes[0].tie == .End)
+		} catch {
+			XCTFail(String(error))
+		}
+		
+		// Fail if it is the last note of a tuplet and there is no next note
+		do {
+			try measure.startTieAtIndex(5)
+			shouldFail()
+		} catch MeasureError.NoNextNoteToTie {
+		} catch {
+			expected(MeasureError.NoNextNoteToTie, actual: error)
+		}
+		
+		// Succeed if starting a tie on the note of an ending tie
+		do {
+			try measure.startTieAtIndex(3)
+			let tuplet = measure.notes[3] as! Tuplet
+			XCTAssert(tuplet.notes[0].tie == .BeginAndEnd)
+			XCTAssert(tuplet.notes[1].tie == .End)
+		} catch {
+			XCTFail(String(error))
+		}
+		
+		// Succeed if it starts on the end of a tuplet and there is a next note
+		measure.addNote(Note(noteDuration: .Sixteenth,
+			tone: Tone(noteLetter: .A, octave: .Octave1)))
+		do {
+			try measure.startTieAtIndex(5)
+			let tuplet = measure.notes[3] as! Tuplet
+			let note1 = measure.notes[4] as! Note
+			XCTAssert(tuplet.notes[2].tie == .Begin)
+			XCTAssert(note1.tie == .End)
+		} catch {
+			XCTFail(String(error))
 		}
 	}
 	
@@ -58,11 +129,12 @@ class MeasureTests: XCTestCase {
 		measure.addNote(Note(noteDuration: .Quarter))
 		measure.addNote(Note(noteDuration: .Quarter))
 		measure.addNote(Note(noteDuration: .Quarter))
-		if let index = measure.noteCollectionIndexFromNoteIndex(2) {
+		do {
+			let index = try measure.noteCollectionIndexFromNoteIndex(2)
 			XCTAssertEqual(index.noteIndex, 2)
 			XCTAssertNil(index.tupletIndex)
-		} else {
-			XCTFail()
+		} catch {
+			XCTFail(String(error))
 		}
 		
 		// Re-initialize measure so that it's empty
@@ -80,20 +152,18 @@ class MeasureTests: XCTestCase {
 			let note3 = Note(noteDuration: .Eighth,
 				tone: Tone(noteLetter: .C, octave: .Octave1))
 			try measure.addTuplet(Tuplet(notes: [note1, note2, note3]))
-			if let index = measure.noteCollectionIndexFromNoteIndex(2) {
-				XCTAssertEqual(index.noteIndex, 1)
-				XCTAssertNotNil(index.tupletIndex)
-				XCTAssertEqual(index.tupletIndex!, 1)
-			}
+			let index = try measure.noteCollectionIndexFromNoteIndex(2)
+			XCTAssertEqual(index.noteIndex, 1)
+			XCTAssertNotNil(index.tupletIndex)
+			XCTAssertEqual(index.tupletIndex!, 1)
 			
 			// Properly address regular note coming after a tuplet
 			measure.addNote(Note(noteDuration: .Eighth))
-			if let index = measure.noteCollectionIndexFromNoteIndex(4) {
-				XCTAssertEqual(index.noteIndex, 4)
-				XCTAssertNil(index.tupletIndex)
-			}
+			let index2 = try measure.noteCollectionIndexFromNoteIndex(4)
+			XCTAssertEqual(index2.noteIndex, 2)
+			XCTAssertNil(index2.tupletIndex)
 		} catch {
-			XCTFail()
+			XCTFail(String(error))
 		}
 	}
 }

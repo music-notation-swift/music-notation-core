@@ -39,7 +39,7 @@ public struct Measure {
 	}
 	
 	public mutating func addTuplet(tuplet: Tuplet) {
-		// TODO: Implement
+		notes.append(tuplet)
 	}
 	
 	public mutating func insertTuplet(tuplet: Tuplet, atIndex index: Int) throws {
@@ -61,10 +61,10 @@ public struct Measure {
 		// Fails if there the tie does not begin at the given index
 	}
 	
-	internal func noteCollectionIndexFromNoteIndex(index: Int) -> (noteIndex: Int, tupletIndex: Int?)? {
+	internal func noteCollectionIndexFromNoteIndex(index: Int) throws -> (noteIndex: Int, tupletIndex: Int?) {
 		// Gets the index of the given element in the notes array by translating the index of the
 		// single note within the NoteCollection array.
-		guard index >= 0 && notes.count > 0 else { return nil }
+		guard index >= 0 && notes.count > 0 else { throw MeasureError.NoteIndexOutOfRange }
 		// Expand notes and tuplets into indexes
 		// TODO: Move this into a method that is called on didSet of notes??
 		var noteIndexes: [(Int, Int?)] = []
@@ -78,7 +78,7 @@ public struct Measure {
 				}
 			}
 		}
-		guard index < noteIndexes.count else { return nil }
+		guard index < noteIndexes.count else { throw MeasureError.NoteIndexOutOfRange }
 		return noteIndexes[index]
 	}
 }
@@ -90,4 +90,6 @@ extension Measure: NotesHolder {
 public enum MeasureError: ErrorType {
 	case NoNextNoteToTie
 	case NoTieBeginsAtIndex
+	case NoteIndexOutOfRange
+	case NoteAlreadyTied
 }

@@ -50,10 +50,51 @@ public struct Measure {
 		// TODO: Implement
 	}
 	
-	public func startTieAtIndex(index: Int) throws {
+	public mutating func startTieAtIndex(index: Int) throws {
 		// TODO: Implement
 		// Fails if there is no next note
 		// Needs to use that index to index into tuplets if needed
+		let (firstNoteIndex, firstTupletIndex) = try noteCollectionIndexFromNoteIndex(index)
+		let (secondNoteIndex, secondTupletIndex) = try noteCollectionIndexFromNoteIndex(index + 1)
+		var firstNote: Note
+		var secondNote: Note
+		switch (firstTupletIndex, secondTupletIndex) {
+		case (nil, nil):
+			firstNote = notes[firstNoteIndex] as! Note
+			secondNote = notes[secondNoteIndex] as! Note
+			try firstNote.modifyTie(.Begin)
+			try secondNote.modifyTie(.End)
+			notes[firstNoteIndex] = firstNote
+			notes[secondNoteIndex] = secondNote
+		case let (nil, secondTupletIndex?):
+			firstNote = notes[firstNoteIndex] as! Note
+			var tuplet = notes[secondNoteIndex] as! Tuplet
+			secondNote = tuplet.notes[secondTupletIndex]
+			try firstNote.modifyTie(.Begin)
+			try secondNote.modifyTie(.End)
+			notes[firstNoteIndex] = firstNote
+			try tuplet.replaceNoteAtIndex(secondTupletIndex, withNote: secondNote)
+			notes[secondNoteIndex] = tuplet
+		case let (firstTupletIndex?, nil):
+			var tuplet = notes[firstNoteIndex] as! Tuplet
+			firstNote = tuplet.notes[firstTupletIndex]
+			secondNote = notes[secondNoteIndex] as! Note
+			try firstNote.modifyTie(.Begin)
+			try tuplet.replaceNoteAtIndex(firstTupletIndex, withNote: firstNote)
+			try secondNote.modifyTie(.End)
+			notes[secondNoteIndex] = secondNote
+		case let (firstTupletIndex?, secondTupletIndex?):
+			var firstTuplet = notes[firstNoteIndex] as! Tuplet
+			firstNote = firstTuplet.notes[firstTupletIndex]
+			var secondTuplet = notes[secondNoteIndex] as! Tuplet
+			secondNote = secondTuplet.notes[secondTupletIndex]
+			try firstNote.modifyTie(.Begin)
+			try secondNote.modifyTie(.End)
+			try firstTuplet.replaceNoteAtIndex(firstTupletIndex, withNote: firstNote)
+			try secondTuplet.replaceNoteAtIndex(secondTupletIndex, withNote: secondNote)
+			notes[firstNoteIndex] = firstTuplet
+			notes[secondNoteIndex] = secondTuplet
+		}
 	}
 	
 	public func removeTieAtIndex(index: Int) throws {

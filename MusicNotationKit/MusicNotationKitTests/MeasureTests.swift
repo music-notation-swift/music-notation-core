@@ -124,6 +124,10 @@ class MeasureTests: XCTestCase {
 		}
 	}
 	
+	func testRemoveTieAtIndex() {
+		XCTFail("Not implemented")
+	}
+	
 	func testNoteCollectionIndexFromNoteIndex() {
 		// NoteIndex should be the same if there are no tuplets
 		measure.addNote(Note(noteDuration: .Quarter))

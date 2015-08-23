@@ -47,9 +47,27 @@ public struct Note {
 		self.noteDuration = noteDuration
 		self.tones = tones
 	}
+	
+	public mutating func modifyTie(tie: Tie) throws {
+		// Nothing to do if it's the same value
+		guard self.tie != tie else { return }
+		
+		switch (self.tie, tie) {
+		case (.Begin?, .End), (.End?, .Begin):
+			self.tie = .BeginAndEnd
+		case (nil, let value):
+			self.tie = value
+		default:
+			throw NoteError.InvalidTieState
+		}
+	}
 }
 
 extension Note: NoteCollection {
 	
 	internal var noteCount: Int { return 1 }
+}
+
+public enum NoteError: ErrorType {
+	case InvalidTieState
 }

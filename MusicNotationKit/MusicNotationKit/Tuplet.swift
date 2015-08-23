@@ -54,6 +54,11 @@ public struct Tuplet {
 		notes.removeAtIndex(index)
 	}
 	
+	public mutating func replaceNoteAtIndex(index: Int, withNote note: Note) throws {
+		try Tuplet.verifyNotRest(note)
+		notes[index] = note
+	}
+	
 	// MARK: Private
 	// MARK: Verification
 	

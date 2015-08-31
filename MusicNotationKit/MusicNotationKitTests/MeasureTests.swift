@@ -302,7 +302,7 @@ class MeasureTests: XCTestCase {
 		}
 	}
 	
-	private func setTieAtIndex(index: Int) {
+	private func setTieAtIndex(index: Int, functionName: String = __FUNCTION__, lineNum: Int = __LINE__) {
 		do {
 			try measure.startTieAtIndex(index)
 			let (noteIndex1, tupletIndex1) = try measure.noteCollectionIndexFromNoteIndex(index)
@@ -311,8 +311,10 @@ class MeasureTests: XCTestCase {
 				tupletIndex: tupletIndex1)
 			let secondNote = noteFromMeasure(measure, noteIndex: noteIndex2,
 				tupletIndex: tupletIndex2)
-			XCTAssert(firstNote.tie == .Begin)
-			XCTAssert(secondNote.tie == .End)
+			XCTAssert(firstNote.tie == .Begin || firstNote.tie == .BeginAndEnd,
+				"\(functionName): \(lineNum)")
+			XCTAssert(secondNote.tie == .End || secondNote.tie == .BeginAndEnd,
+				"\(functionName): \(lineNum)")
 		} catch {
 			XCTFail(String(error))
 		}

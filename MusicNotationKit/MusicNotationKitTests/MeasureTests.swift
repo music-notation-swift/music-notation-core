@@ -23,13 +23,13 @@ class MeasureTests: XCTestCase {
 			key: Key(noteLetter: .C))
     }
 	
-	func testAddNote() {
+	func test_addNote() {
 		XCTAssertEqual(measure.notes.count, 0)
 		measure.addNote(Note(noteDuration: .Whole))
 		XCTAssertEqual(measure.notes.count, 1)
 	}
 	
-	func testStartTieAtIndex() {
+	func test_startTieAtIndex() {
 		XCTAssertEqual(measure.notes.count, 0)
 		measure.addNote(Note(noteDuration: .Quarter,
 			tone: Tone(noteLetter: .C, octave: .Octave1)))
@@ -62,13 +62,11 @@ class MeasureTests: XCTestCase {
 			XCTFail(String(error))
 		}
 		
-		// Fail if the note is already the beginning of a tie
+		// Succeed if the note is already the beginning of a tie
 		do {
 			try measure.startTieAtIndex(0)
-			shouldFail()
-		} catch MeasureError.NoteAlreadyTied {
 		} catch {
-			expected(MeasureError.NoteAlreadyTied, actual: error)
+			XCTFail(String(error))
 		}
 		
 		// Succeed if there is a next note and it's in a tuplet
@@ -124,11 +122,11 @@ class MeasureTests: XCTestCase {
 		}
 	}
 	
-	func testRemoveTieAtIndex() {
+	func test_removeTieAtIndex() {
 		XCTFail("Not implemented")
 	}
 	
-	func testNoteCollectionIndexFromNoteIndex() {
+	func test_noteCollectionIndexFromNoteIndex() {
 		// NoteIndex should be the same if there are no tuplets
 		measure.addNote(Note(noteDuration: .Quarter))
 		measure.addNote(Note(noteDuration: .Quarter))

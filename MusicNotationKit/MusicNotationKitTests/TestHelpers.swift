@@ -8,10 +8,10 @@
 
 import XCTest
 
-func expected<T>(expected: T, actual: ErrorType) {
-	XCTFail("Expected: \(expected), Actual: \(actual)")
+func expected<T>(expected: T, actual: ErrorType, _ functionName: String = __FUNCTION__, _ lineNum: Int = __LINE__) {
+	XCTFail("Expected: \(expected), Actual: \(actual) @ \(functionName): \(lineNum)")
 }
 
-func shouldFail() {
-	XCTFail("Should have failed, but didn't")
+func shouldFail(functionName: String = __FUNCTION__, _ lineNum: Int = __LINE__) {
+	XCTFail("Should have failed, but didn't @ \(functionName): \(lineNum)")
 }

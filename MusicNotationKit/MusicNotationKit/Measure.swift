@@ -55,7 +55,10 @@ public struct Measure {
 		// Fails if there is no next note
 		// Needs to use that index to index into tuplets if needed
 		let (firstNoteIndex, firstTupletIndex) = try noteCollectionIndexFromNoteIndex(index)
-		let (secondNoteIndex, secondTupletIndex) = try noteCollectionIndexFromNoteIndex(index + 1)
+		guard let (secondNoteIndex, secondTupletIndex) =
+			try? noteCollectionIndexFromNoteIndex(index + 1) else {
+			throw MeasureError.NoNextNoteToTie
+		}
 		var firstNote: Note
 		var secondNote: Note
 		switch (firstTupletIndex, secondTupletIndex) {
@@ -82,18 +85,30 @@ public struct Measure {
 			try firstNote.modifyTie(.Begin)
 			try tuplet.replaceNoteAtIndex(firstTupletIndex, withNote: firstNote)
 			try secondNote.modifyTie(.End)
+			notes[firstNoteIndex] = tuplet
 			notes[secondNoteIndex] = secondNote
 		case let (firstTupletIndex?, secondTupletIndex?):
-			var firstTuplet = notes[firstNoteIndex] as! Tuplet
-			firstNote = firstTuplet.notes[firstTupletIndex]
-			var secondTuplet = notes[secondNoteIndex] as! Tuplet
-			secondNote = secondTuplet.notes[secondTupletIndex]
-			try firstNote.modifyTie(.Begin)
-			try secondNote.modifyTie(.End)
-			try firstTuplet.replaceNoteAtIndex(firstTupletIndex, withNote: firstNote)
-			try secondTuplet.replaceNoteAtIndex(secondTupletIndex, withNote: secondNote)
-			notes[firstNoteIndex] = firstTuplet
-			notes[secondNoteIndex] = secondTuplet
+			if firstNoteIndex == secondNoteIndex {
+				var tuplet = notes[firstNoteIndex] as! Tuplet
+				firstNote = tuplet.notes[firstTupletIndex]
+				secondNote = tuplet.notes[secondTupletIndex]
+				try firstNote.modifyTie(.Begin)
+				try secondNote.modifyTie(.End)
+				try tuplet.replaceNoteAtIndex(firstTupletIndex, withNote: firstNote)
+				try tuplet.replaceNoteAtIndex(secondTupletIndex, withNote: secondNote)
+				notes[firstNoteIndex] = tuplet
+			} else {
+				var firstTuplet = notes[firstNoteIndex] as! Tuplet
+				firstNote = firstTuplet.notes[firstTupletIndex]
+				var secondTuplet = notes[secondNoteIndex] as! Tuplet
+				secondNote = secondTuplet.notes[secondTupletIndex]
+				try firstNote.modifyTie(.Begin)
+				try secondNote.modifyTie(.End)
+				try firstTuplet.replaceNoteAtIndex(firstTupletIndex, withNote: firstNote)
+				try secondTuplet.replaceNoteAtIndex(secondTupletIndex, withNote: secondNote)
+				notes[firstNoteIndex] = firstTuplet
+				notes[secondNoteIndex] = secondTuplet
+			}
 		}
 	}
 	
@@ -132,5 +147,4 @@ public enum MeasureError: ErrorType {
 	case NoNextNoteToTie
 	case NoTieBeginsAtIndex
 	case NoteIndexOutOfRange
-	case NoteAlreadyTied
 }

@@ -114,7 +114,7 @@ public struct Measure {
 	
 	public func removeTieAtIndex(index: Int) throws {
 		// TODO: Implement
-		// Fails if there the tie does not begin at the given index
+		// Fails if the tie does not begin at the given index
 	}
 	
 	internal func noteCollectionIndexFromNoteIndex(index: Int) throws -> (noteIndex: Int, tupletIndex: Int?) {

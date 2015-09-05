@@ -51,9 +51,7 @@ public struct Measure {
 	}
 	
 	public mutating func startTieAtIndex(index: Int) throws {
-		// TODO: Implement
 		// Fails if there is no next note
-		// Needs to use that index to index into tuplets if needed
 		let (firstNoteIndex, firstTupletIndex) = try noteCollectionIndexFromNoteIndex(index)
 		guard let (secondNoteIndex, secondTupletIndex) =
 			try? noteCollectionIndexFromNoteIndex(index + 1) else {
@@ -114,7 +112,6 @@ public struct Measure {
 	
 	public func removeTieAtIndex(index: Int) throws {
 		// TODO: Implement
-		// Fails if the tie does not begin at the given index
 	}
 	
 	internal func noteCollectionIndexFromNoteIndex(index: Int) throws -> (noteIndex: Int, tupletIndex: Int?) {
@@ -147,4 +144,5 @@ public enum MeasureError: ErrorType {
 	case NoNextNoteToTie
 	case NoTieBeginsAtIndex
 	case NoteIndexOutOfRange
+	case NoNextNote
 }

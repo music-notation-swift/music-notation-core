@@ -137,8 +137,6 @@ class MeasureTests: XCTestCase {
 		} catch {
 			XCTFail()
 		}
-		
-		// TODO: Succeeds if it starts at the end of a measure
 	}
 	
 	func test_removeTieAtIndex() {
@@ -169,6 +167,16 @@ class MeasureTests: XCTestCase {
 			expected(MeasureError.NoteIndexOutOfRange, actual: error)
 		}
 		
+		// Fails if it started on the end of the measure
+		do {
+			setTieAtIndex(3)
+			try measure.removeTieAtIndex(3)
+			shouldFail()
+		} catch MeasureError.NoNextNote {
+		} catch {
+			expected(MeasureError.NoNextNote, actual: error)
+		}
+		
 		// Succeeds if index is beginning of a tie
 		do {
 			setTieAtIndex(0)
@@ -181,13 +189,14 @@ class MeasureTests: XCTestCase {
 			XCTFail(String(error))
 		}
 		
-		// Succeeds if index is end of a tie
+		// Succeeds if index is end of a tie and beginning
 		do {
 			setTieAtIndex(0)
+			setTieAtIndex(1)
 			try measure.removeTieAtIndex(1)
-			let firstNote = noteFromMeasure(measure, noteIndex: 0, tupletIndex: nil)
-			let secondNote = noteFromMeasure(measure, noteIndex: 1, tupletIndex: nil)
-			XCTAssertNil(firstNote.tie)
+			let firstNote = noteFromMeasure(measure, noteIndex: 1, tupletIndex: nil)
+			let secondNote = noteFromMeasure(measure, noteIndex: 2, tupletIndex: nil)
+			XCTAssert(firstNote.tie == .End)
 			XCTAssertNil(secondNote.tie)
 		} catch {
 			XCTFail(String(error))
@@ -253,10 +262,6 @@ class MeasureTests: XCTestCase {
 		} catch {
 			XCTFail()
 		}
-		
-		// TODO: Succeeds if it started on the end of the measure
-		
-		// TODO: Succeeds if it ended on another measure
 	}
 	
 	func test_noteCollectionIndexFromNoteIndex() {

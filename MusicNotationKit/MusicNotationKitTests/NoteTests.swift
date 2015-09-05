@@ -23,8 +23,8 @@ class NoteTests: XCTestCase {
         super.tearDown()
     }
 	
-	func testModifyTie() {
-		XCTAssert(note.tie == nil)
+	func test_modifyTie() {
+		XCTAssertNil(note.tie)
 		// Success
 		do {
 			try note.modifyTie(.Begin)
@@ -51,7 +51,7 @@ class NoteTests: XCTestCase {
 			try note.modifyTie(.BeginAndEnd)
 			XCTAssert(note.tie == .BeginAndEnd)
 		} catch {
-			XCTFail()
+			XCTFail(String(error))
 		}
 		
 		// Failure
@@ -59,18 +59,114 @@ class NoteTests: XCTestCase {
 		do {
 			try note.modifyTie(.Begin)
 			shouldFail()
-		} catch NoteError.InvalidTieState {
+		} catch NoteError.InvalidRequestedTieState {
 		} catch {
-			expected(NoteError.InvalidTieState, actual: error)
+			expected(NoteError.InvalidRequestedTieState, actual: error)
 		}
 		
 		XCTAssert(note.tie == .BeginAndEnd)
 		do {
 			try note.modifyTie(.End)
 			shouldFail()
-		} catch NoteError.InvalidTieState {
+		} catch NoteError.InvalidRequestedTieState {
 		} catch {
-			expected(NoteError.InvalidTieState, actual: error)
+			expected(NoteError.InvalidRequestedTieState, actual: error)
+		}
+	}
+	
+	func test_removeTie() {
+		XCTAssertNil(note.tie)
+		// Succeed if .Begin
+		do {
+			note.tie = .Begin
+			try note.removeTie(.Begin)
+			XCTAssertNil(note.tie)
+		} catch {
+			XCTFail(String(error))
+		}
+		
+		// Succeed if .End
+		do {
+			note.tie = .End
+			try note.removeTie(.End)
+			XCTAssertNil(note.tie)
+		} catch {
+			XCTFail(String(error))
+		}
+		
+		// Succeed if .BeginAndEnd, request .Begin
+		do {
+			note.tie = .BeginAndEnd
+			try note.removeTie(.Begin)
+			XCTAssert(note.tie == .End)
+		} catch {
+			XCTFail(String(error))
+		}
+		
+		// Succeed if .BeginAndEnd, request .End
+		do {
+			note.tie = .BeginAndEnd
+			try note.removeTie(.End)
+			XCTAssert(note.tie == .Begin)
+		} catch {
+			XCTFail(String(error))
+		}
+		
+		// Succeed if nil already, request .Begin
+		do {
+			note.tie = nil
+			try note.removeTie(.Begin)
+			XCTAssertNil(note.tie)
+		} catch {
+			XCTFail(String(error))
+		}
+		
+		// Succeed if nil already, request .End
+		do {
+			note.tie = nil
+			try note.removeTie(.End)
+			XCTAssertNil(note.tie)
+		} catch {
+			XCTFail(String(error))
+		}
+		
+		// Succeed if nil already, request .Begin
+		do {
+			note.tie = nil
+			try note.removeTie(.Begin)
+			XCTAssertNil(note.tie)
+		} catch {
+			XCTFail(String(error))
+		}
+		
+		// Fail if request .BeginAndEnd
+		do {
+			note.tie = nil
+			try note.removeTie(.BeginAndEnd)
+			shouldFail()
+		} catch NoteError.InvalidRequestedTieState {
+		} catch {
+			expected(NoteError.InvalidRequestedTieState, actual: error)
+		}
+		
+		// Fail if request (Begin) doesn't match
+		do {
+			note.tie = .End
+			try note.removeTie(.Begin)
+			shouldFail()
+		} catch NoteError.InvalidRequestedTieState {
+		} catch {
+			expected(NoteError.InvalidRequestedTieState, actual: error)
+		}
+		
+		// Fail if request (End) doesn't match
+		do {
+			note.tie = .Begin
+			try note.removeTie(.End)
+			shouldFail()
+		} catch NoteError.InvalidRequestedTieState {
+		} catch {
+			expected(NoteError.InvalidRequestedTieState, actual: error)
 		}
 	}
 }

@@ -149,14 +149,6 @@ class MeasureTests: XCTestCase {
 			tone: Tone(noteLetter: .C, octave: .Octave1)))
 		measure.addNote(Note(noteDuration: .Eighth,
 			tone: Tone(noteLetter: .C, octave: .Octave1)))
-		// Fail if there is no tie at the given index
-		do {
-			try measure.removeNoteAtIndex(0)
-			shouldFail()
-		} catch MeasureError.NoTieBeginsAtIndex {
-		} catch {
-			expected(MeasureError.NoTieBeginsAtIndex, actual: error)
-		}
 		
 		// Fails if there is no note at the given index
 		do {
@@ -169,12 +161,24 @@ class MeasureTests: XCTestCase {
 		
 		// Fails if it started on the end of the measure
 		do {
-			setTieAtIndex(3)
+			// Can't set the tie, because it will fail
 			try measure.removeTieAtIndex(3)
 			shouldFail()
 		} catch MeasureError.NoNextNote {
 		} catch {
 			expected(MeasureError.NoNextNote, actual: error)
+		}
+		
+		// Succeeds if there is no tie at the given index
+		do {
+			try measure.removeTieAtIndex(0)
+			let firstNote = noteFromMeasure(measure, noteIndex: 0, tupletIndex: nil)
+			let secondNote = noteFromMeasure(measure, noteIndex: 1, tupletIndex: nil)
+			XCTAssertNil(firstNote.tie)
+			XCTAssertNil(secondNote.tie)
+		} catch MeasureError.NoTieBeginsAtIndex {
+		} catch {
+			expected(MeasureError.NoTieBeginsAtIndex, actual: error)
 		}
 		
 		// Succeeds if index is beginning of a tie
@@ -321,7 +325,7 @@ class MeasureTests: XCTestCase {
 			XCTAssert(secondNote.tie == .End || secondNote.tie == .BeginAndEnd,
 				"\(functionName): \(lineNum)")
 		} catch {
-			XCTFail(String(error))
+			XCTFail("\(error) in \(functionName): \(lineNum)")
 		}
 	}
 	

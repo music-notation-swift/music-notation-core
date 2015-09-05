@@ -58,7 +58,24 @@ public struct Note {
 		case (nil, let value):
 			self.tie = value
 		default:
-			throw NoteError.InvalidTieState
+			throw NoteError.InvalidRequestedTieState
+		}
+	}
+	
+	public mutating func removeTie(currentTie: Tie) throws {
+		switch (currentTie, tie) {
+		case (.BeginAndEnd, _):
+			throw NoteError.InvalidRequestedTieState
+		case (_, nil):
+			return
+		case (let request, let current?) where request == current:
+			tie = nil
+		case (.Begin, .BeginAndEnd?):
+			tie = .End
+		case (.End, .BeginAndEnd?):
+			tie = .Begin
+		default:
+			throw NoteError.InvalidRequestedTieState
 		}
 	}
 }
@@ -69,5 +86,5 @@ extension Note: NoteCollection {
 }
 
 public enum NoteError: ErrorType {
-	case InvalidTieState
+	case InvalidRequestedTieState
 }

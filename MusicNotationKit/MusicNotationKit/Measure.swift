@@ -51,28 +51,36 @@ public struct Measure {
 	}
 	
 	public mutating func startTieAtIndex(index: Int) throws {
-		// Fails if there is no next note
+		try modifyTieAtIndex(index, remove: false)
+	}
+	
+	public mutating func removeTieAtIndex(index: Int) throws {
+		try modifyTieAtIndex(index, remove: true)
+	}
+	
+	private mutating func modifyTieAtIndex(index: Int, remove: Bool) throws {
 		let (firstNoteIndex, firstTupletIndex) = try noteCollectionIndexFromNoteIndex(index)
 		guard let (secondNoteIndex, secondTupletIndex) =
 			try? noteCollectionIndexFromNoteIndex(index + 1) else {
-			throw MeasureError.NoNextNoteToTie
+				throw remove ? MeasureError.NoNextNote : MeasureError.NoNextNoteToTie
 		}
 		var firstNote: Note
 		var secondNote: Note
+		let modificationMethod = remove ? Note.removeTie : Note.modifyTie
 		switch (firstTupletIndex, secondTupletIndex) {
 		case (nil, nil):
 			firstNote = notes[firstNoteIndex] as! Note
 			secondNote = notes[secondNoteIndex] as! Note
-			try firstNote.modifyTie(.Begin)
-			try secondNote.modifyTie(.End)
+			try modificationMethod(&firstNote)(.Begin)
+			try modificationMethod(&secondNote)(.End)
 			notes[firstNoteIndex] = firstNote
 			notes[secondNoteIndex] = secondNote
 		case let (nil, secondTupletIndex?):
 			firstNote = notes[firstNoteIndex] as! Note
 			var tuplet = notes[secondNoteIndex] as! Tuplet
 			secondNote = tuplet.notes[secondTupletIndex]
-			try firstNote.modifyTie(.Begin)
-			try secondNote.modifyTie(.End)
+			try modificationMethod(&firstNote)(.Begin)
+			try modificationMethod(&secondNote)(.End)
 			notes[firstNoteIndex] = firstNote
 			try tuplet.replaceNoteAtIndex(secondTupletIndex, withNote: secondNote)
 			notes[secondNoteIndex] = tuplet
@@ -80,9 +88,9 @@ public struct Measure {
 			var tuplet = notes[firstNoteIndex] as! Tuplet
 			firstNote = tuplet.notes[firstTupletIndex]
 			secondNote = notes[secondNoteIndex] as! Note
-			try firstNote.modifyTie(.Begin)
+			try modificationMethod(&firstNote)(.Begin)
 			try tuplet.replaceNoteAtIndex(firstTupletIndex, withNote: firstNote)
-			try secondNote.modifyTie(.End)
+			try modificationMethod(&secondNote)(.End)
 			notes[firstNoteIndex] = tuplet
 			notes[secondNoteIndex] = secondNote
 		case let (firstTupletIndex?, secondTupletIndex?):
@@ -90,8 +98,8 @@ public struct Measure {
 				var tuplet = notes[firstNoteIndex] as! Tuplet
 				firstNote = tuplet.notes[firstTupletIndex]
 				secondNote = tuplet.notes[secondTupletIndex]
-				try firstNote.modifyTie(.Begin)
-				try secondNote.modifyTie(.End)
+				try modificationMethod(&firstNote)(.Begin)
+				try modificationMethod(&secondNote)(.End)
 				try tuplet.replaceNoteAtIndex(firstTupletIndex, withNote: firstNote)
 				try tuplet.replaceNoteAtIndex(secondTupletIndex, withNote: secondNote)
 				notes[firstNoteIndex] = tuplet
@@ -100,18 +108,14 @@ public struct Measure {
 				firstNote = firstTuplet.notes[firstTupletIndex]
 				var secondTuplet = notes[secondNoteIndex] as! Tuplet
 				secondNote = secondTuplet.notes[secondTupletIndex]
-				try firstNote.modifyTie(.Begin)
-				try secondNote.modifyTie(.End)
+				try modificationMethod(&firstNote)(.Begin)
+				try modificationMethod(&secondNote)(.End)
 				try firstTuplet.replaceNoteAtIndex(firstTupletIndex, withNote: firstNote)
 				try secondTuplet.replaceNoteAtIndex(secondTupletIndex, withNote: secondNote)
 				notes[firstNoteIndex] = firstTuplet
 				notes[secondNoteIndex] = secondTuplet
 			}
 		}
-	}
-	
-	public func removeTieAtIndex(index: Int) throws {
-		// TODO: Implement
 	}
 	
 	internal func noteCollectionIndexFromNoteIndex(index: Int) throws -> (noteIndex: Int, tupletIndex: Int?) {

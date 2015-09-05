@@ -13,7 +13,7 @@ public struct Staff {
 	
 	private(set) var notesHolders: [NotesHolder] = []
 	
-	init(clef: Clef, instrument: Instrument) {
+	public init(clef: Clef, instrument: Instrument) {
 		self.clef = clef
 		self.instrument = instrument
 	}
@@ -33,4 +33,19 @@ public struct Staff {
 	public mutating func insertRepeat(repeatedMeasures: Repeat, atIndex index: Int) {
 		self.notesHolders.insert(repeatedMeasures, atIndex: index)
 	}
+	
+	public mutating func startTieFromNote(noteIndex: Int, inMeasureAtIndex: Int) throws {
+		
+	}
+	
+	public mutating func removeTieFromNote(noteIndex: Int, inMeasureAtIndex: Int) throws {
+		
+	}
+}
+
+public enum StaffErrors: ErrorType {
+	case NoteIndexOutOfRange
+	case MeasureIndexOutOfRange
+	case NoNextNoteToTie
+	case NoNextNote
 }

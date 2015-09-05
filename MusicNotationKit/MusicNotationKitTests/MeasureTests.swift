@@ -43,8 +43,7 @@ class MeasureTests: XCTestCase {
 			expected(MeasureError.NoNextNoteToTie, actual: error)
 		}
 		let note = measure.notes[0] as! Note
-		// TODO: XCTAssertNil was not working for some reason
-		XCTAssert(note.tie == nil)
+		XCTAssertNil(note.tie)
 		
 		// Succeed if there is a next note
 		measure.addNote(Note(noteDuration: .Eighth,
@@ -53,10 +52,9 @@ class MeasureTests: XCTestCase {
 			try measure.startTieAtIndex(0)
 			let note1 = measure.notes[0] as! Note
 			let note2 = measure.notes[1] as! Note
-			// TODO: XCTAssertNotNil was not working for some reason
-			XCTAssert(note1.tie != nil)
+			XCTAssertNotNil(note1.tie)
 			XCTAssert(note1.tie == .Begin)
-			XCTAssert(note2.tie != nil)
+			XCTAssertNotNil(note2.tie)
 			XCTAssert(note2.tie == .End)
 		} catch {
 			XCTFail(String(error))

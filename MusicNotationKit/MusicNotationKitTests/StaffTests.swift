@@ -39,11 +39,15 @@ class StaffTests: XCTestCase {
 			topNumber: 4, bottomNumber: 4, tempo: 120),
 			key: Key(noteLetter: .C),
 			notes: [tuplet, note, note, note, note])
+		let repeat1 = try! MeasureRepeat(measures: [measure4])
+		let repeat2 = try! MeasureRepeat(measures: [measure4, measure4])
 		staff.appendMeasure(measure1)
 		staff.appendMeasure(measure2)
 		staff.appendMeasure(measure3)
 		staff.appendMeasure(measure4)
 		staff.appendMeasure(measure5)
+		staff.appendRepeat(repeat1)
+		staff.appendRepeat(repeat2)
     }
 
 	func test_startTieFromNote() {
@@ -154,6 +158,68 @@ class StaffTests: XCTestCase {
 			XCTAssert(secondNote.tie == .End)
 		} catch {
 			XCTFail(String(error))
+		}
+		
+		// MARK: - Context: Repeats
+		// MARK: - Successes
+		
+		// MARK: Succeed if first and second note are within a measure that is repeated
+		do {
+			try staff.startTieFromNote(0, inMeasureAtIndex: 5)
+			let firstMeasure = (staff.notesHolders[5] as! MeasureRepeat).measures[0]
+			let firstNote = firstMeasure.notes[0] as! Note
+			let secondNote = firstMeasure.notes[1] as! Note
+			XCTAssert(firstNote.tie == .Begin)
+			XCTAssert(secondNote.tie == .End)
+		} catch {
+			XCTFail(String(error))
+		}
+		
+		// MARK: Succeed if first and second note are within a measure that is part of a repeat of multiple measures
+		do {
+			try staff.startTieFromNote(0, inMeasureAtIndex: 6)
+			let firstMeasure = (staff.notesHolders[6] as! MeasureRepeat).measures[0]
+			let firstNote = firstMeasure.notes[0] as! Note
+			let secondNote = firstMeasure.notes[1] as! Note
+			XCTAssert(firstNote.tie == .Begin)
+			XCTAssert(secondNote.tie == .End)
+		} catch {
+			XCTFail(String(error))
+		}
+		
+		// MARK: Succeed if fist note is part of a measure that is repeated, and second note is in a consecutive measure also part of the repeat
+		do {
+			try staff.startTieFromNote(3, inMeasureAtIndex: 6)
+			let measureRepeat = staff.notesHolders[6] as! MeasureRepeat
+			let firstMeasure = measureRepeat.measures[0]
+			let secondMeasure = measureRepeat.measures[1]
+			let firstNote = firstMeasure.notes[3] as! Note
+			let secondNote = secondMeasure.notes[0] as! Note
+			XCTAssert(firstNote.tie == .Begin)
+			XCTAssert(secondNote.tie == .End)
+		} catch {
+			XCTFail(String(error))
+		}
+		
+		// MARK: - Failures
+		
+		// MARK: Fail if first note is the last note in first measure of a 1 measure repeat
+		// -- Can't finish in the next measure
+		do {
+			try staff.startTieFromNote(3, inMeasureAtIndex: 5)
+			shouldFail()
+		} catch StaffErrors.NoNextNoteToTie {
+		} catch {
+			expected(StaffErrors.NoNextNoteToTie, actual: error)
+		}
+		
+		// MARK: Fail if first note is the last note in the last measure of a multi-measure repeat
+		do {
+			try staff.startTieFromNote(3, inMeasureAtIndex: 6)
+			shouldFail()
+		} catch StaffErrors.NoNextNoteToTie {
+		} catch {
+			expected(StaffErrors.NoNextNoteToTie, actual: error)
 		}
 	}
 	

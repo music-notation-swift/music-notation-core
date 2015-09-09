@@ -6,25 +6,25 @@
 //  Copyright © 2015 Kyle Sherman. All rights reserved.
 //
 
-public struct Repeat {
+public struct MeasureRepeat {
 	
 	public var count: Int
 	public var measures: [Measure]
 	
 	public init(measures: [Measure], repeatCount: Int = 1) throws {
-		guard measures.count > 0 else { throw RepeatError.NoMeasures }
-		guard repeatCount > 0 else { throw RepeatError.InvalidRepeatCount }
+		guard measures.count > 0 else { throw MeasureRepeatError.NoMeasures }
+		guard repeatCount > 0 else { throw MeasureRepeatError.InvalidRepeatCount }
 		self.measures = measures
 		count = repeatCount
 	}
 }
 
-extension Repeat: NotesHolder {
+extension MeasureRepeat: NotesHolder {
 	
 	
 }
 
-public enum RepeatError: ErrorType {
+public enum MeasureRepeatError: ErrorType {
 	case NoMeasures
 	case InvalidRepeatCount
 }

@@ -22,7 +22,7 @@ public struct Staff {
 		self.notesHolders.append(measure)
 	}
 	
-	public mutating func appendRepeat(repeatedMeasures: Repeat) {
+	public mutating func appendRepeat(repeatedMeasures: MeasureRepeat) {
 		self.notesHolders.append(repeatedMeasures)
 	}
 	
@@ -30,7 +30,7 @@ public struct Staff {
 		self.notesHolders.insert(measure, atIndex: index)
 	}
 	
-	public mutating func insertRepeat(repeatedMeasures: Repeat, atIndex index: Int) {
+	public mutating func insertRepeat(repeatedMeasures: MeasureRepeat, atIndex index: Int) {
 		self.notesHolders.insert(repeatedMeasures, atIndex: index)
 	}
 }

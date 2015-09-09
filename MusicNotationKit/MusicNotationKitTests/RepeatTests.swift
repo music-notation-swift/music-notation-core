@@ -23,28 +23,28 @@ class RepeatTests: XCTestCase {
 	func testInitSuccess() {
 		// 1 Measure given
 		do {
-			let _ = try Repeat(measures: [measure1])
+			let _ = try MeasureRepeat(measures: [measure1])
 		} catch {
 			XCTFail("\(error)")
 		}
 		
 		// > 1 Measure given
 		do {
-			let _ = try Repeat(measures: [measure1, measure2])
+			let _ = try MeasureRepeat(measures: [measure1, measure2])
 		} catch {
 			XCTFail("\(error)")
 		}
 		
 		// Repeat count is 1
 		do {
-			let _ = try Repeat(measures: [measure1], repeatCount: 1)
+			let _ = try MeasureRepeat(measures: [measure1], repeatCount: 1)
 		} catch {
 			XCTFail("\(error)")
 		}
 		
 		// Repeat count unspecified; should be 1
 		do {
-			let repeat1 = try Repeat(measures: [measure1])
+			let repeat1 = try MeasureRepeat(measures: [measure1])
 			XCTAssertEqual(1, repeat1.count)
 		} catch {
 			XCTFail("\(error)")
@@ -52,7 +52,7 @@ class RepeatTests: XCTestCase {
 		
 		// Repeat count is > 1
 		do {
-			let _ = try Repeat(measures: [measure1, measure2], repeatCount: 2)
+			let _ = try MeasureRepeat(measures: [measure1, measure2], repeatCount: 2)
 		} catch {
 			XCTFail("\(error)")
 		}
@@ -61,41 +61,41 @@ class RepeatTests: XCTestCase {
 	func testInitFailure() {
 		// 0 Measures given
 		do {
-			let _ = try Repeat(measures: [])
-		} catch RepeatError.NoMeasures {
+			let _ = try MeasureRepeat(measures: [])
+		} catch MeasureRepeatError.NoMeasures {
 		} catch {
-			expected(RepeatError.NoMeasures, actual: error)
+			expected(MeasureRepeatError.NoMeasures, actual: error)
 		}
 		
 		do {
-			let _ = try Repeat(measures: [], repeatCount: 1)
-		} catch RepeatError.NoMeasures {
+			let _ = try MeasureRepeat(measures: [], repeatCount: 1)
+		} catch MeasureRepeatError.NoMeasures {
 		} catch {
-			expected(RepeatError.NoMeasures, actual: error)
+			expected(MeasureRepeatError.NoMeasures, actual: error)
 		}
 		
 		// Repeat count is negative
 		do {
-			let _ = try Repeat(measures: [measure1], repeatCount: -1)
-		} catch RepeatError.InvalidRepeatCount {
+			let _ = try MeasureRepeat(measures: [measure1], repeatCount: -1)
+		} catch MeasureRepeatError.InvalidRepeatCount {
 		} catch {
-			expected(RepeatError.InvalidRepeatCount, actual: error)
+			expected(MeasureRepeatError.InvalidRepeatCount, actual: error)
 		}
 		
 		// Repeat count is 0
 		do {
-			let _ = try Repeat(measures: [measure1, measure2], repeatCount: 0)
-		} catch RepeatError.InvalidRepeatCount {
+			let _ = try MeasureRepeat(measures: [measure1, measure2], repeatCount: 0)
+		} catch MeasureRepeatError.InvalidRepeatCount {
 		} catch {
-			expected(RepeatError.InvalidRepeatCount, actual: error)
+			expected(MeasureRepeatError.InvalidRepeatCount, actual: error)
 		}
 		
 		// 0 measures and invalid repeat count
 		do {
-			let _ = try Repeat(measures: [], repeatCount: 0)
-		} catch RepeatError.NoMeasures {
+			let _ = try MeasureRepeat(measures: [], repeatCount: 0)
+		} catch MeasureRepeatError.NoMeasures {
 		} catch {
-			expected(RepeatError.NoMeasures, actual: error)
+			expected(MeasureRepeatError.NoMeasures, actual: error)
 		}
 	}
 }

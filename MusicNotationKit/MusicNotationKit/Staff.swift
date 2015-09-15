@@ -19,19 +19,19 @@ public struct Staff {
 	}
 	
 	public mutating func appendMeasure(measure: Measure) {
-		self.notesHolders.append(measure)
+		notesHolders.append(measure)
 	}
 	
 	public mutating func appendRepeat(repeatedMeasures: MeasureRepeat) {
-		self.notesHolders.append(repeatedMeasures)
+		notesHolders.append(repeatedMeasures)
 	}
 	
 	public mutating func insertMeasure(measure: Measure, atIndex index: Int) {
-		self.notesHolders.insert(measure, atIndex: index)
+		notesHolders.insert(measure, atIndex: index)
 	}
 	
 	public mutating func insertRepeat(repeatedMeasures: MeasureRepeat, atIndex index: Int) {
-		self.notesHolders.insert(repeatedMeasures, atIndex: index)
+		notesHolders.insert(repeatedMeasures, atIndex: index)
 	}
 	
 	public mutating func startTieFromNote(noteIndex: Int, inMeasureAtIndex: Int) throws {

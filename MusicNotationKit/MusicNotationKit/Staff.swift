@@ -11,7 +11,7 @@ public struct Staff {
 	public let clef: Clef
 	public let instrument: Instrument
 	
-	private(set) var notesHolders: [NotesHolder] = []
+	internal private(set) var notesHolders: [NotesHolder] = []
 	
 	public init(clef: Clef, instrument: Instrument) {
 		self.clef = clef
@@ -34,11 +34,27 @@ public struct Staff {
 		notesHolders.insert(repeatedMeasures, atIndex: index)
 	}
 	
-	public mutating func startTieFromNote(noteIndex: Int, inMeasureAtIndex: Int) throws {
+	public mutating func startTieFromNoteAtIndex(noteIndex: Int, inMeasureAtIndex measureIndex: Int) throws {
 		
 	}
 	
-	public mutating func removeTieFromNote(noteIndex: Int, inMeasureAtIndex: Int) throws {
+	public mutating func removeTieFromNoteAtIndex(noteIndex: Int, inMeasureAtIndex measureIndex: Int) throws {
+		
+	}
+	
+	public func measureAtIndex(measureIndex: Int) throws -> Measure {
+		
+	}
+	
+	public func measureRepeatAtIndex(index: Int) throws -> MeasureRepeat {
+		
+	}
+	
+	internal func notesHolderAtIndex(index: Int) throws -> NotesHolder {
+		
+	}
+	
+	private mutating func modifyTieForNoteAtIndex(noteIndex: Int, inMesureAtIndex measureIndex: Int) throws {
 		
 	}
 	

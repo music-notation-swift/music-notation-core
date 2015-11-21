@@ -71,6 +71,7 @@ public enum Dot {
 public enum Accent {
 	case Standard
 	case Strong
+	case Ghost
 }
 
 public enum Dynamics {

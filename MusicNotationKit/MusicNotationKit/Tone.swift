@@ -18,3 +18,11 @@ public struct Tone {
 		self.octave = octave
 	}
 }
+
+extension Tone: CustomDebugStringConvertible {
+	public var debugDescription: String {
+		let result:String = String(format:"(n:%@, o:%@)",
+			String(self.noteLetter), String(self.octave))
+		return result
+	}
+}

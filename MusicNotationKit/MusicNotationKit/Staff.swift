@@ -34,3 +34,11 @@ public struct Staff {
 		self.notesHolders.insert(repeatedMeasures, atIndex: index)
 	}
 }
+
+extension Staff: CustomDebugStringConvertible {
+	public var debugDescription: String {
+		let result:String = String(format:"staff(%@:%@)",
+			String(self.clef), String(self.instrument))
+		return result
+	}
+}

@@ -68,6 +68,24 @@ extension Measure: NotesHolder {
 	
 }
 
+// Debug extensions
+extension Measure: CustomDebugStringConvertible {
+	
+	/**
+	Override debug print method for Measure instance. The format is as follows:
+	| <key> <time signature>, [<note_0>, ..., <note_n>] |
+	*/
+	public var debugDescription: String {
+	
+		let result:String = String(format: "| measure \n %@ - %@ \n notes: \n %@ \n end of measure |",
+			String(self.timeSignature),
+			String(self.key),
+		    String(self.notes))
+
+		return result
+	}
+}
+
 public enum MeasureError: ErrorType {
 	
 }

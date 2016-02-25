@@ -53,3 +53,14 @@ extension Note: NoteCollection {
 	
 	internal var noteCount: Int { return 1 }
 }
+
+extension Note: CustomDebugStringConvertible {
+	public var debugDescription: String {
+		let result = String(format: "note(tone:%@,duration:%@,rest:%@)",
+			String(self.tones),
+			String(self.noteDuration),
+			String(self.isRest)
+		)
+		return result
+	}
+}

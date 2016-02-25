@@ -102,6 +102,14 @@ extension Tuplet: NoteCollection {
 	internal var noteCount: Int { return notes.count }
 }
 
+extension Tuplet: CustomDebugStringConvertible {
+	public var debugDescription: String {
+		let result:String = String(format:"tuplet(notes: \n %@)",
+			String(self.notes))
+		return result
+	}
+}
+
 public enum TupletError: ErrorType {
 	case InvalidNumberOfNotes
 	case GroupingFull

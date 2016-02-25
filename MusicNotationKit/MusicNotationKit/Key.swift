@@ -18,3 +18,11 @@ public struct Key {
 		self.type = type
 	}
 }
+
+extension Key: CustomDebugStringConvertible {
+	public var debugDescription: String {
+		let result:String = String(format:"key(%@ %@)",
+			String(self.noteLetter), String(self.type))
+		return result
+	}
+}

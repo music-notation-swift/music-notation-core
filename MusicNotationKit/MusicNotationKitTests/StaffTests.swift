@@ -16,29 +16,41 @@ class StaffTests: XCTestCase {
     override func setUp() {
         super.setUp()
 		staff = Staff(clef: .Treble, instrument: .Guitar6)
+		let timeSignature = TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120)
+		let key = Key(noteLetter: .C)
 		let note = Note(noteDuration: .Sixteenth,
 			tone: Tone(noteLetter: .C, octave: .Octave1))
 		let tuplet = try! Tuplet(notes: [note, note, note])
-		let measure1 = Measure(timeSignature: TimeSignature(
-			topNumber: 4, bottomNumber: 4, tempo: 120),
-			key: Key(noteLetter: .C),
-			notes: [note, note, note, note, tuplet])
-		let measure2 = Measure(timeSignature: TimeSignature(
-			topNumber: 4, bottomNumber: 4, tempo: 120),
-			key: Key(noteLetter: .C),
-			notes: [tuplet, note, note])
-		let measure3 = Measure(timeSignature: TimeSignature(
-			topNumber: 4, bottomNumber: 4, tempo: 120),
-			key: Key(noteLetter: .C),
-			notes: [note, note, note, note, tuplet])
-		let measure4 = Measure(timeSignature: TimeSignature(
-			topNumber: 4, bottomNumber: 4, tempo: 120),
-			key: Key(noteLetter: .C),
-			notes: [note, note, note, note])
-		let measure5 = Measure(timeSignature: TimeSignature(
-			topNumber: 4, bottomNumber: 4, tempo: 120),
-			key: Key(noteLetter: .C),
-			notes: [tuplet, note, note, note, note])
+		let measure1 = Measure(
+			timeSignature: timeSignature,
+			key: key,
+			notes: [note, note, note, note, tuplet]
+		)
+		let measure2 = Measure(
+			timeSignature: timeSignature,
+			key: key,
+			notes: [tuplet, note, note]
+		)
+		let measure3 = Measure(
+			timeSignature: timeSignature,
+			key: key,
+			notes: [note, note, note, note, tuplet]
+		)
+		let measure4 = Measure(
+			timeSignature: timeSignature,
+			key: key,
+			notes: [note, note, note, note]
+		)
+		let measure5 = Measure(
+			timeSignature: timeSignature,
+			key: key,
+			notes: [tuplet, note, note, note, note]
+		)
+		let measure6 = Measure(
+			timeSignature: timeSignature,
+			key: key,
+			notes: [tuplet, tuplet, note, note]
+		)
 		let repeat1 = try! MeasureRepeat(measures: [measure4])
 		let repeat2 = try! MeasureRepeat(measures: [measure4, measure4])
 		staff.appendMeasure(measure1)
@@ -46,10 +58,15 @@ class StaffTests: XCTestCase {
 		staff.appendMeasure(measure3)
 		staff.appendMeasure(measure4)
 		staff.appendMeasure(measure5)
-		staff.appendRepeat(repeat1)
-		staff.appendRepeat(repeat2)
+		staff.appendRepeat(repeat1) // 5
+		staff.appendRepeat(repeat2) // 7
+		staff.appendMeasure(measure6) // 11
     }
 
+	// MARK: - startTieFromNote(_:, inMeasureAtIndex:)
+	// TODO: Start tie on one that is an End already
+	// TODO: Test tuplet to tuplet within measure
+	
 	func test_startTieFromNote() {
 		// MARK: - Failures
 		// MARK: Fail if noteIndex is invalid
@@ -223,7 +240,166 @@ class StaffTests: XCTestCase {
 		}
 	}
 	
-	func test_removeTieFromNote() {
-		
+	// MARK: - removeTieFromNote(_:, inMeasureAtIndex:)
+	// MARK: Failures
+	
+	func testRemoveTieFailIfNoteIndexInvalid() {
+		do {
+			try staff.removeTieFromNote(10, inMeasureAtIndex: 0)
+			shouldFail()
+		} catch StaffErrors.NoteIndexOutOfRange {
+		} catch {
+			expected(StaffErrors.NoteIndexOutOfRange, actual: error)
+		}
+	}
+	
+	func testRemoveTieFailIfMeasureIndexInvalid() {
+		do {
+			try staff.removeTieFromNote(0, inMeasureAtIndex: 10)
+			shouldFail()
+		} catch StaffErrors.MeasureIndexOutOfRange {
+		} catch {
+			expected(StaffErrors.MeasureIndexOutOfRange, actual: error)
+		}
+	}
+	
+	func testRemoveTieFailIfNotTied() {
+		do {
+			try staff.removeTieFromNote(0, inMeasureAtIndex: 0)
+			shouldFail()
+		} catch StaffErrors.NotBeginningOfTie {
+		} catch {
+			expected(StaffErrors.NotBeginningOfTie, actual: error)
+		}
+	}
+	
+	func testRemoveTieFailIfNotBeginningOfTie() {
+		do {
+			try staff.startTieFromNote(0, inMeasureAtIndex: 0)
+			try staff.removeTieFromNote(1, inMeasureAtIndex: 0)
+			shouldFail()
+		} catch StaffErrors.NotBeginningOfTie {
+		} catch {
+			expected(StaffErrors.NotBeginningOfTie, actual: error)
+		}
+	}
+	
+	// MARK: Successes
+	
+	func testRemoveTieWithinMeasureNoteToNote() {
+		do {
+			let firstNoteIndex = 0
+			let firstMeasureIndex = 0
+			try staff.startTieFromNote(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex)
+			try staff.removeTieFromNote(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex)
+			let measure = staff.notesHolders[firstMeasureIndex] as! Measure
+			let firstNote = measure.notes[firstNoteIndex] as! Note
+			let secondNote = measure.notes[firstNoteIndex + 1] as! Note
+			XCTAssertNil(firstNote.tie)
+			XCTAssertNil(secondNote.tie)
+		} catch {
+			XCTFail(String(error))
+		}
+	}
+	
+	func testRemoveTieWithinMeasureWithinTuplet() {
+		do {
+			let firstNoteIndex = 4
+			let firstMeasureIndex = 0
+			try staff.startTieFromNote(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex)
+			try staff.removeTieFromNote(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex)
+			let measure = staff.notesHolders[firstMeasureIndex] as! Measure
+			let firstNote = measure.notes[firstNoteIndex] as! Note
+			let secondNote = measure.notes[firstNoteIndex + 1] as! Note
+			XCTAssertNil(firstNote.tie)
+			XCTAssertNil(secondNote.tie)
+		} catch {
+			XCTFail(String(error))
+		}
+	}
+	
+	func testRemoveTieWithinMeasureFromTupletToNote() {
+		do {
+			let firstNoteIndex = 2
+			let firstMeasureIndex = 1
+			try staff.startTieFromNote(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex)
+			try staff.removeTieFromNote(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex)
+			let measure = staff.notesHolders[firstMeasureIndex] as! Measure
+			let firstNote = measure.notes[firstNoteIndex] as! Note
+			let secondNote = measure.notes[firstNoteIndex + 1] as! Note
+			XCTAssertNil(firstNote.tie)
+			XCTAssertNil(secondNote.tie)
+		} catch {
+			XCTFail(String(error))
+		}
+	}
+
+	func testRemoveTieWithinMeasureFromTupletToNewTuplet() {
+		do {
+			let firstNoteIndex = 2
+			let firstMeasureIndex = 11
+			try staff.startTieFromNote(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex)
+			try staff.removeTieFromNote(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex)
+			let measure = staff.notesHolders[firstMeasureIndex] as! Measure
+			let firstNote = measure.notes[firstNoteIndex] as! Note
+			let secondNote = measure.notes[firstNoteIndex + 1] as! Note
+			XCTAssertNil(firstNote.tie)
+			XCTAssertNil(secondNote.tie)
+		} catch {
+			XCTFail(String(error))
+		}
+	}
+
+	func testRemoveTieAcrossMeasuresFromTupletToNote() {
+		do {
+			let firstNoteIndex = 6
+			let firstMeasureIndex = 2
+			try staff.startTieFromNote(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex)
+			try staff.removeTieFromNote(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex)
+			let measure1 = staff.notesHolders[firstMeasureIndex] as! Measure
+			let measure2 = staff.notesHolders[firstMeasureIndex + 1] as! Measure
+			let firstNote = measure1.notes[firstNoteIndex] as! Note
+			let secondNote = measure2.notes[0] as! Note
+			XCTAssertNil(firstNote.tie)
+			XCTAssertNil(secondNote.tie)
+		} catch {
+			XCTFail(String(error))
+		}
+	}
+
+	func testRemoveTieAcrosssMeasuresFromTupletToNewTuplet() {
+		do {
+			let firstNoteIndex = 6
+			let firstMeasureIndex = 0
+			try staff.startTieFromNote(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex)
+			try staff.removeTieFromNote(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex + 1)
+			let measure1 = staff.notesHolders[firstMeasureIndex] as! Measure
+			let measure2 = staff.notesHolders[firstMeasureIndex + 1] as! Measure
+			let firstNote = measure1.notes[firstNoteIndex] as! Note
+			let secondNote = measure2.notes[0] as! Note
+			XCTAssertNil(firstNote.tie)
+			XCTAssertNil(secondNote.tie)
+		} catch {
+			XCTFail(String(error))
+		}
+	}
+	
+	func testRemoveTieFromNoteThatIsBeginAndEnd() {
+		do {
+			let firstNoteIndex = 0
+			let firstMeasureIndex = 0
+			try staff.startTieFromNote(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex)
+			try staff.startTieFromNote(firstNoteIndex + 1, inMeasureAtIndex: firstMeasureIndex)
+			try staff.removeTieFromNote(firstNoteIndex + 1, inMeasureAtIndex: firstMeasureIndex)
+			let measure = staff.notesHolders[firstMeasureIndex] as! Measure
+			let firstNote = measure.notes[firstNoteIndex] as! Note
+			let secondNote = measure.notes[firstNoteIndex + 1] as! Note
+			let thirdNote = measure.notes[firstNoteIndex + 2] as! Note
+			XCTAssert(firstNote.tie == .Begin)
+			XCTAssert(secondNote.tie == .End)
+			XCTAssertNil(thirdNote.tie)
+		} catch {
+			XCTFail(String(error))
+		}
 	}
 }

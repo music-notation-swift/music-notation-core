@@ -48,4 +48,5 @@ public enum StaffErrors: ErrorType {
 	case MeasureIndexOutOfRange
 	case NoNextNoteToTie
 	case NoNextNote
+	case NotBeginningOfTie
 }

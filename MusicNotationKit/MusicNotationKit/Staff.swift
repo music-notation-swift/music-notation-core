@@ -49,4 +49,5 @@ public enum StaffErrors: ErrorType {
 	case NoNextNoteToTie
 	case NoNextNote
 	case NotBeginningOfTie
+	case RepeatedMeasureCannotHaveTie
 }

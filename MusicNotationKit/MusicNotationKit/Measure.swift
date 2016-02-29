@@ -70,17 +70,16 @@ extension Measure: NotesHolder {
 
 // Debug extensions
 extension Measure: CustomDebugStringConvertible {
-	
-	/**
-	Override debug print method for Measure instance. The format is as follows:
-	| <key> <time signature>, [<note_0>, ..., <note_n>] |
-	*/
 	public var debugDescription: String {
-	
-		let result:String = String(format: "| measure \n %@ - %@ \n notes: \n %@ \n end of measure |",
+		var notes = [String]();
+		for note in self.notes {
+			notes.append(String(note))
+		}
+		let notesString = notes.joinWithSeparator(", ")
+		
+		let result:String = String(format: "|%@: %@|",
 			String(self.timeSignature),
-			String(self.key),
-		    String(self.notes))
+		    notesString)
 
 		return result
 	}

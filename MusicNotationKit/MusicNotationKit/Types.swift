@@ -6,18 +6,18 @@
 //  Copyright (c) 2015 Kyle Sherman. All rights reserved.
 //
 
-public enum Octave {
-	case OctaveNegative1
-	case Octave0
-	case Octave1
-	case Octave2
-	case Octave3
-	case Octave4
-	case Octave5
-	case Octave6
-	case Octave7
-	case Octave8
-	case Octave9
+public enum Octave: Int {
+	case OctaveNegative1 = -1
+	case Octave0 = 0
+	case Octave1 = 1
+	case Octave2 = 2
+	case Octave3 = 3
+	case Octave4 = 4
+	case Octave5 = 5
+	case Octave6 = 6
+	case Octave7 = 7
+	case Octave8 = 8
+	case Octave9 = 9
 }
 
 public enum Striking {
@@ -25,22 +25,22 @@ public enum Striking {
 	case Right, Down
 }
 
-public enum NoteDuration {
-	case Whole
-	case Half
-	case Quarter
-	case Eighth
-	case Sixteenth
-	case ThirtySecond
-	case SixtyFourth
+public enum NoteDuration: String {
+	case Whole        = "1"
+	case Half         = "1/2"
+	case Quarter      = "1/4"
+	case Eighth       = "1/8"
+	case Sixteenth    = "1/16"
+	case ThirtySecond = "1/32"
+	case SixtyFourth  = "1/64"
 }
 
-public enum Accidental {
-	case Sharp
-	case DoubleSharp
-	case Flat
-	case DoubleFlat
-	case Natural
+public enum Accidental: String {
+	case Sharp        = "#"
+	case DoubleSharp  = "##"
+	case Flat         = "b"
+	case DoubleFlat   = "bb"
+	case Natural      = "n"
 }
 
 public enum NoteLetter {
@@ -63,9 +63,9 @@ public enum Instrument {
 	case Drums
 }
 
-public enum Dot {
-	case Single
-	case Double
+public enum Dot: String {
+	case Single = "."
+	case Double = ".."
 }
 
 public enum Accent {

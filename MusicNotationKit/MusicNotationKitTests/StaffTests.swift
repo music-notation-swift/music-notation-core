@@ -460,4 +460,61 @@ class StaffTests: XCTestCase {
 			XCTFail(String(error))
 		}
 	}
+	
+	// MARK: - notesHolderIndexFromMeasureIndex(_: Int) -> (Int, Int?, Bool)
+	// MARK: Failures
+	
+	func testNotesHolderIndexForOutOfRangeMeasureIndex() {
+		do {
+			let _ = try staff.notesHolderIndexFromMeasureIndex(20)
+			shouldFail()
+		} catch StaffErrors.MeasureIndexOutOfRange {
+		} catch {
+			expected(StaffErrors.MeasureIndexOutOfRange, actual: error)
+		}
+	}
+	
+	// MARK: Successes
+	
+	func testNotesHolderIndexForNoRepeats() {
+		do {
+			let indexes = try staff.notesHolderIndexFromMeasureIndex(2)
+			XCTAssertEqual(indexes.notesHolderIndex, 2)
+			XCTAssertNil(indexes.repeatMeasureIndex)
+		} catch {
+			XCTFail(String(error))
+		}
+	}
+	
+	func testNotesHolderIndexForOriginalRepeatedMeasure() {
+		do {
+			let indexes = try staff.notesHolderIndexFromMeasureIndex(8)
+			XCTAssertEqual(indexes.notesHolderIndex, 6)
+			XCTAssertEqual(indexes.repeatMeasureIndex, 1)
+			XCTAssertEqual(indexes.isRepeatedMeasure, false)
+		} catch {
+			XCTFail(String(error))
+		}
+	}
+	
+	func testNotesHolderIndexForRepeatedMeasure() {
+		do {
+			let indexes = try staff.notesHolderIndexFromMeasureIndex(9)
+			XCTAssertEqual(indexes.notesHolderIndex, 6)
+			XCTAssertEqual(indexes.repeatMeasureIndex, 0)
+			XCTAssertEqual(indexes.isRepeatedMeasure, true)
+		} catch {
+			XCTFail(String(error))
+		}
+	}
+	
+	func testNotesHolderIndexForAfterRepeat() {
+		do {
+			let indexes = try staff.notesHolderIndexFromMeasureIndex(13)
+			XCTAssertEqual(indexes.notesHolderIndex, 7)
+			XCTAssertNil(indexes.repeatMeasureIndex)
+		} catch {
+			XCTFail(String(error))
+		}
+	}
 }

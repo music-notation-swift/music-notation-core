@@ -41,6 +41,10 @@ public struct Staff {
 	public mutating func removeTieFromNote(noteIndex: Int, inMeasureAtIndex: Int) throws {
 		
 	}
+	
+	internal func notesHolderIndexFromMeasureIndex(index: Int) throws -> (notesHolderIndex: Int, repeatMeasureIndex: Int?, isRepeatedMeasure: Bool) {
+		
+	}
 }
 
 public enum StaffErrors: ErrorType {

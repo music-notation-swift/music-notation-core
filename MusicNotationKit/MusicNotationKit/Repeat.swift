@@ -17,10 +17,21 @@ public struct MeasureRepeat {
 		self.measures = measures
 		count = repeatCount
 	}
+	
+	internal func expand() -> [NotesHolder] {
+		let repeatedMeasuresHolders = measures.map {
+			return RepeatedMeasure(timeSignature: $0.timeSignature, key: $0.key, notes: $0.notes) as NotesHolder
+		}
+		let measuresHolders = measures.map { $0 as NotesHolder }
+		var allMeasures: [NotesHolder] = measuresHolders
+		for _ in 0..<count {
+			allMeasures += repeatedMeasuresHolders
+		}
+		return allMeasures
+	}
 }
 
 extension MeasureRepeat: NotesHolder {
-	
 	
 }
 

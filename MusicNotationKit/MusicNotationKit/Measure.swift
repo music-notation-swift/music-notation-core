@@ -6,11 +6,11 @@
 //  Copyright (c) 2015 Kyle Sherman. All rights reserved.
 //
 
-public struct Measure {
+public struct Measure: ImmutableMeasure {
 	
-	private(set) var timeSignature: TimeSignature
-	private(set) var key: Key
-	private(set) var notes: [NoteCollection] = []
+	public let timeSignature: TimeSignature
+	public let key: Key
+	private(set) var notes: [NoteCollection]
 	
 	public init(timeSignature: TimeSignature, key: Key) {
 		self.init(timeSignature: timeSignature, key: key, notes: [])
@@ -62,10 +62,6 @@ public struct Measure {
 		// single note within the NoteCollection array.
 		return nil
 	}
-}
-
-extension Measure: NotesHolder {
-	
 }
 
 public enum MeasureError: ErrorType {

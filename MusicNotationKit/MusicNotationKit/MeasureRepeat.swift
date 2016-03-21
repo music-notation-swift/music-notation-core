@@ -20,7 +20,7 @@ public struct MeasureRepeat {
 	
 	internal func expand() -> [NotesHolder] {
 		let repeatedMeasuresHolders = measures.map {
-			return RepeatedMeasure(timeSignature: $0.timeSignature, key: $0.key, notes: $0.notes) as NotesHolder
+			return RepeatedMeasure(immutableMeasure: $0) as NotesHolder
 		}
 		let measuresHolders = measures.map { $0 as NotesHolder }
 		var allMeasures: [NotesHolder] = measuresHolders
@@ -33,6 +33,21 @@ public struct MeasureRepeat {
 
 extension MeasureRepeat: NotesHolder {
 	
+}
+
+extension MeasureRepeat: Equatable {}
+
+public func ==(lhs: MeasureRepeat, rhs: MeasureRepeat) -> Bool {
+	guard lhs.count == rhs.count else {
+		return false
+	}
+	guard lhs.measures.count == rhs.measures.count else {
+		return false
+	}
+	guard lhs.measures != rhs.measures else {
+		return false
+	}
+	return true
 }
 
 public enum MeasureRepeatError: ErrorType {

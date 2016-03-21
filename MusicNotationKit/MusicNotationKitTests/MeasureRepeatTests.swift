@@ -18,6 +18,55 @@ class MeasureRepeatTests: XCTestCase {
 	let measure1 = Measure(timeSignature: timeSignature, key: key, notes: [note1, note1])
 	let measure2 = Measure(timeSignature: timeSignature, key: key, notes: [note2, note2])
 	
+	// MARK: - init(measures:repeateCount:)
+	// MARK: Failures
+	
+	func testInitInvalidRepeatCount() {
+		do {
+			let _ = try MeasureRepeat(measures: [measure1], repeatCount: -2)
+			shouldFail()
+		} catch MeasureRepeatError.InvalidRepeatCount {
+		} catch {
+			expected(MeasureRepeatError.InvalidRepeatCount, actual: error)
+		}
+	}
+	
+	func testInitNoMeasures() {
+		do {
+			let _ = try MeasureRepeat(measures: [])
+			shouldFail()
+		} catch MeasureRepeatError.NoMeasures {
+		} catch {
+			expected(MeasureRepeatError.NoMeasures, actual: error)
+		}
+	}
+	
+	// MARK: Successes
+	
+	func testInitNotSpecifiedRepeatCount() {
+		do {
+			let _ = try MeasureRepeat(measures: [measure1])
+		} catch {
+			XCTFail(String(error))
+		}
+	}
+	
+	func testInitSingleMeasure() {
+		do {
+			let _ = try MeasureRepeat(measures: [measure2], repeatCount: 3)
+		} catch {
+			XCTFail(String(error))
+		}
+	}
+	
+	func testInitMultipleMeasures() {
+		do {
+			let _ = try MeasureRepeat(measures: [measure1, measure2], repeatCount: 4)
+		} catch {
+			XCTFail(String(error))
+		}
+	}
+	
 	// MARK: - expand()
 	
 	func testExpandSingleMeasureRepeatedOnce() {

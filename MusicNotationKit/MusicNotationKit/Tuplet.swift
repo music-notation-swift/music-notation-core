@@ -102,6 +102,12 @@ public struct Tuplet {
 	}
 }
 
+extension Tuplet: Equatable {}
+
+public func ==(lhs: Tuplet, rhs: Tuplet) -> Bool {
+	return lhs.notes == rhs.notes
+}
+
 extension Tuplet: NoteCollection {
 	
 	internal var noteCount: Int { return notes.count }

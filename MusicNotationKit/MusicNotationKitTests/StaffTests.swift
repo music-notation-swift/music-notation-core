@@ -63,12 +63,12 @@ class StaffTests: XCTestCase {
 		staff.appendMeasure(measure6) // index = 13
     }
 
-	// MARK: - startTieFromNote(_:, inMeasureAtIndex:)
+	// MARK: - startTieFromNoteAtIndex(_:, inMeasureAtIndex:)
 	// MARK: Failures
 	
 	func testStartTieFailIfNoteIndexInvalid() {
 		do {
-			try staff.startTieFromNote(10, inMeasureAtIndex: 0)
+			try staff.startTieFromNoteAtIndex(10, inMeasureAtIndex: 0)
 			shouldFail()
 		} catch StaffErrors.NoteIndexOutOfRange {
 		} catch {
@@ -78,7 +78,7 @@ class StaffTests: XCTestCase {
 	
 	func testStartTieFailIfMeasureIndexInvalid() {
 		do {
-			try staff.startTieFromNote(0, inMeasureAtIndex: 10)
+			try staff.startTieFromNoteAtIndex(0, inMeasureAtIndex: 10)
 			shouldFail()
 		} catch StaffErrors.MeasureIndexOutOfRange {
 		} catch {
@@ -88,7 +88,7 @@ class StaffTests: XCTestCase {
 	
 	func testStartTieFailIfNoNextNote() {
 		do {
-			try staff.startTieFromNote(3, inMeasureAtIndex: 2)
+			try staff.startTieFromNoteAtIndex(3, inMeasureAtIndex: 2)
 			shouldFail()
 		} catch StaffErrors.NoNextNoteToTie {
 		} catch {
@@ -98,7 +98,7 @@ class StaffTests: XCTestCase {
 	
 	func testStartTieFailIfLastNoteOfTupletAndNoNextNote() {
 		do {
-			try staff.startTieFromNote(6, inMeasureAtIndex: 2)
+			try staff.startTieFromNoteAtIndex(6, inMeasureAtIndex: 2)
 			shouldFail()
 		} catch StaffErrors.NoNextNoteToTie {
 		} catch {
@@ -109,7 +109,7 @@ class StaffTests: XCTestCase {
 	func testStartTieFailIfLastNoteOfSingleMeasureRepeat() {
 		// Reason: can't finish in the next measure
 		do {
-			try staff.startTieFromNote(3, inMeasureAtIndex: 5)
+			try staff.startTieFromNoteAtIndex(3, inMeasureAtIndex: 5)
 			shouldFail()
 		} catch StaffErrors.NoNextNoteToTie {
 		} catch {
@@ -119,7 +119,7 @@ class StaffTests: XCTestCase {
 	
 	func testStartTieFailIfLastNoteInLastMeasureOfMultiMeasureRepeat() {
 		do {
-			try staff.startTieFromNote(3, inMeasureAtIndex: 6)
+			try staff.startTieFromNoteAtIndex(3, inMeasureAtIndex: 6)
 			shouldFail()
 		} catch StaffErrors.NoNextNoteToTie {
 		} catch {
@@ -129,7 +129,7 @@ class StaffTests: XCTestCase {
 	
 	func testStartTieFailIfNotesWithinRepeatAfterTheFirstCount() {
 		do {
-			try staff.startTieFromNote(0, inMeasureAtIndex: 8)
+			try staff.startTieFromNoteAtIndex(0, inMeasureAtIndex: 8)
 			shouldFail()
 		} catch StaffErrors.RepeatedMeasureCannotHaveTie {
 		} catch {
@@ -143,7 +143,7 @@ class StaffTests: XCTestCase {
 		do {
 			let firstNoteIndex = 0
 			let firstMeasureIndex = 0
-			try staff.startTieFromNote(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex)
+			try staff.startTieFromNoteAtIndex(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex)
 			let measure = staff.notesHolders[firstMeasureIndex] as! Measure
 			let firstNote = measure.notes[firstNoteIndex] as! Note
 			let secondNote = measure.notes[firstNoteIndex + 1] as! Note
@@ -158,8 +158,8 @@ class StaffTests: XCTestCase {
 		do {
 			let firstNoteIndex = 0
 			let firstMeasureIndex = 0
-			try staff.startTieFromNote(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex)
-			try staff.startTieFromNote(firstNoteIndex + 1, inMeasureAtIndex: firstMeasureIndex)
+			try staff.startTieFromNoteAtIndex(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex)
+			try staff.startTieFromNoteAtIndex(firstNoteIndex + 1, inMeasureAtIndex: firstMeasureIndex)
 			let measure = staff.notesHolders[firstMeasureIndex] as! Measure
 			let firstNote = measure.notes[firstNoteIndex] as! Note
 			let secondNote = measure.notes[firstNoteIndex + 1] as! Note
@@ -176,7 +176,7 @@ class StaffTests: XCTestCase {
 		do {
 			let firstNoteIndex = 2
 			let firstMeasureIndex = 13
-			try staff.startTieFromNote(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex)
+			try staff.startTieFromNoteAtIndex(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex)
 			let measure = staff.notesHolders[firstMeasureIndex] as! Measure
 			let firstNote = (measure.notes[0] as! Tuplet).notes[2]
 			let secondNote = (measure.notes[1] as! Tuplet).notes[0]
@@ -191,7 +191,7 @@ class StaffTests: XCTestCase {
 		do {
 			let firstNoteIndex = 4
 			let firstMeasureIndex = 1
-			try staff.startTieFromNote(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex)
+			try staff.startTieFromNoteAtIndex(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex)
 			let firstMeasure = staff.notesHolders[firstMeasureIndex] as! Measure
 			let secondMeasure = staff.notesHolders[firstMeasureIndex + 1] as! Measure
 			let firstNote = firstMeasure.notes[2] as! Note
@@ -207,7 +207,7 @@ class StaffTests: XCTestCase {
 		do {
 			let firstNoteIndex = 3
 			let firstMeasureIndex = 3
-			try staff.startTieFromNote(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex)
+			try staff.startTieFromNoteAtIndex(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex)
 			let firstMeasure = staff.notesHolders[firstMeasureIndex] as! Measure
 			let secondMeasure = staff.notesHolders[firstMeasureIndex + 1] as! Measure
 			let firstNote = firstMeasure.notes[3] as! Note
@@ -223,7 +223,7 @@ class StaffTests: XCTestCase {
 		do {
 			let firstNoteIndex = 6
 			let firstMeasureIndex = 2
-			try staff.startTieFromNote(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex)
+			try staff.startTieFromNoteAtIndex(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex)
 			let firstMeasure = staff.notesHolders[firstMeasureIndex] as! Measure
 			let secondMeasure = staff.notesHolders[firstMeasureIndex + 1] as! Measure
 			let firstNote = (firstMeasure.notes[4] as! Tuplet).notes[2]
@@ -239,7 +239,7 @@ class StaffTests: XCTestCase {
 		do {
 			let firstNoteIndex = 6
 			let firstMeasureIndex = 0
-			try staff.startTieFromNote(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex)
+			try staff.startTieFromNoteAtIndex(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex)
 			let firstMeasure = staff.notesHolders[firstMeasureIndex] as! Measure
 			let secondMeasure = staff.notesHolders[firstMeasureIndex + 1] as! Measure
 			let firstNote = (firstMeasure.notes[4] as! Tuplet).notes[2]
@@ -255,7 +255,7 @@ class StaffTests: XCTestCase {
 		do {
 			let firstNoteIndex = 0
 			let firstMeasureIndex = 5
-			try staff.startTieFromNote(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex)
+			try staff.startTieFromNoteAtIndex(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex)
 			let firstMeasure = (staff.notesHolders[firstMeasureIndex] as! MeasureRepeat).measures[0]
 			let firstNote = firstMeasure.notes[firstNoteIndex] as! Note
 			let secondNote = firstMeasure.notes[firstNoteIndex + 1] as! Note
@@ -270,7 +270,7 @@ class StaffTests: XCTestCase {
 		do {
 			let firstNoteIndex = 0
 			let firstMeasureIndex = 7
-			try staff.startTieFromNote(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex)
+			try staff.startTieFromNoteAtIndex(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex)
 			let firstMeasure = (staff.notesHolders[firstMeasureIndex] as! MeasureRepeat).measures[0]
 			let firstNote = firstMeasure.notes[firstNoteIndex] as! Note
 			let secondNote = firstMeasure.notes[firstNoteIndex + 1] as! Note
@@ -285,7 +285,7 @@ class StaffTests: XCTestCase {
 		do {
 			let firstNoteIndex = 3
 			let firstMeasureIndex = 7
-			try staff.startTieFromNote(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex)
+			try staff.startTieFromNoteAtIndex(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex)
 			let measureRepeat = staff.notesHolders[firstMeasureIndex] as! MeasureRepeat
 			let firstMeasure = measureRepeat.measures[0]
 			let secondMeasure = measureRepeat.measures[1]
@@ -298,12 +298,12 @@ class StaffTests: XCTestCase {
 		}
 	}
 	
-	// MARK: - removeTieFromNote(_:, inMeasureAtIndex:)
+	// MARK: - removeTieFromNoteAtIndex(_:, inMeasureAtIndex:)
 	// MARK: Failures
 	
 	func testRemoveTieFailIfNoteIndexInvalid() {
 		do {
-			try staff.removeTieFromNote(10, inMeasureAtIndex: 0)
+			try staff.removeTieFromNoteAtIndex(10, inMeasureAtIndex: 0)
 			shouldFail()
 		} catch StaffErrors.NoteIndexOutOfRange {
 		} catch {
@@ -313,7 +313,7 @@ class StaffTests: XCTestCase {
 	
 	func testRemoveTieFailIfMeasureIndexInvalid() {
 		do {
-			try staff.removeTieFromNote(0, inMeasureAtIndex: 10)
+			try staff.removeTieFromNoteAtIndex(0, inMeasureAtIndex: 10)
 			shouldFail()
 		} catch StaffErrors.MeasureIndexOutOfRange {
 		} catch {
@@ -323,7 +323,7 @@ class StaffTests: XCTestCase {
 	
 	func testRemoveTieFailIfNotTied() {
 		do {
-			try staff.removeTieFromNote(0, inMeasureAtIndex: 0)
+			try staff.removeTieFromNoteAtIndex(0, inMeasureAtIndex: 0)
 			shouldFail()
 		} catch StaffErrors.NotBeginningOfTie {
 		} catch {
@@ -333,8 +333,8 @@ class StaffTests: XCTestCase {
 	
 	func testRemoveTieFailIfNotBeginningOfTie() {
 		do {
-			try staff.startTieFromNote(0, inMeasureAtIndex: 0)
-			try staff.removeTieFromNote(1, inMeasureAtIndex: 0)
+			try staff.startTieFromNoteAtIndex(0, inMeasureAtIndex: 0)
+			try staff.removeTieFromNoteAtIndex(1, inMeasureAtIndex: 0)
 			shouldFail()
 		} catch StaffErrors.NotBeginningOfTie {
 		} catch {
@@ -348,8 +348,8 @@ class StaffTests: XCTestCase {
 		do {
 			let firstNoteIndex = 0
 			let firstMeasureIndex = 0
-			try staff.startTieFromNote(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex)
-			try staff.removeTieFromNote(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex)
+			try staff.startTieFromNoteAtIndex(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex)
+			try staff.removeTieFromNoteAtIndex(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex)
 			let measure = staff.notesHolders[firstMeasureIndex] as! Measure
 			let firstNote = measure.notes[firstNoteIndex] as! Note
 			let secondNote = measure.notes[firstNoteIndex + 1] as! Note
@@ -364,8 +364,8 @@ class StaffTests: XCTestCase {
 		do {
 			let firstNoteIndex = 4
 			let firstMeasureIndex = 0
-			try staff.startTieFromNote(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex)
-			try staff.removeTieFromNote(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex)
+			try staff.startTieFromNoteAtIndex(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex)
+			try staff.removeTieFromNoteAtIndex(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex)
 			let measure = staff.notesHolders[firstMeasureIndex] as! Measure
 			let firstNote = measure.notes[firstNoteIndex] as! Note
 			let secondNote = measure.notes[firstNoteIndex + 1] as! Note
@@ -380,8 +380,8 @@ class StaffTests: XCTestCase {
 		do {
 			let firstNoteIndex = 2
 			let firstMeasureIndex = 1
-			try staff.startTieFromNote(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex)
-			try staff.removeTieFromNote(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex)
+			try staff.startTieFromNoteAtIndex(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex)
+			try staff.removeTieFromNoteAtIndex(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex)
 			let measure = staff.notesHolders[firstMeasureIndex] as! Measure
 			let firstNote = measure.notes[firstNoteIndex] as! Note
 			let secondNote = measure.notes[firstNoteIndex + 1] as! Note
@@ -396,8 +396,8 @@ class StaffTests: XCTestCase {
 		do {
 			let firstNoteIndex = 2
 			let firstMeasureIndex = 11
-			try staff.startTieFromNote(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex)
-			try staff.removeTieFromNote(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex)
+			try staff.startTieFromNoteAtIndex(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex)
+			try staff.removeTieFromNoteAtIndex(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex)
 			let measure = staff.notesHolders[firstMeasureIndex] as! Measure
 			let firstNote = measure.notes[firstNoteIndex] as! Note
 			let secondNote = measure.notes[firstNoteIndex + 1] as! Note
@@ -412,8 +412,8 @@ class StaffTests: XCTestCase {
 		do {
 			let firstNoteIndex = 6
 			let firstMeasureIndex = 2
-			try staff.startTieFromNote(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex)
-			try staff.removeTieFromNote(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex)
+			try staff.startTieFromNoteAtIndex(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex)
+			try staff.removeTieFromNoteAtIndex(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex)
 			let measure1 = staff.notesHolders[firstMeasureIndex] as! Measure
 			let measure2 = staff.notesHolders[firstMeasureIndex + 1] as! Measure
 			let firstNote = measure1.notes[firstNoteIndex] as! Note
@@ -429,8 +429,8 @@ class StaffTests: XCTestCase {
 		do {
 			let firstNoteIndex = 6
 			let firstMeasureIndex = 0
-			try staff.startTieFromNote(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex)
-			try staff.removeTieFromNote(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex + 1)
+			try staff.startTieFromNoteAtIndex(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex)
+			try staff.removeTieFromNoteAtIndex(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex + 1)
 			let measure1 = staff.notesHolders[firstMeasureIndex] as! Measure
 			let measure2 = staff.notesHolders[firstMeasureIndex + 1] as! Measure
 			let firstNote = measure1.notes[firstNoteIndex] as! Note
@@ -442,13 +442,13 @@ class StaffTests: XCTestCase {
 		}
 	}
 	
-	func testRemoveTieFromNoteThatIsBeginAndEnd() {
+	func testremoveTieFromNoteAtIndexThatIsBeginAndEnd() {
 		do {
 			let firstNoteIndex = 0
 			let firstMeasureIndex = 0
-			try staff.startTieFromNote(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex)
-			try staff.startTieFromNote(firstNoteIndex + 1, inMeasureAtIndex: firstMeasureIndex)
-			try staff.removeTieFromNote(firstNoteIndex + 1, inMeasureAtIndex: firstMeasureIndex)
+			try staff.startTieFromNoteAtIndex(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex)
+			try staff.startTieFromNoteAtIndex(firstNoteIndex + 1, inMeasureAtIndex: firstMeasureIndex)
+			try staff.removeTieFromNoteAtIndex(firstNoteIndex + 1, inMeasureAtIndex: firstMeasureIndex)
 			let measure = staff.notesHolders[firstMeasureIndex] as! Measure
 			let firstNote = measure.notes[firstNoteIndex] as! Note
 			let secondNote = measure.notes[firstNoteIndex + 1] as! Note

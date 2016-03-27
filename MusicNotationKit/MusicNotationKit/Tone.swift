@@ -18,3 +18,15 @@ public struct Tone {
 		self.octave = octave
 	}
 }
+
+extension Tone: Equatable {}
+
+public func ==(lhs: Tone, rhs: Tone) -> Bool {
+	if lhs.accidental == rhs.accidental &&
+		lhs.noteLetter == rhs.noteLetter &&
+		lhs.octave == rhs.octave {
+			return true
+	} else {
+		return false
+	}
+}

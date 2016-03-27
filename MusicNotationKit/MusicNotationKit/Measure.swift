@@ -6,11 +6,11 @@
 //  Copyright (c) 2015 Kyle Sherman. All rights reserved.
 //
 
-public struct Measure {
+public struct Measure: ImmutableMeasure {
 	
-	private(set) var timeSignature: TimeSignature
-	private(set) var key: Key
-	private(set) var notes: [NoteCollection] = []
+	public let timeSignature: TimeSignature
+	public let key: Key
+	private(set) var notes: [NoteCollection]
 	
 	public init(timeSignature: TimeSignature, key: Key) {
 		self.init(timeSignature: timeSignature, key: key, notes: [])
@@ -64,8 +64,22 @@ public struct Measure {
 	}
 }
 
-extension Measure: NotesHolder {
-	
+extension Measure: Equatable {}
+
+public func ==(lhs: Measure, rhs: Measure) -> Bool {
+	guard lhs.timeSignature == rhs.timeSignature &&
+		lhs.key == rhs.key &&
+		lhs.notes.count == rhs.notes.count else {
+			return false
+	}
+	for i in 0..<lhs.notes.count {
+		if lhs.notes[i] == rhs.notes[i] {
+			continue
+		} else {
+			return false
+		}
+	}
+	return true
 }
 
 public enum MeasureError: ErrorType {

@@ -18,3 +18,15 @@ public struct Key {
 		self.type = type
 	}
 }
+
+extension Key: Equatable {}
+
+public func ==(lhs: Key, rhs: Key) -> Bool {
+	if lhs.type == rhs.type &&
+		lhs.noteLetter == rhs.noteLetter &&
+		lhs.accidental == rhs.accidental {
+			return true
+	} else {
+		return false
+	}
+}

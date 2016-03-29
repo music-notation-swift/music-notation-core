@@ -24,8 +24,6 @@ public struct TimeSignature {
 
 extension TimeSignature: CustomDebugStringConvertible {
 	public var debugDescription: String {
-		let result:String = String(format:"%d/%d",
-			self.topNumber, self.bottomNumber)
-		return result
+		return "\(topNumber)/\(bottomNumber)"
 	}
 }

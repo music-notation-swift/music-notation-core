@@ -59,24 +59,22 @@ extension Note: CustomDebugStringConvertible {
 		
 		// Tones are handled in two different ways. Single notes
 		// do not contain collection notation, whereas chords do.
-		var tones:String = ""
-		if (self.tones.count == 1) {
+		var tones = ""
+		if self.tones.count == 1 {
 			tones = String(self.tones[0])
-		} else if (self.tones.count > 1) {
+		} else if self.tones.count > 1 {
 			tones = String(self.tones)
 		}
 		
 		// The dot notation is placed after the note duration.
-		var duration  = String(self.noteDuration.rawValue)
-		if (self.dot != nil) {
-			duration += String(self.dot!.rawValue)
+		var duration  = String(noteDuration)
+		if dot != nil {
+			duration += String(dot!)
 		}
 		
-		var result = String(format: "%@%@",
-			duration,
-			tones)
+		var result = "\(duration)\(tones)"
 		
-		if (self.isRest) {
+		if isRest {
 			result += "R"
 		}
 		

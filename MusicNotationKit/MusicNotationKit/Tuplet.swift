@@ -104,9 +104,7 @@ extension Tuplet: NoteCollection {
 
 extension Tuplet: CustomDebugStringConvertible {
 	public var debugDescription: String {
-		let result:String = String(format:"tuplet(notes: \n %@)",
-			String(self.notes))
-		return result
+		return "\(notes)"
 	}
 }
 

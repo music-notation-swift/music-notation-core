@@ -21,9 +21,9 @@ public struct Tone {
 
 extension Tone: CustomDebugStringConvertible {
 	public var debugDescription: String {
-		var result = String(format:"%@%d", String(self.noteLetter), self.octave.rawValue)
-		if (self.accidental != nil ) {
-			result = String(format: "[%@%@]", result, self.accidental!.rawValue)
+		var result = "\(noteLetter)\(octave.rawValue)"
+		if accidental != nil {
+			result = "[\(result)\(accidental!)]"
 		}
 		return result
 	}

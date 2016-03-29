@@ -71,17 +71,8 @@ extension Measure: NotesHolder {
 // Debug extensions
 extension Measure: CustomDebugStringConvertible {
 	public var debugDescription: String {
-		var notes = [String]();
-		for note in self.notes {
-			notes.append(String(note))
-		}
-		let notesString = notes.joinWithSeparator(", ")
-		
-		let result:String = String(format: "|%@: %@|",
-			String(self.timeSignature),
-		    notesString)
-
-		return result
+		let notesString = notes.map { "\($0)" }.joinWithSeparator(",")
+		return "|\(timeSignature): \(notesString)|"
 	}
 }
 

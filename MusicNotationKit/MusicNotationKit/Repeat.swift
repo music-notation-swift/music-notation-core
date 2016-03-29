@@ -26,9 +26,7 @@ extension MeasureRepeat: NotesHolder {
 
 extension MeasureRepeat: CustomDebugStringConvertible {
 	public var debugDescription: String {
-		let result:String = String(format:"repeat(times: %d - measures \n %@)",
-			self.count, String(self.measures))
-		return result
+		return "repeat(times: \(count) measures: \(measures))"
 	}
 }
 

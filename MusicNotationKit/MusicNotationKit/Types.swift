@@ -25,22 +25,48 @@ public enum Striking {
 	case Right, Down
 }
 
-public enum NoteDuration: String {
-	case Whole        = "1"
-	case Half         = "1/2"
-	case Quarter      = "1/4"
-	case Eighth       = "1/8"
-	case Sixteenth    = "1/16"
-	case ThirtySecond = "1/32"
-	case SixtyFourth  = "1/64"
+public enum NoteDuration {
+	case Whole
+	case Half
+	case Quarter
+	case Eighth
+	case Sixteenth
+	case ThirtySecond
+	case SixtyFourth
 }
 
-public enum Accidental: String {
-	case Sharp        = "#"
-	case DoubleSharp  = "##"
-	case Flat         = "b"
-	case DoubleFlat   = "bb"
-	case Natural      = "n"
+extension NoteDuration: CustomDebugStringConvertible {
+	public var debugDescription: String {
+		switch self {
+		case .Whole: return "1"
+		case .Half: return "1/2"
+		case .Quarter: return "1/4"
+		case .Eighth: return "1/8"
+		case .Sixteenth: return "1/16"
+		case .ThirtySecond: return "1/32"
+		case .SixtyFourth: return "1/64"
+		}
+	}
+}
+
+public enum Accidental {
+	case Sharp
+	case DoubleSharp
+	case Flat
+	case DoubleFlat
+	case Natural
+}
+
+extension Accidental: CustomDebugStringConvertible {
+	public var debugDescription: String {
+		switch self {
+		case .Sharp: return "#"
+		case .DoubleSharp: return "##"
+		case .Flat: return "b"
+		case .DoubleFlat: return "bb"
+		case .Natural: return "n"
+		}
+	}
 }
 
 public enum NoteLetter {
@@ -63,9 +89,18 @@ public enum Instrument {
 	case Drums
 }
 
-public enum Dot: String {
-	case Single = "."
-	case Double = ".."
+public enum Dot {
+	case Single
+	case Double
+}
+
+extension Dot: CustomDebugStringConvertible {
+	public var debugDescription: String {
+		switch self {
+		case .Single: return "."
+		case .Double: return ".."
+		}
+	}
 }
 
 public enum Accent {

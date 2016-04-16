@@ -19,6 +19,18 @@ public struct Tone {
 	}
 }
 
+extension Tone: CustomDebugStringConvertible {
+	public var debugDescription: String {
+		let accidentalString: String
+		if let accidental = accidental {
+			accidentalString = "\(accidental)"
+		} else {
+			accidentalString = ""
+		}
+		return "\(noteLetter)\(octave.rawValue)\(accidentalString)"
+	}
+}
+
 extension Tone: Equatable {}
 
 public func ==(lhs: Tone, rhs: Tone) -> Bool {

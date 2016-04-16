@@ -34,3 +34,9 @@ public struct Staff {
 		self.notesHolders.insert(repeatedMeasures, atIndex: index)
 	}
 }
+
+extension Staff: CustomDebugStringConvertible {
+	public var debugDescription: String {
+		return "staff(\(clef) \(instrument))"
+	}
+}

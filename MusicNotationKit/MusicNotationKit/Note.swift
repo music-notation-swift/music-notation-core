@@ -71,3 +71,25 @@ extension Note: NoteCollection {
 	
 	internal var noteCount: Int { return 1 }
 }
+
+extension Note: CustomDebugStringConvertible {
+	public var debugDescription: String {
+		let tonesString: String
+		if tones.count > 1 {
+			tonesString = "\(tones)"
+		} else {
+			if let tone = tones.first {
+				tonesString = "\(tone)"
+			} else {
+				tonesString = ""
+			}
+		}
+		let dotString: String
+		if let dot = dot {
+			dotString = "\(dot)"
+		} else {
+			dotString = ""
+		}
+		return "\(noteDuration)\(dotString)\(tonesString)\(isRest ? "R" : "")"
+	}
+}

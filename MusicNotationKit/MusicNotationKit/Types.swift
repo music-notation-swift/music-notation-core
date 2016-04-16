@@ -6,18 +6,18 @@
 //  Copyright (c) 2015 Kyle Sherman. All rights reserved.
 //
 
-public enum Octave {
-	case OctaveNegative1
-	case Octave0
-	case Octave1
-	case Octave2
-	case Octave3
-	case Octave4
-	case Octave5
-	case Octave6
-	case Octave7
-	case Octave8
-	case Octave9
+public enum Octave: Int {
+	case OctaveNegative1 = -1
+	case Octave0 = 0
+	case Octave1 = 1
+	case Octave2 = 2
+	case Octave3 = 3
+	case Octave4 = 4
+	case Octave5 = 5
+	case Octave6 = 6
+	case Octave7 = 7
+	case Octave8 = 8
+	case Octave9 = 9
 }
 
 public enum Striking {
@@ -35,12 +35,38 @@ public enum NoteDuration {
 	case SixtyFourth
 }
 
+extension NoteDuration: CustomDebugStringConvertible {
+	public var debugDescription: String {
+		switch self {
+		case .Whole: return "1"
+		case .Half: return "1/2"
+		case .Quarter: return "1/4"
+		case .Eighth: return "1/8"
+		case .Sixteenth: return "1/16"
+		case .ThirtySecond: return "1/32"
+		case .SixtyFourth: return "1/64"
+		}
+	}
+}
+
 public enum Accidental {
 	case Sharp
 	case DoubleSharp
 	case Flat
 	case DoubleFlat
 	case Natural
+}
+
+extension Accidental: CustomDebugStringConvertible {
+	public var debugDescription: String {
+		switch self {
+		case .Sharp: return "#"
+		case .DoubleSharp: return "##"
+		case .Flat: return "b"
+		case .DoubleFlat: return "bb"
+		case .Natural: return "n"
+		}
+	}
 }
 
 public enum NoteLetter {
@@ -66,6 +92,15 @@ public enum Instrument {
 public enum Dot {
 	case Single
 	case Double
+}
+
+extension Dot: CustomDebugStringConvertible {
+	public var debugDescription: String {
+		switch self {
+		case .Single: return "."
+		case .Double: return ".."
+		}
+	}
 }
 
 public enum Accent {

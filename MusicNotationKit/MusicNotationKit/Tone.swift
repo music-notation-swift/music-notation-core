@@ -30,3 +30,15 @@ extension Tone: CustomDebugStringConvertible {
 		return "\(noteLetter)\(octave.rawValue)\(accidentalString)"
 	}
 }
+
+extension Tone: Equatable {}
+
+public func ==(lhs: Tone, rhs: Tone) -> Bool {
+	if lhs.accidental == rhs.accidental &&
+		lhs.noteLetter == rhs.noteLetter &&
+		lhs.octave == rhs.octave {
+			return true
+	} else {
+		return false
+	}
+}

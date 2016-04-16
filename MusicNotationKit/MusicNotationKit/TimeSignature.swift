@@ -27,3 +27,15 @@ extension TimeSignature: CustomDebugStringConvertible {
 		return "\(topNumber)/\(bottomNumber)"
 	}
 }
+
+extension TimeSignature: Equatable {}
+
+public func ==(lhs: TimeSignature, rhs: TimeSignature) -> Bool {
+	if lhs.topNumber == rhs.topNumber &&
+		lhs.bottomNumber == rhs.bottomNumber &&
+		lhs.tempo == rhs.tempo {
+			return true
+	} else {
+		return false
+	}
+}

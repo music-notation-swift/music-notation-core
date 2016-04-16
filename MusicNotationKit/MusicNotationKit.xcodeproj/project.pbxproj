@@ -15,7 +15,7 @@
 		270CC5401B2C06B700CA1A56 /* TimeSignature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 270CC53C1B2C06B700CA1A56 /* TimeSignature.swift */; };
 		270CC5411B2C06B700CA1A56 /* Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = 270CC53D1B2C06B700CA1A56 /* Types.swift */; };
 		270F46A31B2FE4D900FDF4FF /* NoteHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 270F46A21B2FE4D900FDF4FF /* NoteHolder.swift */; };
-		270F46A51B2FE76E00FDF4FF /* Repeat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 270F46A41B2FE76E00FDF4FF /* Repeat.swift */; };
+		270F46A51B2FE76E00FDF4FF /* MeasureRepeat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 270F46A41B2FE76E00FDF4FF /* MeasureRepeat.swift */; };
 		270F46A71B2FE8B400FDF4FF /* Tuplet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 270F46A61B2FE8B400FDF4FF /* Tuplet.swift */; };
 		270F46AB1B2FEA3900FDF4FF /* Tone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 270F46AA1B2FEA3900FDF4FF /* Tone.swift */; };
 		270F46AD1B2FEC5500FDF4FF /* NoteCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 270F46AC1B2FEC5500FDF4FF /* NoteCollection.swift */; };
@@ -26,6 +26,9 @@
 		27A0AA461B52351400635541 /* Key.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27A0AA451B52351400635541 /* Key.swift */; };
 		27A0AA481B52478F00635541 /* RepeatTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27A0AA471B52478F00635541 /* RepeatTests.swift */; };
 		27A0AA4A1B524B6400635541 /* TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27A0AA491B524B6400635541 /* TestHelpers.swift */; };
+		27AA71131C8D1BD900E2BF22 /* ImmutableMeasure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27AA71121C8D1BD900E2BF22 /* ImmutableMeasure.swift */; };
+		27AA71151C9140C400E2BF22 /* RepeatedMeasure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27AA71141C9140C400E2BF22 /* RepeatedMeasure.swift */; };
+		27AA71171C9146FD00E2BF22 /* MeasureRepeatTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27AA71161C9146FD00E2BF22 /* MeasureRepeatTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,7 +53,7 @@
 		270CC53C1B2C06B700CA1A56 /* TimeSignature.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeSignature.swift; sourceTree = "<group>"; };
 		270CC53D1B2C06B700CA1A56 /* Types.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Types.swift; sourceTree = "<group>"; };
 		270F46A21B2FE4D900FDF4FF /* NoteHolder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoteHolder.swift; sourceTree = "<group>"; };
-		270F46A41B2FE76E00FDF4FF /* Repeat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Repeat.swift; sourceTree = "<group>"; };
+		270F46A41B2FE76E00FDF4FF /* MeasureRepeat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeasureRepeat.swift; sourceTree = "<group>"; };
 		270F46A61B2FE8B400FDF4FF /* Tuplet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tuplet.swift; sourceTree = "<group>"; };
 		270F46AA1B2FEA3900FDF4FF /* Tone.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tone.swift; sourceTree = "<group>"; };
 		270F46AC1B2FEC5500FDF4FF /* NoteCollection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoteCollection.swift; sourceTree = "<group>"; };
@@ -61,6 +64,9 @@
 		27A0AA451B52351400635541 /* Key.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Key.swift; sourceTree = "<group>"; };
 		27A0AA471B52478F00635541 /* RepeatTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RepeatTests.swift; sourceTree = "<group>"; };
 		27A0AA491B524B6400635541 /* TestHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestHelpers.swift; sourceTree = "<group>"; };
+		27AA71121C8D1BD900E2BF22 /* ImmutableMeasure.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImmutableMeasure.swift; sourceTree = "<group>"; };
+		27AA71141C9140C400E2BF22 /* RepeatedMeasure.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RepeatedMeasure.swift; sourceTree = "<group>"; };
+		27AA71161C9146FD00E2BF22 /* MeasureRepeatTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeasureRepeatTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -110,12 +116,14 @@
 				270CC53D1B2C06B700CA1A56 /* Types.swift */,
 				278D194F1B2EB4E7004ACE99 /* Staff.swift */,
 				270F46A21B2FE4D900FDF4FF /* NoteHolder.swift */,
-				270F46A41B2FE76E00FDF4FF /* Repeat.swift */,
+				270F46A41B2FE76E00FDF4FF /* MeasureRepeat.swift */,
 				270F46A61B2FE8B400FDF4FF /* Tuplet.swift */,
 				270F46AA1B2FEA3900FDF4FF /* Tone.swift */,
 				270F46AC1B2FEC5500FDF4FF /* NoteCollection.swift */,
 				27A0AA451B52351400635541 /* Key.swift */,
+				27AA71121C8D1BD900E2BF22 /* ImmutableMeasure.swift */,
 				270CC5211B2C06A200CA1A56 /* Supporting Files */,
+				27AA71141C9140C400E2BF22 /* RepeatedMeasure.swift */,
 			);
 			path = MusicNotationKit;
 			sourceTree = "<group>";
@@ -138,6 +146,7 @@
 				27A0AA471B52478F00635541 /* RepeatTests.swift */,
 				27A0AA491B524B6400635541 /* TestHelpers.swift */,
 				275A58D11B54BD8B0023D5EF /* MeasureTests.swift */,
+				27AA71161C9146FD00E2BF22 /* MeasureRepeatTests.swift */,
 			);
 			path = MusicNotationKitTests;
 			sourceTree = "<group>";
@@ -259,12 +268,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				278D19501B2EB4E7004ACE99 /* Staff.swift in Sources */,
-				270F46A51B2FE76E00FDF4FF /* Repeat.swift in Sources */,
+				270F46A51B2FE76E00FDF4FF /* MeasureRepeat.swift in Sources */,
 				270CC53E1B2C06B700CA1A56 /* Measure.swift in Sources */,
 				270F46AB1B2FEA3900FDF4FF /* Tone.swift in Sources */,
 				270CC5401B2C06B700CA1A56 /* TimeSignature.swift in Sources */,
 				27A0AA461B52351400635541 /* Key.swift in Sources */,
 				270CC53F1B2C06B700CA1A56 /* Note.swift in Sources */,
+				27AA71151C9140C400E2BF22 /* RepeatedMeasure.swift in Sources */,
+				27AA71131C8D1BD900E2BF22 /* ImmutableMeasure.swift in Sources */,
 				270CC5411B2C06B700CA1A56 /* Types.swift in Sources */,
 				270F46A71B2FE8B400FDF4FF /* Tuplet.swift in Sources */,
 				270F46AD1B2FEC5500FDF4FF /* NoteCollection.swift in Sources */,
@@ -277,6 +288,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				275A58D21B54BD8B0023D5EF /* MeasureTests.swift in Sources */,
+				27AA71171C9146FD00E2BF22 /* MeasureRepeatTests.swift in Sources */,
 				27A0AA481B52478F00635541 /* RepeatTests.swift in Sources */,
 				27A0AA4A1B524B6400635541 /* TestHelpers.swift in Sources */,
 				270CC5311B2C06A200CA1A56 /* MusicNotationKitTests.swift in Sources */,

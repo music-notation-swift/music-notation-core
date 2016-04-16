@@ -19,8 +19,22 @@ public struct Key {
 	}
 }
 
+
 extension Key: CustomDebugStringConvertible {
 	public var debugDescription: String {
 		return "\(noteLetter) \(type)"
+	}
+}
+
+extension Key: Equatable {}
+
+public func ==(lhs: Key, rhs: Key) -> Bool {
+	if lhs.type == rhs.type &&
+		lhs.noteLetter == rhs.noteLetter &&
+		lhs.accidental == rhs.accidental {
+			return true
+	} else {
+		return false
+
 	}
 }

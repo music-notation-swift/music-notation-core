@@ -56,29 +56,22 @@ extension Note: NoteCollection {
 
 extension Note: CustomDebugStringConvertible {
 	public var debugDescription: String {
-		
-		// Tones are handled in two different ways. Single notes
-		// do not contain collection notation, whereas chords do.
-		var tones = ""
-		if self.tones.count == 1 {
-			tones = String(self.tones[0])
-		} else if self.tones.count > 1 {
-			tones = String(self.tones)
+		let tonesString:String
+		if tones.count > 1 {
+			tonesString = "\(tones)"
+		} else {
+			if let tone = tones.first {
+				tonesString = "\(tone)"
+			} else {
+				tonesString = ""
+			}
 		}
-		
-		// The dot notation is placed after the note duration.
-		var duration  = String(noteDuration)
-		if dot != nil {
-			duration += String(dot!)
+		let dotString:String
+		if let dot = self.dot {
+			dotString = "\(dot)"
+		} else {
+			dotString = ""
 		}
-		
-		var result = "\(duration)\(tones)"
-		
-		if isRest {
-			result += "R"
-		}
-		
-		
-		return result
+		return "\(noteDuration)\(dotString)\(tonesString)\(isRest ? "R":"")"
 	}
 }

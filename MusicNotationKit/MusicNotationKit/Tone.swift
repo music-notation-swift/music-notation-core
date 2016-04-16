@@ -21,10 +21,12 @@ public struct Tone {
 
 extension Tone: CustomDebugStringConvertible {
 	public var debugDescription: String {
-		var result = "\(noteLetter)\(octave.rawValue)"
-		if accidental != nil {
-			result = "[\(result)\(accidental!)]"
+		let accidentalString:String
+		if let accidental = self.accidental {
+			accidentalString = "\(accidental)"
+		} else {
+			accidentalString = ""
 		}
-		return result
+		return "\(noteLetter)\(octave.rawValue)\(accidentalString)"
 	}
 }

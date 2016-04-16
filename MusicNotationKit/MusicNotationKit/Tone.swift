@@ -21,8 +21,8 @@ public struct Tone {
 
 extension Tone: CustomDebugStringConvertible {
 	public var debugDescription: String {
-		let accidentalString:String
-		if let accidental = self.accidental {
+		let accidentalString: String
+		if let accidental = accidental {
 			accidentalString = "\(accidental)"
 		} else {
 			accidentalString = ""

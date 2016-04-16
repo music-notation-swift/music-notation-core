@@ -74,7 +74,7 @@ extension Note: NoteCollection {
 
 extension Note: CustomDebugStringConvertible {
 	public var debugDescription: String {
-		let tonesString:String
+		let tonesString: String
 		if tones.count > 1 {
 			tonesString = "\(tones)"
 		} else {
@@ -84,12 +84,12 @@ extension Note: CustomDebugStringConvertible {
 				tonesString = ""
 			}
 		}
-		let dotString:String
-		if let dot = self.dot {
+		let dotString: String
+		if let dot = dot {
 			dotString = "\(dot)"
 		} else {
 			dotString = ""
 		}
-		return "\(noteDuration)\(dotString)\(tonesString)\(isRest ? "R":"")"
+		return "\(noteDuration)\(dotString)\(tonesString)\(isRest ? "R" : "")"
 	}
 }

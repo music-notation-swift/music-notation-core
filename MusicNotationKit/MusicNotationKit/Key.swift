@@ -35,6 +35,5 @@ public func ==(lhs: Key, rhs: Key) -> Bool {
 			return true
 	} else {
 		return false
-
 	}
 }

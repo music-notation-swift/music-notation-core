@@ -103,6 +103,10 @@ extension Note: NoteCollection {
 	internal var noteCount: Int { return 1 }
 }
 
+<<<<<<< HEAD
+public enum NoteError: ErrorType {
+	case InvalidRequestedTieState
+=======
 extension Note: CustomDebugStringConvertible {
 	public var debugDescription: String {
 		let tonesString: String
@@ -123,8 +127,5 @@ extension Note: CustomDebugStringConvertible {
 		}
 		return "\(noteDuration)\(dotString)\(tonesString)\(isRest ? "R" : "")"
 	}
-}
-
-public enum NoteError: ErrorType {
-	case InvalidRequestedTieState
+>>>>>>> master
 }

@@ -158,6 +158,14 @@ public func ==(lhs: Measure, rhs: Measure) -> Bool {
 	return true
 }
 
+// Debug extensions
+extension Measure: CustomDebugStringConvertible {
+	public var debugDescription: String {
+		let notesString = notes.map { "\($0)" }.joinWithSeparator(",")
+		return "|\(timeSignature): \(notesString)|"
+	}
+}
+
 public enum MeasureError: ErrorType {
 	case NoNextNoteToTie
 	case NoTieBeginsAtIndex

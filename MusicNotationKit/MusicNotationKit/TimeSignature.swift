@@ -22,6 +22,12 @@ public struct TimeSignature {
 	}
 }
 
+extension TimeSignature: CustomDebugStringConvertible {
+	public var debugDescription: String {
+		return "\(topNumber)/\(bottomNumber)"
+	}
+}
+
 extension TimeSignature: Equatable {}
 
 public func ==(lhs: TimeSignature, rhs: TimeSignature) -> Bool {

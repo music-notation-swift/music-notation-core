@@ -55,3 +55,9 @@ public enum StaffErrors: ErrorType {
 	case NotBeginningOfTie
 	case RepeatedMeasureCannotHaveTie
 }
+
+extension Staff: CustomDebugStringConvertible {
+	public var debugDescription: String {
+		return "staff(\(clef) \(instrument))"
+	}
+}

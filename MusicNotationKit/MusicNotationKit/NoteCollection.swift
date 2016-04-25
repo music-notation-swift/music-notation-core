@@ -6,7 +6,7 @@
 //  Copyright © 2015 Kyle Sherman. All rights reserved.
 //
 
-internal protocol NoteCollection {
+public protocol NoteCollection {
 	
 	var noteCount: Int { get }
 }

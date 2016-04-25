@@ -100,7 +100,7 @@ public func ==(lhs: Note, rhs: Note) -> Bool {
 
 extension Note: NoteCollection {
 	
-	internal var noteCount: Int { return 1 }
+	public var noteCount: Int { return 1 }
 }
 
 extension Note: CustomDebugStringConvertible {

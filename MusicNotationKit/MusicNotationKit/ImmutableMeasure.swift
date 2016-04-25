@@ -6,7 +6,7 @@
 //  Copyright © 2016 Kyle Sherman. All rights reserved.
 //
 
-protocol ImmutableMeasure: NotesHolder {
+public protocol ImmutableMeasure: NotesHolder {
 	
 	var timeSignature: TimeSignature { get }
 	var key: Key { get }

@@ -42,7 +42,7 @@ public struct Staff {
 		
 	}
 	
-	public func measureAtIndex(measureIndex: Int) throws -> Measure {
+	public func measureAtIndex(measureIndex: Int) throws -> ImmutableMeasure {
 		
 	}
 	
@@ -58,7 +58,7 @@ public struct Staff {
 		
 	}
 	
-	internal func notesHolderIndexFromMeasureIndex(index: Int) throws -> (notesHolderIndex: Int, repeatMeasureIndex: Int?, isRepeatedMeasure: Bool) {
+	internal func notesHolderIndexFromMeasureIndex(index: Int) throws -> (notesHolderIndex: Int, repeatMeasureIndex: Int?) {
 		
 	}
 }

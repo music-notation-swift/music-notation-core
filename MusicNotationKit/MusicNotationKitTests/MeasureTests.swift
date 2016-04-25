@@ -312,7 +312,7 @@ class MeasureTests: XCTestCase {
 		}
 	}
 	
-	private func setTieAtIndex(index: Int, functionName: String = __FUNCTION__, lineNum: Int = __LINE__) {
+	private func setTieAtIndex(index: Int, functionName: String = #function, lineNum: Int = #line) {
 		do {
 			try measure.startTieAtIndex(index)
 			let (noteIndex1, tupletIndex1) = try measure.noteCollectionIndexFromNoteIndex(index)

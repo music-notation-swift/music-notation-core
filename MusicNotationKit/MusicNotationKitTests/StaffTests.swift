@@ -461,7 +461,7 @@ class StaffTests: XCTestCase {
 		}
 	}
 	
-	// MARK: - notesHolderIndexFromMeasureIndex(_: Int) -> (Int, Int?, Bool)
+	// MARK: - notesHolderIndexFromMeasureIndex(_: Int) -> (Int, Int?)
 	// MARK: Failures
 	
 	func testNotesHolderIndexForOutOfRangeMeasureIndex() {
@@ -491,7 +491,6 @@ class StaffTests: XCTestCase {
 			let indexes = try staff.notesHolderIndexFromMeasureIndex(8)
 			XCTAssertEqual(indexes.notesHolderIndex, 6)
 			XCTAssertEqual(indexes.repeatMeasureIndex, 1)
-			XCTAssertEqual(indexes.isRepeatedMeasure, false)
 		} catch {
 			XCTFail(String(error))
 		}
@@ -502,7 +501,6 @@ class StaffTests: XCTestCase {
 			let indexes = try staff.notesHolderIndexFromMeasureIndex(9)
 			XCTAssertEqual(indexes.notesHolderIndex, 6)
 			XCTAssertEqual(indexes.repeatMeasureIndex, 0)
-			XCTAssertEqual(indexes.isRepeatedMeasure, true)
 		} catch {
 			XCTFail(String(error))
 		}
@@ -513,6 +511,49 @@ class StaffTests: XCTestCase {
 			let indexes = try staff.notesHolderIndexFromMeasureIndex(13)
 			XCTAssertEqual(indexes.notesHolderIndex, 7)
 			XCTAssertNil(indexes.repeatMeasureIndex)
+		} catch {
+			XCTFail(String(error))
+		}
+	}
+	
+	// MARK: - notesHolderAtIndex(_: Int) -> NotesHolder
+	// MARK: Failures
+	
+	func testNotesHolderAtIndexForInvalidIndexNegative() {
+		do {
+			let _ = try staff.notesHolderAtIndex(-3)
+			shouldFail()
+		} catch StaffErrors.MeasureIndexOutOfRange {
+		} catch {
+			expected(StaffErrors.MeasureIndexOutOfRange, actual: error)
+		}
+	}
+	
+	func testNotesHolderAtIndexForInvalidIndexTooLarge() {
+		do {
+			let _ = try staff.notesHolderAtIndex(99)
+			shouldFail()
+		} catch StaffErrors.MeasureIndexOutOfRange {
+		} catch {
+			expected(StaffErrors.MeasureIndexOutOfRange, actual: error)
+		}
+	}
+	
+	// MARK: Successes
+	
+	func testNotesHolderAtIndexForMeasureRepeat() {
+		do {
+			let measureRepeat = try staff.notesHolderAtIndex(5)
+			XCTAssertNotNil(measureRepeat as? MeasureRepeat)
+		} catch {
+			XCTFail(String(error))
+		}
+	}
+	
+	func testNotesHolderAtIndexForMeasure() {
+		do {
+			let measure = try staff.notesHolderAtIndex(0)
+			XCTAssertNotNil(measure as? Measure)
 		} catch {
 			XCTFail(String(error))
 		}

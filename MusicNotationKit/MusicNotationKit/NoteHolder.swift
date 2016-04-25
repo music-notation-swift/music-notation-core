@@ -6,7 +6,6 @@
 //  Copyright © 2015 Kyle Sherman. All rights reserved.
 //
 
-internal protocol NotesHolder {
-	
+public protocol NotesHolder {
 	
 }

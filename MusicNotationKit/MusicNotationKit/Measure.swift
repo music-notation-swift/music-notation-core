@@ -10,13 +10,13 @@ public struct Measure: ImmutableMeasure {
 	
 	public let timeSignature: TimeSignature
 	public let key: Key
-	private(set) var notes: [NoteCollection]
+	public private(set) var notes: [NoteCollection]
 	
 	public init(timeSignature: TimeSignature, key: Key) {
 		self.init(timeSignature: timeSignature, key: key, notes: [])
 	}
 	
-	internal init(timeSignature: TimeSignature, key: Key, notes: [NoteCollection]) {
+	public init(timeSignature: TimeSignature, key: Key, notes: [NoteCollection]) {
 		self.timeSignature = timeSignature
 		self.key = key
 		self.notes = notes

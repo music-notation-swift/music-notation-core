@@ -110,7 +110,7 @@ public func ==(lhs: Tuplet, rhs: Tuplet) -> Bool {
 
 extension Tuplet: NoteCollection {
 	
-	internal var noteCount: Int { return notes.count }
+	public var noteCount: Int { return notes.count }
 }
 
 extension Tuplet: CustomDebugStringConvertible {

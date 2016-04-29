@@ -8,14 +8,16 @@
 
 public struct MeasureRepeat {
 	
-	public var count: Int
-	public var measures: [Measure]
+	public let count: Int
+	public let measures: [Measure]
+    public let measureCount: Int
 	
 	public init(measures: [Measure], repeatCount: Int = 1) throws {
 		guard measures.count > 0 else { throw MeasureRepeatError.NoMeasures }
 		guard repeatCount > 0 else { throw MeasureRepeatError.InvalidRepeatCount }
 		self.measures = measures
 		count = repeatCount
+        measureCount = measures.count + (repeatCount * measures.count)
 	}
 	
 	internal func expand() -> [NotesHolder] {

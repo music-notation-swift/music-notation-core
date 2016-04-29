@@ -70,9 +70,9 @@ class StaffTests: XCTestCase {
 		do {
 			try staff.startTieFromNoteAtIndex(10, inMeasureAtIndex: 0)
 			shouldFail()
-		} catch StaffErrors.NoteIndexOutOfRange {
+		} catch StaffError.NoteIndexOutOfRange {
 		} catch {
-			expected(StaffErrors.NoteIndexOutOfRange, actual: error)
+			expected(StaffError.NoteIndexOutOfRange, actual: error)
 		}
 	}
 	
@@ -80,9 +80,9 @@ class StaffTests: XCTestCase {
 		do {
 			try staff.startTieFromNoteAtIndex(0, inMeasureAtIndex: 10)
 			shouldFail()
-		} catch StaffErrors.MeasureIndexOutOfRange {
+		} catch StaffError.MeasureIndexOutOfRange {
 		} catch {
-			expected(StaffErrors.MeasureIndexOutOfRange, actual: error)
+			expected(StaffError.MeasureIndexOutOfRange, actual: error)
 		}
 	}
 	
@@ -90,9 +90,9 @@ class StaffTests: XCTestCase {
 		do {
 			try staff.startTieFromNoteAtIndex(3, inMeasureAtIndex: 2)
 			shouldFail()
-		} catch StaffErrors.NoNextNoteToTie {
+		} catch StaffError.NoNextNoteToTie {
 		} catch {
-			expected(StaffErrors.NoNextNoteToTie, actual: error)
+			expected(StaffError.NoNextNoteToTie, actual: error)
 		}
 	}
 	
@@ -100,9 +100,9 @@ class StaffTests: XCTestCase {
 		do {
 			try staff.startTieFromNoteAtIndex(6, inMeasureAtIndex: 2)
 			shouldFail()
-		} catch StaffErrors.NoNextNoteToTie {
+		} catch StaffError.NoNextNoteToTie {
 		} catch {
-			expected(StaffErrors.NoNextNoteToTie, actual: error)
+			expected(StaffError.NoNextNoteToTie, actual: error)
 		}
 	}
 	
@@ -111,9 +111,9 @@ class StaffTests: XCTestCase {
 		do {
 			try staff.startTieFromNoteAtIndex(3, inMeasureAtIndex: 5)
 			shouldFail()
-		} catch StaffErrors.NoNextNoteToTie {
+		} catch StaffError.NoNextNoteToTie {
 		} catch {
-			expected(StaffErrors.NoNextNoteToTie, actual: error)
+			expected(StaffError.NoNextNoteToTie, actual: error)
 		}
 	}
 	
@@ -121,9 +121,9 @@ class StaffTests: XCTestCase {
 		do {
 			try staff.startTieFromNoteAtIndex(3, inMeasureAtIndex: 6)
 			shouldFail()
-		} catch StaffErrors.NoNextNoteToTie {
+		} catch StaffError.NoNextNoteToTie {
 		} catch {
-			expected(StaffErrors.NoNextNoteToTie, actual: error)
+			expected(StaffError.NoNextNoteToTie, actual: error)
 		}
 	}
 	
@@ -131,9 +131,9 @@ class StaffTests: XCTestCase {
 		do {
 			try staff.startTieFromNoteAtIndex(0, inMeasureAtIndex: 8)
 			shouldFail()
-		} catch StaffErrors.RepeatedMeasureCannotHaveTie {
+		} catch StaffError.RepeatedMeasureCannotHaveTie {
 		} catch {
-			expected(StaffErrors.RepeatedMeasureCannotHaveTie, actual: error)
+			expected(StaffError.RepeatedMeasureCannotHaveTie, actual: error)
 		}
 	}
 	
@@ -305,9 +305,9 @@ class StaffTests: XCTestCase {
 		do {
 			try staff.removeTieFromNoteAtIndex(10, inMeasureAtIndex: 0)
 			shouldFail()
-		} catch StaffErrors.NoteIndexOutOfRange {
+		} catch StaffError.NoteIndexOutOfRange {
 		} catch {
-			expected(StaffErrors.NoteIndexOutOfRange, actual: error)
+			expected(StaffError.NoteIndexOutOfRange, actual: error)
 		}
 	}
 	
@@ -315,9 +315,9 @@ class StaffTests: XCTestCase {
 		do {
 			try staff.removeTieFromNoteAtIndex(0, inMeasureAtIndex: 10)
 			shouldFail()
-		} catch StaffErrors.MeasureIndexOutOfRange {
+		} catch StaffError.MeasureIndexOutOfRange {
 		} catch {
-			expected(StaffErrors.MeasureIndexOutOfRange, actual: error)
+			expected(StaffError.MeasureIndexOutOfRange, actual: error)
 		}
 	}
 	
@@ -325,9 +325,9 @@ class StaffTests: XCTestCase {
 		do {
 			try staff.removeTieFromNoteAtIndex(0, inMeasureAtIndex: 0)
 			shouldFail()
-		} catch StaffErrors.NotBeginningOfTie {
+		} catch StaffError.NotBeginningOfTie {
 		} catch {
-			expected(StaffErrors.NotBeginningOfTie, actual: error)
+			expected(StaffError.NotBeginningOfTie, actual: error)
 		}
 	}
 	
@@ -336,9 +336,9 @@ class StaffTests: XCTestCase {
 			try staff.startTieFromNoteAtIndex(0, inMeasureAtIndex: 0)
 			try staff.removeTieFromNoteAtIndex(1, inMeasureAtIndex: 0)
 			shouldFail()
-		} catch StaffErrors.NotBeginningOfTie {
+		} catch StaffError.NotBeginningOfTie {
 		} catch {
-			expected(StaffErrors.NotBeginningOfTie, actual: error)
+			expected(StaffError.NotBeginningOfTie, actual: error)
 		}
 	}
 	
@@ -468,9 +468,9 @@ class StaffTests: XCTestCase {
 		do {
 			let _ = try staff.notesHolderIndexFromMeasureIndex(20)
 			shouldFail()
-		} catch StaffErrors.MeasureIndexOutOfRange {
+		} catch StaffError.MeasureIndexOutOfRange {
 		} catch {
-			expected(StaffErrors.MeasureIndexOutOfRange, actual: error)
+			expected(StaffError.MeasureIndexOutOfRange, actual: error)
 		}
 	}
 	
@@ -500,7 +500,7 @@ class StaffTests: XCTestCase {
 		do {
 			let indexes = try staff.notesHolderIndexFromMeasureIndex(9)
 			XCTAssertEqual(indexes.notesHolderIndex, 6)
-			XCTAssertEqual(indexes.repeatMeasureIndex, 0)
+			XCTAssertEqual(indexes.repeatMeasureIndex, 2)
 		} catch {
 			XCTFail(String(error))
 		}
@@ -523,9 +523,9 @@ class StaffTests: XCTestCase {
 		do {
 			let _ = try staff.notesHolderAtIndex(-3)
 			shouldFail()
-		} catch StaffErrors.MeasureIndexOutOfRange {
+		} catch StaffError.MeasureIndexOutOfRange {
 		} catch {
-			expected(StaffErrors.MeasureIndexOutOfRange, actual: error)
+			expected(StaffError.MeasureIndexOutOfRange, actual: error)
 		}
 	}
 	
@@ -533,9 +533,9 @@ class StaffTests: XCTestCase {
 		do {
 			let _ = try staff.notesHolderAtIndex(99)
 			shouldFail()
-		} catch StaffErrors.MeasureIndexOutOfRange {
+		} catch StaffError.MeasureIndexOutOfRange {
 		} catch {
-			expected(StaffErrors.MeasureIndexOutOfRange, actual: error)
+			expected(StaffError.MeasureIndexOutOfRange, actual: error)
 		}
 	}
 	
@@ -598,9 +598,9 @@ class StaffTests: XCTestCase {
 		do {
 			let _ = try staff.measureAtIndex(-1)
 			shouldFail()
-		} catch StaffErrors.MeasureIndexOutOfRange {
+		} catch StaffError.MeasureIndexOutOfRange {
 		} catch {
-			expected(StaffErrors.MeasureIndexOutOfRange, actual: error)
+			expected(StaffError.MeasureIndexOutOfRange, actual: error)
 		}
 	}
 	
@@ -608,9 +608,9 @@ class StaffTests: XCTestCase {
 		do {
 			let _ = try staff.measureAtIndex(staff.notesHolders.count + 10)
 			shouldFail()
-		} catch StaffErrors.MeasureIndexOutOfRange {
+		} catch StaffError.MeasureIndexOutOfRange {
 		} catch {
-			expected(StaffErrors.MeasureIndexOutOfRange, actual: error)
+			expected(StaffError.MeasureIndexOutOfRange, actual: error)
 		}
 	}
 	
@@ -654,9 +654,9 @@ class StaffTests: XCTestCase {
 		do {
 			let _ = try staff.measureRepeatAtIndex(-1)
 			shouldFail()
-		} catch StaffErrors.MeasureIndexOutOfRange {
+		} catch StaffError.MeasureIndexOutOfRange {
 		} catch {
-			expected(StaffErrors.MeasureIndexOutOfRange, actual: error)
+			expected(StaffError.MeasureIndexOutOfRange, actual: error)
 		}
 	}
 	
@@ -664,9 +664,9 @@ class StaffTests: XCTestCase {
 		do {
 			let _ = try staff.measureRepeatAtIndex(staff.notesHolders.count + 10)
 			shouldFail()
-		} catch StaffErrors.MeasureIndexOutOfRange {
+		} catch StaffError.MeasureIndexOutOfRange {
 		} catch {
-			expected(StaffErrors.MeasureIndexOutOfRange, actual: error)
+			expected(StaffError.MeasureIndexOutOfRange, actual: error)
 		}
 	}
 	
@@ -674,9 +674,9 @@ class StaffTests: XCTestCase {
 		do {
 			let _ = try staff.measureRepeatAtIndex(1)
 			shouldFail()
-		} catch StaffErrors.MeasureNotPartOfRepeat {
+		} catch StaffError.MeasureNotPartOfRepeat {
 		} catch {
-			expected(StaffErrors.MeasureNotPartOfRepeat, actual: error)
+			expected(StaffError.MeasureNotPartOfRepeat, actual: error)
 		}
 	}
 	

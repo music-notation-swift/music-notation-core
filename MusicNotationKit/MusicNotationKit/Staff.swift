@@ -12,7 +12,13 @@ public struct Staff {
 	public let instrument: Instrument
     public private(set) var measureCount: Int = 0
 	
-	internal private(set) var notesHolders: [NotesHolder] = []
+    internal private(set) var notesHolders: [NotesHolder] = [] {
+        didSet {
+            recomputeMeasureIndexes()
+        }
+    }
+
+    private var measureIndexes: [(notesHolderIndex: Int, repeatMeasureIndex: Int?)] = []
 	
 	public init(clef: Clef, instrument: Instrument) {
 		self.clef = clef
@@ -68,7 +74,11 @@ public struct Staff {
 	
 	internal func notesHolderIndexFromMeasureIndex(index: Int) throws -> (notesHolderIndex: Int, repeatMeasureIndex: Int?) {
         guard index >= 0 && index < measureCount else { throw StaffError.MeasureIndexOutOfRange }
-        var measureIndexes: [(Int, Int?)] = []
+        return measureIndexes[index]
+	}
+
+    private mutating func recomputeMeasureIndexes() {
+        measureIndexes = []
         for (i, notesHolder) in notesHolders.enumerate() {
             switch notesHolder {
             case is Measure:
@@ -82,8 +92,7 @@ public struct Staff {
                 continue
             }
         }
-        return measureIndexes[index]
-	}
+    }
 }
 
 public enum StaffError: ErrorType {

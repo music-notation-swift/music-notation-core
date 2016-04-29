@@ -11,7 +11,7 @@ public protocol NoteCollection {
 	var noteCount: Int { get }
 }
 
-internal func ==(lhs: NoteCollection, rhs: NoteCollection) -> Bool {
+public func ==(lhs: NoteCollection, rhs: NoteCollection) -> Bool {
 	if let left = lhs as? Note,
 		let right = rhs as? Note where left == right {
 			return true

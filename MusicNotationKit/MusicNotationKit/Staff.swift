@@ -43,15 +43,18 @@ public struct Staff {
 	}
 	
 	public func measureAtIndex(measureIndex: Int) throws -> ImmutableMeasure {
-		
+		// FIXME: REMOVE
+		throw StaffErrors.MeasureIndexOutOfRange
 	}
 	
 	public func measureRepeatAtIndex(index: Int) throws -> MeasureRepeat {
-		
+		// FIXME: REMOVE
+		throw StaffErrors.MeasureIndexOutOfRange
 	}
 	
 	internal func notesHolderAtIndex(index: Int) throws -> NotesHolder {
-		
+		// FIXME: REMOVE
+		throw StaffErrors.MeasureIndexOutOfRange
 	}
 	
 	private mutating func modifyTieForNoteAtIndex(noteIndex: Int, inMesureAtIndex measureIndex: Int) throws {
@@ -59,7 +62,8 @@ public struct Staff {
 	}
 	
 	internal func notesHolderIndexFromMeasureIndex(index: Int) throws -> (notesHolderIndex: Int, repeatMeasureIndex: Int?) {
-		
+		// FIXME: REMOVE
+		throw StaffErrors.MeasureIndexOutOfRange
 	}
 }
 
@@ -70,6 +74,7 @@ public enum StaffErrors: ErrorType {
 	case NoNextNote
 	case NotBeginningOfTie
 	case RepeatedMeasureCannotHaveTie
+	case MeasureNotPartOfRepeat
 }
 
 extension Staff: CustomDebugStringConvertible {

@@ -1,5 +1,5 @@
 //
-//  Playable.swift
+//  NotesHolder.swift
 //  MusicNotationKit
 //
 //  Created by Kyle Sherman on 6/15/15.

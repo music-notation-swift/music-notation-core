@@ -558,4 +558,111 @@ class StaffTests: XCTestCase {
 			XCTFail(String(error))
 		}
 	}
+	
+	// MARK: - measureAtIndex(_: Int) -> ImmutableMeasure
+	// MARK: Failures
+	
+	func testMeasureAtIndexForInvalidIndexNegative() {
+		do {
+			let _ = try staff.measureAtIndex(-1)
+			shouldFail()
+		} catch StaffErrors.MeasureIndexOutOfRange {
+		} catch {
+			expected(StaffErrors.MeasureIndexOutOfRange, actual: error)
+		}
+	}
+	
+	func testMeasureAtIndexForInvalidIndexTooLarge() {
+		do {
+			let _ = try staff.measureAtIndex(staff.notesHolders.count + 10)
+			shouldFail()
+		} catch StaffErrors.MeasureIndexOutOfRange {
+		} catch {
+			expected(StaffErrors.MeasureIndexOutOfRange, actual: error)
+		}
+	}
+	
+	// MARK: Successes
+	
+	func testMeasureAtIndexForRegularMeasure() {
+		do {
+			let measure = try staff.measureAtIndex(1) as! Measure
+			XCTAssertEqual(measure, staff.notesHolders[1] as? Measure)
+		} catch {
+			XCTFail(String(error))
+		}
+	}
+	
+	func testMeasureAtIndexForMeasureThatRepeats() {
+		do {
+			let measureThatRepeats = try staff.measureAtIndex(5) as! RepeatedMeasure
+			let measureRepeat = staff.notesHolders[5] as! MeasureRepeat
+			XCTAssertEqual(measureThatRepeats, measureRepeat.expand()[0] as? RepeatedMeasure)
+		} catch {
+			XCTFail(String(error))
+		}
+	}
+	
+	func testMeasureAtIndexForRepeatedMeasure() {
+		do {
+			let repeatedMeasure = try staff.measureAtIndex(6)
+			let measureRepeat = staff.notesHolders[5] as! MeasureRepeat
+			let expectedMeasure = measureRepeat.expand()[1]
+			XCTAssertNotNil(expectedMeasure as? RepeatedMeasure)
+			XCTAssertEqual(repeatedMeasure as? RepeatedMeasure, expectedMeasure as? RepeatedMeasure)
+		} catch {
+			XCTFail(String(error))
+		}
+	}
+	
+	// MARK: - measureRepeatAtIndex(_: Int) -> MeasureRepeat
+	// MARK: Failures
+	
+	func testMeasureRepeatAtIndexForInvalidIndexNegative() {
+		do {
+			let _ = try staff.measureRepeatAtIndex(-1)
+			shouldFail()
+		} catch StaffErrors.MeasureIndexOutOfRange {
+		} catch {
+			expected(StaffErrors.MeasureIndexOutOfRange, actual: error)
+		}
+	}
+	
+	func testMeasureRepeatAtIndexForInvalidIndexTooLarge() {
+		do {
+			let _ = try staff.measureRepeatAtIndex(staff.notesHolders.count + 10)
+			shouldFail()
+		} catch StaffErrors.MeasureIndexOutOfRange {
+		} catch {
+			expected(StaffErrors.MeasureIndexOutOfRange, actual: error)
+		}
+	}
+	
+	func testMeasureRepeatAtIndexForMeasureNotPartOfRepeat() {
+		do {
+			let _ = try staff.measureRepeatAtIndex(1)
+			shouldFail()
+		} catch StaffErrors.MeasureNotPartOfRepeat {
+		} catch {
+			expected(StaffErrors.MeasureNotPartOfRepeat, actual: error)
+		}
+	}
+	
+	// MARK: Successes
+	
+	func testMeasureRepeatAtIndexForFirstMeasureThatIsRepeated() {
+		
+	}
+	
+	func testMeasureRepeatAtIndexForSecondMeasureThatIsRepeated() {
+		
+	}
+	
+	func testMeasureRepeatAtIndexForRepeatedMeasureInFirstRepeat() {
+		
+	}
+	
+	func testMeasureRepeatAtIndexForRepeatedMeasureInSecondRepeat() {
+		
+	}
 }

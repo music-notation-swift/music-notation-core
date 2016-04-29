@@ -177,7 +177,7 @@ class StaffTests: XCTestCase {
 			let firstNoteIndex = 2
 			let firstMeasureIndex = 13
 			try staff.startTieFromNoteAtIndex(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex)
-			let measure = staff.notesHolders[firstMeasureIndex] as! Measure
+			let measure = staff.notesHolders[7] as! Measure
 			let firstNote = (measure.notes[0] as! Tuplet).notes[2]
 			let secondNote = (measure.notes[1] as! Tuplet).notes[0]
 			XCTAssert(firstNote.tie == .Begin)
@@ -271,7 +271,7 @@ class StaffTests: XCTestCase {
 			let firstNoteIndex = 0
 			let firstMeasureIndex = 7
 			try staff.startTieFromNoteAtIndex(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex)
-			let firstMeasure = (staff.notesHolders[firstMeasureIndex] as! MeasureRepeat).measures[0]
+			let firstMeasure = (staff.notesHolders[6] as! MeasureRepeat).measures[0]
 			let firstNote = firstMeasure.notes[firstNoteIndex] as! Note
 			let secondNote = firstMeasure.notes[firstNoteIndex + 1] as! Note
 			XCTAssert(firstNote.tie == .Begin)
@@ -286,7 +286,7 @@ class StaffTests: XCTestCase {
 			let firstNoteIndex = 3
 			let firstMeasureIndex = 7
 			try staff.startTieFromNoteAtIndex(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex)
-			let measureRepeat = staff.notesHolders[firstMeasureIndex] as! MeasureRepeat
+			let measureRepeat = staff.notesHolders[6] as! MeasureRepeat
 			let firstMeasure = measureRepeat.measures[0]
 			let secondMeasure = measureRepeat.measures[1]
 			let firstNote = firstMeasure.notes[firstNoteIndex] as! Note
@@ -367,8 +367,8 @@ class StaffTests: XCTestCase {
 			try staff.startTieFromNoteAtIndex(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex)
 			try staff.removeTieFromNoteAtIndex(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex)
 			let measure = staff.notesHolders[firstMeasureIndex] as! Measure
-			let firstNote = measure.notes[firstNoteIndex] as! Note
-			let secondNote = measure.notes[firstNoteIndex + 1] as! Note
+			let firstNote = (measure.notes[firstNoteIndex] as! Tuplet).notes[0]
+			let secondNote = (measure.notes[firstNoteIndex] as! Tuplet).notes[1]
 			XCTAssertNil(firstNote.tie)
 			XCTAssertNil(secondNote.tie)
 		} catch {
@@ -383,8 +383,8 @@ class StaffTests: XCTestCase {
 			try staff.startTieFromNoteAtIndex(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex)
 			try staff.removeTieFromNoteAtIndex(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex)
 			let measure = staff.notesHolders[firstMeasureIndex] as! Measure
-			let firstNote = measure.notes[firstNoteIndex] as! Note
-			let secondNote = measure.notes[firstNoteIndex + 1] as! Note
+			let firstNote = (measure.notes[0] as! Tuplet).notes[firstNoteIndex]
+			let secondNote = measure.notes[1] as! Note
 			XCTAssertNil(firstNote.tie)
 			XCTAssertNil(secondNote.tie)
 		} catch {
@@ -398,9 +398,9 @@ class StaffTests: XCTestCase {
 			let firstMeasureIndex = 11
 			try staff.startTieFromNoteAtIndex(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex)
 			try staff.removeTieFromNoteAtIndex(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex)
-			let measure = staff.notesHolders[firstMeasureIndex] as! Measure
-			let firstNote = measure.notes[firstNoteIndex] as! Note
-			let secondNote = measure.notes[firstNoteIndex + 1] as! Note
+			let measure = staff.notesHolders[7] as! Measure
+			let firstNote = (measure.notes[0] as! Tuplet).notes[firstNoteIndex]
+			let secondNote = (measure.notes[1] as! Tuplet).notes[0]
 			XCTAssertNil(firstNote.tie)
 			XCTAssertNil(secondNote.tie)
 		} catch {
@@ -416,7 +416,7 @@ class StaffTests: XCTestCase {
 			try staff.removeTieFromNoteAtIndex(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex)
 			let measure1 = staff.notesHolders[firstMeasureIndex] as! Measure
 			let measure2 = staff.notesHolders[firstMeasureIndex + 1] as! Measure
-			let firstNote = measure1.notes[firstNoteIndex] as! Note
+            let firstNote = (measure1.notes[4] as! Tuplet).notes[2]
 			let secondNote = measure2.notes[0] as! Note
 			XCTAssertNil(firstNote.tie)
 			XCTAssertNil(secondNote.tie)
@@ -433,8 +433,8 @@ class StaffTests: XCTestCase {
 			try staff.removeTieFromNoteAtIndex(firstNoteIndex, inMeasureAtIndex: firstMeasureIndex + 1)
 			let measure1 = staff.notesHolders[firstMeasureIndex] as! Measure
 			let measure2 = staff.notesHolders[firstMeasureIndex + 1] as! Measure
-			let firstNote = measure1.notes[firstNoteIndex] as! Note
-			let secondNote = measure2.notes[0] as! Note
+			let firstNote = (measure1.notes[4] as! Tuplet).notes[2]
+			let secondNote = (measure2.notes[0] as! Tuplet).notes[0]
 			XCTAssertNil(firstNote.tie)
 			XCTAssertNil(secondNote.tie)
 		} catch {
@@ -541,19 +541,51 @@ class StaffTests: XCTestCase {
 	
 	// MARK: Successes
 	
-	func testNotesHolderAtIndexForMeasureRepeat() {
+	func testNotesHolderAtIndexForFirstMeasureThatIsRepeated() {
 		do {
-			let measureRepeat = try staff.notesHolderAtIndex(5)
-			XCTAssertNotNil(measureRepeat as? MeasureRepeat)
+			let actual = try staff.notesHolderAtIndex(5)
+            let expected = staff.notesHolders[5]
+            XCTAssertEqual(actual as? MeasureRepeat, expected as? MeasureRepeat)
 		} catch {
 			XCTFail(String(error))
 		}
 	}
+
+    func testNotesHolderAtIndexForSecondMeasureThatIsRepeated() {
+        do {
+            let actual = try staff.notesHolderAtIndex(8)
+            let expected = staff.notesHolders[7]
+            XCTAssertEqual(actual as? MeasureRepeat, expected as? MeasureRepeat)
+        } catch {
+            XCTFail(String(error))
+        }
+    }
+
+    func testNotesHolderAtIndexForRepeatedMeasureInFirstRepeat() {
+        do {
+            let actual = try staff.notesHolderAtIndex(6)
+            let expected = staff.notesHolders[5]
+            XCTAssertEqual(actual as? MeasureRepeat, expected as? MeasureRepeat)
+        } catch {
+            XCTFail(String(error))
+        }
+    }
+
+    func testNotesHolderAtIndexForRepeatedMeasureInSecondRepeat() {
+        do {
+            let actual = try staff.notesHolderAtIndex(12)
+            let expected = staff.notesHolders[7]
+            XCTAssertEqual(actual as? MeasureRepeat, expected as? MeasureRepeat)
+        } catch {
+            XCTFail(String(error))
+        }
+    }
 	
-	func testNotesHolderAtIndexForMeasure() {
+	func testNotesHolderAtIndexForRegularMeasure() {
 		do {
-			let measure = try staff.notesHolderAtIndex(0)
-			XCTAssertNotNil(measure as? Measure)
+			let actual = try staff.notesHolderAtIndex(0)
+            let expected = staff.notesHolders[0]
+			XCTAssertEqual(actual as? Measure, expected as? Measure)
 		} catch {
 			XCTFail(String(error))
 		}
@@ -586,8 +618,8 @@ class StaffTests: XCTestCase {
 	
 	func testMeasureAtIndexForRegularMeasure() {
 		do {
-			let measure = try staff.measureAtIndex(1) as! Measure
-			XCTAssertEqual(measure, staff.notesHolders[1] as? Measure)
+			let measure = try staff.measureAtIndex(1)
+			XCTAssertEqual(measure as? Measure, staff.notesHolders[1] as? Measure)
 		} catch {
 			XCTFail(String(error))
 		}
@@ -595,9 +627,9 @@ class StaffTests: XCTestCase {
 	
 	func testMeasureAtIndexForMeasureThatRepeats() {
 		do {
-			let measureThatRepeats = try staff.measureAtIndex(5) as! RepeatedMeasure
+			let measureThatRepeats = try staff.measureAtIndex(5)
 			let measureRepeat = staff.notesHolders[5] as! MeasureRepeat
-			XCTAssertEqual(measureThatRepeats, measureRepeat.expand()[0] as? RepeatedMeasure)
+			XCTAssertEqual(measureThatRepeats as? RepeatedMeasure, measureRepeat.expand()[0] as? RepeatedMeasure)
 		} catch {
 			XCTFail(String(error))
 		}
@@ -651,18 +683,42 @@ class StaffTests: XCTestCase {
 	// MARK: Successes
 	
 	func testMeasureRepeatAtIndexForFirstMeasureThatIsRepeated() {
-		
+        do {
+            let measureRepeat = try staff.measureRepeatAtIndex(5)
+            let expected = staff.notesHolders[5] as! MeasureRepeat
+            XCTAssertEqual(measureRepeat, expected)
+        } catch {
+            XCTFail(String(error))
+        }
 	}
 	
 	func testMeasureRepeatAtIndexForSecondMeasureThatIsRepeated() {
-		
+        do {
+            let measureRepeat = try staff.measureRepeatAtIndex(8)
+            let expected = staff.notesHolders[7] as! MeasureRepeat
+            XCTAssertEqual(measureRepeat, expected)
+        } catch {
+            XCTFail(String(error))
+        }
 	}
 	
 	func testMeasureRepeatAtIndexForRepeatedMeasureInFirstRepeat() {
-		
+        do {
+            let measureRepeat = try staff.measureRepeatAtIndex(6)
+            let expected = staff.notesHolders[5] as! MeasureRepeat
+            XCTAssertEqual(measureRepeat, expected)
+        } catch {
+            XCTFail(String(error))
+        }
 	}
 	
 	func testMeasureRepeatAtIndexForRepeatedMeasureInSecondRepeat() {
-		
+        do {
+            let measureRepeat = try staff.measureRepeatAtIndex(12)
+            let expected = staff.notesHolders[7] as! MeasureRepeat
+            XCTAssertEqual(measureRepeat, expected)
+        } catch {
+            XCTFail(String(error))
+        }
 	}
 }

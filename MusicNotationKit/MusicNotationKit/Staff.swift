@@ -36,11 +36,15 @@ public struct Staff {
 	}
 	
 	public mutating func insertMeasure(measure: Measure, atIndex index: Int) {
+        // TODO: Handle it properly with the index being the measure index
+        // Have to somehow handle the case of trying to insert where repeats are
 		notesHolders.insert(measure, atIndex: index)
         measureCount += 1
 	}
 	
 	public mutating func insertRepeat(repeatedMeasures: MeasureRepeat, atIndex index: Int) {
+        // TODO: Handle it properly with the index being the measure index
+        // Have to somehow handle the case of trying to insert where repeats already exist
 		notesHolders.insert(repeatedMeasures, atIndex: index)
         measureCount += repeatedMeasures.measureCount
 	}

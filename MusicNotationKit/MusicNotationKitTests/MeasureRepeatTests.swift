@@ -142,6 +142,61 @@ class MeasureRepeatTests: XCTestCase {
 			XCTFail(String(error))
 		}
 	}
+
+    // MARK: - ==
+    // MARK: Failures
+
+    func testEqualitySameMeasureCountDifferentMeasures() {
+        do {
+            let measureRepeat1 = try MeasureRepeat(measures: [measure1, measure2, measure1])
+            let measureRepeat2 = try MeasureRepeat(measures: [measure2, measure1, measure2])
+            XCTAssertFalse(measureRepeat1 == measureRepeat2)
+        } catch {
+            XCTFail(String(error))
+        }
+    }
+
+    func testEqualityDifferentMeasureCountSameMeasures() {
+        do {
+            let measureRepeat1 = try MeasureRepeat(measures: [measure1, measure2])
+            let measureRepeat2 = try MeasureRepeat(measures: [measure1, measure2, measure1])
+            XCTAssertFalse(measureRepeat1 == measureRepeat2)
+        } catch {
+            XCTFail(String(error))
+        }
+    }
+
+    func testEqualityDifferentMeasureCountDifferentMeasures() {
+        do {
+            let measureRepeat1 = try MeasureRepeat(measures: [measure1, measure2])
+            let measureRepeat2 = try MeasureRepeat(measures: [measure2, measure1, measure2])
+            XCTAssertFalse(measureRepeat1 == measureRepeat2)
+        } catch {
+            XCTFail(String(error))
+        }
+    }
+
+    func testEqualityDifferentRepeatCount() {
+        do {
+            let measureRepeat1 = try MeasureRepeat(measures: [measure1, measure2], repeatCount: 2)
+            let measureRepeat2 = try MeasureRepeat(measures: [measure1, measure2], repeatCount: 3)
+            XCTAssertFalse(measureRepeat1 == measureRepeat2)
+        } catch {
+            XCTFail(String(error))
+        }
+    }
+
+    // MARK: Successes
+
+    func testEqualitySucceeds() {
+        do {
+            let measureRepeat1 = try MeasureRepeat(measures: [measure1], repeatCount: 2)
+            let measureRepeat2 = try MeasureRepeat(measures: [measure1], repeatCount: 2)
+            XCTAssertTrue(measureRepeat1 == measureRepeat2)
+        } catch {
+            XCTFail(String(error))
+        }
+    }
 	
 	// MARK: - Helpers
 	

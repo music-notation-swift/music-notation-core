@@ -7,12 +7,19 @@
 //
 
 public struct Measure: ImmutableMeasure {
-	
+
 	public let timeSignature: TimeSignature
 	public let key: Key
-	public private(set) var notes: [NoteCollection]
+    public private(set) var notes: [NoteCollection] {
+        didSet {
+            recomputeNoteCollectionIndexes()
+        }
+    }
     public private(set) var noteCount: Int
     public let measureCount: Int = 1
+
+    typealias NoteCollectionIndex = (noteIndex: Int, tupletIndex: Int?)
+    private var noteCollectionIndexes: [NoteCollectionIndex] = []
 	
 	public init(timeSignature: TimeSignature, key: Key) {
 		self.init(timeSignature: timeSignature, key: key, notes: [])
@@ -25,6 +32,7 @@ public struct Measure: ImmutableMeasure {
         noteCount = notes.reduce(0) { prev, noteCollection in
             return prev + noteCollection.noteCount
         }
+        recomputeNoteCollectionIndexes()
 	}
 	
 	public mutating func addNote(note: Note) {
@@ -188,26 +196,29 @@ public struct Measure: ImmutableMeasure {
 		}
 	}
 	
-	internal func noteCollectionIndexFromNoteIndex(index: Int) throws -> (noteIndex: Int, tupletIndex: Int?) {
+	internal func noteCollectionIndexFromNoteIndex(index: Int) throws -> NoteCollectionIndex {
 		// Gets the index of the given element in the notes array by translating the index of the
 		// single note within the NoteCollection array.
 		guard index >= 0 && notes.count > 0 else { throw MeasureError.NoteIndexOutOfRange }
 		// Expand notes and tuplets into indexes
 		// TODO: Move this into a method that is called on didSet of notes??
-		var noteIndexes: [(Int, Int?)] = []
-		for (i, noteCollection) in notes.enumerate() {
-			switch noteCollection.noteCount {
-			case 1:
-				noteIndexes.append((noteIndex: i, tupletIndex: nil))
-			case let count:
-				for j in 0..<count {
-					noteIndexes.append((noteIndex: i, tupletIndex: j))
-				}
-			}
-		}
-		guard index < noteIndexes.count else { throw MeasureError.NoteIndexOutOfRange }
-		return noteIndexes[index]
+		guard index < noteCollectionIndexes.count else { throw MeasureError.NoteIndexOutOfRange }
+		return noteCollectionIndexes[index]
 	}
+
+    private mutating func recomputeNoteCollectionIndexes() {
+        noteCollectionIndexes = []
+        for (i, noteCollection) in notes.enumerate() {
+            switch noteCollection.noteCount {
+            case 1:
+                noteCollectionIndexes.append((noteIndex: i, tupletIndex: nil))
+            case let count:
+                for j in 0..<count {
+                    noteCollectionIndexes.append((noteIndex: i, tupletIndex: j))
+                }
+            }
+        }
+    }
 
     private func tieStateForNoteIndex(noteIndex: Int, tupletIndex: Int?) throws -> Tie? {
         if let tupletIndex = tupletIndex {

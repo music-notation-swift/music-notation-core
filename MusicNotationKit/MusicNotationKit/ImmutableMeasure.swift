@@ -11,6 +11,7 @@ public protocol ImmutableMeasure: NotesHolder {
 	var timeSignature: TimeSignature { get }
 	var key: Key { get }
 	var notes: [NoteCollection] { get }
+    var noteCount: Int { get }
 	
 	init(timeSignature: TimeSignature, key: Key)
 	init(timeSignature: TimeSignature, key: Key, notes: [NoteCollection])

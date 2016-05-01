@@ -36,17 +36,19 @@ class MeasureTests: XCTestCase {
 		XCTAssertEqual(measure.notes.count, 0)
 		measure.addNote(Note(noteDuration: .Quarter,
 			tone: Tone(noteLetter: .C, octave: .Octave1)))
-		
-		// Fail if no next note
+
+        // Succeed if there is no next note, but only change the note to Begin
 		do {
 			try measure.startTieAtIndex(0)
-			shouldFail()
-		} catch MeasureError.NoNextNoteToTie {
-		} catch {
-			expected(MeasureError.NoNextNoteToTie, actual: error)
-		}
-		let note = measure.notes[0] as! Note
-		XCTAssertNil(note.tie)
+            let note = measure.notes[0] as! Note
+            XCTAssertNotNil(note.tie)
+            XCTAssert(note.tie == .Begin)
+        } catch {
+            XCTFail(String(error))
+        }
+
+        // FIXME: When I refactor the tests to small ones, this will not be needed
+        try! measure.removeTieAtIndex(0)
 		
 		// Succeed if there is a next note
 		measure.addNote(Note(noteDuration: .Eighth,
@@ -66,6 +68,10 @@ class MeasureTests: XCTestCase {
 		// Succeed if the note is already the beginning of a tie
 		do {
 			try measure.startTieAtIndex(0)
+            let note1 = measure.notes[0] as! Note
+            let note2 = measure.notes[1] as! Note
+            XCTAssert(note1.tie == .Begin)
+            XCTAssert(note2.tie == .End)
 		} catch {
 			XCTFail(String(error))
 		}
@@ -90,14 +96,16 @@ class MeasureTests: XCTestCase {
 			XCTFail(String(error))
 		}
 		
-		// Fail if it is the last note of a tuplet and there is no next note
+		// Succeed if it is the last note of a tuplet and there is no next note. Just change to Begin
 		do {
 			try measure.startTieAtIndex(5)
-			shouldFail()
-		} catch MeasureError.NoNextNoteToTie {
-		} catch {
-			expected(MeasureError.NoNextNoteToTie, actual: error)
-		}
+            let tuplet = measure.notes[3] as! Tuplet
+            XCTAssert(tuplet.notes[2].tie == .Begin)
+        } catch {
+            XCTFail(String(error))
+        }
+        // FIXME: When I refactor the tests to small ones, this will not be needed
+        try! measure.removeTieAtIndex(5)
 		
 		// Succeed if starting a tie on the note of an ending tie
 		do {
@@ -158,16 +166,6 @@ class MeasureTests: XCTestCase {
 		} catch MeasureError.NoteIndexOutOfRange {
 		} catch {
 			expected(MeasureError.NoteIndexOutOfRange, actual: error)
-		}
-		
-		// Fails if it started on the end of the measure
-		do {
-			// Can't set the tie, because it will fail
-			try measure.removeTieAtIndex(3)
-			shouldFail()
-		} catch MeasureError.NoNextNote {
-		} catch {
-			expected(MeasureError.NoNextNote, actual: error)
 		}
 		
 		// Succeeds if there is no tie at the given index

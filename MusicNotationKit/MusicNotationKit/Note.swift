@@ -48,21 +48,27 @@ public struct Note {
 		self.tones = tones
 	}
 	
-	public mutating func modifyTie(tie: Tie) throws {
+	internal mutating func modifyTie(request: Tie) throws {
 		// Nothing to do if it's the same value
-		guard self.tie != tie else { return }
+		guard tie != request else { return }
 		
-		switch (self.tie, tie) {
+		switch (tie, request) {
 		case (.Begin?, .End), (.End?, .Begin):
-			self.tie = .BeginAndEnd
+			tie = .BeginAndEnd
 		case (nil, let value):
-			self.tie = value
+			tie = value
 		default:
 			throw NoteError.InvalidRequestedTieState
 		}
 	}
-	
-	public mutating func removeTie(currentTie: Tie) throws {
+
+    /**
+     Remove the tie from the note.
+
+     - parameter currentTie: What part of the tie on the note the caller wants to remove. This is important if the 
+     note is both the beginning and end of a tie
+     */
+    public mutating func removeTie(currentTie: Tie) throws {
 		switch (currentTie, tie) {
 		case (.BeginAndEnd, _):
 			throw NoteError.InvalidRequestedTieState
@@ -121,7 +127,7 @@ extension Note: CustomDebugStringConvertible {
 		} else {
 			dotString = ""
 		}
-		return "\(noteDuration)\(dotString)\(tonesString)\(isRest ? "R" : "")"
+        return "\(tie == .End || tie == .BeginAndEnd ? "_" : "")\(noteDuration)\(dotString)\(tonesString)\(isRest ? "R" : "")\(tie == .Begin || tie == .BeginAndEnd ? "_" : "")"
 	}
 }
 

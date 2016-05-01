@@ -8,25 +8,25 @@
 
 public struct MeasureRepeat {
 	
-	public let count: Int
-	public let measures: [Measure]
+	public var repeatCount: Int
+	public var measures: [Measure]
     public let measureCount: Int
 	
 	public init(measures: [Measure], repeatCount: Int = 1) throws {
 		guard measures.count > 0 else { throw MeasureRepeatError.NoMeasures }
 		guard repeatCount > 0 else { throw MeasureRepeatError.InvalidRepeatCount }
 		self.measures = measures
-		count = repeatCount
+		self.repeatCount = repeatCount
         measureCount = measures.count + (repeatCount * measures.count)
 	}
 	
-	internal func expand() -> [NotesHolder] {
+	internal func expand() -> [ImmutableMeasure] {
 		let repeatedMeasuresHolders = measures.map {
-			return RepeatedMeasure(immutableMeasure: $0) as NotesHolder
+			return RepeatedMeasure(immutableMeasure: $0) as ImmutableMeasure
 		}
-		let measuresHolders = measures.map { $0 as NotesHolder }
-		var allMeasures: [NotesHolder] = measuresHolders
-		for _ in 0..<count {
+		let measuresHolders = measures.map { $0 as ImmutableMeasure }
+		var allMeasures: [ImmutableMeasure] = measuresHolders
+		for _ in 0..<repeatCount {
 			allMeasures += repeatedMeasuresHolders
 		}
 		return allMeasures
@@ -40,7 +40,7 @@ extension MeasureRepeat: NotesHolder {
 extension MeasureRepeat: Equatable {}
 
 public func ==(lhs: MeasureRepeat, rhs: MeasureRepeat) -> Bool {
-	guard lhs.count == rhs.count else {
+	guard lhs.repeatCount == rhs.repeatCount else {
 		return false
 	}
 	guard lhs.measures.count == rhs.measures.count else {

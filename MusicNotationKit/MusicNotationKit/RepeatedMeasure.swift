@@ -11,6 +11,8 @@ public struct RepeatedMeasure: ImmutableMeasure {
 	public let timeSignature: TimeSignature
 	public let key: Key
 	public private(set) var notes: [NoteCollection]
+    public let measureCount: Int = 1
+    public let noteCount: Int
 	
 	public init(timeSignature: TimeSignature, key: Key) {
 		self.init(timeSignature: timeSignature, key: key, notes: [])
@@ -20,6 +22,9 @@ public struct RepeatedMeasure: ImmutableMeasure {
 		self.timeSignature = timeSignature
 		self.key = key
 		self.notes = notes
+        noteCount = notes.reduce(0) { prev, noteCollection in
+            return prev + noteCollection.noteCount
+        }
 	}
 	
 	internal init(immutableMeasure: ImmutableMeasure) {

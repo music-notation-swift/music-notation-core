@@ -45,7 +45,7 @@ class RepeatTests: XCTestCase {
 		// Repeat count unspecified; should be 1
 		do {
 			let repeat1 = try MeasureRepeat(measures: [measure1])
-			XCTAssertEqual(1, repeat1.count)
+			XCTAssertEqual(1, repeat1.repeatCount)
 		} catch {
 			XCTFail("\(error)")
 		}

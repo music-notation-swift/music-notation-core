@@ -7,5 +7,5 @@
 //
 
 public protocol NotesHolder {
-	
+    var measureCount: Int { get }
 }

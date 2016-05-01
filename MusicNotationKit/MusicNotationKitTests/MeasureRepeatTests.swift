@@ -72,13 +72,13 @@ class MeasureRepeatTests: XCTestCase {
 	func testExpandSingleMeasureRepeatedOnce() {
 		do {
 			let measureRepeat = try MeasureRepeat(measures: [measure1], repeatCount: 1)
-			let expected = [measure1, RepeatedMeasure(immutableMeasure: measure1)] as [NotesHolder]
+			let expected = [measure1, RepeatedMeasure(immutableMeasure: measure1)] as [ImmutableMeasure]
 			let actual = measureRepeat.expand()
 			guard actual.count == expected.count else {
 				XCTFail()
 				return
 			}
-			XCTAssertTrue(compareNotesHolderArrays(actual: actual, expected: expected))
+            XCTAssertTrue(compareImmutableMeasureArrays(actual: actual, expected: expected))
 		}
 		catch {
 			XCTFail(String(error))
@@ -89,13 +89,13 @@ class MeasureRepeatTests: XCTestCase {
 		do {
 			let measureRepeat = try MeasureRepeat(measures: [measure1], repeatCount: 3)
 			let repeatedMeasure = RepeatedMeasure(immutableMeasure: measure1)
-			let expected = [measure1, repeatedMeasure, repeatedMeasure, repeatedMeasure] as [NotesHolder]
+			let expected = [measure1, repeatedMeasure, repeatedMeasure, repeatedMeasure] as [ImmutableMeasure]
 			let actual = measureRepeat.expand()
 			guard actual.count == expected.count else {
 				XCTFail()
 				return
 			}
-			XCTAssertTrue(compareNotesHolderArrays(actual: actual, expected: expected))
+            XCTAssertTrue(compareImmutableMeasureArrays(actual: actual, expected: expected))
 		}
 		catch {
 			XCTFail(String(error))
@@ -107,13 +107,13 @@ class MeasureRepeatTests: XCTestCase {
 			let measureRepeat = try MeasureRepeat(measures: [measure1, measure2], repeatCount: 1)
 			let repeatedMeasure1 = RepeatedMeasure(immutableMeasure: measure1)
 			let repeatedMeasure2 = RepeatedMeasure(immutableMeasure: measure2)
-			let expected = [measure1, measure2, repeatedMeasure1, repeatedMeasure2] as [NotesHolder]
+			let expected = [measure1, measure2, repeatedMeasure1, repeatedMeasure2] as [ImmutableMeasure]
 			let actual = measureRepeat.expand()
 			guard actual.count == expected.count else {
 				XCTFail()
 				return
 			}
-			XCTAssertTrue(compareNotesHolderArrays(actual: actual, expected: expected))
+            XCTAssertTrue(compareImmutableMeasureArrays(actual: actual, expected: expected))
 		}
 		catch {
 			XCTFail(String(error))
@@ -130,13 +130,13 @@ class MeasureRepeatTests: XCTestCase {
 				repeatedMeasure1, repeatedMeasure2,
 				repeatedMeasure1, repeatedMeasure2,
 				repeatedMeasure1, repeatedMeasure2
-				] as [NotesHolder]
+				] as [ImmutableMeasure]
 			let actual = measureRepeat.expand()
 			guard actual.count == expected.count else {
 				XCTFail()
 				return
 			}
-			XCTAssertTrue(compareNotesHolderArrays(actual: actual, expected: expected))
+            XCTAssertTrue(compareImmutableMeasureArrays(actual: actual, expected: expected))
 		}
 		catch {
 			XCTFail(String(error))
@@ -200,7 +200,7 @@ class MeasureRepeatTests: XCTestCase {
 	
 	// MARK: - Helpers
 	
-	private func compareNotesHolderArrays(actual actual: [NotesHolder], expected: [NotesHolder]) -> Bool {
+	private func compareImmutableMeasureArrays(actual actual: [ImmutableMeasure], expected: [ImmutableMeasure]) -> Bool {
 		for (index, item) in actual.enumerate() {
 			if let item = item as? RepeatedMeasure {
 				if let expectedItem = expected[index] as? RepeatedMeasure {

@@ -11,6 +11,8 @@ public struct Measure: ImmutableMeasure {
 	public let timeSignature: TimeSignature
 	public let key: Key
 	public private(set) var notes: [NoteCollection]
+    public private(set) var noteCount: Int
+    public let measureCount: Int = 1
 	
 	public init(timeSignature: TimeSignature, key: Key) {
 		self.init(timeSignature: timeSignature, key: key, notes: [])
@@ -20,10 +22,14 @@ public struct Measure: ImmutableMeasure {
 		self.timeSignature = timeSignature
 		self.key = key
 		self.notes = notes
+        noteCount = notes.reduce(0) { prev, noteCollection in
+            return prev + noteCollection.noteCount
+        }
 	}
 	
 	public mutating func addNote(note: Note) {
 		notes.append(note)
+        noteCount += note.noteCount
 	}
 	
 	public mutating func insertNote(note: Note, atIndex index: Int) throws {
@@ -51,69 +57,133 @@ public struct Measure: ImmutableMeasure {
 	}
 	
 	public mutating func startTieAtIndex(index: Int) throws {
-		try modifyTieAtIndex(index, remove: false)
+		try modifyTieAtIndex(index, requestedTieState: .Begin)
 	}
 	
 	public mutating func removeTieAtIndex(index: Int) throws {
-		try modifyTieAtIndex(index, remove: true)
+		try modifyTieAtIndex(index, requestedTieState: nil)
 	}
 	
-	private mutating func modifyTieAtIndex(index: Int, remove: Bool) throws {
-		let (firstNoteIndex, firstTupletIndex) = try noteCollectionIndexFromNoteIndex(index)
-		guard let (secondNoteIndex, secondTupletIndex) =
-			try? noteCollectionIndexFromNoteIndex(index + 1) else {
-				throw remove ? MeasureError.NoNextNote : MeasureError.NoNextNoteToTie
-		}
+	internal mutating func modifyTieAtIndex(index: Int, requestedTieState: Tie?) throws {
+        guard requestedTieState != .BeginAndEnd else {
+            throw MeasureError.InvalidRequestedTieState
+        }
+		let requestedIndex = try noteCollectionIndexFromNoteIndex(index)
+        let secondaryIndex: (noteIndex: Int, tupletIndex: Int?)?
+        let secondaryRequestedTieState: Tie
+
+        let requestedNoteCurrentTie = try tieStateForNoteIndex(requestedIndex.noteIndex, tupletIndex: requestedIndex.tupletIndex)
+
+        let removal = requestedTieState == nil
+        let primaryRequestedTieState: Tie
+        // In the case of no previous or next note to do the secondary operation, just do the primary, because
+        // it could be that the note that is needed is in the preceding or following measure.
+        // This is why secondaryIndex is sometimes nil.
+        switch (requestedTieState, requestedNoteCurrentTie) {
+        case (let request, let current) where request == current:
+            return
+        case (nil, .Begin?):
+            secondaryIndex = try? noteCollectionIndexFromNoteIndex(index + 1)
+            secondaryRequestedTieState = .End
+            primaryRequestedTieState = .Begin
+        case (nil, .End?):
+            secondaryIndex = try? noteCollectionIndexFromNoteIndex(index - 1)
+            secondaryRequestedTieState = .Begin
+            primaryRequestedTieState = .End
+        case (nil, .BeginAndEnd?):
+            // Default to removing the tie as if the requested index is the beginning, because that
+            // makes the most sense and we don't want to fail here.
+            secondaryIndex = try? noteCollectionIndexFromNoteIndex(index + 1)
+            secondaryRequestedTieState = .End
+            primaryRequestedTieState = .Begin
+        case (.Begin?, nil):
+            secondaryIndex = try? noteCollectionIndexFromNoteIndex(index + 1)
+            secondaryRequestedTieState = .End
+            primaryRequestedTieState = requestedTieState!
+        case (.Begin?, .End?):
+            secondaryIndex = try? noteCollectionIndexFromNoteIndex(index + 1)
+            secondaryRequestedTieState = .End
+            primaryRequestedTieState = requestedTieState!
+        case (.Begin?, .BeginAndEnd?):
+            throw MeasureError.InvalidRequestedTieState
+        case (.End?, nil):
+            secondaryIndex = try? noteCollectionIndexFromNoteIndex(index - 1)
+            secondaryRequestedTieState = .Begin
+            primaryRequestedTieState = requestedTieState!
+        case (.End?, .Begin?):
+            secondaryIndex = try? noteCollectionIndexFromNoteIndex(index - 1)
+            secondaryRequestedTieState = .Begin
+            primaryRequestedTieState = requestedTieState!
+        case (.End?, .BeginAndEnd?):
+            throw MeasureError.InvalidRequestedTieState
+        default:
+            throw MeasureError.InvalidRequestedTieState
+        }
+
+        let requestedModificationMethod = requestedTieState == nil ? Note.removeTie : Note.modifyTie
+        let secondaryModificationMethod = removal ? Note.removeTie : Note.modifyTie
+
 		var firstNote: Note
 		var secondNote: Note
-		let modificationMethod = remove ? Note.removeTie : Note.modifyTie
-		switch (firstTupletIndex, secondTupletIndex) {
+		switch (requestedIndex.tupletIndex, secondaryIndex?.tupletIndex) {
 		case (nil, nil):
-			firstNote = notes[firstNoteIndex] as! Note
-			secondNote = notes[secondNoteIndex] as! Note
-			try modificationMethod(&firstNote)(.Begin)
-			try modificationMethod(&secondNote)(.End)
-			notes[firstNoteIndex] = firstNote
-			notes[secondNoteIndex] = secondNote
+			firstNote = notes[requestedIndex.noteIndex] as! Note
+            try requestedModificationMethod(&firstNote)(primaryRequestedTieState)
+            notes[requestedIndex.noteIndex] = firstNote
+            guard let secondaryIndex = secondaryIndex else {
+                break
+            }
+            secondNote = notes[secondaryIndex.noteIndex] as! Note
+            try secondaryModificationMethod(&secondNote)(secondaryRequestedTieState)
+            notes[secondaryIndex.noteIndex] = secondNote
 		case let (nil, secondTupletIndex?):
-			firstNote = notes[firstNoteIndex] as! Note
-			var tuplet = notes[secondNoteIndex] as! Tuplet
+			firstNote = notes[requestedIndex.noteIndex] as! Note
+            try requestedModificationMethod(&firstNote)(primaryRequestedTieState)
+            notes[requestedIndex.noteIndex] = firstNote
+            guard let secondaryIndex = secondaryIndex else {
+                break
+            }
+			var tuplet = notes[secondaryIndex.noteIndex] as! Tuplet
 			secondNote = tuplet.notes[secondTupletIndex]
-			try modificationMethod(&firstNote)(.Begin)
-			try modificationMethod(&secondNote)(.End)
-			notes[firstNoteIndex] = firstNote
+			try secondaryModificationMethod(&secondNote)(secondaryRequestedTieState)
 			try tuplet.replaceNoteAtIndex(secondTupletIndex, withNote: secondNote)
-			notes[secondNoteIndex] = tuplet
+			notes[secondaryIndex.noteIndex] = tuplet
 		case let (firstTupletIndex?, nil):
-			var tuplet = notes[firstNoteIndex] as! Tuplet
+			var tuplet = notes[requestedIndex.noteIndex] as! Tuplet
 			firstNote = tuplet.notes[firstTupletIndex]
-			secondNote = notes[secondNoteIndex] as! Note
-			try modificationMethod(&firstNote)(.Begin)
-			try tuplet.replaceNoteAtIndex(firstTupletIndex, withNote: firstNote)
-			try modificationMethod(&secondNote)(.End)
-			notes[firstNoteIndex] = tuplet
-			notes[secondNoteIndex] = secondNote
+            try requestedModificationMethod(&firstNote)(primaryRequestedTieState)
+            try tuplet.replaceNoteAtIndex(firstTupletIndex, withNote: firstNote)
+            notes[requestedIndex.noteIndex] = tuplet
+            guard let secondaryIndex = secondaryIndex else {
+                break
+            }
+			secondNote = notes[secondaryIndex.noteIndex] as! Note
+			try secondaryModificationMethod(&secondNote)(secondaryRequestedTieState)
+			notes[secondaryIndex.noteIndex] = secondNote
 		case let (firstTupletIndex?, secondTupletIndex?):
-			if firstNoteIndex == secondNoteIndex {
-				var tuplet = notes[firstNoteIndex] as! Tuplet
+			if requestedIndex.noteIndex == secondaryIndex?.noteIndex {
+				var tuplet = notes[requestedIndex.noteIndex] as! Tuplet
 				firstNote = tuplet.notes[firstTupletIndex]
+                try requestedModificationMethod(&firstNote)(primaryRequestedTieState)
+                try tuplet.replaceNoteAtIndex(firstTupletIndex, withNote: firstNote)
 				secondNote = tuplet.notes[secondTupletIndex]
-				try modificationMethod(&firstNote)(.Begin)
-				try modificationMethod(&secondNote)(.End)
-				try tuplet.replaceNoteAtIndex(firstTupletIndex, withNote: firstNote)
+				try secondaryModificationMethod(&secondNote)(secondaryRequestedTieState)
 				try tuplet.replaceNoteAtIndex(secondTupletIndex, withNote: secondNote)
-				notes[firstNoteIndex] = tuplet
+                notes[requestedIndex.noteIndex] = tuplet
 			} else {
-				var firstTuplet = notes[firstNoteIndex] as! Tuplet
+				var firstTuplet = notes[requestedIndex.noteIndex] as! Tuplet
 				firstNote = firstTuplet.notes[firstTupletIndex]
-				var secondTuplet = notes[secondNoteIndex] as! Tuplet
+                try requestedModificationMethod(&firstNote)(primaryRequestedTieState)
+                try firstTuplet.replaceNoteAtIndex(firstTupletIndex, withNote: firstNote)
+                notes[requestedIndex.noteIndex] = firstTuplet
+                guard let secondaryIndex = secondaryIndex else {
+                    break
+                }
+				var secondTuplet = notes[secondaryIndex.noteIndex] as! Tuplet
 				secondNote = secondTuplet.notes[secondTupletIndex]
-				try modificationMethod(&firstNote)(.Begin)
-				try modificationMethod(&secondNote)(.End)
-				try firstTuplet.replaceNoteAtIndex(firstTupletIndex, withNote: firstNote)
+				try secondaryModificationMethod(&secondNote)(secondaryRequestedTieState)
 				try secondTuplet.replaceNoteAtIndex(secondTupletIndex, withNote: secondNote)
-				notes[firstNoteIndex] = firstTuplet
-				notes[secondNoteIndex] = secondTuplet
+				notes[secondaryIndex.noteIndex] = secondTuplet
 			}
 		}
 	}
@@ -138,6 +208,22 @@ public struct Measure: ImmutableMeasure {
 		guard index < noteIndexes.count else { throw MeasureError.NoteIndexOutOfRange }
 		return noteIndexes[index]
 	}
+
+    private func tieStateForNoteIndex(noteIndex: Int, tupletIndex: Int?) throws -> Tie? {
+        if let tupletIndex = tupletIndex {
+            guard let tuplet = notes[noteIndex] as? Tuplet else {
+                assertionFailure("NoteCollection was not a Tuplet as expected")
+                throw MeasureError.InternalError
+            }
+            return tuplet.notes[tupletIndex].tie
+        } else {
+            guard let note = notes[noteIndex] as? Note else {
+                assertionFailure("NoteCollection was not a Note as expected")
+                throw MeasureError.InternalError
+            }
+            return note.tie
+        }
+    }
 }
 
 extension Measure: Equatable {}
@@ -167,8 +253,9 @@ extension Measure: CustomDebugStringConvertible {
 }
 
 public enum MeasureError: ErrorType {
-	case NoNextNoteToTie
 	case NoTieBeginsAtIndex
 	case NoteIndexOutOfRange
 	case NoNextNote
+    case InvalidRequestedTieState
+    case InternalError
 }

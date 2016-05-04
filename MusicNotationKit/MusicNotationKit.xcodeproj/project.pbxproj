@@ -289,11 +289,7 @@
 			files = (
 				275A58D21B54BD8B0023D5EF /* MeasureTests.swift in Sources */,
 				27AA71171C9146FD00E2BF22 /* MeasureRepeatTests.swift in Sources */,
-<<<<<<< HEAD
-				27A0AA481B52478F00635541 /* RepeatTests.swift in Sources */,
 				27B670511B9ACDCE00347C4C /* StaffTests.swift in Sources */,
-=======
->>>>>>> master
 				27A0AA4A1B524B6400635541 /* TestHelpers.swift in Sources */,
 				270CC5311B2C06A200CA1A56 /* MusicNotationKitTests.swift in Sources */,
 				270F46B11B353DF400FDF4FF /* TupletTests.swift in Sources */,

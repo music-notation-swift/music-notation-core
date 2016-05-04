@@ -24,7 +24,6 @@
 		275A58D21B54BD8B0023D5EF /* MeasureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 275A58D11B54BD8B0023D5EF /* MeasureTests.swift */; };
 		278D19501B2EB4E7004ACE99 /* Staff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 278D194F1B2EB4E7004ACE99 /* Staff.swift */; };
 		27A0AA461B52351400635541 /* Key.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27A0AA451B52351400635541 /* Key.swift */; };
-		27A0AA481B52478F00635541 /* RepeatTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27A0AA471B52478F00635541 /* RepeatTests.swift */; };
 		27A0AA4A1B524B6400635541 /* TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27A0AA491B524B6400635541 /* TestHelpers.swift */; };
 		27AA71131C8D1BD900E2BF22 /* ImmutableMeasure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27AA71121C8D1BD900E2BF22 /* ImmutableMeasure.swift */; };
 		27AA71151C9140C400E2BF22 /* RepeatedMeasure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27AA71141C9140C400E2BF22 /* RepeatedMeasure.swift */; };
@@ -63,7 +62,6 @@
 		275A58D11B54BD8B0023D5EF /* MeasureTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeasureTests.swift; sourceTree = "<group>"; };
 		278D194F1B2EB4E7004ACE99 /* Staff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Staff.swift; sourceTree = "<group>"; };
 		27A0AA451B52351400635541 /* Key.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Key.swift; sourceTree = "<group>"; };
-		27A0AA471B52478F00635541 /* RepeatTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RepeatTests.swift; sourceTree = "<group>"; };
 		27A0AA491B524B6400635541 /* TestHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestHelpers.swift; sourceTree = "<group>"; };
 		27AA71121C8D1BD900E2BF22 /* ImmutableMeasure.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImmutableMeasure.swift; sourceTree = "<group>"; };
 		27AA71141C9140C400E2BF22 /* RepeatedMeasure.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RepeatedMeasure.swift; sourceTree = "<group>"; };
@@ -145,7 +143,6 @@
 				270F46AE1B2FF2A100FDF4FF /* NoteTests.swift */,
 				270CC52E1B2C06A200CA1A56 /* Supporting Files */,
 				270F46B01B353DF400FDF4FF /* TupletTests.swift */,
-				27A0AA471B52478F00635541 /* RepeatTests.swift */,
 				27A0AA491B524B6400635541 /* TestHelpers.swift */,
 				275A58D11B54BD8B0023D5EF /* MeasureTests.swift */,
 				27B670501B9ACDCE00347C4C /* StaffTests.swift */,
@@ -292,8 +289,11 @@
 			files = (
 				275A58D21B54BD8B0023D5EF /* MeasureTests.swift in Sources */,
 				27AA71171C9146FD00E2BF22 /* MeasureRepeatTests.swift in Sources */,
+<<<<<<< HEAD
 				27A0AA481B52478F00635541 /* RepeatTests.swift in Sources */,
 				27B670511B9ACDCE00347C4C /* StaffTests.swift in Sources */,
+=======
+>>>>>>> master
 				27A0AA4A1B524B6400635541 /* TestHelpers.swift in Sources */,
 				270CC5311B2C06A200CA1A56 /* MusicNotationKitTests.swift in Sources */,
 				270F46B11B353DF400FDF4FF /* TupletTests.swift in Sources */,

@@ -64,11 +64,11 @@ public struct Measure: ImmutableMeasure {
 		// TODO: Implement
 	}
 	
-	public mutating func startTieAtIndex(index: Int) throws {
+	internal mutating func startTieAtIndex(index: Int) throws {
 		try modifyTieAtIndex(index, requestedTieState: .Begin)
 	}
 	
-	public mutating func removeTieAtIndex(index: Int) throws {
+	internal mutating func removeTieAtIndex(index: Int) throws {
 		try modifyTieAtIndex(index, requestedTieState: nil)
 	}
 	

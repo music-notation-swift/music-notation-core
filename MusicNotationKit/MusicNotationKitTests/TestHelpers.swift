@@ -9,9 +9,9 @@
 import XCTest
 
 func expected<T>(expected: T, actual: ErrorType, functionName: String = #function, lineNum: Int = #line) {
-	XCTFail("Expected: \(expected), Actual: \(actual) @ \(functionName): \(lineNum)")
+    XCTFail("Expected: \(expected), Actual: \(actual) @ \(functionName): \(lineNum)")
 }
 
 func shouldFail(functionName: String = #function, lineNum: Int = #line) {
-	XCTFail("Should have failed, but didn't @ \(functionName): \(lineNum)")
+    XCTFail("Should have failed, but didn't @ \(functionName): \(lineNum)")
 }

@@ -7,50 +7,54 @@
 //
 
 public struct MeasureRepeat {
-	
-	public var count: Int
-	public var measures: [Measure]
-	
-	public init(measures: [Measure], repeatCount: Int = 1) throws {
-		guard measures.count > 0 else { throw MeasureRepeatError.NoMeasures }
-		guard repeatCount > 0 else { throw MeasureRepeatError.InvalidRepeatCount }
-		self.measures = measures
-		count = repeatCount
-	}
-	
-	internal func expand() -> [NotesHolder] {
-		let repeatedMeasuresHolders = measures.map {
-			return RepeatedMeasure(immutableMeasure: $0) as NotesHolder
-		}
-		let measuresHolders = measures.map { $0 as NotesHolder }
-		var allMeasures: [NotesHolder] = measuresHolders
-		for _ in 0..<count {
-			allMeasures += repeatedMeasuresHolders
-		}
-		return allMeasures
-	}
+
+    public var repeatCount: Int
+    public var measures: [Measure]
+    public let measureCount: Int
+
+    public init(measures: [Measure], repeatCount: Int = 1) throws {
+        guard measures.count > 0 else { throw MeasureRepeatError.NoMeasures }
+        guard repeatCount > 0 else { throw MeasureRepeatError.InvalidRepeatCount }
+        self.measures = measures
+        self.repeatCount = repeatCount
+        measureCount = measures.count + (repeatCount * measures.count)
+    }
+
+    internal func expand() -> [ImmutableMeasure] {
+        let repeatedMeasuresHolders = measures.map {
+            return RepeatedMeasure(immutableMeasure: $0) as ImmutableMeasure
+        }
+        let measuresHolders = measures.map { $0 as ImmutableMeasure }
+        var allMeasures: [ImmutableMeasure] = measuresHolders
+        for _ in 0..<repeatCount {
+            allMeasures += repeatedMeasuresHolders
+        }
+        return allMeasures
+    }
 }
 
 extension MeasureRepeat: NotesHolder {
-	
+
 }
 
 extension MeasureRepeat: Equatable {}
 
 public func ==(lhs: MeasureRepeat, rhs: MeasureRepeat) -> Bool {
-	guard lhs.count == rhs.count else {
-		return false
-	}
-	guard lhs.measures.count == rhs.measures.count else {
-		return false
-	}
-	guard lhs.measures != rhs.measures else {
-		return false
-	}
-	return true
+    guard lhs.repeatCount == rhs.repeatCount else {
+        return false
+    }
+    guard lhs.measures.count == rhs.measures.count else {
+        return false
+    }
+    for i in 0..<lhs.measures.count {
+        if lhs.measures[i] != rhs.measures[i] {
+            return false
+        }
+    }
+    return true
 }
 
 public enum MeasureRepeatError: ErrorType {
-	case NoMeasures
-	case InvalidRepeatCount
+    case NoMeasures
+    case InvalidRepeatCount
 }

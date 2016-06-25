@@ -1,0 +1,11 @@
+language: objective-c
+osx_image: xcode7.3
+script:
+  set -o pipefail &&
+  xcodebuild build -workspace MusicNotation.xcworkspace -scheme MusicNotationKit -sdk macosx10.11
+  | xcpretty &&
+  xcodebuild test -workspace MusicNotation.xcworkspace -scheme MusicNotationKit -sdk macosx10.11
+  | xcpretty
+  
+after_success:
+  - bash <(curl -s https://codecov.io/bash)

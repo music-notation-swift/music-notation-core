@@ -11,11 +11,11 @@ import XCTest
 
 class TupletTests: XCTestCase {
 
-	let tone1 = Tone(accidental: .None, noteLetter: .A, octave: .Octave1)
-	let tone2 = Tone(accidental: .Sharp, noteLetter: .B, octave: .Octave1)
-	let tone3 = Tone(accidental: .Natural, noteLetter: .D, octave: .Octave1)
-	let quarterRest = Note(noteDuration: .Quarter)
-	let eighthRest = Note(noteDuration: .Eighth)
+	let tone1 = Tone(accidental: .none, noteLetter: .a, octave: .octave1)
+	let tone2 = Tone(accidental: .sharp, noteLetter: .b, octave: .octave1)
+	let tone3 = Tone(accidental: .natural, noteLetter: .d, octave: .octave1)
+	let quarterRest = Note(noteDuration: .quarter)
+	let eighthRest = Note(noteDuration: .eighth)
 	var quarterNote1: Note!
 	var quarterNote2: Note!
 	var quarterNote3: Note!
@@ -25,12 +25,12 @@ class TupletTests: XCTestCase {
 	
     override func setUp() {
         super.setUp()
-		quarterNote1 = Note(noteDuration: .Quarter, tone: tone1)
-		quarterNote2 = Note(noteDuration: .Quarter, tone: tone1)
-		quarterNote3 = Note(noteDuration: .Quarter, tone: tone2)
-		eighthNote = Note(noteDuration: .Eighth, tone: tone1)
-		quarterChord = Note(noteDuration: .Quarter, tones: [tone1, tone2, tone3])
-		eighthChord = Note(noteDuration: .Eighth, tones: [tone1, tone2, tone3])
+		quarterNote1 = Note(noteDuration: .quarter, tone: tone1)
+		quarterNote2 = Note(noteDuration: .quarter, tone: tone1)
+		quarterNote3 = Note(noteDuration: .quarter, tone: tone2)
+		eighthNote = Note(noteDuration: .eighth, tone: tone1)
+		quarterChord = Note(noteDuration: .quarter, tones: [tone1, tone2, tone3])
+		eighthChord = Note(noteDuration: .eighth, tones: [tone1, tone2, tone3])
     }
     
     override func tearDown() {
@@ -45,9 +45,9 @@ class TupletTests: XCTestCase {
         do {
             let _ = try Tuplet(notes: [quarterNote1, quarterRest])
             shouldFail()
-        } catch TupletError.RestsNotValid {
+        } catch TupletError.restsNotValid {
         } catch {
-            expected(TupletError.RestsNotValid, actual: error)
+            expected(TupletError.restsNotValid, actual: error)
         }
     }
 
@@ -55,9 +55,9 @@ class TupletTests: XCTestCase {
         do {
             let _ = try Tuplet(notes: [quarterNote1, quarterNote2, quarterNote3, quarterNote1, quarterNote2, quarterNote3, quarterNote1, quarterNote2])
             shouldFail()
-        } catch TupletError.InvalidNumberOfNotes {
+        } catch TupletError.invalidNumberOfNotes {
         } catch {
-            expected(TupletError.InvalidNumberOfNotes, actual: error)
+            expected(TupletError.invalidNumberOfNotes, actual: error)
         }
     }
 
@@ -65,9 +65,9 @@ class TupletTests: XCTestCase {
         do {
             let _ = try Tuplet(notes: [quarterNote1])
             shouldFail()
-        } catch TupletError.InvalidNumberOfNotes {
+        } catch TupletError.invalidNumberOfNotes {
         } catch {
-            expected(TupletError.InvalidNumberOfNotes, actual: error)
+            expected(TupletError.invalidNumberOfNotes, actual: error)
         }
     }
 
@@ -75,9 +75,9 @@ class TupletTests: XCTestCase {
         do {
             let _ = try Tuplet(notes: [])
             shouldFail()
-        } catch TupletError.InvalidNumberOfNotes {
+        } catch TupletError.invalidNumberOfNotes {
         } catch {
-            expected(TupletError.InvalidNumberOfNotes, actual: error)
+            expected(TupletError.invalidNumberOfNotes, actual: error)
         }
     }
 
@@ -85,9 +85,9 @@ class TupletTests: XCTestCase {
         do {
             let _ = try Tuplet(notes: [quarterNote1, quarterNote2, quarterNote3, eighthNote])
             shouldFail()
-        } catch TupletError.NotSameDuration {
+        } catch TupletError.notSameDuration {
         } catch {
-            expected(TupletError.NotSameDuration, actual: error)
+            expected(TupletError.notSameDuration, actual: error)
         }
     }
 
@@ -117,9 +117,9 @@ class TupletTests: XCTestCase {
             var noteGroup = try Tuplet(notes: [quarterNote1, quarterNote2, quarterNote3, quarterNote1, quarterNote2, quarterNote3, quarterNote1])
             try noteGroup.appendNote(quarterNote3)
             shouldFail()
-        } catch TupletError.GroupingFull {
+        } catch TupletError.groupingFull {
         } catch {
-            expected(TupletError.GroupingFull, actual: error)
+            expected(TupletError.groupingFull, actual: error)
         }
     }
 
@@ -128,9 +128,9 @@ class TupletTests: XCTestCase {
             var noteGroup = try Tuplet(notes: [quarterNote1, quarterNote2])
             try noteGroup.appendNote(quarterRest)
             shouldFail()
-        } catch TupletError.RestsNotValid {
+        } catch TupletError.restsNotValid {
         } catch {
-            expected(TupletError.RestsNotValid, actual: error)
+            expected(TupletError.restsNotValid, actual: error)
         }
     }
 
@@ -139,9 +139,9 @@ class TupletTests: XCTestCase {
             var noteGroup = try Tuplet(notes: [quarterNote1, quarterNote2])
             try noteGroup.appendNote(eighthNote)
             shouldFail()
-        } catch TupletError.NotSameDuration {
+        } catch TupletError.notSameDuration {
         } catch {
-            expected(TupletError.NotSameDuration, actual: error)
+            expected(TupletError.notSameDuration, actual: error)
         }
     }
 

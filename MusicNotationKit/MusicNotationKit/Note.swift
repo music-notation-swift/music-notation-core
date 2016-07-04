@@ -48,17 +48,16 @@ public struct Note {
         self.tones = tones
     }
 
-    internal mutating func modifyTie(request: Tie) throws {
+    internal mutating func modifyTie(_ request: Tie) throws {
         // Nothing to do if it's the same value
         guard tie != request else { return }
-
         switch (tie, request) {
-        case (.Begin?, .End), (.End?, .Begin):
-            tie = .BeginAndEnd
+        case (.begin?, .end), (.end?, .begin):
+            tie = .beginAndEnd
         case (nil, let value):
             tie = value
         default:
-            throw NoteError.InvalidRequestedTieState
+            throw NoteError.invalidRequestedTieState
         }
     }
 
@@ -68,22 +67,22 @@ public struct Note {
      - parameter currentTie: What part of the tie on the note the caller wants to remove. This is important if the
      note is both the beginning and end of a tie
      - throws:
-     - `NoteError.InvalidRequestedTieState`
+        - `NoteError.InvalidRequestedTieState`
      */
-    internal mutating func removeTie(currentTie: Tie) throws {
+    internal mutating func removeTie(_ currentTie: Tie) throws {
         switch (currentTie, tie) {
-        case (.BeginAndEnd, _):
-            throw NoteError.InvalidRequestedTieState
+        case (.beginAndEnd, _):
+            throw NoteError.invalidRequestedTieState
         case (_, nil):
             return
         case (let request, let current?) where request == current:
             tie = nil
-        case (.Begin, .BeginAndEnd?):
-            tie = .End
-        case (.End, .BeginAndEnd?):
-            tie = .Begin
+        case (.begin, .beginAndEnd?):
+            tie = .end
+        case (.end, .beginAndEnd?):
+            tie = .begin
         default:
-            throw NoteError.InvalidRequestedTieState
+            throw NoteError.invalidRequestedTieState
         }
     }
 }
@@ -129,10 +128,10 @@ extension Note: CustomDebugStringConvertible {
         } else {
             dotString = ""
         }
-        return "\(tie == .End || tie == .BeginAndEnd ? "_" : "")\(noteDuration)\(dotString)\(tonesString)\(isRest ? "R" : "")\(tie == .Begin || tie == .BeginAndEnd ? "_" : "")"
+        return "\(tie == .end || tie == .beginAndEnd ? "_" : "")\(noteDuration)\(dotString)\(tonesString)\(isRest ? "R" : "")\(tie == .begin || tie == .beginAndEnd ? "_" : "")"
     }
 }
 
-public enum NoteError: ErrorType {
-    case InvalidRequestedTieState
+public enum NoteError: ErrorProtocol {
+    case invalidRequestedTieState
 }

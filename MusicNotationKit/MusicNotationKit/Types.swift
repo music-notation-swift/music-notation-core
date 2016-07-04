@@ -7,184 +7,184 @@
 //
 
 public enum Octave: Int {
-    case OctaveNegative1 = -1
-    case Octave0 = 0
-    case Octave1 = 1
-    case Octave2 = 2
-    case Octave3 = 3
-    case Octave4 = 4
-    case Octave5 = 5
-    case Octave6 = 6
-    case Octave7 = 7
-    case Octave8 = 8
-    case Octave9 = 9
+    case octaveNegative1 = -1
+    case octave0 = 0
+    case octave1 = 1
+    case octave2 = 2
+    case octave3 = 3
+    case octave4 = 4
+    case octave5 = 5
+    case octave6 = 6
+    case octave7 = 7
+    case octave8 = 8
+    case octave9 = 9
 }
 
 public enum Striking {
-    case Left, Up
-    case Right, Down
+    case left, up
+    case right, down
 }
 
 public enum NoteDuration {
-    case Whole
-    case Half
-    case Quarter
-    case Eighth
-    case Sixteenth
-    case ThirtySecond
-    case SixtyFourth
+    case whole
+    case half
+    case quarter
+    case eighth
+    case sixteenth
+    case thirtySecond
+    case sixtyFourth
 }
 
 extension NoteDuration: CustomDebugStringConvertible {
     public var debugDescription: String {
         switch self {
-        case .Whole: return "1"
-        case .Half: return "1/2"
-        case .Quarter: return "1/4"
-        case .Eighth: return "1/8"
-        case .Sixteenth: return "1/16"
-        case .ThirtySecond: return "1/32"
-        case .SixtyFourth: return "1/64"
+        case .whole: return "1"
+        case .half: return "1/2"
+        case .quarter: return "1/4"
+        case .eighth: return "1/8"
+        case .sixteenth: return "1/16"
+        case .thirtySecond: return "1/32"
+        case .sixtyFourth: return "1/64"
         }
     }
 }
 
 public enum Accidental {
-    case Sharp
-    case DoubleSharp
-    case Flat
-    case DoubleFlat
-    case Natural
+    case sharp
+    case doubleSharp
+    case flat
+    case doubleFlat
+    case natural
 }
 
 extension Accidental: CustomDebugStringConvertible {
     public var debugDescription: String {
         switch self {
-        case .Sharp: return "#"
-        case .DoubleSharp: return "##"
-        case .Flat: return "b"
-        case .DoubleFlat: return "bb"
-        case .Natural: return "n"
+        case .sharp: return "#"
+        case .doubleSharp: return "##"
+        case .flat: return "b"
+        case .doubleFlat: return "bb"
+        case .natural: return "n"
         }
     }
 }
 
 public enum NoteLetter {
-    case A
-    case B
-    case C
-    case D
-    case E
-    case F
-    case G
+    case a
+    case b
+    case c
+    case d
+    case e
+    case f
+    case g
 }
 
 public enum Clef {
-    case Treble
-    case Bass
+    case treble
+    case bass
 }
 
 public enum Instrument {
-    case Guitar6
-    case Drums
+    case guitar6
+    case drums
 }
 
 public enum Dot {
-    case Single
-    case Double
+    case single
+    case double
 }
 
 extension Dot: CustomDebugStringConvertible {
     public var debugDescription: String {
         switch self {
-        case .Single: return "."
-        case .Double: return ".."
+        case .single: return "."
+        case .double: return ".."
         }
     }
 }
 
 public enum Accent {
-    case Standard
-    case Strong
-    case Ghost
+    case standard
+    case strong
+    case ghost
 }
 
 public enum Dynamics {
-    case Ppp
-    case Pp
-    case P
-    case Mp
-    case Mf
-    case F
-    case Ff
-    case Fff
+    case ppp
+    case pp
+    case p
+    case mp
+    case mf
+    case f
+    case ff
+    case fff
 }
 
 public enum Interval: Int {
-    case Unison = 0
-    case Min2
-    case Maj2
-    case Min3
-    case Maj3
-    case Perfect4
-    case Aug4
-    case Perfect5
-    case Min6
-    case Maj6
-    case Min7
-    case Maj7
-    case Octave
-    case Min9
-    case Maj9
-    case Min10
-    case Maj10
-    case Perfect11
-    case Aug11
-    case Perfect12
-    case Min13
-    case Maj13
-    case Min14
-    case Maj14
-    case Perfect15
+    case unison = 0
+    case min2
+    case maj2
+    case min3
+    case maj3
+    case perfect4
+    case aug4
+    case perfect5
+    case min6
+    case maj6
+    case min7
+    case maj7
+    case octave
+    case min9
+    case maj9
+    case min10
+    case maj10
+    case perfect11
+    case aug11
+    case perfect12
+    case min13
+    case maj13
+    case min14
+    case maj14
+    case perfect15
 }
 
 public enum AugInterval: Int {
-    case Dim2 = 0
-    case AugUnison
-    case Dim3
-    case Aug2
-    case Dim4
-    case Aug3
-    case Dim5
-    case Dim6
-    case Aug5
-    case Dim7
-    case Aug6
-    case DimOctave
-    case Aug7 /* TODO: Also dim9?? */
-    case AugOctave
-    case Dim10
-    case Aug9
-    case Dim11
-    case Aug10
-    case Dim12
-    case Dim13
-    case Aug12
-    case Dim14
-    case Aug13
-    case Dim15
-    case Aug14
-    case Aug15
+    case dim2 = 0
+    case augUnison
+    case dim3
+    case aug2
+    case dim4
+    case aug3
+    case dim5
+    case dim6
+    case aug5
+    case dim7
+    case aug6
+    case dimOctave
+    case aug7 /* TODO: Also dim9?? */
+    case augOctave
+    case dim10
+    case aug9
+    case dim11
+    case aug10
+    case dim12
+    case dim13
+    case aug12
+    case dim14
+    case aug13
+    case dim15
+    case aug14
+    case aug15
 }
 
 public enum Tie {
-    case Begin
-    case End
-    case BeginAndEnd
+    case begin
+    case end
+    case beginAndEnd
 }
 
 public enum KeyType {
-    case Major
-    case Minor
+    case major
+    case minor
 }
 

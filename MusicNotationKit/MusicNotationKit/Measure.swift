@@ -12,13 +12,15 @@ public struct Measure: ImmutableMeasure {
     public let key: Key
     public private(set) var notes: [NoteCollection] {
         didSet {
+            // Calling this expensive operation every time you modify the notes, because
+            // this operation should be done more infrequently than the others that rely on it.
             recomputeNoteCollectionIndexes()
         }
     }
     public private(set) var noteCount: Int
     public let measureCount: Int = 1
 
-    typealias NoteCollectionIndex = (noteIndex: Int, tupletIndex: Int?)
+    internal typealias NoteCollectionIndex = (noteIndex: Int, tupletIndex: Int?)
     private var noteCollectionIndexes: [NoteCollectionIndex] = []
 
     public init(timeSignature: TimeSignature, key: Key) {
@@ -35,46 +37,46 @@ public struct Measure: ImmutableMeasure {
         recomputeNoteCollectionIndexes()
     }
 
-    public mutating func addNote(note: Note) {
+    public mutating func addNote(_ note: Note) {
         notes.append(note)
         noteCount += note.noteCount
     }
 
-    public mutating func insertNote(note: Note, atIndex index: Int) throws {
+    public mutating func insertNote(_ note: Note, atIndex index: Int) throws {
         // TODO: Implement
     }
 
-    public mutating func removeNoteAtIndex(index: Int) throws {
+    public mutating func removeNoteAtIndex(_ index: Int) throws {
         // TODO: Implement
     }
 
-    public mutating func removeNotesInRange(indexRange: Range<Int>) throws {
+    public mutating func removeNotesInRange(_ indexRange: Range<Int>) throws {
         // TODO: Implement
     }
 
-    public mutating func addTuplet(tuplet: Tuplet) {
+    public mutating func addTuplet(_ tuplet: Tuplet) {
         notes.append(tuplet)
     }
 
-    public mutating func insertTuplet(tuplet: Tuplet, atIndex index: Int) throws {
+    public mutating func insertTuplet(_ tuplet: Tuplet, atIndex index: Int) throws {
         // TODO: Implement
     }
 
-    public mutating func removeTuplet(tuplet: Tuplet, atIndex index: Int) throws {
+    public mutating func removeTuplet(_ tuplet: Tuplet, atIndex index: Int) throws {
         // TODO: Implement
     }
 
-    internal mutating func startTieAtIndex(index: Int) throws {
-        try modifyTieAtIndex(index, requestedTieState: .Begin)
+    internal mutating func startTieAtIndex(_ index: Int) throws {
+        try modifyTieAtIndex(index, requestedTieState: .begin)
     }
 
-    internal mutating func removeTieAtIndex(index: Int) throws {
+    internal mutating func removeTieAtIndex(_ index: Int) throws {
         try modifyTieAtIndex(index, requestedTieState: nil)
     }
 
-    internal mutating func modifyTieAtIndex(index: Int, requestedTieState: Tie?) throws {
-        guard requestedTieState != .BeginAndEnd else {
-            throw MeasureError.InvalidRequestedTieState
+    internal mutating func modifyTieAtIndex(_ index: Int, requestedTieState: Tie?) throws {
+        guard requestedTieState != .beginAndEnd else {
+            throw MeasureError.invalidRequestedTieState
         }
         let requestedIndex = try noteCollectionIndexFromNoteIndex(index)
         let secondaryIndex: (noteIndex: Int, tupletIndex: Int?)?
@@ -82,52 +84,55 @@ public struct Measure: ImmutableMeasure {
 
         let requestedNoteCurrentTie = try tieStateForNoteIndex(requestedIndex.noteIndex, tupletIndex: requestedIndex.tupletIndex)
 
+        // Calculate secondary Index and tie states //
         let removal = requestedTieState == nil
         let primaryRequestedTieState: Tie
+
         // In the case of no previous or next note to do the secondary operation, just do the primary, because
         // it could be that the note that is needed is in the preceding or following measure.
         // This is why secondaryIndex is sometimes nil.
         switch (requestedTieState, requestedNoteCurrentTie) {
         case (let request, let current) where request == current:
             return
-        case (nil, .Begin?):
+        case (nil, .begin?):
             secondaryIndex = try? noteCollectionIndexFromNoteIndex(index + 1)
-            secondaryRequestedTieState = .End
-            primaryRequestedTieState = .Begin
-        case (nil, .End?):
+            secondaryRequestedTieState = .end
+            primaryRequestedTieState = .begin
+        case (nil, .end?):
             secondaryIndex = try? noteCollectionIndexFromNoteIndex(index - 1)
-            secondaryRequestedTieState = .Begin
-            primaryRequestedTieState = .End
-        case (nil, .BeginAndEnd?):
+            secondaryRequestedTieState = .begin
+            primaryRequestedTieState = .end
+        case (nil, .beginAndEnd?):
             // Default to removing the tie as if the requested index is the beginning, because that
             // makes the most sense and we don't want to fail here.
             secondaryIndex = try? noteCollectionIndexFromNoteIndex(index + 1)
-            secondaryRequestedTieState = .End
-            primaryRequestedTieState = .Begin
-        case (.Begin?, nil):
+            secondaryRequestedTieState = .end
+            primaryRequestedTieState = .begin
+        case (.begin?, nil):
             secondaryIndex = try? noteCollectionIndexFromNoteIndex(index + 1)
-            secondaryRequestedTieState = .End
+            secondaryRequestedTieState = .end
             primaryRequestedTieState = requestedTieState!
-        case (.Begin?, .End?):
+        case (.begin?, .end?):
             secondaryIndex = try? noteCollectionIndexFromNoteIndex(index + 1)
-            secondaryRequestedTieState = .End
+            secondaryRequestedTieState = .end
             primaryRequestedTieState = requestedTieState!
-        case (.Begin?, .BeginAndEnd?):
-            throw MeasureError.InvalidRequestedTieState
-        case (.End?, nil):
+        case (.begin?, .beginAndEnd?):
+            throw MeasureError.invalidRequestedTieState
+        case (.end?, nil):
             secondaryIndex = try? noteCollectionIndexFromNoteIndex(index - 1)
-            secondaryRequestedTieState = .Begin
+            secondaryRequestedTieState = .begin
             primaryRequestedTieState = requestedTieState!
-        case (.End?, .Begin?):
+        case (.end?, .begin?):
             secondaryIndex = try? noteCollectionIndexFromNoteIndex(index - 1)
-            secondaryRequestedTieState = .Begin
+            secondaryRequestedTieState = .begin
             primaryRequestedTieState = requestedTieState!
-        case (.End?, .BeginAndEnd?):
-            throw MeasureError.InvalidRequestedTieState
+        case (.end?, .beginAndEnd?):
+            throw MeasureError.invalidRequestedTieState
         default:
-            throw MeasureError.InvalidRequestedTieState
+            throw MeasureError.invalidRequestedTieState
         }
 
+        // Modify the ties of the notes involved //
         let requestedModificationMethod = requestedTieState == nil ? Note.removeTie : Note.modifyTie
         let secondaryModificationMethod = removal ? Note.removeTie : Note.modifyTie
 
@@ -196,19 +201,19 @@ public struct Measure: ImmutableMeasure {
         }
     }
 
-    internal func noteCollectionIndexFromNoteIndex(index: Int) throws -> NoteCollectionIndex {
+    internal func noteCollectionIndexFromNoteIndex(_ index: Int) throws -> NoteCollectionIndex {
         // Gets the index of the given element in the notes array by translating the index of the
         // single note within the NoteCollection array.
-        guard index >= 0 && notes.count > 0 else { throw MeasureError.NoteIndexOutOfRange }
+        guard index >= 0 && notes.count > 0 else { throw MeasureError.noteIndexOutOfRange }
         // Expand notes and tuplets into indexes
         // TODO: Move this into a method that is called on didSet of notes??
-        guard index < noteCollectionIndexes.count else { throw MeasureError.NoteIndexOutOfRange }
+        guard index < noteCollectionIndexes.count else { throw MeasureError.noteIndexOutOfRange }
         return noteCollectionIndexes[index]
     }
 
     private mutating func recomputeNoteCollectionIndexes() {
         noteCollectionIndexes = []
-        for (i, noteCollection) in notes.enumerate() {
+        for (i, noteCollection) in notes.enumerated() {
             switch noteCollection.noteCount {
             case 1:
                 noteCollectionIndexes.append((noteIndex: i, tupletIndex: nil))
@@ -220,17 +225,17 @@ public struct Measure: ImmutableMeasure {
         }
     }
 
-    private func tieStateForNoteIndex(noteIndex: Int, tupletIndex: Int?) throws -> Tie? {
+    private func tieStateForNoteIndex(_ noteIndex: Int, tupletIndex: Int?) throws -> Tie? {
         if let tupletIndex = tupletIndex {
             guard let tuplet = notes[noteIndex] as? Tuplet else {
                 assertionFailure("NoteCollection was not a Tuplet as expected")
-                throw MeasureError.InternalError
+                throw MeasureError.internalError
             }
             return tuplet.notes[tupletIndex].tie
         } else {
             guard let note = notes[noteIndex] as? Note else {
                 assertionFailure("NoteCollection was not a Note as expected")
-                throw MeasureError.InternalError
+                throw MeasureError.internalError
             }
             return note.tie
         }
@@ -258,15 +263,15 @@ public func ==(lhs: Measure, rhs: Measure) -> Bool {
 // Debug extensions
 extension Measure: CustomDebugStringConvertible {
     public var debugDescription: String {
-        let notesString = notes.map { "\($0)" }.joinWithSeparator(",")
+        let notesString = notes.map { "\($0)" }.joined(separator: ",")
         return "|\(timeSignature): \(notesString)|"
     }
 }
 
-public enum MeasureError: ErrorType {
-    case NoTieBeginsAtIndex
-    case NoteIndexOutOfRange
-    case NoNextNote
-    case InvalidRequestedTieState
-    case InternalError
+public enum MeasureError: ErrorProtocol {
+    case noTieBeginsAtIndex
+    case noteIndexOutOfRange
+    case noNextNote
+    case invalidRequestedTieState
+    case internalError
 }

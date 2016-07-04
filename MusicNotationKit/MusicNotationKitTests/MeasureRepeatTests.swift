@@ -12,9 +12,9 @@ import XCTest
 class MeasureRepeatTests: XCTestCase {
 
     static let timeSignature = TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120)
-    static let key = Key(noteLetter: .C)
-    static let note1 = Note(noteDuration: .Eighth, tone: Tone(noteLetter: .C, octave: .Octave1))
-    static let note2 = Note(noteDuration: .Quarter, tone: Tone(noteLetter: .D, octave: .Octave1))
+    static let key = Key(noteLetter: .c)
+    static let note1 = Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1))
+    static let note2 = Note(noteDuration: .quarter, tone: Tone(noteLetter: .d, octave: .octave1))
     let measure1 = Measure(timeSignature: timeSignature, key: key, notes: [note1, note1])
     let measure2 = Measure(timeSignature: timeSignature, key: key, notes: [note2, note2])
 
@@ -25,9 +25,9 @@ class MeasureRepeatTests: XCTestCase {
         do {
             let _ = try MeasureRepeat(measures: [measure1], repeatCount: -2)
             shouldFail()
-        } catch MeasureRepeatError.InvalidRepeatCount {
+        } catch MeasureRepeatError.invalidRepeatCount {
         } catch {
-            expected(MeasureRepeatError.InvalidRepeatCount, actual: error)
+            expected(MeasureRepeatError.invalidRepeatCount, actual: error)
         }
     }
 
@@ -35,9 +35,9 @@ class MeasureRepeatTests: XCTestCase {
         do {
             let _ = try MeasureRepeat(measures: [])
             shouldFail()
-        } catch MeasureRepeatError.NoMeasures {
+        } catch MeasureRepeatError.noMeasures {
         } catch {
-            expected(MeasureRepeatError.NoMeasures, actual: error)
+            expected(MeasureRepeatError.noMeasures, actual: error)
         }
     }
 
@@ -200,8 +200,8 @@ class MeasureRepeatTests: XCTestCase {
 
     // MARK: - Helpers
 
-    private func compareImmutableMeasureArrays(actual actual: [ImmutableMeasure], expected: [ImmutableMeasure]) -> Bool {
-        for (index, item) in actual.enumerate() {
+    private func compareImmutableMeasureArrays(actual: [ImmutableMeasure], expected: [ImmutableMeasure]) -> Bool {
+        for (index, item) in actual.enumerated() {
             if let item = item as? RepeatedMeasure {
                 if let expectedItem = expected[index] as? RepeatedMeasure {
                     if item == expectedItem {

@@ -25,27 +25,27 @@ public struct Staff {
         self.instrument = instrument
     }
 
-    public mutating func appendMeasure(measure: Measure) {
+    public mutating func appendMeasure(_ measure: Measure) {
         notesHolders.append(measure)
         measureCount += measure.measureCount
     }
 
-    public mutating func appendRepeat(repeatedMeasures: MeasureRepeat) {
+    public mutating func appendRepeat(_ repeatedMeasures: MeasureRepeat) {
         notesHolders.append(repeatedMeasures)
         measureCount += repeatedMeasures.measureCount
     }
 
-    public mutating func insertMeasure(measure: Measure, atIndex index: Int) {
+    public mutating func insertMeasure(_ measure: Measure, atIndex index: Int) {
         // TODO: Handle it properly with the index being the measure index
         // Have to somehow handle the case of trying to insert where repeats are
-        notesHolders.insert(measure, atIndex: index)
+        notesHolders.insert(measure, at: index)
         measureCount += measure.measureCount
     }
 
-    public mutating func insertRepeat(repeatedMeasures: MeasureRepeat, atIndex index: Int) {
+    public mutating func insertRepeat(_ repeatedMeasures: MeasureRepeat, atIndex index: Int) {
         // TODO: Handle it properly with the index being the measure index
         // Have to somehow handle the case of trying to insert where repeats already exist
-        notesHolders.insert(repeatedMeasures, atIndex: index)
+        notesHolders.insert(repeatedMeasures, at: index)
         measureCount += repeatedMeasures.measureCount
     }
 
@@ -59,16 +59,16 @@ public struct Staff {
          - `StaffError.RepeatedMeasureCannotBeModified` if the measure is a repeated measure.
          - `StaffError.InternalError` if index translation doesn't work properly.
      */
-    public mutating func replaceMeasureAtIndex(measureIndex: Int, withNewMeasure newMeasure: Measure) throws {
+    public mutating func replaceMeasureAtIndex(_ measureIndex: Int, withNewMeasure newMeasure: Measure) throws {
         let (notesHolderIndex, repeatMeasureIndex) = try notesHolderIndexFromMeasureIndex(measureIndex)
         let newNotesHolder: NotesHolder
         if let repeatMeasureIndex = repeatMeasureIndex {
             guard (try? mutableMeasureFromNotesHolderIndex(notesHolderIndex, repeatMeasureIndex: repeatMeasureIndex)) != nil else {
-                throw StaffError.RepeatedMeasureCannotBeModified
+                throw StaffError.repeatedMeasureCannotBeModified
             }
             guard var measureRepeat = notesHolders[notesHolderIndex] as? MeasureRepeat else {
                 assertionFailure("Index translation showed should be a repeat, but it's not")
-                throw StaffError.InternalError
+                throw StaffError.internalError
             }
             measureRepeat.measures[repeatMeasureIndex] = newMeasure
             newNotesHolder = measureRepeat
@@ -92,7 +92,7 @@ public struct Staff {
          - `StaffError.InternalError`, `MeasureError.InternalError` if the function has an internal implementation error.
          - `MeasureError.NoteIndexOutOfRange`
      */
-    public mutating func startTieFromNoteAtIndex(noteIndex: Int, inMeasureAtIndex measureIndex: Int) throws {
+    public mutating func startTieFromNoteAtIndex(_ noteIndex: Int, inMeasureAtIndex measureIndex: Int) throws {
         try modifyTieForNoteAtIndex(noteIndex, inMeasureAtIndex: measureIndex, removeTie: false)
     }
 
@@ -110,7 +110,7 @@ public struct Staff {
          - `MeasureError.NoteIndexOutOfRange`
          - `StaffError.InternalError`, `MeasureError.InternalError` if the function has an internal implementation error.
      */
-    public mutating func removeTieFromNoteAtIndex(noteIndex: Int, inMeasureAtIndex measureIndex: Int) throws {
+    public mutating func removeTieFromNoteAtIndex(_ noteIndex: Int, inMeasureAtIndex measureIndex: Int) throws {
         try modifyTieForNoteAtIndex(noteIndex, inMeasureAtIndex: measureIndex, removeTie: true)
     }
 
@@ -121,7 +121,7 @@ public struct Staff {
         - `StaffError.MeasureIndexOutOfRange`
         - `StaffError.InternalError` if the function has an internal implementation error.
      */
-    public func measureAtIndex(measureIndex: Int) throws -> ImmutableMeasure {
+    public func measureAtIndex(_ measureIndex: Int) throws -> ImmutableMeasure {
         let (notesHolderIndex, repeatMeasureIndex) = try notesHolderIndexFromMeasureIndex(measureIndex)
         if let measureRepeat = notesHolders[notesHolderIndex] as? MeasureRepeat,
             let repeatMeasureIndex = repeatMeasureIndex {
@@ -129,7 +129,7 @@ public struct Staff {
         } else if let measure = notesHolders[notesHolderIndex] as? ImmutableMeasure {
             return measure
         }
-        throw StaffError.InternalError
+        throw StaffError.internalError
     }
 
     /**
@@ -140,23 +140,23 @@ public struct Staff {
         - `StaffError.MeasureIndexOutOfRange`
         - `StaffError.InternalError` if the function has an internal implementation error.
      */
-    public func measureRepeatAtIndex(measureIndex: Int) throws -> MeasureRepeat? {
+    public func measureRepeatAtIndex(_ measureIndex: Int) throws -> MeasureRepeat? {
         let (notesHolderIndex, _) = try notesHolderIndexFromMeasureIndex(measureIndex)
         return notesHolders[notesHolderIndex] as? MeasureRepeat
     }
 
-    internal func notesHolderAtMeasureIndex(measureIndex: Int) throws -> NotesHolder {
+    internal func notesHolderAtMeasureIndex(_ measureIndex: Int) throws -> NotesHolder {
         let (notesHolderIndex, _) = try notesHolderIndexFromMeasureIndex(measureIndex)
         return notesHolders[notesHolderIndex]
     }
 
-    private mutating func modifyTieForNoteAtIndex(noteIndex: Int, inMeasureAtIndex measureIndex: Int, removeTie: Bool) throws {
+    private mutating func modifyTieForNoteAtIndex(_ noteIndex: Int, inMeasureAtIndex measureIndex: Int, removeTie: Bool) throws {
         let notesHolderIndex = try notesHolderIndexFromMeasureIndex(measureIndex)
 
         // Ensure first measure information provided is valid for tie
         var firstMeasure = try mutableMeasureFromNotesHolderIndex(notesHolderIndex.notesHolderIndex, repeatMeasureIndex: notesHolderIndex.repeatMeasureIndex)
         guard noteIndex < firstMeasure.noteCount else {
-            throw StaffError.NoteIndexOutOfRange
+            throw StaffError.noteIndexOutOfRange
         }
 
         // Get second measure if needed (tie starts on last note of measure)
@@ -166,11 +166,11 @@ public struct Staff {
             do {
                 secondNotesHolderIndex = try notesHolderIndexFromMeasureIndex(measureIndex + 1)
             } catch {
-                throw StaffError.NoNextNoteToTie
+                throw StaffError.noNextNoteToTie
             }
             secondMeasure = try mutableMeasureFromNotesHolderIndex(secondNotesHolderIndex.notesHolderIndex, repeatMeasureIndex: secondNotesHolderIndex.repeatMeasureIndex)
             guard secondMeasure?.noteCount > 0 else {
-                throw StaffError.NoNextNoteToTie
+                throw StaffError.noNextNoteToTie
             }
         } else {
             secondMeasure = nil
@@ -178,8 +178,8 @@ public struct Staff {
 
         // Modify tie
         if secondMeasure != nil {
-            try firstMeasure.modifyTieAtIndex(noteIndex, requestedTieState: removeTie ? nil : .Begin )
-            try secondMeasure?.modifyTieAtIndex(0, requestedTieState: removeTie ? nil : .End)
+            try firstMeasure.modifyTieAtIndex(noteIndex, requestedTieState: removeTie ? nil : .begin )
+            try secondMeasure?.modifyTieAtIndex(0, requestedTieState: removeTie ? nil : .end)
         } else {
             if removeTie {
                 try firstMeasure.removeTieAtIndex(noteIndex)
@@ -195,14 +195,14 @@ public struct Staff {
         }
     }
 
-    internal func notesHolderIndexFromMeasureIndex(index: Int) throws -> (notesHolderIndex: Int, repeatMeasureIndex: Int?) {
-        guard index >= 0 && index < measureCount else { throw StaffError.MeasureIndexOutOfRange }
+    internal func notesHolderIndexFromMeasureIndex(_ index: Int) throws -> (notesHolderIndex: Int, repeatMeasureIndex: Int?) {
+        guard index >= 0 && index < measureCount else { throw StaffError.measureIndexOutOfRange }
         return measureIndexes[index]
     }
 
     private mutating func recomputeMeasureIndexes() {
         measureIndexes = []
-        for (i, notesHolder) in notesHolders.enumerate() {
+        for (i, notesHolder) in notesHolders.enumerated() {
             switch notesHolder {
             case is Measure:
                 measureIndexes.append((notesHolderIndex: i, repeatMeasureIndex: nil))
@@ -217,7 +217,7 @@ public struct Staff {
         }
     }
 
-    private func mutableMeasureFromNotesHolderIndex(notesHolderIndex: Int, repeatMeasureIndex: Int?) throws -> Measure {
+    private func mutableMeasureFromNotesHolderIndex(_ notesHolderIndex: Int, repeatMeasureIndex: Int?) throws -> Measure {
         let notesHolder = notesHolders[notesHolderIndex]
         // Ensure first measure information provided is valid for tie
         if let repeatMeasureIndex = repeatMeasureIndex {
@@ -225,38 +225,38 @@ public struct Staff {
             // If it's not, check if noteIndex is less than count of measure
             guard let measureRepeat = notesHolder as? MeasureRepeat else {
                 assertionFailure("Index translation showed should be a repeat, but it's not")
-                throw StaffError.InternalError
+                throw StaffError.internalError
             }
             guard let mutableMeasure = measureRepeat.expand()[repeatMeasureIndex] as? Measure else {
-                throw StaffError.RepeatedMeasureCannotHaveTie
+                throw StaffError.repeatedMeasureCannotHaveTie
             }
             return mutableMeasure
         } else {
             // If repeatMeasureIndex is nil, check if the noteIndex is less than note count of measure
             assert(notesHolder.measureCount == 1, "Index translation showed should be a single measure, but it's not")
             guard let immutableMeasure = notesHolder as? ImmutableMeasure else {
-                throw StaffError.InternalError
+                throw StaffError.internalError
             }
             if let mutableMeasure = immutableMeasure as? Measure {
                 return mutableMeasure
             } else {
                 assertionFailure("If not a repeated measure, should be a mutable measure")
-                throw StaffError.InternalError
+                throw StaffError.internalError
             }
         }
     }
 }
 
-public enum StaffError: ErrorType {
-    case NoteIndexOutOfRange
-    case MeasureIndexOutOfRange
-    case NoNextNoteToTie
-    case NoNextNote
-    case NotBeginningOfTie
-    case RepeatedMeasureCannotHaveTie
-    case MeasureNotPartOfRepeat
-    case RepeatedMeasureCannotBeModified
-    case InternalError
+public enum StaffError: ErrorProtocol {
+    case noteIndexOutOfRange
+    case measureIndexOutOfRange
+    case noNextNoteToTie
+    case noNextNote
+    case notBeginningOfTie
+    case repeatedMeasureCannotHaveTie
+    case measureNotPartOfRepeat
+    case repeatedMeasureCannotBeModified
+    case internalError
 }
 
 extension Staff: CustomDebugStringConvertible {

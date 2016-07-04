@@ -24,37 +24,37 @@ public struct Tuplet {
             try Tuplet.verifyNoRests(notes)
             self.notes = notes
         default:
-            throw TupletError.InvalidNumberOfNotes
+            throw TupletError.invalidNumberOfNotes
         }
     }
 
     // MARK: - Methods
     // MARK: Public
 
-    public mutating func appendNote(note: Note) throws {
+    public mutating func appendNote(_ note: Note) throws {
         try verifyNewNote(note)
         notes.append(note)
     }
 
-    public mutating func insertNote(note: Note, atIndex index: Int) throws {
+    public mutating func insertNote(_ note: Note, atIndex index: Int) throws {
         try verifyNewNote(note)
         if index > 6 {
-            throw TupletError.InvalidIndex
+            throw TupletError.invalidIndex
         }
-        notes.insert(note, atIndex: index)
+        notes.insert(note, at: index)
     }
 
-    public mutating func removeNoteAtIndex(index: Int) throws {
+    public mutating func removeNoteAtIndex(_ index: Int) throws {
         guard notes.count <= 2 else {
-            throw TupletError.TooFewNotes
+            throw TupletError.tooFewNotes
         }
         guard index < notes.count else {
-            throw TupletError.InvalidIndex
+            throw TupletError.invalidIndex
         }
-        notes.removeAtIndex(index)
+        notes.remove(at: index)
     }
 
-    public mutating func replaceNoteAtIndex(index: Int, withNote note: Note) throws {
+    public mutating func replaceNoteAtIndex(_ index: Int, withNote note: Note) throws {
         try Tuplet.verifyNotRest(note)
         notes[index] = note
     }
@@ -62,42 +62,42 @@ public struct Tuplet {
     // MARK: Private
     // MARK: Verification
 
-    private func verifyNewNote(note: Note) throws {
+    private func verifyNewNote(_ note: Note) throws {
         try verifyNotFull()
         try verifySameDuration(newNote: note)
         try Tuplet.verifyNotRest(note)
     }
 
-    private static func verifyNoRests(notes: [Note]) throws {
+    private static func verifyNoRests(_ notes: [Note]) throws {
         for note in notes {
             try verifyNotRest(note)
         }
     }
 
-    private static func verifyNotRest(note: Note) throws {
+    private static func verifyNotRest(_ note: Note) throws {
         if note.isRest == true {
-            throw TupletError.RestsNotValid
+            throw TupletError.restsNotValid
         }
     }
 
-    private static func verifySameDuration(notes: [Note]) throws {
+    private static func verifySameDuration(_ notes: [Note]) throws {
         // Map all durations into new set
         // If set has more than 1 member, it is invalid
         let durations: Set<NoteDuration> = Set(notes.map { $0.noteDuration })
         if durations.count > 1 {
-            throw TupletError.NotSameDuration
+            throw TupletError.notSameDuration
         }
     }
 
-    private func verifySameDuration(newNote newNote: Note) throws {
+    private func verifySameDuration(newNote: Note) throws {
         if newNote.noteDuration != duration {
-            throw TupletError.NotSameDuration
+            throw TupletError.notSameDuration
         }
     }
 
     private func verifyNotFull() throws {
         if notes.count >= 7 {
-            throw TupletError.GroupingFull
+            throw TupletError.groupingFull
         }
     }
 }
@@ -119,11 +119,11 @@ extension Tuplet: CustomDebugStringConvertible {
     }
 }
 
-public enum TupletError: ErrorType {
-    case InvalidNumberOfNotes
-    case GroupingFull
-    case TooFewNotes
-    case RestsNotValid
-    case NotSameDuration
-    case InvalidIndex
+public enum TupletError: ErrorProtocol {
+    case invalidNumberOfNotes
+    case groupingFull
+    case tooFewNotes
+    case restsNotValid
+    case notSameDuration
+    case invalidIndex
 }

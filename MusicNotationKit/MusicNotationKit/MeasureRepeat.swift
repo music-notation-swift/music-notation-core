@@ -13,8 +13,8 @@ public struct MeasureRepeat {
     public let measureCount: Int
 
     public init(measures: [Measure], repeatCount: Int = 1) throws {
-        guard measures.count > 0 else { throw MeasureRepeatError.NoMeasures }
-        guard repeatCount > 0 else { throw MeasureRepeatError.InvalidRepeatCount }
+        guard measures.count > 0 else { throw MeasureRepeatError.noMeasures }
+        guard repeatCount > 0 else { throw MeasureRepeatError.invalidRepeatCount }
         self.measures = measures
         self.repeatCount = repeatCount
         measureCount = measures.count + (repeatCount * measures.count)
@@ -54,7 +54,7 @@ public func ==(lhs: MeasureRepeat, rhs: MeasureRepeat) -> Bool {
     return true
 }
 
-public enum MeasureRepeatError: ErrorType {
-    case NoMeasures
-    case InvalidRepeatCount
+public enum MeasureRepeatError: ErrorProtocol {
+    case noMeasures
+    case invalidRepeatCount
 }

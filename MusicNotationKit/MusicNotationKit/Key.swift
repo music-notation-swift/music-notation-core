@@ -12,7 +12,7 @@ public struct Key {
 	private let noteLetter: NoteLetter
 	private let accidental: Accidental?
 	
-	public init(noteLetter: NoteLetter, accidental: Accidental? = nil, type: KeyType = .Major) {
+	public init(noteLetter: NoteLetter, accidental: Accidental? = nil, type: KeyType = .major) {
 		self.noteLetter = noteLetter
 		self.accidental = accidental
 		self.type = type

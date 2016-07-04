@@ -1,6 +1,6 @@
 language: objective-c
 osx_image: xcode8
 script: 
-  - xctool -workspace ./MusicNotation.xcworkspace -scheme MusicNotationKit build test -sdk macosx10.11 GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=YES GCC_GENERATE_TEST_COVERAGE_FILES=YES
+  - xctool -workspace ./MusicNotation.xcworkspace -scheme MusicNotationKit build test -sdk macosx GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=YES GCC_GENERATE_TEST_COVERAGE_FILES=YES
 after_success:
   - bash <(curl -s https://codecov.io/bash)

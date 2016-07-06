@@ -6,6 +6,10 @@
 //  Copyright © 2015 Kyle Sherman. All rights reserved.
 //
 
+/**
+ This is a protocol that represents anything that can directly hold multiple notes.
+ i.e. `Measure` and `MeasureRepeat` both conform to this.
+ */
 public protocol NotesHolder {
     var measureCount: Int { get }
 }

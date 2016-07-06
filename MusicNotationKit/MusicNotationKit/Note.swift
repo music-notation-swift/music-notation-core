@@ -67,7 +67,7 @@ public struct Note {
      - parameter currentTie: What part of the tie on the note the caller wants to remove. This is important if the
      note is both the beginning and end of a tie
      - throws:
-        - `NoteError.InvalidRequestedTieState`
+        - `NoteError.invalidRequestedTieState`
      */
     internal mutating func removeTie(_ currentTie: Tie) throws {
         switch (currentTie, tie) {

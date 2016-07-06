@@ -6,6 +6,10 @@
 //  Copyright © 2015 Kyle Sherman. All rights reserved.
 //
 
+/**
+ This is a protocol that represents anything that represents one or more notes.
+ i.e. `Note` and `Tuplet` both conform to this.
+ */
 public protocol NoteCollection {
 
     var noteCount: Int { get }

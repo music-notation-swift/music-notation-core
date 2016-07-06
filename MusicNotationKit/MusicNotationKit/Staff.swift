@@ -35,14 +35,14 @@ public struct Staff {
         measureCount += repeatedMeasures.measureCount
     }
 
-    public mutating func insertMeasure(_ measure: Measure, atIndex index: Int) {
+    public mutating func insertMeasure(_ measure: Measure, at index: Int) {
         // TODO: Handle it properly with the index being the measure index
         // Have to somehow handle the case of trying to insert where repeats are
         notesHolders.insert(measure, at: index)
         measureCount += measure.measureCount
     }
 
-    public mutating func insertRepeat(_ repeatedMeasures: MeasureRepeat, atIndex index: Int) {
+    public mutating func insertRepeat(_ repeatedMeasures: MeasureRepeat, at index: Int) {
         // TODO: Handle it properly with the index being the measure index
         // Have to somehow handle the case of trying to insert where repeats already exist
         notesHolders.insert(repeatedMeasures, at: index)
@@ -56,10 +56,10 @@ public struct Staff {
      - parameter measureIndex: The index of the measure to replace.
      - parameter newMeasure: The new measure to replace the old one.
      - throws:
-         - `StaffError.RepeatedMeasureCannotBeModified` if the measure is a repeated measure.
-         - `StaffError.InternalError` if index translation doesn't work properly.
+         - `StaffError.repeatedMeasureCannotBeModified` if the measure is a repeated measure.
+         - `StaffError.internalError` if index translation doesn't work properly.
      */
-    public mutating func replaceMeasureAtIndex(_ measureIndex: Int, withNewMeasure newMeasure: Measure) throws {
+    public mutating func replaceMeasure(at measureIndex: Int, with newMeasure: Measure) throws {
         let (notesHolderIndex, repeatMeasureIndex) = try notesHolderIndexFromMeasureIndex(measureIndex)
         let newNotesHolder: NotesHolder
         if let repeatMeasureIndex = repeatMeasureIndex {
@@ -84,16 +84,16 @@ public struct Staff {
      - parameter noteIndex: The index of the note in the specified measure to begin the tie.
      - parameter measureIndex: The index of the measure that contains the note at which the tie should begin.
      - throws:
-         - `StaffError.NoteIndexoutOfRange`
-         - `StaffError.NoNextNoteToTie` if the note specified is the last note in the staff.
-         - `StaffError.MeasureIndexOutOfRange`
-         - `StaffError.RepeatedMeasureCannotHaveTie` if the index for the measure specified refers to a measure that is
-         a repeat of another measure.
-         - `StaffError.InternalError`, `MeasureError.InternalError` if the function has an internal implementation error.
-         - `MeasureError.NoteIndexOutOfRange`
+         - `StaffError.noteIndexoutOfRange`
+         - `StaffError.noNextNoteToTie` if the note specified is the last note in the staff.
+         - `StaffError.measureIndexOutOfRange`
+         - `StaffError.repeatedMeasureCannotHaveTie` if the index for the measure specified refers to a measure that is
+            a repeat of another measure.
+         - `StaffError.internalError`, `MeasureError.internalError` if the function has an internal implementation error.
+         - `MeasureError.noteIndexOutOfRange`
      */
-    public mutating func startTieFromNoteAtIndex(_ noteIndex: Int, inMeasureAtIndex measureIndex: Int) throws {
-        try modifyTieForNoteAtIndex(noteIndex, inMeasureAtIndex: measureIndex, removeTie: false)
+    public mutating func startTieFromNote(at noteIndex: Int, inMeasureAt measureIndex: Int) throws {
+        try modifyTieForNote(at: noteIndex, inMeasureAt: measureIndex, removeTie: false)
     }
 
     /**
@@ -102,26 +102,26 @@ public struct Staff {
      - parameter noteIndex: The index of the note in the specified measure where the tie begins.
      - parameter measureIndex: The index of the measure that contains the note at which the tie begins.
      - throws:
-         - `StaffError.NoteIndexoutOfRange`
-         - `StaffError.NoNextNoteToTie` if the note specified is the last note in the staff.
-         - `StaffError.MeasureIndexOutOfRange`
-         - `StaffError.RepeatedMeasureCannotHaveTie` if the index for the measure specified refers to a measure that is
-         a repeat of another measure.
-         - `MeasureError.NoteIndexOutOfRange`
-         - `StaffError.InternalError`, `MeasureError.InternalError` if the function has an internal implementation error.
+         - `StaffError.noteIndexoutOfRange`
+         - `StaffError.noNextNoteToTie` if the note specified is the last note in the staff.
+         - `StaffError.measureIndexOutOfRange`
+         - `StaffError.repeatedMeasureCannotHaveTie` if the index for the measure specified refers to a measure that is
+            a repeat of another measure.
+         - `MeasureError.noteIndexOutOfRange`
+         - `StaffError.internalError`, `MeasureError.internalError` if the function has an internal implementation error.
      */
-    public mutating func removeTieFromNoteAtIndex(_ noteIndex: Int, inMeasureAtIndex measureIndex: Int) throws {
-        try modifyTieForNoteAtIndex(noteIndex, inMeasureAtIndex: measureIndex, removeTie: true)
+    public mutating func removeTieFromNote(at noteIndex: Int, inMeasureAt measureIndex: Int) throws {
+        try modifyTieForNote(at: noteIndex, inMeasureAt: measureIndex, removeTie: true)
     }
 
     /**
      - parameter measureIndex: The index of the measure to return.
      - returns An `ImmutableMeasure` at the given index within the staff.
      - throws:
-        - `StaffError.MeasureIndexOutOfRange`
-        - `StaffError.InternalError` if the function has an internal implementation error.
+        - `StaffError.measureIndexOutOfRange`
+        - `StaffError.internalError` if the function has an internal implementation error.
      */
-    public func measureAtIndex(_ measureIndex: Int) throws -> ImmutableMeasure {
+    public func measure(at measureIndex: Int) throws -> ImmutableMeasure {
         let (notesHolderIndex, repeatMeasureIndex) = try notesHolderIndexFromMeasureIndex(measureIndex)
         if let measureRepeat = notesHolders[notesHolderIndex] as? MeasureRepeat,
             let repeatMeasureIndex = repeatMeasureIndex {
@@ -137,10 +137,10 @@ public struct Staff {
      - returns A `MeasureRepeat` that contains the measure(s) that are repeated as well as the repeat count. Returns nil
      if the measure at the specified index is not part of repeat.
      - throws:
-        - `StaffError.MeasureIndexOutOfRange`
-        - `StaffError.InternalError` if the function has an internal implementation error.
+        - `StaffError.measureIndexOutOfRange`
+        - `StaffError.internalError` if the function has an internal implementation error.
      */
-    public func measureRepeatAtIndex(_ measureIndex: Int) throws -> MeasureRepeat? {
+    public func measureRepeat(at measureIndex: Int) throws -> MeasureRepeat? {
         let (notesHolderIndex, _) = try notesHolderIndexFromMeasureIndex(measureIndex)
         return notesHolders[notesHolderIndex] as? MeasureRepeat
     }
@@ -150,7 +150,7 @@ public struct Staff {
         return notesHolders[notesHolderIndex]
     }
 
-    private mutating func modifyTieForNoteAtIndex(_ noteIndex: Int, inMeasureAtIndex measureIndex: Int, removeTie: Bool) throws {
+    private mutating func modifyTieForNote(at noteIndex: Int, inMeasureAt measureIndex: Int, removeTie: Bool) throws {
         let notesHolderIndex = try notesHolderIndexFromMeasureIndex(measureIndex)
 
         // Ensure first measure information provided is valid for tie
@@ -178,20 +178,20 @@ public struct Staff {
 
         // Modify tie
         if secondMeasure != nil {
-            try firstMeasure.modifyTieAtIndex(noteIndex, requestedTieState: removeTie ? nil : .begin )
-            try secondMeasure?.modifyTieAtIndex(0, requestedTieState: removeTie ? nil : .end)
+            try firstMeasure.modifyTie(at: noteIndex, requestedTieState: removeTie ? nil : .begin )
+            try secondMeasure?.modifyTie(at: 0, requestedTieState: removeTie ? nil : .end)
         } else {
             if removeTie {
-                try firstMeasure.removeTieAtIndex(noteIndex)
+                try firstMeasure.removeTie(at: noteIndex)
             } else {
-                try firstMeasure.startTieAtIndex(noteIndex)
+                try firstMeasure.startTie(at: noteIndex)
             }
         }
 
         // Set new measures in the staff
-        try replaceMeasureAtIndex(measureIndex, withNewMeasure: firstMeasure)
+        try replaceMeasure(at: measureIndex, with: firstMeasure)
         if let secondMeasure = secondMeasure {
-            try replaceMeasureAtIndex(measureIndex + 1, withNewMeasure: secondMeasure)
+            try replaceMeasure(at: measureIndex + 1, with: secondMeasure)
         }
     }
 

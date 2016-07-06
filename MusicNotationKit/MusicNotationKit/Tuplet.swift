@@ -36,7 +36,7 @@ public struct Tuplet {
         notes.append(note)
     }
 
-    public mutating func insertNote(_ note: Note, atIndex index: Int) throws {
+    public mutating func insertNote(_ note: Note, at index: Int) throws {
         try verifyNewNote(note)
         if index > 6 {
             throw TupletError.invalidIndex
@@ -44,7 +44,7 @@ public struct Tuplet {
         notes.insert(note, at: index)
     }
 
-    public mutating func removeNoteAtIndex(_ index: Int) throws {
+    public mutating func removeNote(at index: Int) throws {
         guard notes.count <= 2 else {
             throw TupletError.tooFewNotes
         }
@@ -54,7 +54,7 @@ public struct Tuplet {
         notes.remove(at: index)
     }
 
-    public mutating func replaceNoteAtIndex(_ index: Int, withNote note: Note) throws {
+    public mutating func replaceNote(at index: Int, with note: Note) throws {
         try Tuplet.verifyNotRest(note)
         notes[index] = note
     }

@@ -1,11 +1,14 @@
 //
-//  Repeat.swift
+//  MeasureRepeat.swift
 //  MusicNotationKit
 //
 //  Created by Kyle Sherman on 6/15/15.
 //  Copyright © 2015 Kyle Sherman. All rights reserved.
 //
 
+/**
+ This represents a set of one or more measures that is repeated `repeatCount` times.
+ */
 public struct MeasureRepeat {
 
     public var repeatCount: Int

@@ -13,6 +13,7 @@ public struct MeasureRepeat {
 
     public var repeatCount: Int
     public var measures: [Measure]
+	/// The number of measures, including repeated measures
     public let measureCount: Int
 
     public init(measures: [Measure], repeatCount: Int = 1) throws {

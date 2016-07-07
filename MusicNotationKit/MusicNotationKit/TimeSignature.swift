@@ -14,7 +14,7 @@ public struct TimeSignature {
 	public let bottomNumber: Int
 	public let tempo: Int
 	
-	init(topNumber: Int, bottomNumber: Int, tempo: Int) {
+	public init(topNumber: Int, bottomNumber: Int, tempo: Int) {
 		// TODO: Check the validity of all these values
 		self.topNumber = topNumber
 		self.bottomNumber = bottomNumber

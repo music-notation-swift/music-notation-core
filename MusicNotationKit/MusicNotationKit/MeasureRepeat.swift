@@ -47,13 +47,8 @@ public func ==(lhs: MeasureRepeat, rhs: MeasureRepeat) -> Bool {
     guard lhs.repeatCount == rhs.repeatCount else {
         return false
     }
-    guard lhs.measures.count == rhs.measures.count else {
+    guard lhs.measures == rhs.measures else {
         return false
-    }
-    for i in 0..<lhs.measures.count {
-        if lhs.measures[i] != rhs.measures[i] {
-            return false
-        }
     }
     return true
 }

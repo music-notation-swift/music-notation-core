@@ -35,18 +35,54 @@ public struct Staff {
         measureCount += repeatedMeasures.measureCount
     }
 
-    public mutating func insertMeasure(_ measure: Measure, at index: Int) {
-        // TODO: Handle it properly with the index being the measure index
-        // Have to somehow handle the case of trying to insert where repeats are
-        notesHolders.insert(measure, at: index)
-        measureCount += measure.measureCount
+    /**
+     Inserts a measure at the given index. If there is a repeat at that index and the index provided
+     is within the original measure to be repeated or at the end of that list, it will be inserted;
+     otherwise, it will fail.
+     
+     - parameter measure: The measure to be inserted.
+     - parameter index: The index where the measure should be inserted.
+     - throws:
+        - `StaffError.measureIndexOutOfRange`
+        - `StaffError.internalError`
+        - `MeasureRepeatError.indexOutOfRange`
+        - `MeasureRepeatError.cannotModifyRepeatedMeasures`
+     */
+    public mutating func insertMeasure(_ measure: Measure, at index: Int) throws {
+        let notesHolderIndex = try notesHolderIndexFromMeasureIndex(index)
+        // Not a repeat, just insert
+        if notesHolderIndex.repeatMeasureIndex == nil {
+            notesHolders.insert(measure, at: index)
+            measureCount += measure.measureCount
+        } else {
+            // Is a repeat, so insert if it is one of the measures to be repeated
+            guard var measureRepeat = notesHolders[notesHolderIndex.notesHolderIndex] as? MeasureRepeat,
+                let repeatMeasureIndex = notesHolderIndex.repeatMeasureIndex else {
+                assertionFailure("Index translation showed should be a repeat, but it's not")
+                throw StaffError.internalError
+            }
+            try measureRepeat.insertMeasure(measure, at: repeatMeasureIndex)
+            notesHolders[notesHolderIndex.notesHolderIndex] = measureRepeat
+        }
     }
 
-    public mutating func insertRepeat(_ repeatedMeasures: MeasureRepeat, at index: Int) {
-        // TODO: Handle it properly with the index being the measure index
-        // Have to somehow handle the case of trying to insert where repeats already exist
-        notesHolders.insert(repeatedMeasures, at: index)
-        measureCount += repeatedMeasures.measureCount
+    /**
+     Inserts a `MeasureRepeat` at the given index. If there is already a repeat at the given index,
+     this will fail.
+     
+     - parameter measureRepeat: The repeat to insert.
+     - parameter index: The index where the repeat should be inserted.
+     - throws:
+        - `StaffError.measureIndexOutOfRange`
+        - `StaffError.cannotInsertRepeatWhereOneAlreadyExists`
+     */
+    public mutating func insertRepeat(_ measureRepeat: MeasureRepeat, at index: Int) throws {
+        let notesHolderIndex = try notesHolderIndexFromMeasureIndex(index)
+        guard notesHolderIndex.repeatMeasureIndex == nil else {
+            throw StaffError.cannotInsertRepeatWhereOneAlreadyExists
+        }
+        notesHolders.insert(measureRepeat, at: notesHolderIndex.notesHolderIndex)
+        measureCount += measureRepeat.measureCount
     }
 
     /**
@@ -256,6 +292,7 @@ public enum StaffError: ErrorProtocol {
     case repeatedMeasureCannotHaveTie
     case measureNotPartOfRepeat
     case repeatedMeasureCannotBeModified
+    case cannotInsertRepeatWhereOneAlreadyExists
     case internalError
 }
 

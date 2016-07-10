@@ -37,6 +37,14 @@ public struct Measure: ImmutableMeasure {
         recomputeNoteCollectionIndexes()
     }
 
+    public init(_ immutableMeasure: ImmutableMeasure) {
+        timeSignature = immutableMeasure.timeSignature
+        key = immutableMeasure.key
+        notes = immutableMeasure.notes
+        noteCount = immutableMeasure.noteCount
+        recomputeNoteCollectionIndexes()
+    }
+
     public mutating func addNote(_ note: Note) {
         notes.append(note)
         noteCount += note.noteCount

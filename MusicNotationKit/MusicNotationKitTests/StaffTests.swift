@@ -13,6 +13,13 @@ class StaffTests: XCTestCase {
 
     var staff: Staff!
 
+    var measure1: Measure!
+    var measure2: Measure!
+    var measure3: Measure!
+    var measure4: Measure!
+    var measure5: Measure!
+    var measure6: Measure!
+
     override func setUp() {
         super.setUp()
         staff = Staff(clef: .treble, instrument: .guitar6)
@@ -21,32 +28,32 @@ class StaffTests: XCTestCase {
         let note = Note(noteDuration: .sixteenth,
                         tone: Tone(noteLetter: .c, octave: .octave1))
         let tuplet = try! Tuplet(notes: [note, note, note])
-        let measure1 = Measure(
+        measure1 = Measure(
             timeSignature: timeSignature,
             key: key,
             notes: [note, note, note, note, tuplet]
         )
-        let measure2 = Measure(
+        measure2 = Measure(
             timeSignature: timeSignature,
             key: key,
             notes: [tuplet, note, note]
         )
-        let measure3 = Measure(
+        measure3 = Measure(
             timeSignature: timeSignature,
             key: key,
             notes: [note, note, note, note, tuplet]
         )
-        let measure4 = Measure(
+        measure4 = Measure(
             timeSignature: timeSignature,
             key: key,
             notes: [note, note, note, note]
         )
-        let measure5 = Measure(
+        measure5 = Measure(
             timeSignature: timeSignature,
             key: key,
             notes: [tuplet, note, note, note, note]
         )
-        let measure6 = Measure(
+        measure6 = Measure(
             timeSignature: timeSignature,
             key: key,
             notes: [tuplet, tuplet, note, note]
@@ -62,6 +69,123 @@ class StaffTests: XCTestCase {
         staff.appendRepeat(repeat2) // index = 7
         staff.appendMeasure(measure6) // index = 13
         staff.appendMeasure(measure3)
+    }
+
+    // MARK: - insertMeasure(_:, at:)
+    // MARK: Failures
+
+    func testInsertMeasureInvalidIndex() {
+        let measure = Measure(
+            timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
+            key: Key(noteLetter: .c))
+        do {
+            try staff.insertMeasure(measure, at: 15)
+            shouldFail()
+        } catch StaffError.measureIndexOutOfRange {
+        } catch {
+            expected(StaffError.measureIndexOutOfRange, actual: error)
+        }
+    }
+
+    func testInsertMeasureInRepeatedMeasures() {
+        let measure = Measure(
+            timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
+            key: Key(noteLetter: .c))
+        do {
+            try staff.insertMeasure(measure, at: 9)
+        } catch MeasureRepeatError.cannotModifyRepeatedMeasures {
+        } catch {
+            expected(MeasureRepeatError.cannotModifyRepeatedMeasures, actual: error)
+        }
+    }
+
+    // MARK: Successes
+
+    func testInsertMeasureNoRepeat() {
+        let measure = Measure(
+            timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
+            key: Key(noteLetter: .c))
+        do {
+            try staff.insertMeasure(measure, at: 1)
+            let addedMeasure = try staff.measure(at: 1)
+            let beforeMeasure = try staff.measure(at: 0)
+            let afterMeasure = try staff.measure(at: 2)
+            XCTAssertEqual(Measure(addedMeasure), measure)
+            XCTAssertEqual(Measure(beforeMeasure), measure1)
+            XCTAssertEqual(Measure(afterMeasure), measure2)
+        } catch {
+            XCTFail(String(error))
+        }
+    }
+
+    func testInsertMeasureInRepeat() {
+        let measure = Measure(
+            timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
+            key: Key(noteLetter: .c))
+        do {
+            try staff.insertMeasure(measure, at: 5)
+            let actualRepeat = try staff.measureRepeat(at: 5)
+            let expectedRepeat = try MeasureRepeat(measures: [measure, measure4])
+            XCTAssertEqual(actualRepeat, expectedRepeat)
+        } catch {
+            XCTFail(String(error))
+        }
+    }
+
+    func testInsertMeasureInRepeatAtEnd() {
+        let measure = Measure(
+            timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
+            key: Key(noteLetter: .c))
+        do {
+            try staff.insertMeasure(measure, at: 6)
+            let actualRepeat = try staff.measureRepeat(at: 5)
+            let expectedRepeat = try MeasureRepeat(measures: [measure4, measure])
+            XCTAssertEqual(actualRepeat, expectedRepeat)
+        } catch {
+            XCTFail(String(error))
+        }
+    }
+
+    // MARK: - insertRepeat(_:, at:)
+    // MARK: Failures
+
+    func testInsertRepeatInvalidIndex() {
+        do {
+            let measureRepeat = try MeasureRepeat(measures: [measure4])
+            try staff.insertRepeat(measureRepeat, at: 50)
+            shouldFail()
+        } catch StaffError.measureIndexOutOfRange {
+        } catch {
+            expected(StaffError.measureIndexOutOfRange, actual: error)
+        }
+    }
+
+    func testInsertRepeatInRepeat() {
+        do {
+            let measureRepeat = try MeasureRepeat(measures: [measure5])
+            try staff.insertRepeat(measureRepeat, at: 5)
+            shouldFail()
+        } catch StaffError.cannotInsertRepeatWhereOneAlreadyExists {
+        } catch {
+            expected(StaffError.cannotInsertRepeatWhereOneAlreadyExists, actual: error)
+        }
+    }
+
+    // MARK: Successes
+
+    func testInsertRepeatSingleMeasure() {
+        do {
+            let measureRepeat = try MeasureRepeat(measures: [measure4])
+            try staff.insertRepeat(measureRepeat, at: 1)
+            let beforeRepeat = try staff.measure(at: 0)
+            let actualRepeat = try staff.measureRepeat(at: 1)
+            let afterRepeat = try staff.measure(at: 3)
+            XCTAssertEqual(Measure(beforeRepeat), measure1)
+            XCTAssertEqual(Measure(afterRepeat), measure2)
+            XCTAssertEqual(actualRepeat, measureRepeat)
+        } catch {
+            XCTFail(String(error))
+        }
     }
 
     // MARK: - startTieFromNote(at:, inMeasureAt:)

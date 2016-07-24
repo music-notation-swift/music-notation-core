@@ -94,7 +94,7 @@ public struct Staff {
      */
     public mutating func insertRepeat(_ measureRepeat: MeasureRepeat, at index: Int) throws {
         let notesHolderIndex = try notesHolderIndexFromMeasureIndex(index)
-        guard notesHolderIndex.repeatMeasureIndex == nil else {
+        guard notesHolderIndex.repeatMeasureIndex == nil || notesHolderIndex.repeatMeasureIndex == 0 else {
             throw StaffError.cannotInsertRepeatWhereOneAlreadyExists
         }
         notesHolders.insert(measureRepeat, at: notesHolderIndex.notesHolderIndex)

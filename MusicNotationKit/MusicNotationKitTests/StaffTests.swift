@@ -19,6 +19,8 @@ class StaffTests: XCTestCase {
     var measure4: Measure!
     var measure5: Measure!
     var measure6: Measure!
+    var repeat1: MeasureRepeat!
+    var repeat2: MeasureRepeat!
 
     override func setUp() {
         super.setUp()
@@ -58,8 +60,8 @@ class StaffTests: XCTestCase {
             key: key,
             notes: [tuplet, tuplet, note, note]
         )
-        let repeat1 = try! MeasureRepeat(measures: [measure4])
-        let repeat2 = try! MeasureRepeat(measures: [measure4, measure4], repeatCount: 2)
+        repeat1 = try! MeasureRepeat(measures: [measure4])
+        repeat2 = try! MeasureRepeat(measures: [measure4, measure4], repeatCount: 2)
         staff.appendMeasure(measure1)
         staff.appendMeasure(measure2)
         staff.appendMeasure(measure3)
@@ -206,7 +208,7 @@ class StaffTests: XCTestCase {
     func testInsertRepeatInRepeat() {
         do {
             let measureRepeat = try MeasureRepeat(measures: [measure5])
-            try staff.insertRepeat(measureRepeat, at: 5)
+            try staff.insertRepeat(measureRepeat, at: 6)
             shouldFail()
         } catch StaffError.cannotInsertRepeatWhereOneAlreadyExists {
         } catch {
@@ -225,6 +227,21 @@ class StaffTests: XCTestCase {
             let afterRepeat = try staff.measure(at: 3)
             XCTAssertEqual(Measure(beforeRepeat), measure1)
             XCTAssertEqual(Measure(afterRepeat), measure2)
+            XCTAssertEqual(actualRepeat, measureRepeat)
+        } catch {
+            XCTFail(String(error))
+        }
+    }
+
+    func testInsertRepeatBeforeOtherRepeat() {
+        do {
+            let measureRepeat = try MeasureRepeat(measures: [measure5])
+            try staff.insertRepeat(measureRepeat, at: 5)
+            let beforeRepeat = try staff.measure(at: 4)
+            let actualRepeat = try staff.measureRepeat(at: 5)
+            let afterRepeat = try staff.measureRepeat(at: 7)
+            XCTAssertEqual(Measure(beforeRepeat), measure5)
+            XCTAssertEqual(afterRepeat, repeat1)
             XCTAssertEqual(actualRepeat, measureRepeat)
         } catch {
             XCTFail(String(error))

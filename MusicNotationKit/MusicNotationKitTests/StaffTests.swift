@@ -92,10 +92,37 @@ class StaffTests: XCTestCase {
             timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
             key: Key(noteLetter: .c))
         do {
-            try staff.insertMeasure(measure, at: 9)
+            try staff.insertMeasure(measure, at: 10, inRepeat: true)
+            shouldFail()
         } catch MeasureRepeatError.cannotModifyRepeatedMeasures {
         } catch {
             expected(MeasureRepeatError.cannotModifyRepeatedMeasures, actual: error)
+        }
+    }
+
+    func testInsertMeasureInMeasureRepeatWithWrongFlag() {
+        let measure = Measure(
+            timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
+            key: Key(noteLetter: .c))
+        do {
+            try staff.insertMeasure(measure, at: 6, inRepeat: false)
+            shouldFail()
+        } catch StaffError.hasToInsertIntoRepeatIfIndexIsNotFirstMeasureOfRepeat {
+        } catch {
+            expected(StaffError.hasToInsertIntoRepeatIfIndexIsNotFirstMeasureOfRepeat, actual: error)
+        }
+    }
+
+    func testInsertMeasureNoRepeatWithWrongFlag() {
+        let measure = Measure(
+            timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
+            key: Key(noteLetter: .c))
+        do {
+            try staff.insertMeasure(measure, at: 1, inRepeat: true)
+            shouldFail()
+        } catch StaffError.noRepeatToInsertInto {
+        } catch {
+            expected(StaffError.noRepeatToInsertInto, actual: error)
         }
     }
 
@@ -123,7 +150,7 @@ class StaffTests: XCTestCase {
             timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
             key: Key(noteLetter: .c))
         do {
-            try staff.insertMeasure(measure, at: 5)
+            try staff.insertMeasure(measure, at: 5, inRepeat: true)
             let actualRepeat = try staff.measureRepeat(at: 5)
             let expectedRepeat = try MeasureRepeat(measures: [measure, measure4])
             XCTAssertEqual(actualRepeat, expectedRepeat)
@@ -137,10 +164,26 @@ class StaffTests: XCTestCase {
             timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
             key: Key(noteLetter: .c))
         do {
-            try staff.insertMeasure(measure, at: 6)
+            try staff.insertMeasure(measure, at: 6, inRepeat: true)
             let actualRepeat = try staff.measureRepeat(at: 5)
             let expectedRepeat = try MeasureRepeat(measures: [measure4, measure])
             XCTAssertEqual(actualRepeat, expectedRepeat)
+        } catch {
+            XCTFail(String(error))
+        }
+    }
+
+    func testInsertMeasureBeforeRepeat() {
+        let measure = Measure(
+            timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
+            key: Key(noteLetter: .c))
+        do {
+            try staff.insertMeasure(measure, at: 5, inRepeat: false)
+            let _ = try staff.measureRepeat(at: 6)
+            let addedMeasure = try staff.measure(at: 5)
+            let beforeMeasure = try staff.measure(at: 4)
+            XCTAssertEqual(Measure(addedMeasure), measure)
+            XCTAssertEqual(Measure(beforeMeasure), measure5)
         } catch {
             XCTFail(String(error))
         }

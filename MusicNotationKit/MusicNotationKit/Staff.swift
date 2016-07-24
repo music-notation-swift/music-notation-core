@@ -42,19 +42,35 @@ public struct Staff {
      
      - parameter measure: The measure to be inserted.
      - parameter index: The index where the measure should be inserted.
+     - parameter inRepeat: Default to false. True when you want the measure to be inserted into the repeat at the
+        given index. False if you want the measure to be inserted either before a repeat or there is no repeat
+        at the specified index.
      - throws:
         - `StaffError.measureIndexOutOfRange`
+        - `StaffError.noRepeatToInsertInto`
+        - `StaffError.hasToInsertIntoRepeatIfIndexIsNotFirstMeasureOfRepeat`
         - `StaffError.internalError`
         - `MeasureRepeatError.indexOutOfRange`
         - `MeasureRepeatError.cannotModifyRepeatedMeasures`
      */
-    public mutating func insertMeasure(_ measure: Measure, at index: Int) throws {
+    public mutating func insertMeasure(_ measure: Measure, at index: Int, inRepeat: Bool = false) throws {
         let notesHolderIndex = try notesHolderIndexFromMeasureIndex(index)
         // Not a repeat, just insert
         if notesHolderIndex.repeatMeasureIndex == nil {
+            guard !inRepeat else {
+                throw StaffError.noRepeatToInsertInto
+            }
             notesHolders.insert(measure, at: index)
             measureCount += measure.measureCount
         } else {
+            guard !inRepeat && notesHolderIndex.repeatMeasureIndex == 0 || inRepeat else {
+                throw StaffError.hasToInsertIntoRepeatIfIndexIsNotFirstMeasureOfRepeat
+            }
+            if !inRepeat {
+                notesHolders.insert(measure, at: index)
+                measureCount += measure.measureCount
+                return
+            }
             // Is a repeat, so insert if it is one of the measures to be repeated
             guard var measureRepeat = notesHolders[notesHolderIndex.notesHolderIndex] as? MeasureRepeat,
                 let repeatMeasureIndex = notesHolderIndex.repeatMeasureIndex else {
@@ -293,6 +309,8 @@ public enum StaffError: ErrorProtocol {
     case measureNotPartOfRepeat
     case repeatedMeasureCannotBeModified
     case cannotInsertRepeatWhereOneAlreadyExists
+    case noRepeatToInsertInto
+    case hasToInsertIntoRepeatIfIndexIsNotFirstMeasureOfRepeat
     case internalError
 }
 

@@ -6,8 +6,6 @@
 //  Copyright (c) 2015 Kyle Sherman. All rights reserved.
 //
 
-import Foundation
-
 public struct TimeSignature {
 	
 	public let topNumber: Int

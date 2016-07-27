@@ -54,7 +54,8 @@ http://usermanuals.musicxml.com/MusicXML/Content/ST-MusicXML-note-type-value.htm
 
 - Make TPQN configurable (e.g 1024, TODO: look into MIDI time duration). This
   parameter is not necessarily exposed in the public API.
-- Calculate budget in terms of TPQN. For example: `4/4 = 4 * TPQN, 6/8 = 6 * TPQN / 2`
+- Calculate budget in terms of TPQN. For example: `4/4 = 4 * TPQN, 6/8 = 6 * (TPQN / 2)`.
+  In the case of `6/8` TPQN id divided by 2 because an eighth note is half of a quarter.
 
 ## Measure Calculations
 
@@ -62,7 +63,7 @@ http://usermanuals.musicxml.com/MusicXML/Content/ST-MusicXML-note-type-value.htm
 - Proposed API: Suggest available note durations given used space. 
 - Proposed API: Validate measure.
 - Proposed setting to enable automatic validation. This implementation would
-  leverage incremental changes in the measure occupancy values. 
+  leverage incremental changes in the measure occupancy values.
 - Insert note (Methods implemented in Measure class).
 - Delete note (Methods implemented in Measure class).
 - Replace note. This can be a combination of delete followed by insert?
@@ -72,5 +73,5 @@ Opens:
 - Good to have the ability to tell what can be used to fill the measure.
 - Let the API caller know that the measure is incomplete.
 - Add the ability to split the measure.
-- What happends when the user changes the time signature. Do we allow this?
+- What happens when the user changes the time signature. Do we allow this?
 

@@ -60,11 +60,11 @@ public enum Accidental {
 extension Accidental: CustomDebugStringConvertible {
     public var debugDescription: String {
         switch self {
-        case .sharp: return "#"
-        case .doubleSharp: return "##"
-        case .flat: return "b"
-        case .doubleFlat: return "bb"
-        case .natural: return "n"
+        case .sharp: return "♯"
+        case .doubleSharp: return "𝄪"
+        case .flat: return "♭"
+        case .doubleFlat: return "𝄫"
+        case .natural: return "♮"
         }
     }
 }

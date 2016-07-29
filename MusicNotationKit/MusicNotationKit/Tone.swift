@@ -27,7 +27,7 @@ extension Tone: CustomDebugStringConvertible {
 		} else {
 			accidentalString = ""
 		}
-		return "\(noteLetter)\(octave.rawValue)\(accidentalString)"
+		return "\(noteLetter)\(accidentalString)\(octave.rawValue)"
 	}
 }
 

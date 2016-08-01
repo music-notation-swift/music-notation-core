@@ -86,7 +86,7 @@ public func ==(lhs: MeasureRepeat, rhs: MeasureRepeat) -> Bool {
     return true
 }
 
-public enum MeasureRepeatError: ErrorProtocol {
+public enum MeasureRepeatError: Error {
     case noMeasures
     case invalidRepeatCount
     case cannotModifyRepeatedMeasures

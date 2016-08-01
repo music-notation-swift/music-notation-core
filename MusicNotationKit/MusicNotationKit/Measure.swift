@@ -275,7 +275,7 @@ extension Measure: CustomDebugStringConvertible {
     }
 }
 
-public enum MeasureError: ErrorProtocol {
+public enum MeasureError: Error {
     case noTieBeginsAtIndex
     case noteIndexOutOfRange
     case noNextNote

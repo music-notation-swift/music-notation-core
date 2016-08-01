@@ -132,6 +132,6 @@ extension Note: CustomDebugStringConvertible {
     }
 }
 
-public enum NoteError: ErrorProtocol {
+public enum NoteError: Error {
     case invalidRequestedTieState
 }

@@ -45,7 +45,8 @@ class MeasureRepeatTests: XCTestCase {
 
     func testInitNotSpecifiedRepeatCount() {
         do {
-            let _ = try MeasureRepeat(measures: [measure1])
+            let mesaureRepeat = try MeasureRepeat(measures: [measure1])
+            XCTAssertEqual(mesaureRepeat.repeatCount, 1)
         } catch {
             XCTFail(String(error))
         }
@@ -79,6 +80,7 @@ class MeasureRepeatTests: XCTestCase {
                 return
             }
             XCTAssertTrue(compareImmutableMeasureArrays(actual: actual, expected: expected))
+            XCTAssertEqual(String(measureRepeat), "[ |4/4: 1/8c1,1/8c1| ] × 2")
         }
         catch {
             XCTFail(String(error))
@@ -96,6 +98,7 @@ class MeasureRepeatTests: XCTestCase {
                 return
             }
             XCTAssertTrue(compareImmutableMeasureArrays(actual: actual, expected: expected))
+            XCTAssertEqual(String(measureRepeat), "[ |4/4: 1/8c1,1/8c1| ] × 4")
         }
         catch {
             XCTFail(String(error))
@@ -114,6 +117,7 @@ class MeasureRepeatTests: XCTestCase {
                 return
             }
             XCTAssertTrue(compareImmutableMeasureArrays(actual: actual, expected: expected))
+            XCTAssertEqual(String(measureRepeat), "[ |4/4: 1/8c1,1/8c1|, |4/4: 1/4d1,1/4d1| ] × 2")
         }
         catch {
             XCTFail(String(error))
@@ -137,6 +141,7 @@ class MeasureRepeatTests: XCTestCase {
                 return
             }
             XCTAssertTrue(compareImmutableMeasureArrays(actual: actual, expected: expected))
+            XCTAssertEqual(String(measureRepeat), "[ |4/4: 1/8c1,1/8c1|, |4/4: 1/4d1,1/4d1| ] × 4")
         }
         catch {
             XCTFail(String(error))

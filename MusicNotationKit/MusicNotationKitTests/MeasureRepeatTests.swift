@@ -45,8 +45,8 @@ class MeasureRepeatTests: XCTestCase {
 
     func testInitNotSpecifiedRepeatCount() {
         do {
-            let mesaureRepeat = try MeasureRepeat(measures: [measure1])
-            XCTAssertEqual(mesaureRepeat.repeatCount, 1)
+            let measureRepeat = try MeasureRepeat(measures: [measure1])
+            XCTAssertEqual(measureRepeat.repeatCount, 1)
         } catch {
             XCTFail(String(error))
         }

@@ -298,7 +298,7 @@ public enum StaffError: ErrorProtocol {
 
 extension Staff: CustomDebugStringConvertible {
     public var debugDescription: String {
-        let notesDescription = notesHolders.map { String($0) }.joined(separator: ", ")
+        let notesDescription = notesHolders.map { $0.debugDescription }.joined(separator: ", ")
         
         return "staff(\(clef) \(instrument) \(notesDescription))"
     }

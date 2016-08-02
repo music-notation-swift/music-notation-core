@@ -47,6 +47,14 @@ public struct RepeatedMeasure: ImmutableMeasure {
     }
 }
 
+extension RepeatedMeasure: CustomDebugStringConvertible {
+    public var debugDescription: String {
+        let notesString = notes.map { "\($0)" }.joined(separator: ",")
+        
+        return "|\(timeSignature): \(notesString)|"
+    }
+}
+
 extension RepeatedMeasure: Equatable {}
 
 public func ==(lhs: RepeatedMeasure, rhs: RepeatedMeasure) -> Bool {

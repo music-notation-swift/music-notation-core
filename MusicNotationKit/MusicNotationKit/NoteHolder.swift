@@ -10,6 +10,6 @@
  This is a protocol that represents anything that can directly hold multiple notes.
  i.e. `Measure` and `MeasureRepeat` both conform to this.
  */
-public protocol NotesHolder {
+public protocol NotesHolder: CustomDebugStringConvertible {
     var measureCount: Int { get }
 }

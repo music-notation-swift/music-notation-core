@@ -72,11 +72,9 @@ public struct MeasureRepeat {
 
 extension MeasureRepeat: CustomDebugStringConvertible {
     public var debugDescription: String {
-        var description = "[ "
-        description += measures.map { $0.debugDescription }.joined(separator: ", ")
-        description += " ] × \(repeatCount + 1)"
+        let measuresDescription = measures.map { $0.debugDescription }.joined(separator: ", ")
         
-        return description
+        return "[ \(measuresDescription) ] × \(repeatCount + 1)"
     }
 }
 

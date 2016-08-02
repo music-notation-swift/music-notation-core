@@ -103,7 +103,7 @@ public struct Tuplet {
 }
 
 extension Tuplet: Equatable {
-    static public func ==(lhs: Tuplet, rhs: Tuplet) -> Bool {
+    public static func ==(lhs: Tuplet, rhs: Tuplet) -> Bool {
         return lhs.notes == rhs.notes
     }
 }

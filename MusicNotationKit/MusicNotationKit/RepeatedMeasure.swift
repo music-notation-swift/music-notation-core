@@ -48,7 +48,7 @@ public struct RepeatedMeasure: ImmutableMeasure {
 }
 
 extension RepeatedMeasure: Equatable {
-    static public func ==(lhs: RepeatedMeasure, rhs: RepeatedMeasure) -> Bool {
+    public static func ==(lhs: RepeatedMeasure, rhs: RepeatedMeasure) -> Bool {
         guard lhs.timeSignature == rhs.timeSignature &&
             lhs.key == rhs.key &&
             lhs.notes.count == rhs.notes.count else {

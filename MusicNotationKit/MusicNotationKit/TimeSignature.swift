@@ -29,7 +29,7 @@ extension TimeSignature: CustomDebugStringConvertible {
 }
 
 extension TimeSignature: Equatable {
-    static public func ==(lhs: TimeSignature, rhs: TimeSignature) -> Bool {
+    public static func ==(lhs: TimeSignature, rhs: TimeSignature) -> Bool {
         if lhs.topNumber == rhs.topNumber &&
             lhs.bottomNumber == rhs.bottomNumber &&
             lhs.tempo == rhs.tempo {

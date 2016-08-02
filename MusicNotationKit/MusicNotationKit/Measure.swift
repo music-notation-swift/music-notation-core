@@ -250,7 +250,7 @@ public struct Measure: ImmutableMeasure {
 }
 
 extension Measure: Equatable {
-    static public func ==(lhs: Measure, rhs: Measure) -> Bool {
+    public static func ==(lhs: Measure, rhs: Measure) -> Bool {
         guard lhs.timeSignature == rhs.timeSignature &&
             lhs.key == rhs.key &&
             lhs.notes.count == rhs.notes.count else {

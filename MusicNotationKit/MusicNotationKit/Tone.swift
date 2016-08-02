@@ -32,7 +32,7 @@ extension Tone: CustomDebugStringConvertible {
 }
 
 extension Tone: Equatable {
-    static public func ==(lhs: Tone, rhs: Tone) -> Bool {
+    public static func ==(lhs: Tone, rhs: Tone) -> Bool {
         if lhs.accidental == rhs.accidental &&
             lhs.noteLetter == rhs.noteLetter &&
             lhs.octave == rhs.octave {

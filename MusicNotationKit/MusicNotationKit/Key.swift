@@ -27,7 +27,7 @@ extension Key: CustomDebugStringConvertible {
 }
 
 extension Key: Equatable {
-    static public func ==(lhs: Key, rhs: Key) -> Bool {
+    public static func ==(lhs: Key, rhs: Key) -> Bool {
         if lhs.type == rhs.type &&
             lhs.noteLetter == rhs.noteLetter &&
             lhs.accidental == rhs.accidental {

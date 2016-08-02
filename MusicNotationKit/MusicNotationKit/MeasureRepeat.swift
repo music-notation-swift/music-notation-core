@@ -75,7 +75,7 @@ extension MeasureRepeat: NotesHolder {
 }
 
 extension MeasureRepeat: Equatable {
-    static public func ==(lhs: MeasureRepeat, rhs: MeasureRepeat) -> Bool {
+    public static func ==(lhs: MeasureRepeat, rhs: MeasureRepeat) -> Bool {
         guard lhs.repeatCount == rhs.repeatCount else {
             return false
         }

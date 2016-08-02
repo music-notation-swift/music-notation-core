@@ -88,7 +88,7 @@ public struct Note {
 }
 
 extension Note: Equatable {
-    static public func ==(lhs: Note, rhs: Note) -> Bool {
+    public static func ==(lhs: Note, rhs: Note) -> Bool {
         if lhs.noteDuration == rhs.noteDuration &&
             lhs.tones == rhs.tones &&
             lhs.isRest == rhs.isRest &&

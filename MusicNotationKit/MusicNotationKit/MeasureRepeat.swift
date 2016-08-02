@@ -74,16 +74,16 @@ extension MeasureRepeat: NotesHolder {
 
 }
 
-extension MeasureRepeat: Equatable {}
-
-public func ==(lhs: MeasureRepeat, rhs: MeasureRepeat) -> Bool {
-    guard lhs.repeatCount == rhs.repeatCount else {
-        return false
+extension MeasureRepeat: Equatable {
+    static public func ==(lhs: MeasureRepeat, rhs: MeasureRepeat) -> Bool {
+        guard lhs.repeatCount == rhs.repeatCount else {
+            return false
+        }
+        guard lhs.measures == rhs.measures else {
+            return false
+        }
+        return true
     }
-    guard lhs.measures == rhs.measures else {
-        return false
-    }
-    return true
 }
 
 public enum MeasureRepeatError: Error {

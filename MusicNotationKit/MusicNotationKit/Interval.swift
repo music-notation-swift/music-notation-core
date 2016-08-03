@@ -41,9 +41,9 @@ public struct Interval {
     public let quality: IntervalQuality
     public let number: Int
     
-    public init?(quality: IntervalQuality, number: Int) {
+    public init(quality: IntervalQuality, number: Int) throws {
         guard number > 0 else {
-            return nil
+            throw IntervalError.numberNotPositive
         }
         
         let simpleInterval = ((number - 1) % 7) + 1
@@ -51,11 +51,11 @@ public struct Interval {
         switch simpleInterval {
         case 1, 4, 5:
             guard quality != .major && quality != .minor else {
-                return nil
+                throw IntervalError.invalidQuality
             }
         default:
             guard quality != .perfect else {
-                return nil
+                throw IntervalError.invalidQuality
             }
         }
         
@@ -73,19 +73,40 @@ extension Interval: CustomDebugStringConvertible {
         case 8:
             description += "octave"
         default:
-            let formatter = NumberFormatter()
-            if #available(OSX 10.11, *) {
-                formatter.numberStyle = .ordinal
-                description += formatter.string(from: number)!
-            } else {
-                description += "\(number)"
-            }
+            description += ordinal(forNumber: number)
         }
         
         return description
     }
     
+    private func ordinal(forNumber: Int) -> String {
+        let tens = (number / 10) % 10
+        let ones = number % 10
+        
+        let suffix: String
+        
+        switch (tens, ones) {
+        case (1, _):
+            suffix = "th"
+        case (_, 1):
+            suffix = "st"
+        case (_, 2):
+            suffix = "nd"
+        case (_, 3):
+            suffix = "rd"
+        default:
+            suffix = "th"
+        }
+        
+        return "\(number)\(suffix)"
+    }
+    
     public var abbreviation: String {
         return "\(quality.abbreviation)\(number)"
     }
+}
+
+public enum IntervalError: ErrorProtocol {
+    case invalidQuality
+    case numberNotPositive
 }

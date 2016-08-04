@@ -82,7 +82,8 @@ class IntervalTests: XCTestCase {
         } catch IntervalError.invalidQuality {
         } catch {
             expected(IntervalError.invalidQuality, actual: error)
-        }    }
+        }
+    }
     
     func testZeroInvalid() {
         do {

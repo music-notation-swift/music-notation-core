@@ -29,6 +29,7 @@
 		27AA71151C9140C400E2BF22 /* RepeatedMeasure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27AA71141C9140C400E2BF22 /* RepeatedMeasure.swift */; };
 		27AA71171C9146FD00E2BF22 /* MeasureRepeatTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27AA71161C9146FD00E2BF22 /* MeasureRepeatTests.swift */; };
 		27B670511B9ACDCE00347C4C /* StaffTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27B670501B9ACDCE00347C4C /* StaffTests.swift */; };
+		E98D30AE1D4BFB7100C6DF5E /* ToneTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E98D30AD1D4BFB7100C6DF5E /* ToneTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,6 +69,7 @@
 		27AA71141C9140C400E2BF22 /* RepeatedMeasure.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RepeatedMeasure.swift; sourceTree = "<group>"; };
 		27AA71161C9146FD00E2BF22 /* MeasureRepeatTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeasureRepeatTests.swift; sourceTree = "<group>"; };
 		27B670501B9ACDCE00347C4C /* StaffTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StaffTests.swift; sourceTree = "<group>"; };
+		E98D30AD1D4BFB7100C6DF5E /* ToneTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToneTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -149,6 +151,7 @@
 				275A58D11B54BD8B0023D5EF /* MeasureTests.swift */,
 				27B670501B9ACDCE00347C4C /* StaffTests.swift */,
 				27AA71161C9146FD00E2BF22 /* MeasureRepeatTests.swift */,
+				E98D30AD1D4BFB7100C6DF5E /* ToneTests.swift */,
 			);
 			path = MusicNotationKitTests;
 			sourceTree = "<group>";
@@ -294,6 +297,7 @@
 				275A58D21B54BD8B0023D5EF /* MeasureTests.swift in Sources */,
 				27AA71171C9146FD00E2BF22 /* MeasureRepeatTests.swift in Sources */,
 				27B670511B9ACDCE00347C4C /* StaffTests.swift in Sources */,
+				E98D30AE1D4BFB7100C6DF5E /* ToneTests.swift in Sources */,
 				27A0AA4A1B524B6400635541 /* TestHelpers.swift in Sources */,
 				270CC5311B2C06A200CA1A56 /* MusicNotationKitTests.swift in Sources */,
 				270F46B11B353DF400FDF4FF /* TupletTests.swift in Sources */,

@@ -129,6 +129,10 @@ class StaffTests: XCTestCase {
     }
 
     // MARK: Successes
+    
+    func testDescription() {
+        XCTAssertEqual(staff.debugDescription, "staff(treble guitar6 |4/4: 1/16c1,1/16c1,1/16c1,1/16c1,[1/16c1, 1/16c1, 1/16c1]|, |4/4: [1/16c1, 1/16c1, 1/16c1],1/16c1,1/16c1|, |4/4: 1/16c1,1/16c1,1/16c1,1/16c1,[1/16c1, 1/16c1, 1/16c1]|, |4/4: 1/16c1,1/16c1,1/16c1,1/16c1|, |4/4: [1/16c1, 1/16c1, 1/16c1],1/16c1,1/16c1,1/16c1,1/16c1|, [ |4/4: 1/16c1,1/16c1,1/16c1,1/16c1| ] × 2, [ |4/4: 1/16c1,1/16c1,1/16c1,1/16c1|, |4/4: 1/16c1,1/16c1,1/16c1,1/16c1| ] × 3, |4/4: [1/16c1, 1/16c1, 1/16c1],[1/16c1, 1/16c1, 1/16c1],1/16c1,1/16c1|, |4/4: 1/16c1,1/16c1,1/16c1,1/16c1,[1/16c1, 1/16c1, 1/16c1]|)")
+    }
 
     func testInsertMeasureNoRepeat() {
         let measure = Measure(

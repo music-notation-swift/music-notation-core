@@ -64,3 +64,12 @@ extension RepeatedMeasure: Equatable {
         return true
     }
 }
+
+extension RepeatedMeasure: CustomDebugStringConvertible {
+    public var debugDescription: String {
+        let notesString = notes.map { "\($0)" }.joined(separator: ",")
+        
+        return "|\(timeSignature): \(notesString)|"
+    }
+}
+

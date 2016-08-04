@@ -70,6 +70,14 @@ public struct MeasureRepeat {
     }
 }
 
+extension MeasureRepeat: CustomDebugStringConvertible {
+    public var debugDescription: String {
+        let measuresDescription = measures.map { $0.debugDescription }.joined(separator: ", ")
+        
+        return "[ \(measuresDescription) ] × \(repeatCount + 1)"
+    }
+}
+
 extension MeasureRepeat: NotesHolder {
 
 }

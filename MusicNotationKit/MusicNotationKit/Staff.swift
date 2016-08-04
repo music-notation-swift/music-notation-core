@@ -283,7 +283,7 @@ public struct Staff {
     }
 }
 
-public enum StaffError: ErrorProtocol {
+public enum StaffError: Error {
     case noteIndexOutOfRange
     case measureIndexOutOfRange
     case noNextNoteToTie

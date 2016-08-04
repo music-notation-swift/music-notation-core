@@ -47,6 +47,24 @@ public struct RepeatedMeasure: ImmutableMeasure {
     }
 }
 
+extension RepeatedMeasure: Equatable {
+    public static func ==(lhs: RepeatedMeasure, rhs: RepeatedMeasure) -> Bool {
+        guard lhs.timeSignature == rhs.timeSignature &&
+            lhs.key == rhs.key &&
+            lhs.notes.count == rhs.notes.count else {
+                return false
+        }
+        for i in 0..<lhs.notes.count {
+            if lhs.notes[i] == rhs.notes[i] {
+                continue
+            } else {
+                return false
+            }
+        }
+        return true
+    }
+}
+
 extension RepeatedMeasure: CustomDebugStringConvertible {
     public var debugDescription: String {
         let notesString = notes.map { "\($0)" }.joined(separator: ",")
@@ -55,20 +73,3 @@ extension RepeatedMeasure: CustomDebugStringConvertible {
     }
 }
 
-extension RepeatedMeasure: Equatable {}
-
-public func ==(lhs: RepeatedMeasure, rhs: RepeatedMeasure) -> Bool {
-    guard lhs.timeSignature == rhs.timeSignature &&
-        lhs.key == rhs.key &&
-        lhs.notes.count == rhs.notes.count else {
-            return false
-    }
-    for i in 0..<lhs.notes.count {
-        if lhs.notes[i] == rhs.notes[i] {
-            continue
-        } else {
-            return false
-        }
-    }
-    return true
-}

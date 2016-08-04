@@ -42,9 +42,9 @@ public struct Staff {
      
      - parameter measure: The measure to be inserted.
      - parameter index: The index where the measure should be inserted.
-     - parameter inRepeat: Default to false. True when you want the measure to be inserted into the repeat at the
-        given index. False if you want the measure to be inserted either before a repeat or there is no repeat
-        at the specified index.
+     - parameter prependRepeat: Default to true. True if you want the measure to be inserted before a repeat. False 
+        when you want the measure to be inserted into the repeat at the given index. This parameter is only
+        respected if the given index is the beginning of a repeat.
      - throws:
         - `StaffError.measureIndexOutOfRange`
         - `StaffError.noRepeatToInsertInto`
@@ -53,20 +53,14 @@ public struct Staff {
         - `MeasureRepeatError.indexOutOfRange`
         - `MeasureRepeatError.cannotModifyRepeatedMeasures`
      */
-    public mutating func insertMeasure(_ measure: Measure, at index: Int, inRepeat: Bool = false) throws {
+    public mutating func insertMeasure(_ measure: Measure, at index: Int, prependRepeat: Bool = true) throws {
         let notesHolderIndex = try notesHolderIndexFromMeasureIndex(index)
         // Not a repeat, just insert
         if notesHolderIndex.repeatMeasureIndex == nil {
-            guard !inRepeat else {
-                throw StaffError.noRepeatToInsertInto
-            }
             notesHolders.insert(measure, at: index)
             measureCount += measure.measureCount
         } else {
-            guard !inRepeat && notesHolderIndex.repeatMeasureIndex == 0 || inRepeat else {
-                throw StaffError.hasToInsertIntoRepeatIfIndexIsNotFirstMeasureOfRepeat
-            }
-            if !inRepeat {
+            if prependRepeat && notesHolderIndex.repeatMeasureIndex == 0 {
                 notesHolders.insert(measure, at: index)
                 measureCount += measure.measureCount
                 return

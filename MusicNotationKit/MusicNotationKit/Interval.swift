@@ -106,7 +106,7 @@ extension Interval: CustomDebugStringConvertible {
     }
 }
 
-public enum IntervalError: ErrorProtocol {
+public enum IntervalError: Error {
     case invalidQuality
     case numberNotPositive
 }

@@ -87,21 +87,21 @@ public struct Note {
     }
 }
 
-extension Note: Equatable {}
-
-public func ==(lhs: Note, rhs: Note) -> Bool {
-    if lhs.noteDuration == rhs.noteDuration &&
-        lhs.tones == rhs.tones &&
-        lhs.isRest == rhs.isRest &&
-        lhs.dot == rhs.dot &&
-        lhs.accent == rhs.accent &&
-        lhs.isStaccato == rhs.isStaccato &&
-        lhs.dynamics == rhs.dynamics &&
-        lhs.striking == rhs.striking &&
-        lhs.tie == rhs.tie {
-        return true
-    } else {
-        return false
+extension Note: Equatable {
+    public static func ==(lhs: Note, rhs: Note) -> Bool {
+        if lhs.noteDuration == rhs.noteDuration &&
+            lhs.tones == rhs.tones &&
+            lhs.isRest == rhs.isRest &&
+            lhs.dot == rhs.dot &&
+            lhs.accent == rhs.accent &&
+            lhs.isStaccato == rhs.isStaccato &&
+            lhs.dynamics == rhs.dynamics &&
+            lhs.striking == rhs.striking &&
+            lhs.tie == rhs.tie {
+            return true
+        } else {
+            return false
+        }
     }
 }
 
@@ -132,6 +132,6 @@ extension Note: CustomDebugStringConvertible {
     }
 }
 
-public enum NoteError: ErrorProtocol {
+public enum NoteError: Error {
     case invalidRequestedTieState
 }

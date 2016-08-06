@@ -87,7 +87,7 @@ public enum MeasureDurationValidator {
 ```
 
 Changes to `Staff`
-- Create method to split a `Measure` that is overfilled into 2 measures. This utilizes the return value from `MeasureDurationValidator.overflowingNotes(forMeasure:)`.
+- Create method to split a `Measure` that is overfilled into 2 measures. This utilizes the return value from `MeasureDurationValidator.overflowingNotes(for:)`.
 
 Changes to `Measure`:
 - Make a way to modify `Tuplet`s and replace `Tuplet`s.

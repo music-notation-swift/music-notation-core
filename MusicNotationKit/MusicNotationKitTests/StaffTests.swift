@@ -19,6 +19,8 @@ class StaffTests: XCTestCase {
     var measure4: Measure!
     var measure5: Measure!
     var measure6: Measure!
+    var repeat1: MeasureRepeat!
+    var repeat2: MeasureRepeat!
 
     override func setUp() {
         super.setUp()
@@ -58,8 +60,8 @@ class StaffTests: XCTestCase {
             key: key,
             notes: [tuplet, tuplet, note, note]
         )
-        let repeat1 = try! MeasureRepeat(measures: [measure4])
-        let repeat2 = try! MeasureRepeat(measures: [measure4, measure4], repeatCount: 2)
+        repeat1 = try! MeasureRepeat(measures: [measure4])
+        repeat2 = try! MeasureRepeat(measures: [measure4, measure4], repeatCount: 2)
         staff.appendMeasure(measure1)
         staff.appendMeasure(measure2)
         staff.appendMeasure(measure3)
@@ -92,7 +94,8 @@ class StaffTests: XCTestCase {
             timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
             key: Key(noteLetter: .c))
         do {
-            try staff.insertMeasure(measure, at: 9)
+            try staff.insertMeasure(measure, at: 10, beforeRepeat: true)
+            shouldFail()
         } catch MeasureRepeatError.cannotModifyRepeatedMeasures {
         } catch {
             expected(MeasureRepeatError.cannotModifyRepeatedMeasures, actual: error)
@@ -127,7 +130,7 @@ class StaffTests: XCTestCase {
             timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
             key: Key(noteLetter: .c))
         do {
-            try staff.insertMeasure(measure, at: 5)
+            try staff.insertMeasure(measure, at: 5, beforeRepeat: false)
             let actualRepeat = try staff.measureRepeat(at: 5)
             let expectedRepeat = try MeasureRepeat(measures: [measure, measure4])
             XCTAssertEqual(actualRepeat, expectedRepeat)
@@ -141,7 +144,56 @@ class StaffTests: XCTestCase {
             timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
             key: Key(noteLetter: .c))
         do {
-            try staff.insertMeasure(measure, at: 6)
+            try staff.insertMeasure(measure, at: 6, beforeRepeat: false)
+            let actualRepeat = try staff.measureRepeat(at: 5)
+            let expectedRepeat = try MeasureRepeat(measures: [measure4, measure])
+            XCTAssertEqual(actualRepeat, expectedRepeat)
+        } catch {
+            XCTFail(String(error))
+        }
+    }
+
+    func testInsertMeasureBeforeRepeat() {
+        let measure = Measure(
+            timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
+            key: Key(noteLetter: .c))
+        do {
+            try staff.insertMeasure(measure, at: 5, beforeRepeat: true)
+            let _ = try staff.measureRepeat(at: 6)
+            let addedMeasure = try staff.measure(at: 5)
+            let beforeMeasure = try staff.measure(at: 4)
+            XCTAssertEqual(Measure(addedMeasure), measure)
+            XCTAssertEqual(Measure(beforeMeasure), measure5)
+        } catch {
+            XCTFail(String(error))
+        }
+    }
+
+    func testInsertMeasureNoRepeatWithWrongFlag() {
+        let measure = Measure(
+            timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
+            key: Key(noteLetter: .c))
+        do {
+            // Ignores the flag, since it's not a repeat
+            try staff.insertMeasure(measure, at: 1, beforeRepeat: false)
+            let addedMeasure = try staff.measure(at: 1)
+            let beforeMeasure = try staff.measure(at: 0)
+            let afterMeasure = try staff.measure(at: 2)
+            XCTAssertEqual(Measure(addedMeasure), measure)
+            XCTAssertEqual(Measure(beforeMeasure), measure1)
+            XCTAssertEqual(Measure(afterMeasure), measure2)
+        } catch {
+            XCTFail(String(error))
+        }
+    }
+
+    func testInsertMeasureInMeasureRepeatWithWrongFlag() {
+        let measure = Measure(
+            timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
+            key: Key(noteLetter: .c))
+        do {
+            // Ignores teh flag since you can only insert it into the repeat
+            try staff.insertMeasure(measure, at: 6, beforeRepeat: true)
             let actualRepeat = try staff.measureRepeat(at: 5)
             let expectedRepeat = try MeasureRepeat(measures: [measure4, measure])
             XCTAssertEqual(actualRepeat, expectedRepeat)
@@ -167,7 +219,7 @@ class StaffTests: XCTestCase {
     func testInsertRepeatInRepeat() {
         do {
             let measureRepeat = try MeasureRepeat(measures: [measure5])
-            try staff.insertRepeat(measureRepeat, at: 5)
+            try staff.insertRepeat(measureRepeat, at: 6)
             shouldFail()
         } catch StaffError.cannotInsertRepeatWhereOneAlreadyExists {
         } catch {
@@ -186,6 +238,21 @@ class StaffTests: XCTestCase {
             let afterRepeat = try staff.measure(at: 3)
             XCTAssertEqual(Measure(beforeRepeat), measure1)
             XCTAssertEqual(Measure(afterRepeat), measure2)
+            XCTAssertEqual(actualRepeat, measureRepeat)
+        } catch {
+            XCTFail(String(error))
+        }
+    }
+
+    func testInsertRepeatBeforeOtherRepeat() {
+        do {
+            let measureRepeat = try MeasureRepeat(measures: [measure5])
+            try staff.insertRepeat(measureRepeat, at: 5)
+            let beforeRepeat = try staff.measure(at: 4)
+            let actualRepeat = try staff.measureRepeat(at: 5)
+            let afterRepeat = try staff.measureRepeat(at: 7)
+            XCTAssertEqual(Measure(beforeRepeat), measure5)
+            XCTAssertEqual(afterRepeat, repeat1)
             XCTAssertEqual(actualRepeat, measureRepeat)
         } catch {
             XCTFail(String(error))

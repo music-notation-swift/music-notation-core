@@ -80,7 +80,7 @@ public enum MeasureDurationValidator {
         case Overfilled
     }
     public static func completionState(_ measure: Measure) -> CompletionState
-    public static func number(of noteDuration: NoteDuration, availableInMeasure: Measure) -> Int
+    public static func number(of noteDuration: NoteDuration, availableIn: Measure) -> Int
     public static func overflowingNotes(forMeasure measure: Measure) -> Range<Int>?
     public static func availableNotes(forMeasure measure: Measure) -> [NoteDuration : Int]
 }

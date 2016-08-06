@@ -94,7 +94,7 @@ class StaffTests: XCTestCase {
             timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
             key: Key(noteLetter: .c))
         do {
-            try staff.insertMeasure(measure, at: 10, prependRepeat: true)
+            try staff.insertMeasure(measure, at: 10, beforeRepeat: true)
             shouldFail()
         } catch MeasureRepeatError.cannotModifyRepeatedMeasures {
         } catch {
@@ -130,7 +130,7 @@ class StaffTests: XCTestCase {
             timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
             key: Key(noteLetter: .c))
         do {
-            try staff.insertMeasure(measure, at: 5, prependRepeat: false)
+            try staff.insertMeasure(measure, at: 5, beforeRepeat: false)
             let actualRepeat = try staff.measureRepeat(at: 5)
             let expectedRepeat = try MeasureRepeat(measures: [measure, measure4])
             XCTAssertEqual(actualRepeat, expectedRepeat)
@@ -144,7 +144,7 @@ class StaffTests: XCTestCase {
             timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
             key: Key(noteLetter: .c))
         do {
-            try staff.insertMeasure(measure, at: 6, prependRepeat: false)
+            try staff.insertMeasure(measure, at: 6, beforeRepeat: false)
             let actualRepeat = try staff.measureRepeat(at: 5)
             let expectedRepeat = try MeasureRepeat(measures: [measure4, measure])
             XCTAssertEqual(actualRepeat, expectedRepeat)
@@ -158,7 +158,7 @@ class StaffTests: XCTestCase {
             timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
             key: Key(noteLetter: .c))
         do {
-            try staff.insertMeasure(measure, at: 5, prependRepeat: true)
+            try staff.insertMeasure(measure, at: 5, beforeRepeat: true)
             let _ = try staff.measureRepeat(at: 6)
             let addedMeasure = try staff.measure(at: 5)
             let beforeMeasure = try staff.measure(at: 4)
@@ -175,7 +175,7 @@ class StaffTests: XCTestCase {
             key: Key(noteLetter: .c))
         do {
             // Ignores the flag, since it's not a repeat
-            try staff.insertMeasure(measure, at: 1, prependRepeat: false)
+            try staff.insertMeasure(measure, at: 1, beforeRepeat: false)
             let addedMeasure = try staff.measure(at: 1)
             let beforeMeasure = try staff.measure(at: 0)
             let afterMeasure = try staff.measure(at: 2)
@@ -193,7 +193,7 @@ class StaffTests: XCTestCase {
             key: Key(noteLetter: .c))
         do {
             // Ignores teh flag since you can only insert it into the repeat
-            try staff.insertMeasure(measure, at: 6, prependRepeat: true)
+            try staff.insertMeasure(measure, at: 6, beforeRepeat: true)
             let actualRepeat = try staff.measureRepeat(at: 5)
             let expectedRepeat = try MeasureRepeat(measures: [measure4, measure])
             XCTAssertEqual(actualRepeat, expectedRepeat)

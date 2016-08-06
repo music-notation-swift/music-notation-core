@@ -36,15 +36,22 @@ public struct Staff {
     }
 
     /**
-     Inserts a measure at the given index. If there is a repeat at that index and the index provided
-     is within the original measure to be repeated or at the end of that list, it will be inserted;
-     otherwise, it will fail.
+     Inserts a measure at the given index.
+
+     If the given index falls on a `MeasureRepeat`, there are 3 things that can happen:
+
+     1. If the index is the beginning of a repeat, see the `beforeRepeat` parameter.
+     2. If the index is within the original measure(s) to be repeated, the `newMeasure`
+     will be inserted into the repeat. The new measure is therefore repeated
+     `MeasureRepeat.repeatCount` times.
+     3. If the index is within the repeated portion, the insert will fail, because
+     the repeated measures are immutable. See `MeasureRepeat`.
      
      - parameter measure: The measure to be inserted.
      - parameter index: The index where the measure should be inserted.
-     - parameter prependRepeat: Default to true. True if you want the measure to be inserted before a repeat. False 
-        when you want the measure to be inserted into the repeat at the given index. This parameter is only
-        respected if the given index is the beginning of a repeat.
+     - parameter beforeRepeat: Default value is true. This parameter is only used if the given index is
+        the beginning of a repeat. True if you want the measure to be inserted before the repeat. False
+        when you want the measure to be inserted into the repeat at the given index.
      - throws:
         - `StaffError.measureIndexOutOfRange`
         - `StaffError.noRepeatToInsertInto`
@@ -53,14 +60,14 @@ public struct Staff {
         - `MeasureRepeatError.indexOutOfRange`
         - `MeasureRepeatError.cannotModifyRepeatedMeasures`
      */
-    public mutating func insertMeasure(_ measure: Measure, at index: Int, prependRepeat: Bool = true) throws {
+    public mutating func insertMeasure(_ measure: Measure, at index: Int, beforeRepeat: Bool = true) throws {
         let notesHolderIndex = try notesHolderIndexFromMeasureIndex(index)
         // Not a repeat, just insert
         if notesHolderIndex.repeatMeasureIndex == nil {
             notesHolders.insert(measure, at: index)
             measureCount += measure.measureCount
         } else {
-            if prependRepeat && notesHolderIndex.repeatMeasureIndex == 0 {
+            if beforeRepeat && notesHolderIndex.repeatMeasureIndex == 0 {
                 notesHolders.insert(measure, at: index)
                 measureCount += measure.measureCount
                 return

@@ -62,16 +62,40 @@ http://usermanuals.musicxml.com/MusicXML/Content/ST-MusicXML-note-type-value.htm
 - Measure occupancy value (measure usage): used space / measure budget.
 - Proposed API: Suggest available note durations given used space. 
 - Proposed API: Validate measure.
-- Proposed setting to enable automatic validation. This implementation would
-  leverage incremental changes in the measure occupancy values.
+- ~~Proposed setting to enable automatic validation. This implementation would
+  leverage incremental changes in the measure occupancy values.~~
 - Insert note (Methods implemented in Measure class).
 - Delete note (Methods implemented in Measure class).
 - Replace note. This can be a combination of delete followed by insert?
 
-Opens:
+## New API
 
-- Good to have the ability to tell what can be used to fill the measure.
-- Let the API caller know that the measure is incomplete.
-- Add the ability to split the measure.
-- What happens when the user changes the time signature. Do we allow this?
+New enum: `MeasureDurationValidator` with all static methods.
+
+```swift
+public enum MeasureDurationValidator {
+    public enum CompletionState {
+        case NotFull
+        case Full
+        case Overfilled
+    }
+    public static func completionState(_ measure: Measure) -> CompletionState
+    public static func number(of noteDuration: NoteDuration, availableInMeasure: Measure) -> Int
+    public static func overflowingNotes(forMeasure measure: Measure) -> Range<Int>?
+    public static func availableNotes(forMeasure measure: Measure) -> [NoteDuration : Int]
+}
+```
+
+Changes to `Staff`
+- Create method to split a `Measure` that is overfilled into 2 measures. This utilizes the return value from `MeasureDurationValidator.overflowingNotes(forMeasure:)`.
+
+Changes to `Measure`:
+- Make a way to modify `Tuplet`s and replace `Tuplet`s.
+- There may be a way to reuse functionality from `Staff.insertMeasure`, so think about it...
+
+Opens:
+- ~~Good to have the ability to tell what can be used to fill the measure.~~
+- ~~Let the API caller know that the measure is incomplete.~~
+- ~~Add the ability to split the measure.~~ See changes for `Staff`
+- ~~What happens when the user changes the time signature. Do we allow this?~~ Yes. We just call the methods.
 

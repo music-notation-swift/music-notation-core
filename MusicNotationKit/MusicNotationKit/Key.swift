@@ -26,14 +26,15 @@ extension Key: CustomDebugStringConvertible {
 	}
 }
 
-extension Key: Equatable {}
-
-public func ==(lhs: Key, rhs: Key) -> Bool {
-	if lhs.type == rhs.type &&
-		lhs.noteLetter == rhs.noteLetter &&
-		lhs.accidental == rhs.accidental {
-			return true
-	} else {
-		return false
-	}
+extension Key: Equatable {
+    public static func ==(lhs: Key, rhs: Key) -> Bool {
+        if lhs.type == rhs.type &&
+            lhs.noteLetter == rhs.noteLetter &&
+            lhs.accidental == rhs.accidental {
+            return true
+        } else {
+            return false
+        }
+    }
 }
+

@@ -14,22 +14,22 @@ public enum MeasureDurationValidator {
         case overfilled
     }
 
-    public static func completionState(of measure: Measure) -> CompletionState {
+    public static func completionState(of measure: ImmutableMeasure) -> CompletionState {
         // TODO: Implement
         return .notFull
     }
 
-    public static func number(of noteDuration: NoteDuration, fittingIn: Measure) -> Int {
+    public static func number(of noteDuration: NoteDuration, fittingIn: ImmutableMeasure) -> Int {
         // TODO: Implement
         return 0
     }
 
-    public static func overflowingNotes(for measure: Measure) -> Range<Int>? {
+    public static func overflowingNotes(for measure: ImmutableMeasure) -> Range<Int>? {
         // TODO: Implement
         return nil
     }
 
-    public static func availableNotes(for measure: Measure) -> [NoteDuration : Int] {
+    public static func availableNotes(for measure: ImmutableMeasure) -> [NoteDuration : Int] {
         // TODO: Implement
         return [:]
     }

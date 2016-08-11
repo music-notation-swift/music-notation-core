@@ -50,8 +50,28 @@ public struct Measure: ImmutableMeasure {
         noteCount += note.noteCount
     }
 
-    public mutating func insertNote(_ note: Note, at index: Int) throws {
-        // TODO: Implement
+	public mutating func insertNote(_ note: Note, at index: Int, beforeTuplet: Bool = true) throws {
+		let noteCollectionIndex = try noteCollectionIndexFromNoteIndex(index)
+		
+		// Not a repeat, just insert
+		if noteCollectionIndex.tupletIndex == nil {
+			notes.insert(note, at: index)
+			noteCount += note.noteCount
+		} else {
+			if beforeTuplet && noteCollectionIndex.tupletIndex == 0 {
+				notes.insert(note, at: index)
+				noteCount += note.noteCount
+				return
+			}
+			// Is a repeat, so insert if it is one of the measures to be repeated
+			guard var tuplet = notes[noteCollectionIndex.noteIndex] as? Tuplet,
+				let tupletIndex = noteCollectionIndex.tupletIndex else {
+					assertionFailure("Index translation showed should be a tuplet, but it's not")
+					throw MeasureError.internalError
+			}
+			try tuplet.insertNote(note, at: tupletIndex)
+			notes[noteCollectionIndex.noteIndex] = tuplet
+		}
     }
 
     public mutating func removeNote(at index: Int) throws {

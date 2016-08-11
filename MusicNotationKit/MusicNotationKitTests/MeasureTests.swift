@@ -31,7 +31,41 @@ class MeasureTests: XCTestCase {
         XCTAssertEqual(measure.notes.count, 3)
         print(measure)
     }
+	
+	func testInsertNoteInvalidIndex() {
+		XCTAssertEqual(measure.notes.count, 0)
+		do {
+			try measure.insertNote(Note(noteDuration: .whole), at: 1)
+		} catch MeasureError.noteIndexOutOfRange {
+		} catch {
+			expected(MeasureError.noteIndexOutOfRange, actual:error)
+		}
+	}
+	
+	func testInsertNote() {
+		XCTAssertEqual(measure.notes.count, 0)
+		let note1 = Note(noteDuration: .whole)
+		let note2 = Note(noteDuration: .eighth)
+		let note3 = Note(noteDuration: .quarter)
+		measure.addNote(note1)
+		measure.addNote(note2)
+		do {
+			try measure.insertNote(note3, at: 1)
+			XCTAssertEqual(measure.notes.count, 3)
+			print(measure)
+			
+			let resultNote1 = measure.notes[0] as! Note
+			let resultNote2 = measure.notes[1] as! Note
+			let resultNote3 = measure.notes[2] as! Note
+			XCTAssertEqual(resultNote1, note1)
+			XCTAssertEqual(resultNote2, note3)
+			XCTAssertEqual(resultNote3, note2)
+		} catch {
+			XCTFail(String(error))
+		}
 
+	}
+	
     func test_startTieAt() {
         XCTAssertEqual(measure.notes.count, 0)
         measure.addNote(Note(noteDuration: .quarter,

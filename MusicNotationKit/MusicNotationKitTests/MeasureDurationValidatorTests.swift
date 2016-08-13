@@ -116,78 +116,139 @@ class MeasureDurationValidatorTests: XCTestCase {
     }
 
     // MARK: - completionState(of:)
+    // MARK: .full
 
-    func testCompletionStateForEmpty() {
-
+    func testCompletionStateFull() {
+        XCTAssertEqual(
+            MeasureDurationValidator.completionState(of: fullMeasure),
+            MeasureDurationValidator.CompletionState.full
+        )
+        XCTAssertEqual(
+            MeasureDurationValidator.completionState(of: fullMeasureOddTimeSignature),
+            MeasureDurationValidator.CompletionState.full
+        )
     }
 
-    func testCompletionStateForNotFull() {
+    // MARK: .notFull
 
+    func testCompletionStateNotFullForEmpty() {
+        XCTAssertEqual(
+            MeasureDurationValidator.completionState(of: emptyMeasure),
+            MeasureDurationValidator.CompletionState.notFull(availableNotes: [.whole: 1])
+        )
     }
 
-    func testCompletionStateForFull() {
-
+    func testCompletionStateNotFullForStandard() {
+        XCTAssertEqual(
+            MeasureDurationValidator.completionState(of: notFullMeasure),
+            MeasureDurationValidator.CompletionState.notFull(availableNotes: [.quarter: 1, .eighth: 1, .sixteenth: 1])
+        )
     }
 
-    func testCompletionStateForOverfilled() {
+    func testCompletionStateNotFullForDotted() {
+        XCTAssertEqual(
+            MeasureDurationValidator.completionState(of: notFullMeasure),
+            MeasureDurationValidator.CompletionState.notFull(availableNotes: [.quarter: 1, .thirtySecond: 1])
+        )
+    }
 
+    func testCompletionStateNotFullForOddTimeSignature() {
+        XCTAssertEqual(
+            MeasureDurationValidator.completionState(of: notFullMeasureOddTimeSignature),
+            MeasureDurationValidator.CompletionState.notFull(availableNotes: [.quarter: 1])
+        )
+    }
+
+    // MARK: .overfilled
+
+    func testCompletionStateOverfilledForOneExtra() {
+        XCTAssertEqual(
+            MeasureDurationValidator.completionState(of: overfilledWithTooLargeMeasure),
+            MeasureDurationValidator.CompletionState.overfilled(overflowingNotes: Range(4...4))
+        )
+    }
+
+    func testCompletionStateOverfilledForMultipleExtra() {
+        XCTAssertEqual(
+            MeasureDurationValidator.completionState(of: overfilledMeasure),
+            MeasureDurationValidator.CompletionState.overfilled(overflowingNotes: Range(8...9))
+        )
+    }
+
+    func testCompletionStateOverfilledForSingleExtraOddTimeSignature() {
+        XCTAssertEqual(
+            MeasureDurationValidator.completionState(of: overfilledMeasureOddTimeSignature),
+            MeasureDurationValidator.CompletionState.overfilled(overflowingNotes: Range(6...6))
+        )
+    }
+
+    func testCompletionStateOverfilledTooFullBecauseOfDot() {
+        XCTAssertEqual(
+            MeasureDurationValidator.completionState(of: overfilledWithDotMeasure),
+            MeasureDurationValidator.CompletionState.overfilled(overflowingNotes: Range(8...8))
+        )
     }
 
     // MARK: - number(of:fittingIn:)
 
     func testNumberOfFittingInForFull() {
-
+        XCTAssertEqual(MeasureDurationValidator.number(of: .whole, fittingIn: fullMeasure), 0)
+        XCTAssertEqual(MeasureDurationValidator.number(of: .half, fittingIn: fullMeasure), 0)
+        XCTAssertEqual(MeasureDurationValidator.number(of: .quarter, fittingIn: fullMeasure), 0)
+        XCTAssertEqual(MeasureDurationValidator.number(of: .eighth, fittingIn: fullMeasureOddTimeSignature), 0)
+        XCTAssertEqual(MeasureDurationValidator.number(of: .sixteenth, fittingIn: fullMeasure), 0)
+        XCTAssertEqual(MeasureDurationValidator.number(of: .thirtySecond, fittingIn: fullMeasure), 0)
+        XCTAssertEqual(MeasureDurationValidator.number(of: .sixtyFourth, fittingIn: fullMeasure), 0)
     }
 
-    func testNumberOfFittingInForEmpty() {
+    func testNumberOfFittingInForEmptyStandardTimeSignature() {
+        XCTAssertEqual(MeasureDurationValidator.number(of: .whole, fittingIn: fullMeasure), 1)
+        XCTAssertEqual(MeasureDurationValidator.number(of: .half, fittingIn: emptyMeasure), 2)
+        XCTAssertEqual(MeasureDurationValidator.number(of: .quarter, fittingIn: emptyMeasure), 4)
+        XCTAssertEqual(MeasureDurationValidator.number(of: .eighth, fittingIn: fullMeasure), 8)
+        XCTAssertEqual(MeasureDurationValidator.number(of: .sixteenth, fittingIn: fullMeasure), 16)
+        XCTAssertEqual(MeasureDurationValidator.number(of: .thirtySecond, fittingIn: fullMeasure), 32)
+        XCTAssertEqual(MeasureDurationValidator.number(of: .sixtyFourth, fittingIn: fullMeasure), 64)
+    }
 
+    func testNumberOfFittingInForStandardTimeSignature() {
+        // 1 3/4 beats missing
+        XCTAssertEqual(MeasureDurationValidator.number(of: .whole, fittingIn: notFullMeasure), 0)
+        XCTAssertEqual(MeasureDurationValidator.number(of: .half, fittingIn: notFullMeasure), 0)
+        XCTAssertEqual(MeasureDurationValidator.number(of: .quarter, fittingIn: notFullMeasure), 1)
+        XCTAssertEqual(MeasureDurationValidator.number(of: .eighth, fittingIn: notFullMeasure), 3)
+        XCTAssertEqual(MeasureDurationValidator.number(of: .sixteenth, fittingIn: notFullMeasure), 7)
+        XCTAssertEqual(MeasureDurationValidator.number(of: .thirtySecond, fittingIn: notFullMeasure), 14)
+        XCTAssertEqual(MeasureDurationValidator.number(of: .sixtyFourth, fittingIn: notFullMeasure), 28)
+
+        // 1 1/8 beats missing
+        XCTAssertEqual(MeasureDurationValidator.number(of: .whole, fittingIn: notFullMeasureDotted), 0)
+        XCTAssertEqual(MeasureDurationValidator.number(of: .half, fittingIn: notFullMeasureDotted), 0)
+        XCTAssertEqual(MeasureDurationValidator.number(of: .quarter, fittingIn: notFullMeasureDotted), 1)
+        XCTAssertEqual(MeasureDurationValidator.number(of: .eighth, fittingIn: notFullMeasureDotted), 2)
+        XCTAssertEqual(MeasureDurationValidator.number(of: .sixteenth, fittingIn: notFullMeasureDotted), 4)
+        XCTAssertEqual(MeasureDurationValidator.number(of: .thirtySecond, fittingIn: notFullMeasureDotted), 9)
+        XCTAssertEqual(MeasureDurationValidator.number(of: .sixtyFourth, fittingIn: notFullMeasureDotted), 18)
     }
 
     func testNumberOfFittingInForOddTimeSignature() {
-
+        // 4 beats missing - 1 quarter note
+        XCTAssertEqual(MeasureDurationValidator.number(of: .whole, fittingIn: notFullMeasureOddTimeSignature), 0)
+        XCTAssertEqual(MeasureDurationValidator.number(of: .half, fittingIn: notFullMeasureOddTimeSignature), 0)
+        XCTAssertEqual(MeasureDurationValidator.number(of: .quarter, fittingIn: notFullMeasureOddTimeSignature), 1)
+        XCTAssertEqual(MeasureDurationValidator.number(of: .eighth, fittingIn: notFullMeasureOddTimeSignature), 2)
+        XCTAssertEqual(MeasureDurationValidator.number(of: .sixteenth, fittingIn: notFullMeasureOddTimeSignature), 4)
+        XCTAssertEqual(MeasureDurationValidator.number(of: .thirtySecond, fittingIn: notFullMeasureOddTimeSignature), 8)
+        XCTAssertEqual(MeasureDurationValidator.number(of: .sixtyFourth, fittingIn: notFullMeasureOddTimeSignature), 16)
     }
 
     func testNumberOfFittingInForOverfilled() {
-
-    }
-
-    // MARK: - overflowingNotes(for:)
-
-    func testOverflowingNotesForEmpty() {
-
-    }
-
-    func testOverflowingNotesForJustFull() {
-
-    }
-
-    func testOverflowingNotesForOneExtra() {
-
-    }
-
-    func testOverFlowingNotesForMultipleExtra() {
-
-    }
-
-    func testOverFlowingNotesForMultipleExtraOddTimeSignature() {
-
-    }
-
-    // MARK: - availableNotes(for:)
-
-    func testAvailableNotesForFull() {
-
-    }
-
-    func testAvailableNotesForEmpty() {
-
-    }
-
-    func testAvailableNotesForOverfilled() {
-
-    }
-
-    func testAvailableNotesForOddTimeSignature() {
-
+        XCTAssertEqual(MeasureDurationValidator.number(of: .whole, fittingIn: overfilledMeasure), 0)
+        XCTAssertEqual(MeasureDurationValidator.number(of: .half, fittingIn: overfilledMeasure), 0)
+        XCTAssertEqual(MeasureDurationValidator.number(of: .quarter, fittingIn: overfilledMeasure), 0)
+        XCTAssertEqual(MeasureDurationValidator.number(of: .eighth, fittingIn: overfilledMeasure), 0)
+        XCTAssertEqual(MeasureDurationValidator.number(of: .sixteenth, fittingIn: overfilledMeasure), 0)
+        XCTAssertEqual(MeasureDurationValidator.number(of: .thirtySecond, fittingIn: overfilledMeasure), 0)
+        XCTAssertEqual(MeasureDurationValidator.number(of: .sixtyFourth, fittingIn: overfilledMeasure), 0)
     }
 }

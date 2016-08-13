@@ -13,6 +13,7 @@ class MeasureDurationValidatorTests: XCTestCase {
 
     static let standardTimeSignature = TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120)
     static let oddTimeSignature = TimeSignature(topNumber: 11, bottomNumber: 16, tempo: 86)
+    static let irrationalTimeSignature = TimeSignature(topNumber: 3, bottomNumber: 6, tempo: 120)
 
     var fullMeasure: Measure!
     var notFullMeasure: Measure!
@@ -27,6 +28,10 @@ class MeasureDurationValidatorTests: XCTestCase {
     var fullMeasureOddTimeSignature: Measure!
     var notFullMeasureOddTimeSignature: Measure!
     var overfilledMeasureOddTimeSignature: Measure!
+
+    var fullMeasureIrrationalTimeSignature: Measure!
+    var notFullMeasureIrrationalTimeSignature: Measure!
+    var overfilledMeasureIrrationalTimeSignature: Measure!
 
     override func setUp() {
         super.setUp()
@@ -102,6 +107,23 @@ class MeasureDurationValidatorTests: XCTestCase {
             key: key,
             notes: [dotted16, thirtySecond, quarter, thirtySecond, thirtySecond, quarter, halfRest]
         )
+        fullMeasureIrrationalTimeSignature = Measure(
+            timeSignature: MeasureDurationValidatorTests.irrationalTimeSignature,
+            key: key,
+            notes: [quarter, quarter, quarter]
+        )
+        // Missing one quarter note
+        notFullMeasureIrrationalTimeSignature = Measure(
+            timeSignature: MeasureDurationValidatorTests.irrationalTimeSignature,
+            key: key,
+            notes: [quarter, quarter]
+        )
+        // Overfilled by one quarter note
+        overfilledMeasureIrrationalTimeSignature = Measure(
+            timeSignature: MeasureDurationValidatorTests.irrationalTimeSignature,
+            key: key,
+            notes: [quarter, quarter, quarter, quarter]
+        )
         // Add all to staff
         staff.appendMeasure(fullMeasure)
         staff.appendMeasure(notFullMeasure)
@@ -113,6 +135,9 @@ class MeasureDurationValidatorTests: XCTestCase {
         staff.appendMeasure(fullMeasureOddTimeSignature)
         staff.appendMeasure(notFullMeasureOddTimeSignature)
         staff.appendMeasure(overfilledMeasureOddTimeSignature)
+        staff.appendMeasure(fullMeasureIrrationalTimeSignature)
+        staff.appendMeasure(notFullMeasureIrrationalTimeSignature)
+        staff.appendMeasure(overfilledMeasureIrrationalTimeSignature)
     }
 
     // MARK: - completionState(of:)
@@ -125,6 +150,10 @@ class MeasureDurationValidatorTests: XCTestCase {
         )
         XCTAssertEqual(
             MeasureDurationValidator.completionState(of: fullMeasureOddTimeSignature),
+            MeasureDurationValidator.CompletionState.full
+        )
+        XCTAssertEqual(
+            MeasureDurationValidator.completionState(of: fullMeasureIrrationalTimeSignature),
             MeasureDurationValidator.CompletionState.full
         )
     }
@@ -159,6 +188,13 @@ class MeasureDurationValidatorTests: XCTestCase {
         )
     }
 
+    func testCompletionStateNotFullForIrrationalTimeSignature() {
+        XCTAssertEqual(
+            MeasureDurationValidator.completionState(of: notFullMeasureIrrationalTimeSignature),
+            MeasureDurationValidator.CompletionState.notFull(availableNotes: [.quarter: 1])
+        )
+    }
+
     // MARK: .overfilled
 
     func testCompletionStateOverfilledForOneExtra() {
@@ -186,6 +222,13 @@ class MeasureDurationValidatorTests: XCTestCase {
         XCTAssertEqual(
             MeasureDurationValidator.completionState(of: overfilledWithDotMeasure),
             MeasureDurationValidator.CompletionState.overfilled(overflowingNotes: Range(8...8))
+        )
+    }
+
+    func testCompletionStateOverfilledForSingleExtraIrrationalTimeSignature() {
+        XCTAssertEqual(
+            MeasureDurationValidator.completionState(of: overfilledMeasureIrrationalTimeSignature),
+            MeasureDurationValidator.CompletionState.overfilled(overflowingNotes: Range(3...3))
         )
     }
 
@@ -250,5 +293,34 @@ class MeasureDurationValidatorTests: XCTestCase {
         XCTAssertEqual(MeasureDurationValidator.number(of: .sixteenth, fittingIn: overfilledMeasure), 0)
         XCTAssertEqual(MeasureDurationValidator.number(of: .thirtySecond, fittingIn: overfilledMeasure), 0)
         XCTAssertEqual(MeasureDurationValidator.number(of: .sixtyFourth, fittingIn: overfilledMeasure), 0)
+    }
+
+    func testNumberOfFittingInForFullIrrationalTimeSignature() {
+        XCTAssertEqual(MeasureDurationValidator.number(of: .whole, fittingIn: fullMeasureIrrationalTimeSignature), 0)
+        XCTAssertEqual(MeasureDurationValidator.number(of: .half, fittingIn: fullMeasureIrrationalTimeSignature), 0)
+        XCTAssertEqual(MeasureDurationValidator.number(of: .quarter, fittingIn: fullMeasureIrrationalTimeSignature), 0)
+        XCTAssertEqual(MeasureDurationValidator.number(of: .eighth, fittingIn: fullMeasureIrrationalTimeSignature), 0)
+        XCTAssertEqual(MeasureDurationValidator.number(of: .sixteenth, fittingIn: fullMeasureIrrationalTimeSignature), 0)
+        XCTAssertEqual(MeasureDurationValidator.number(of: .thirtySecond,
+                                                       fittingIn: fullMeasureIrrationalTimeSignature), 0)
+        XCTAssertEqual(MeasureDurationValidator.number(of: .sixtyFourth,
+                                                       fittingIn: fullMeasureIrrationalTimeSignature), 0)
+    }
+
+    func testNumberOfFittingInForNotFullIrrationalTimeSignature() {
+        XCTAssertEqual(MeasureDurationValidator.number(of: .whole,
+                                                       fittingIn: notFullMeasureIrrationalTimeSignature), 0)
+        XCTAssertEqual(MeasureDurationValidator.number(of: .half,
+                                                       fittingIn: notFullMeasureIrrationalTimeSignature), 0)
+        XCTAssertEqual(MeasureDurationValidator.number(of: .quarter,
+                                                       fittingIn: notFullMeasureIrrationalTimeSignature), 1)
+        XCTAssertEqual(MeasureDurationValidator.number(of: .eighth,
+                                                       fittingIn: notFullMeasureIrrationalTimeSignature), 2)
+        XCTAssertEqual(MeasureDurationValidator.number(of: .sixteenth,
+                                                       fittingIn: notFullMeasureIrrationalTimeSignature), 4)
+        XCTAssertEqual(MeasureDurationValidator.number(of: .thirtySecond,
+                                                       fittingIn: notFullMeasureIrrationalTimeSignature), 8)
+        XCTAssertEqual(MeasureDurationValidator.number(of: .sixtyFourth,
+                                                       fittingIn: notFullMeasureIrrationalTimeSignature), 16)
     }
 }

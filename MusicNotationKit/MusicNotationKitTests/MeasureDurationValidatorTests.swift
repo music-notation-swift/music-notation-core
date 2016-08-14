@@ -35,7 +35,6 @@ class MeasureDurationValidatorTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        // Create measures in valid in each state
         let key = Key(noteLetter: .c)
         var staff = Staff(clef: .treble, instrument: .guitar6)
         let dotted16: Note = {
@@ -51,6 +50,7 @@ class MeasureDurationValidatorTests: XCTestCase {
         let quarter = Note(noteDuration: .quarter, tone: Tone(noteLetter: .c, octave: .octave0))
         let thirtySecond = Note(noteDuration: .thirtySecond, tone: Tone(noteLetter: .c, octave: .octave0))
         let halfRest = Note(noteDuration: .half)
+        let quarterTriplet = try! Tuplet(notes: [quarter, quarter, quarter])
 
         fullMeasure = Measure(
             timeSignature: MeasureDurationValidatorTests.standardTimeSignature,
@@ -62,7 +62,7 @@ class MeasureDurationValidatorTests: XCTestCase {
         notFullMeasure = Measure(
             timeSignature: MeasureDurationValidatorTests.standardTimeSignature,
             key: key,
-            notes: [quarter, quarter, thirtySecond, thirtySecond]
+            notes: [quarterTriplet, thirtySecond, thirtySecond]
         )
         // Missing 1 1/8 beats
         notFullMeasureDotted = Measure(
@@ -322,5 +322,166 @@ class MeasureDurationValidatorTests: XCTestCase {
                                                        fittingIn: notFullMeasureIrrationalTimeSignature), 8)
         XCTAssertEqual(MeasureDurationValidator.number(of: .sixtyFourth,
                                                        fittingIn: notFullMeasureIrrationalTimeSignature), 16)
+    }
+
+    // MARK: - baseNoteDuration(from:)
+    // MARK: Failures
+
+    func testBaseNoteDurationForTooLargeBottomNumber() {
+        let timeSignature = TimeSignature(topNumber: 4, bottomNumber: 256, tempo: 120)
+        let measure = Measure(timeSignature: timeSignature, key: Key(noteLetter: .c))
+        do {
+            let _ = try MeasureDurationValidator.baseNoteDuration(from: measure)
+            shouldFail()
+        } catch MeasureDurationValidatorError.invalidBottomNumber {
+        } catch {
+            expected(MeasureDurationValidatorError.invalidBottomNumber, actual: error)
+        }
+    }
+
+    // MARK: Successes
+
+    func testBaseNoteDurationForCommonBottomNumber() {
+        do {
+            let baseNoteDuration = try MeasureDurationValidator.baseNoteDuration(from: fullMeasure)
+            XCTAssertEqual(baseNoteDuration, .quarter)
+            let baseNoteDurationOdd = try MeasureDurationValidator.baseNoteDuration(from: fullMeasureOddTimeSignature)
+            XCTAssertEqual(baseNoteDurationOdd, .sixteenth)
+        } catch {
+            XCTFail(String(error))
+        }
+    }
+
+    func testBaseNoteDurationForIrrationalBottomNumber() {
+        do {
+            let baseNoteDurationIrrational = try MeasureDurationValidator.baseNoteDuration(from: fullMeasureIrrationalTimeSignature)
+            XCTAssertEqual(baseNoteDurationIrrational, .quarter)
+        } catch {
+            XCTFail(String(error))
+        }
+    }
+
+    // MARK: - ticks(for:givenBaseDuration:)
+
+    func testTicksForDurationForSameAsBaseStandard() {
+        let baseDuration: NoteDuration = .quarter
+        let duration: NoteDuration = .quarter
+        XCTAssertEqual(MeasureDurationValidator.ticks(for: duration, baseDuration: baseDuration),
+                       MeasureDurationValidator.ticksPerBaseNote
+        )
+    }
+
+    func testTicksForDurationForSmallerStandard() {
+        let baseDuration: NoteDuration = .sixteenth
+        let duration: NoteDuration = .quarter
+        XCTAssertEqual(MeasureDurationValidator.ticks(for: duration, baseDuration: baseDuration),
+                       MeasureDurationValidator.ticksPerBaseNote * 4
+        )
+    }
+
+    func testTicksForDurationForLargerStandard() {
+        let baseDuration: NoteDuration = .whole
+        let duration: NoteDuration = .quarter
+        XCTAssertEqual(MeasureDurationValidator.ticks(for: duration, baseDuration: baseDuration),
+                       MeasureDurationValidator.ticksPerBaseNote / 4
+        )
+    }
+
+    func testTicksForDurationForSameAsBaseOdd() {
+        let baseDuration: NoteDuration = .sixteenth
+        let duration: NoteDuration = .sixteenth
+        XCTAssertEqual(MeasureDurationValidator.ticks(for: duration, baseDuration: baseDuration),
+                       MeasureDurationValidator.ticksPerBaseNote
+        )
+    }
+
+    func testTicksForDurationForSmallerOdd() {
+        let baseDuration: NoteDuration = .thirtySecond
+        let duration: NoteDuration = .sixteenth
+        XCTAssertEqual(MeasureDurationValidator.ticks(for: duration, baseDuration: baseDuration),
+                       MeasureDurationValidator.ticksPerBaseNote * 2
+        )
+    }
+
+    func testTicksForDurationForLargerOdd() {
+        let baseDuration: NoteDuration = .quarter
+        let duration: NoteDuration = .sixteenth
+        XCTAssertEqual(MeasureDurationValidator.ticks(for: duration, baseDuration: baseDuration),
+                       MeasureDurationValidator.ticksPerBaseNote / 4
+        )
+    }
+
+    // MARK: - ticksFromDot(for:baseDuration:)
+
+    func testTicksFromDotForNoDotSameAsBase() {
+
+    }
+
+    func testTicksFromDotForNoDotSmaller() {
+
+    }
+
+    func testTicksFromDotForNoDotLarger() {
+
+    }
+
+    func testTicksFromDotForNoDotRestSameAsBase() {
+
+    }
+
+    func testTicksFromDotForNoDotRestSmaller() {
+
+    }
+
+    func testTicksFromDotForNoDotRestLarger() {
+
+    }
+
+    func testTicksFromDotForSingleDotSameAsBase() {
+
+    }
+
+    func testTicksFromDotForSingleDotSmaller() {
+
+    }
+
+    func testTicksFromDotForSingleDotLarger() {
+
+    }
+
+    func testTicksFromDotForSingleDotRestSameAsBase() {
+
+    }
+
+    func testTicksFromDotForSingleDotRestSmaller() {
+
+    }
+
+    func testTicksFromDotForSingleDotRestLarger() {
+
+    }
+
+    func testTicksFromDotForDoubleDotSameAsBase() {
+
+    }
+
+    func testTicksFromDotForDoubleDotSmaller() {
+
+    }
+
+    func testTicksFromDotForDoubleDotLarger() {
+
+    }
+
+    func testTicksFromDotForDoubleDotRestSameAsBase() {
+
+    }
+
+    func testTicksFromDotForDoubleDotRestSmaller() {
+
+    }
+
+    func testTicksFromDotForDoubleDotRestLarger() {
+
     }
 }

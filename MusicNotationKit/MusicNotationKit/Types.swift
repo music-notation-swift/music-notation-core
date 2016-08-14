@@ -25,14 +25,14 @@ public enum Striking {
     case right, down
 }
 
-public enum NoteDuration {
-    case whole
-    case half
-    case quarter
-    case eighth
-    case sixteenth
-    case thirtySecond
-    case sixtyFourth
+public enum NoteDuration: Int {
+    case whole = 1
+    case half = 2
+    case quarter = 4
+    case eighth = 8
+    case sixteenth = 16
+    case thirtySecond = 32
+    case sixtyFourth = 64
 }
 
 extension NoteDuration: CustomDebugStringConvertible {

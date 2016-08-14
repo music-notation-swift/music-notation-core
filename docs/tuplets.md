@@ -38,9 +38,9 @@ struct Tuplet {
     /// The notes that make up the tuplet
     public private(set) var notes: [Note]
     /// The number of notes of the specified duration that this tuplet contains
-    public let noteCount: Int
+    public let baseNoteCount: Int
     /// The duration of the notes that define this tuplet
-    public let noteDuration: NoteDuration
+    public let baseNoteDuration: NoteDuration
     /// The number of notes that this tuplet fits in the space of
     public let noteCountFit: Int
     

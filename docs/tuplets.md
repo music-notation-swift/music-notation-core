@@ -35,6 +35,15 @@ Because of these rules, some type of validation must be done in the initializer 
 **Open**: Naming is still up for debate. Having trouble with that.
 ```swift
 struct Tuplet {
+    /// The notes that make up the tuplet
+    public private(set) var notes: [Note]
+    /// The number of notes of the specified duration that this tuplet contains
+    public let noteCount: Int
+    /// The duration of the notes that define this tuplet
+    public let noteDuration: NoteDuration
+    /// The number of notes that this tuplet fits in the space of
+    public let noteCountFit: Int
+    
     init(_ count: Int, _ duration: NoteDuration, inSpaceOf baseCount: Int? = nil, _ baseDuration: NoteDuration? = nil, notes: [Note]) throws
     mutating func replaceNote(at index: Int, with note: Note) throws
 }

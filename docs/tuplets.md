@@ -24,6 +24,13 @@ There are certain ratios that are standard, like a triplet would usually have a 
 
 There should only be a need to list the standard ratios for 2-9. In this case, we can just list them in `Tuplet` struct. This way, if the second number is not specific in the initializer and the first number is one of these, we can fill in the second number according to th static list of default ratios.
 
+## Compound Tuplets
+You can have a tuplet that is made up of another tuplet, which is made up of another tuplet, and so on. 
+
+In order to support this behavior, the `Tuplet` will store an array of type `NoteCollection` so that it can have a `Note` or `Tuplet` as a value in the array. Also, the `NoteCollection` will have to have a property or set of properties to communicate the duration and number of that duration for each `NoteCollection`. 
+    
+i.e. A 3:2 Eighth note tuplet will have a number of 2 and duration of `.eighth`. A single eighth note, would have a number of 1 and duration of `.eighth`
+
 ## Validation
 A tuplet needs to always be full. This means if it is a 3:2 ratio, it needs to have 3 notes in it. However, the notes can be rests. Because of this, the only mutating function should be to replace a note, not remove or add.
 You may also have notes of different durations as part of the tuplet as seen [here](http://www2.siba.fi/muste1/index.php?id=100&la=en) where you have triplets with eighth notes and tied quarter notes.
@@ -36,7 +43,7 @@ Because of these rules, some type of validation must be done in the initializer 
 ```swift
 struct Tuplet {
     /// The notes that make up the tuplet
-    public private(set) var notes: [Note]
+    public private(set) var notes: [NoteCollection]
     /// The number of notes of the specified duration that this tuplet contains
     public let baseNoteCount: Int
     /// The duration of the notes that define this tuplet
@@ -44,7 +51,7 @@ struct Tuplet {
     /// The number of notes that this tuplet fits in the space of
     public let noteCountFit: Int
     
-    init(_ count: Int, _ duration: NoteDuration, inSpaceOf baseCount: Int? = nil, _ baseDuration: NoteDuration? = nil, notes: [Note]) throws
+    init(_ count: Int, _ duration: NoteDuration, inSpaceOf baseCount: Int? = nil, _ baseDuration: NoteDuration? = nil, notes: [NoteCollection]) throws
     mutating func replaceNote(at index: Int, with note: Note) throws
 }
 ```
@@ -78,6 +85,34 @@ let customOctuplet = try! Tuplet(
     .eighth, 
     notes: [eighthNote, eighthNote, eighthNote, eighthNote, eighthNote, eighthNote, eighthNote, eighthNote]
 )
+```
+
+## Other API Changes
+### NoteCollection
+#### API Before
+```swift
+protocol NoteCollection {
+    var noteCount: Int
+}
+```
+
+#### API After
+**Open**: Naming is still up for debate.
+```swift
+protocol NoteCollection {
+    /**
+     The duration of the note that in combination with `noteTimingCount` 
+     will give you the amount of time this `NoteCollection` occupies.
+     */
+    var noteDuration: NoteDuration
+    /**
+     The number of notes to indicate the amount of time occupied by this
+     `NoteCollection`. Combine this with `noteDuration`.
+     */
+    var noteTimingCount: Int
+    /// The count of actual notes in this `NoteCollection`
+    var noteCount: Int
+}
 ```
 
 ## Sources

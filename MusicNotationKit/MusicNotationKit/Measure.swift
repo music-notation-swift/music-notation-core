@@ -63,7 +63,7 @@ public struct Measure: ImmutableMeasure {
 				noteCount += note.noteCount
 				return
 			}
-			// Is a repeat, so insert if it is one of the measures to be repeated
+			
 			guard var tuplet = notes[noteCollectionIndex.noteIndex] as? Tuplet,
 				let tupletIndex = noteCollectionIndex.tupletIndex else {
 					assertionFailure("Index translation showed should be a tuplet, but it's not")
@@ -75,7 +75,34 @@ public struct Measure: ImmutableMeasure {
     }
 
     public mutating func removeNote(at index: Int) throws {
-        // TODO: Implement
+        let noteCollectionIndex = try noteCollectionIndexFromNoteIndex(index)
+		
+		let requestedNoteCurrentTie = try tieStateForNoteIndex(noteCollectionIndex)
+		if requestedNoteCurrentTie != nil {
+			throw MeasureError.invalidRequestedTieState
+		}
+		
+		if noteCollectionIndex.tupletIndex == nil {
+			guard let note = notes[index] as? Note else {
+				assertionFailure("NoteCollection was not a Note as expected")
+				throw MeasureError.internalError
+			}
+			notes.remove(at: index)
+			noteCount -= note.noteCount
+		} else {
+			guard var tuplet = notes[noteCollectionIndex.noteIndex] as? Tuplet,
+				let tupletIndex = noteCollectionIndex.tupletIndex else {
+				assertionFailure("Index translation showed should be a tuplet, but it's not")
+				throw MeasureError.internalError
+			}
+			try tuplet.removeNote(at: tupletIndex)
+			if tuplet.noteCount == 0 {
+				notes.remove(at: noteCollectionIndex.noteIndex)
+				return
+			}
+			
+			notes[noteCollectionIndex.noteIndex] = tuplet
+		}
     }
 
     public mutating func removeNotesInRange(_ indexRange: Range<Int>) throws {
@@ -110,7 +137,7 @@ public struct Measure: ImmutableMeasure {
         let secondaryIndex: (noteIndex: Int, tupletIndex: Int?)?
         let secondaryRequestedTieState: Tie
 
-        let requestedNoteCurrentTie = try tieStateForNoteIndex(requestedIndex.noteIndex, tupletIndex: requestedIndex.tupletIndex)
+		let requestedNoteCurrentTie = try tieStateForNoteIndex(requestedIndex)
 
         // Calculate secondary Index and tie states //
         let removal = requestedTieState == nil
@@ -252,15 +279,15 @@ public struct Measure: ImmutableMeasure {
         }
     }
 
-    private func tieStateForNoteIndex(_ noteIndex: Int, tupletIndex: Int?) throws -> Tie? {
-        if let tupletIndex = tupletIndex {
-            guard let tuplet = notes[noteIndex] as? Tuplet else {
+	private func tieStateForNoteIndex(_ index: NoteCollectionIndex) throws -> Tie? {
+        if let tupletIndex = index.tupletIndex {
+            guard let tuplet = notes[index.noteIndex] as? Tuplet else {
                 assertionFailure("NoteCollection was not a Tuplet as expected")
                 throw MeasureError.internalError
             }
             return tuplet.notes[tupletIndex].tie
         } else {
-            guard let note = notes[noteIndex] as? Note else {
+            guard let note = notes[index.noteIndex] as? Note else {
                 assertionFailure("NoteCollection was not a Note as expected")
                 throw MeasureError.internalError
             }

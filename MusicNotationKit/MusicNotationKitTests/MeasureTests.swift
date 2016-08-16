@@ -63,7 +63,28 @@ class MeasureTests: XCTestCase {
 		} catch {
 			XCTFail(String(error))
 		}
+	}
+	
+	func testRemoveNote() {
+		XCTAssertEqual(measure.notes.count, 0)
+		let note1 = Note(noteDuration: .whole)
+		let note2 = Note(noteDuration: .eighth)
+		let note3 = Note(noteDuration: .quarter)
+		measure.addNote(note1)
+		measure.addNote(note2)
+		measure.addNote(note3)
+		do {
+			try measure.removeNote(at: 1)
+			XCTAssertEqual(measure.notes.count, 2)
+			
+			let resultNote1 = measure.notes[0] as! Note
+			let resultNote2 = measure.notes[1] as! Note
 
+			XCTAssertEqual(resultNote1, note1)
+			XCTAssertEqual(resultNote2, note3)
+		} catch {
+			XCTFail(String(error))
+		}
 	}
 	
     func test_startTieAt() {

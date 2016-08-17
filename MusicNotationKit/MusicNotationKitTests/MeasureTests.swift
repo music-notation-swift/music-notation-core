@@ -62,7 +62,7 @@ class MeasureTests: XCTestCase {
 			XCTAssertEqual(resultNote2, note3)
 			XCTAssertEqual(resultNote3, note2)
 		} catch {
-			XCTFail(String(error))
+			XCTFail(String(describing: error))
 		}
 	}
 	
@@ -84,7 +84,7 @@ class MeasureTests: XCTestCase {
 			XCTAssertEqual(resultNote1, note1)
 			XCTAssertEqual(resultNote2, note3)
 		} catch {
-			XCTFail(String(error))
+			XCTFail(String(describing: error))
 		}
 	}
 	
@@ -116,7 +116,7 @@ class MeasureTests: XCTestCase {
 			XCTAssertEqual(resultNote1, note1)
 			XCTAssertEqual(resultNote2, note2)
 		} catch {
-			XCTFail(String(error))
+			XCTFail(String(describing: error))
 		}
 	}
 	

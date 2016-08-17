@@ -44,7 +44,7 @@ class MeasureTests: XCTestCase {
             XCTAssertNotNil(note.tie)
             XCTAssert(note.tie == .begin)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
 
         // FIXME: When I refactor the tests to small ones, this will not be needed
@@ -62,7 +62,7 @@ class MeasureTests: XCTestCase {
             XCTAssertNotNil(note2.tie)
             XCTAssert(note2.tie == .end)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
 
         // Succeed if the note is already the beginning of a tie
@@ -73,7 +73,7 @@ class MeasureTests: XCTestCase {
             XCTAssert(note1.tie == .begin)
             XCTAssert(note2.tie == .end)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
 
         // Succeed if there is a next note and it's in a tuplet
@@ -93,7 +93,7 @@ class MeasureTests: XCTestCase {
             XCTAssert(note1.tie == .begin)
             XCTAssert(tuplet2.notes[0].tie == .end)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
 
         // Succeed if it is the last note of a tuplet and there is no next note. Just change to Begin
@@ -102,7 +102,7 @@ class MeasureTests: XCTestCase {
             let tuplet = measure.notes[3] as! Tuplet
             XCTAssert(tuplet.notes[2].tie == .begin)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
         // FIXME: When I refactor the tests to small ones, this will not be needed
         try! measure.removeTie(at: 5)
@@ -114,7 +114,7 @@ class MeasureTests: XCTestCase {
             XCTAssert(tuplet.notes[0].tie == .beginAndEnd)
             XCTAssert(tuplet.notes[1].tie == .end)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
 
         // Succeed if it starts on the end of a tuplet and there is a next note
@@ -127,7 +127,7 @@ class MeasureTests: XCTestCase {
             XCTAssert(tuplet.notes[2].tie == .begin)
             XCTAssert(note1.tie == .end)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
 
         // Succeeds if it starts on the end of a tuplet and ends on another tuplet
@@ -189,7 +189,7 @@ class MeasureTests: XCTestCase {
             XCTAssertNil(firstNote.tie)
             XCTAssertNil(secondNote.tie)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
 
         // Succeeds if index is end of a tie and beginning
@@ -202,7 +202,7 @@ class MeasureTests: XCTestCase {
             XCTAssert(firstNote.tie == .end)
             XCTAssertNil(secondNote.tie)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
 
         // Succeeds if tie starts in tuplet, and ends on a separate note
@@ -277,7 +277,7 @@ class MeasureTests: XCTestCase {
             XCTAssertEqual(index.noteIndex, 2)
             XCTAssertNil(index.tupletIndex)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
 
         // Re-initialize measure so that it's empty
@@ -306,7 +306,7 @@ class MeasureTests: XCTestCase {
             XCTAssertEqual(index2.noteIndex, 2)
             XCTAssertNil(index2.tupletIndex)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
     

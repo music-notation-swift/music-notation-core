@@ -45,7 +45,7 @@ public struct Tuplet {
     }
 
     public mutating func removeNote(at index: Int) throws {
-        guard notes.count <= 2 else {
+        guard notes.count > 2 else {
             throw TupletError.tooFewNotes
         }
         guard index < notes.count else {

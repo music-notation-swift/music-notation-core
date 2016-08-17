@@ -1,3 +1,4 @@
+
 //
 //  MeasureTests.swift
 //  MusicNotationKit
@@ -82,6 +83,38 @@ class MeasureTests: XCTestCase {
 
 			XCTAssertEqual(resultNote1, note1)
 			XCTAssertEqual(resultNote2, note3)
+		} catch {
+			XCTFail(String(error))
+		}
+	}
+	
+	func testRemoveNoteFromTuplet() {
+		XCTAssertEqual(measure.notes.count, 0)
+		let note1  = Note(noteDuration: .whole)
+		let note2  = Note(noteDuration: .quarter)
+		measure.addNote(note1)
+		
+		let notes = [
+			Note(noteDuration: .eighth, tone: Tone(noteLetter: .a, octave: .octave1)),
+			Note(noteDuration: .eighth, tone: Tone(noteLetter: .b, octave: .octave1)),
+			Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)),
+			Note(noteDuration: .eighth, tone: Tone(noteLetter: .d, octave: .octave1))
+		]
+		do {
+			let tuplet = try Tuplet(notes: notes)
+			measure.addTuplet(tuplet)
+			measure.addNote(note2)
+			
+			try measure.removeNote(at: 1, removeTuplet: false)
+			XCTAssertEqual(measure.notes.count, 3)
+			
+			let resultNote1 = measure.notes[0] as! Note
+			let resultTuplet = measure.notes[1] as! Tuplet
+			let resultNote2 = measure.notes[2] as! Note
+			
+			XCTAssertEqual(resultTuplet.notes.count, 3)
+			XCTAssertEqual(resultNote1, note1)
+			XCTAssertEqual(resultNote2, note2)
 		} catch {
 			XCTFail(String(error))
 		}

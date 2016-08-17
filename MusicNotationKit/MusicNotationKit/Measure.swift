@@ -55,11 +55,11 @@ public struct Measure: ImmutableMeasure {
 		
 		// Not a repeat, just insert
 		if noteCollectionIndex.tupletIndex == nil {
-			notes.insert(note, at: index)
+			notes.insert(note, at: noteCollectionIndex.noteIndex)
 			noteCount += note.noteCount
 		} else {
 			if beforeTuplet && noteCollectionIndex.tupletIndex == 0 {
-				notes.insert(note, at: index)
+				notes.insert(note, at: noteCollectionIndex.noteIndex)
 				noteCount += note.noteCount
 				return
 			}
@@ -74,7 +74,12 @@ public struct Measure: ImmutableMeasure {
 		}
     }
 
-    public mutating func removeNote(at index: Int) throws {
+	// TODO: Pending Tuplet implementation details. If tuplets become inmutable, then the 
+	// implementation will have to change.
+	//
+	// TODO: What should be the behavior when Tuplet notes count <= 2. If trying to remove a
+	// note from a tuplet of two notes, convert the remaining note into a Note?
+	public mutating func removeNote(at index: Int, removeTuplet: Bool = true) throws {
         let noteCollectionIndex = try noteCollectionIndexFromNoteIndex(index)
 		
 		let requestedNoteCurrentTie = try tieStateForNoteIndex(noteCollectionIndex)
@@ -83,13 +88,18 @@ public struct Measure: ImmutableMeasure {
 		}
 		
 		if noteCollectionIndex.tupletIndex == nil {
-			guard let note = notes[index] as? Note else {
+			guard let note = notes[noteCollectionIndex.noteIndex] as? Note else {
 				assertionFailure("NoteCollection was not a Note as expected")
 				throw MeasureError.internalError
 			}
-			notes.remove(at: index)
+			notes.remove(at: noteCollectionIndex.noteIndex)
 			noteCount -= note.noteCount
 		} else {
+			if removeTuplet && noteCollectionIndex.tupletIndex == 0 {
+				notes.remove(at: noteCollectionIndex.noteIndex)
+				return
+			}
+			
 			guard var tuplet = notes[noteCollectionIndex.noteIndex] as? Tuplet,
 				let tupletIndex = noteCollectionIndex.tupletIndex else {
 				assertionFailure("Index translation showed should be a tuplet, but it's not")
@@ -105,6 +115,8 @@ public struct Measure: ImmutableMeasure {
 		}
     }
 
+	// TODO: Don't care about removing tuplets and notes within the range?
+	// TODO: Take into account ties.
     public mutating func removeNotesInRange(_ indexRange: Range<Int>) throws {
         // TODO: Implement
     }
@@ -112,13 +124,20 @@ public struct Measure: ImmutableMeasure {
     public mutating func addTuplet(_ tuplet: Tuplet) {
         notes.append(tuplet)
     }
-
+	
+	// TODO: Is it  okay to insert things between ties?
     public mutating func insertTuplet(_ tuplet: Tuplet, at index: Int) throws {
-        // TODO: Implement
+		let noteCollectionIndex = try noteCollectionIndexFromNoteIndex(index)
+		notes.insert(tuplet, at: noteCollectionIndex.noteIndex)
     }
 
+	// TODO: Take into account ties.
     public mutating func removeTuplet(_ tuplet: Tuplet, at index: Int) throws {
-        // TODO: Implement
+		let noteCollectionIndex = try noteCollectionIndexFromNoteIndex(index)
+		if noteCollectionIndex.tupletIndex == nil {
+			throw MeasureError.noTieAtIndex
+		}
+		notes.remove(at: noteCollectionIndex.noteIndex)
     }
 
     internal mutating func startTie(at index: Int) throws {
@@ -328,4 +347,5 @@ public enum MeasureError: Error {
     case noNextNote
     case invalidRequestedTieState
     case internalError
+	case noTieAtIndex
 }

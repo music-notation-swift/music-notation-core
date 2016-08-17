@@ -105,7 +105,7 @@ class TupletTests: XCTestCase {
 			// Test with a chord
 			let _ = try Tuplet(notes: [quarterNote1, quarterChord])
 		} catch {
-			XCTFail(String(error))
+			XCTFail(String(describing: error))
 		}
 	}
 
@@ -166,7 +166,7 @@ class TupletTests: XCTestCase {
 			// Test appending chord
 			try group2.appendNote(quarterChord)
 		} catch {
-			XCTFail(String(error))
+			XCTFail(String(describing: error))
 		}
 	}
 }

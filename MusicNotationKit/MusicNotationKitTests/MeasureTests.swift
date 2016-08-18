@@ -120,6 +120,43 @@ class MeasureTests: XCTestCase {
 		}
 	}
 	
+	func testRemoveNotesInRange() {
+		XCTAssertEqual(measure.notes.count, 0)
+		let note1 = Note(noteDuration: .whole)
+		let note2 = Note(noteDuration: .eighth)
+		let note3 = Note(noteDuration: .quarter)
+		measure.addNote(note1)
+		measure.addNote(Note(noteDuration: .quarter))
+		measure.addNote(Note(noteDuration: .quarter))
+		measure.addNote(Note(noteDuration: .quarter))
+		measure.addNote(Note(noteDuration: .quarter))
+		measure.addNote(note2)
+		measure.addNote(note3)
+		do {
+			XCTAssertEqual(measure.notes.count, 7)
+			try measure.removeNotesInRange(Range<Int>(1...3))
+			XCTAssertEqual(measure.notes.count, 3)
+			
+			let resultNote1 = measure.notes[0] as! Note
+			let resultNote2 = measure.notes[1] as! Note
+			let resultNote3 = measure.notes[2] as! Note
+			
+			XCTAssertEqual(resultNote1, note1)
+			XCTAssertEqual(resultNote2, note2)
+			XCTAssertEqual(resultNote3, note3)
+		} catch {
+			XCTFail(String(describing: error))
+		}
+	}
+	
+	// TODO: remove notes in range covering Tuplets
+	// TODO: remove notes in range with invalid tie start|end (negative test)
+	// TODO: remove notes in range with valid tie start&end
+	// TODO: insert tuplet base case
+	// TODO: insert tuplet into tuplet index (negative test)
+	// TODO: remove tuplet base case
+	// TODO: remove tuplet when pointing index at note (negative test)
+	
     func test_startTieAt() {
         XCTAssertEqual(measure.notes.count, 0)
         measure.addNote(Note(noteDuration: .quarter,

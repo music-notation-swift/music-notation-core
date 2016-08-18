@@ -115,10 +115,19 @@ public struct Measure: ImmutableMeasure {
 		}
     }
 
+	// Remove notes from range. Tuplet instances within the range are
+	// removed as well. Removes entire Tuplet if the end portion of the 
+	// range falls within the note range of a Tuplet.
+	// TODO: Need to talk about how the indexRange works. This needs to be
+	// documented. Revisit staff insert measure.
 	// TODO: Don't care about removing tuplets and notes within the range?
-	// TODO: Take into account ties.
     public mutating func removeNotesInRange(_ indexRange: Range<Int>) throws {
-        // TODO: Implement
+        // TODO: Check for invalid tie issues. Only allow a closed tie (start-end)
+		// between the range, or no tie at all. This includes checking ties
+		// inside Tuplets.
+		let start = try noteCollectionIndexFromNoteIndex(indexRange.lowerBound)
+		let end = try noteCollectionIndexFromNoteIndex(indexRange.upperBound)
+		notes.removeSubrange(start.noteIndex...end.noteIndex)
     }
 
     public mutating func addTuplet(_ tuplet: Tuplet) {
@@ -128,6 +137,7 @@ public struct Measure: ImmutableMeasure {
 	// TODO: Is it  okay to insert things between ties?
     public mutating func insertTuplet(_ tuplet: Tuplet, at index: Int) throws {
 		let noteCollectionIndex = try noteCollectionIndexFromNoteIndex(index)
+		// TODO: make sure that index does not belong to a tuplet note.
 		notes.insert(tuplet, at: noteCollectionIndex.noteIndex)
     }
 

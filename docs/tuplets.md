@@ -14,7 +14,7 @@ Most of then you see a grouping of 3, 5, 6, 7, or 9. However, You may also see a
 But they all end with etc. Therefore, I don't think we should validate the number. It seems that it can really be any arbitrary number.
 
 ## Definition
-A complete tuplet definition requires knowing how many of what duration fits into the space of how many of a certrain duration. This is how you define the ratio.
+A complete tuplet definition requires knowing how many of what duration fits into the space of how many of a certain duration. This is how you define the ratio.
 You can see a simple dialog box that shows this very clearly [here](https://usermanuals.finalemusic.com/Finale2014Mac/Content/Finale/TPDLG.htm).
 
 Usually the two note durations would be the same, but you can do the calculation with any duration. For instance, you would normally define a standard eighth note triplet in 4/4 as "3 eighth notes in the space of 2 eighth notes". However, you could also define that as "3 eighth notes in the space of 1 quarter note". The ratio here would be 3:2.

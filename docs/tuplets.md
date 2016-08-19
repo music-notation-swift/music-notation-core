@@ -39,26 +39,26 @@ Because of these rules, some type of validation must be done in the initializer 
 
 ## API Design
 ### API Definition
-**Open**: Naming is still up for debate. Having trouble with that.
+**Open**: Naming is still up for debate. Having trouble with that. We did a first pass and it seems pretty good.
 ```swift
-struct Tuplet {
+struct Tuplet: NoteCollection {
     /// The notes that make up the tuplet
     public private(set) var notes: [NoteCollection]
     /// The number of notes of the specified duration that this tuplet contains
-    public let baseNoteCount: Int
+    public let noteCount: Int
     /// The duration of the notes that define this tuplet
-    public let baseNoteDuration: NoteDuration
+    public let noteDuration: NoteDuration
     /// The number of notes that this tuplet fits in the space of
-    public let noteCountFit: Int
+    public let noteTimingCount: Int
     
-    init(_ count: Int, _ duration: NoteDuration, inSpaceOf baseCount: Int? = nil, _ baseDuration: NoteDuration? = nil, notes: [NoteCollection]) throws
+    init(_ count: Int, _ baseNoteDuration: NoteDuration, inSpaceOf baseCount: Int? = nil, notes: [NoteCollection]) throws
     mutating func replaceNote(at index: Int, with note: Note) throws
 }
 ```
 ### Secondary duration
-We can choose to allow a second duration to be specified like in [Finale](https://usermanuals.finalemusic.com/Finale2014Mac/Content/Finale/TPDLG.htm). However, in order to put the ratio on top, it seems like you need to convert to the same duration?
+We can choose to allow a second duration to be specified like in [Finale](https://usermanuals.finalemusic.com/Finale2014Mac/Content/Finale/TPDLG.htm). However, in order to put the ratio on top, it seems like you need to convert to the same duration? Therefore, I have decided to take out the selection of a second duration.
 
-**Open**: Why have a second duration? Don't we need to convert to the same duration for the ratio?
+-**Open**: Why have a second duration? Don't we need to convert to the same duration for the ratio?- I removed this capability as it doesn't seem useful.
 
 If we do have a second duration, the initializer would function in the following way:
 - The second duration is optional and will default to the same as the first duration.
@@ -97,7 +97,7 @@ protocol NoteCollection {
 ```
 
 #### API After
-**Open**: Naming is still up for debate.
+**Open**: Naming is still up for debate. Needs to match `Tuplet` property naming above.
 ```swift
 protocol NoteCollection {
     /**

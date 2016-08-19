@@ -1,0 +1,8 @@
+coverage:
+  ignore:
+    - "docs"
+    - "MusicNotation.xcworkspace"
+    - "MusicNotationKit/MusicNotation.playground"
+    - "MusicNotationKit/MusicNotationKit.xcodeproj"
+    - "MusicNotationKit/MusicNotationKit/Info.plist"
+    - "MusicNotationKit/MusicNotationKitTests/Info.plist"

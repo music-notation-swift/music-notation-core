@@ -90,7 +90,7 @@ let customOctuplet = try! Tuplet(
 
 ## Implementation Details
 ### Indexing for `replaceNote`
-We will need to use a similar method used in other places to have an expanded set of indexes to get to each note. Please see design doc (TODO: insert link here). This is needed because there can be compound tuplets and we want to be able to replace a single note with either a `Note` or `Tuplet`. Therefore, we need to be able to index into a single note even if it is within a compound `Tuplet`.
+We will need to use a similar method used in other places to have an expanded set of indexes to get to each note. Please see [design doc](https://github.com/drumnkyle/music-notation-swift/blob/master/docs/indexing-methodolgy.md). This is needed because there can be compound tuplets and we want to be able to replace a single note with either a `Note` or `Tuplet`. Therefore, we need to be able to index into a single note even if it is within a compound `Tuplet`.
 
 ## Other API Changes
 ### NoteCollection

@@ -222,7 +222,7 @@ public struct Staff {
                 throw StaffError.noNextNoteToTie
             }
             secondMeasure = try mutableMeasureFromNotesHolderIndex(secondNotesHolderIndex.notesHolderIndex, repeatMeasureIndex: secondNotesHolderIndex.repeatMeasureIndex)
-            guard secondMeasure?.noteCount > 0 else {
+            guard let noteCount = secondMeasure?.noteCount, noteCount > 0 else {
                 throw StaffError.noNextNoteToTie
             }
         } else {

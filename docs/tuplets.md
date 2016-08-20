@@ -53,6 +53,7 @@ struct Tuplet: NoteCollection {
     
     init(_ count: Int, _ baseNoteDuration: NoteDuration, inSpaceOf baseCount: Int? = nil, notes: [NoteCollection]) throws
     mutating func replaceNote(at index: Int, with note: Note) throws
+    mutating func replaceNote(at index: Int, with tuplet: Tuplet) throws
 }
 ```
 ### Secondary duration
@@ -86,6 +87,10 @@ let customOctuplet = try! Tuplet(
     notes: [eighthNote, eighthNote, eighthNote, eighthNote, eighthNote, eighthNote, eighthNote, eighthNote]
 )
 ```
+
+## Implementation Details
+### Indexing for `replaceNote`
+We will need to use a similar method used in other places to have an expanded set of indexes to get to each note. Please see design doc (TODO: insert link here). This is needed because there can be compound tuplets and we want to be able to replace a single note with either a `Note` or `Tuplet`. Therefore, we need to be able to index into a single note even if it is within a compound `Tuplet`.
 
 ## Other API Changes
 ### NoteCollection

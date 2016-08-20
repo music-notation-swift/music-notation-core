@@ -25,6 +25,8 @@ To limit the hit to performance, this method is performed only when the array is
 
 **Open**: If anyone can think of a more efficient way, please let us know.
 
+**Open**: This seems like it could be useful to make this generic instead of writing very similar code over and over. However, I cannot presently think of a convenient way to do that, though I haven't thought too hard about it yet. 
+
 ## Usages
 - Used in `Staff` for the array of `NotesHolder`s.
 - Used in `Measure` for the array of `NoteCollection`s.

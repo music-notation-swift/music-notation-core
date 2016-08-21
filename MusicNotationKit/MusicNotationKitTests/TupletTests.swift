@@ -11,7 +11,7 @@ import XCTest
 
 class TupletTests: XCTestCase {
 
-	let tone1 = Tone(accidental: .none, noteLetter: .a, octave: .octave1)
+	let tone1 = Tone(noteLetter: .a, octave: .octave1)
 	let tone2 = Tone(accidental: .sharp, noteLetter: .b, octave: .octave1)
 	let tone3 = Tone(accidental: .natural, noteLetter: .d, octave: .octave1)
 	let quarterRest = Note(noteDuration: .quarter)
@@ -41,54 +41,60 @@ class TupletTests: XCTestCase {
     // MARK: - init(notes:)
     // MARK: Failures
 
-    func testInitFailsIfHasRest() {
-        do {
-            let _ = try Tuplet(notes: [quarterNote1, quarterRest])
-            shouldFail()
-        } catch TupletError.restsNotValid {
-        } catch {
-            expected(TupletError.restsNotValid, actual: error)
-        }
+    func testInitFailForCountLessThan2() {
+
     }
 
-    func testInitFailsIfTooManyNotes() {
-        do {
-            let _ = try Tuplet(notes: [quarterNote1, quarterNote2, quarterNote3, quarterNote1, quarterNote2, quarterNote3, quarterNote1, quarterNote2])
-            shouldFail()
-        } catch TupletError.invalidNumberOfNotes {
-        } catch {
-            expected(TupletError.invalidNumberOfNotes, actual: error)
-        }
+    func testInitFailForOddCountNoBaseCount() {
+        // count specified is something not in 2-9 range and no base count specified
     }
 
-    func testInitFailsIfTooFewNotes1() {
-        do {
-            let _ = try Tuplet(notes: [quarterNote1])
-            shouldFail()
-        } catch TupletError.invalidNumberOfNotes {
-        } catch {
-            expected(TupletError.invalidNumberOfNotes, actual: error)
-        }
+    func testInitFailForNoEmptyNotes() {
+
     }
 
-    func testInitFailsIfTooFewNotes0() {
-        do {
-            let _ = try Tuplet(notes: [])
-            shouldFail()
-        } catch TupletError.invalidNumberOfNotes {
-        } catch {
-            expected(TupletError.invalidNumberOfNotes, actual: error)
-        }
+    func testInitFailForNotesSameDurationNotEnough() {
+
     }
 
-    func testInitFailsIfNonUniformDuration() {
-        do {
-            let _ = try Tuplet(notes: [quarterNote1, quarterNote2, quarterNote3, eighthNote])
-            shouldFail()
-        } catch TupletError.notSameDuration {
-        } catch {
-            expected(TupletError.notSameDuration, actual: error)
-        }
+    func testInitFailForNotesSameDurationTooMany() {
+
+    }
+
+    func testInitFailForNotesShorterNotEnough() {
+
+    }
+
+    func testInitFailForShorterTooMany() {
+
+    }
+
+    func testInitFailForLongerNotEnough() {
+
+    }
+
+    func testInitFailForLongerTooMany() {
+
+    }
+
+    func testInitFailForSameDurationWithRestsNotEnough() {
+
+    }
+
+    func testInitFailForMixedDurationsNotEnough() {
+
+    }
+
+    func testInitFailForMixedDurationsTooMan() {
+
+    }
+
+    func testInitFailForCompoundTupletTooLarge() {
+
+    }
+
+    func testInitFailForCompoundTupletTooSmall() {
+
     }
 
     // MARK: Successes
@@ -109,64 +115,62 @@ class TupletTests: XCTestCase {
 		}
 	}
 
-    // MARK: - appendNote(_:)
+    // MARK: - replaceNote(at:with:Note)
     // MARK: Failures
 
-    func testAppendNoteFailsIfTupletFull() {
-        do {
-            var noteGroup = try Tuplet(notes: [quarterNote1, quarterNote2, quarterNote3, quarterNote1, quarterNote2, quarterNote3, quarterNote1])
-            try noteGroup.appendNote(quarterNote3)
-            shouldFail()
-        } catch TupletError.groupingFull {
-        } catch {
-            expected(TupletError.groupingFull, actual: error)
-        }
+    func testReplaceNoteWithNoteTooLong() {
+
     }
 
-    func testAppendNoteFailsIfRest() {
-        do {
-            var noteGroup = try Tuplet(notes: [quarterNote1, quarterNote2])
-            try noteGroup.appendNote(quarterRest)
-            shouldFail()
-        } catch TupletError.restsNotValid {
-        } catch {
-            expected(TupletError.restsNotValid, actual: error)
-        }
+    func testReplaceNoteWithNoteTooShort() {
+
     }
 
-    func testAppendNoteFailsIfInvalidDuration() {
-        do {
-            var noteGroup = try Tuplet(notes: [quarterNote1, quarterNote2])
-            try noteGroup.appendNote(eighthNote)
-            shouldFail()
-        } catch TupletError.notSameDuration {
-        } catch {
-            expected(TupletError.notSameDuration, actual: error)
-        }
+    func testReplaceNoteInTupletWithNoteTooShort() {
+
+    }
+
+    func testReplaceNoteInTupletWithNoteTooLong() {
+
     }
 
     // MARK: Successes
-	
-	func testAppendNoteSuccess() {
-		do {
-			// Test 2 - 7
-			var group2 = try Tuplet(notes: [quarterNote1, quarterNote2])
-			try group2.appendNote(quarterNote1)
-			var group3 = try Tuplet(notes: [quarterNote1, quarterNote2, quarterNote3])
-			try group3.appendNote(quarterNote1)
-			var group4 = try Tuplet(notes: [quarterNote1, quarterNote2, quarterNote3, quarterNote1])
-			try group4.appendNote(quarterNote1)
-			var group5 = try Tuplet(notes: [quarterNote1, quarterNote2, quarterNote3, quarterNote1, quarterNote2])
-			try group5.appendNote(quarterNote1)
-			var group6 = try Tuplet(notes: [quarterNote1, quarterNote2, quarterNote3, quarterNote1, quarterNote2, quarterNote3])
-			try group6.appendNote(quarterNote1)
-			// Test with a chord
-			var group7 = try Tuplet(notes: [quarterNote1, quarterChord])
-			try group7.appendNote(quarterNote1)
-			// Test appending chord
-			try group2.appendNote(quarterChord)
-		} catch {
-			XCTFail(String(describing: error))
-		}
-	}
+
+    func testReplaceNoteWithRestOfSameDuration() {
+
+    }
+
+    func testReplaceNoteInTupletWithRestOfSameDuration() {
+
+    }
+
+    func testReplaceNoteWithNoteOfSameDuration() {
+
+    }
+
+    func testReplaceNoteWithNotesOfShorterDuration() {
+
+    }
+
+
+    // MARK: - replaceNote(at:with:Tuplet)
+    // MARK: Failures
+
+    func testReplaceNoteWithTupletTooLong() {
+
+    }
+
+    func testReplaceNoteWithTupletTooShort() {
+
+    }
+
+    func testReplaceNoteInTupletWithTupletTooLong() {
+
+    }
+
+    func testReplaceNoteInTupletWithTupletTooShort() {
+
+    }
+
+    // MARK: Successes
 }

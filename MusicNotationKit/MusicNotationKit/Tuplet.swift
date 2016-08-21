@@ -7,110 +7,57 @@
 //
 
 /**
- Represents Duplet, Triplet, ... Septuplet
+ Represents Duplet, Triplet, ... Septuplet, etc.
  */
-public struct Tuplet {
+public struct Tuplet: NoteCollection {
 
-    public var duration: NoteDuration {
-        return notes[0].noteDuration
-    }
+    /// The notes that make up the tuplet. They can be other tuplets.
+    public private(set) var notes: [NoteCollection]
+    /// The number of notes of the specified duration that this tuplet contains
+    public var noteCount: Int { return notes.count }
+    /// The duration of the notes that define this tuplet
+    public let noteDuration: NoteDuration
+    /// The number of notes that this tuplet fits in the space of
+    public let noteTimingCount: Int
 
-    private(set) var notes: [Note]
-
-    public init(notes: [Note]) throws {
-        switch notes.count {
-        case 2...7:
-            try Tuplet.verifySameDuration(notes)
-            try Tuplet.verifyNoRests(notes)
-            self.notes = notes
-        default:
-            throw TupletError.invalidNumberOfNotes
-        }
+    public init(_ count: Int, _ baseNoteDuration: NoteDuration, inSpaceOf baseCount: Int? = nil, notes: [NoteCollection]) throws {
+        self.notes = notes
+        noteDuration = baseNoteDuration
+        noteTimingCount = baseCount
     }
 
     // MARK: - Methods
     // MARK: Public
 
-    public mutating func appendNote(_ note: Note) throws {
-        try verifyNewNote(note)
-        notes.append(note)
-    }
-
-    public mutating func insertNote(_ note: Note, at index: Int) throws {
-        try verifyNewNote(note)
-        if index > 6 {
-            throw TupletError.invalidIndex
-        }
-        notes.insert(note, at: index)
-    }
-
-    public mutating func removeNote(at index: Int) throws {
-        guard notes.count <= 2 else {
-            throw TupletError.tooFewNotes
-        }
-        guard index < notes.count else {
-            throw TupletError.invalidIndex
-        }
-        notes.remove(at: index)
-    }
-
-    public mutating func replaceNote(at index: Int, with note: Note) throws {
-        try Tuplet.verifyNotRest(note)
+    public mutating func replaceNote(at index: Int, with notes: [Note]) throws {
         notes[index] = note
     }
 
-    // MARK: Private
-    // MARK: Verification
+    public mutating func replaceNote(at index: Int, with tuplet: Tuplet) throws {
 
-    private func verifyNewNote(_ note: Note) throws {
-        try verifyNotFull()
-        try verifySameDuration(newNote: note)
-        try Tuplet.verifyNotRest(note)
     }
 
-    private static func verifyNoRests(_ notes: [Note]) throws {
-        for note in notes {
-            try verifyNotRest(note)
-        }
+    public mutating func replaceNotes(in range: Range<Int>, with notes: [Note]) throws {
+
     }
 
-    private static func verifyNotRest(_ note: Note) throws {
-        if note.isRest == true {
-            throw TupletError.restsNotValid
-        }
-    }
+    public mutating func replaceNotes(in range: Range<Int>, with tuplet: Tuplet) throws {
 
-    private static func verifySameDuration(_ notes: [Note]) throws {
-        // Map all durations into new set
-        // If set has more than 1 member, it is invalid
-        let durations: Set<NoteDuration> = Set(notes.map { $0.noteDuration })
-        if durations.count > 1 {
-            throw TupletError.notSameDuration
-        }
-    }
-
-    private func verifySameDuration(newNote: Note) throws {
-        if newNote.noteDuration != duration {
-            throw TupletError.notSameDuration
-        }
-    }
-
-    private func verifyNotFull() throws {
-        if notes.count >= 7 {
-            throw TupletError.groupingFull
-        }
     }
 }
 
 extension Tuplet: Equatable {
     public static func ==(lhs: Tuplet, rhs: Tuplet) -> Bool {
-        return lhs.notes == rhs.notes
+        guard lhs.notes.count == rhs.notes.count else {
+            return false
+        }
+        for (index, collection) in lhs.notes.enumerated() {
+            if collection != rhs.notes[index] {
+                return false
+            }
+        }
+        return true
     }
-}
-
-extension Tuplet: NoteCollection {
-    
-    public var noteCount: Int { return notes.count }
 }
 
 extension Tuplet: CustomDebugStringConvertible {
@@ -120,9 +67,6 @@ extension Tuplet: CustomDebugStringConvertible {
 }
 
 public enum TupletError: Error {
-    case invalidNumberOfNotes
-    case groupingFull
-    case tooFewNotes
     case restsNotValid
     case notSameDuration
     case invalidIndex

@@ -13,7 +13,6 @@ public struct Note {
 
     public let isRest: Bool
 
-    public var dot: Dot?
     public var accent: Accent?
     public var isStaccato: Bool = false
     public var dynamics: Dynamics?
@@ -92,7 +91,6 @@ extension Note: Equatable {
         if lhs.noteDuration == rhs.noteDuration &&
             lhs.tones == rhs.tones &&
             lhs.isRest == rhs.isRest &&
-            lhs.dot == rhs.dot &&
             lhs.accent == rhs.accent &&
             lhs.isStaccato == rhs.isStaccato &&
             lhs.dynamics == rhs.dynamics &&
@@ -122,13 +120,7 @@ extension Note: CustomDebugStringConvertible {
                 tonesString = ""
             }
         }
-        let dotString: String
-        if let dot = dot {
-            dotString = "\(dot)"
-        } else {
-            dotString = ""
-        }
-        return "\(tie == .end || tie == .beginAndEnd ? "_" : "")\(noteDuration)\(dotString)\(tonesString)\(isRest ? "R" : "")\(tie == .begin || tie == .beginAndEnd ? "_" : "")"
+        return "\(tie == .end || tie == .beginAndEnd ? "_" : "")\(noteDuration)\(tonesString)\(isRest ? "R" : "")\(tie == .begin || tie == .beginAndEnd ? "_" : "")"
     }
 }
 

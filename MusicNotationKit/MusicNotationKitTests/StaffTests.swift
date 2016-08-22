@@ -925,4 +925,43 @@ class StaffTests: XCTestCase {
             XCTFail(String(describing: error))
         }
     }
+    
+    // MARK: - replaceMeasure(at:, with:)
+    // MARK: Failures
+    
+    func testReplaceRepeatedMeasure() {
+        do {
+            try staff.replaceMeasure(at: 6, with: measure1)
+            shouldFail()
+        } catch StaffError.repeatedMeasureCannotBeModified {
+        } catch {
+            expected(StaffError.repeatedMeasureCannotBeModified, actual: error)
+        }
+    }
+    
+    // MARK: Successes
+    
+    func testReplaceMeasureAtIndex() {
+        do {
+            try staff.replaceMeasure(at: 0, with: measure2)
+            let replacedMeasure = Measure(try staff.measure(at: 0))
+            XCTAssertEqual(replacedMeasure, measure2)
+        } catch {
+            XCTFail(String(describing: error))
+        }
+    }
+    
+    func testReplaceMeasureWithRepeat() {
+        do {
+            try staff.replaceMeasure(at: 5, with: measure1)
+            let replacedMeasure = Measure(try staff.measure(at: 5))
+            let repeatedMeasure = Measure(try staff.measure(at: 6))
+            XCTAssertEqual(replacedMeasure, measure1)
+            XCTAssertEqual(repeatedMeasure, measure1)
+        } catch {
+            XCTFail(String(describing: error))
+        }
+    }
+    
+    
 }

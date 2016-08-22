@@ -926,31 +926,8 @@ class StaffTests: XCTestCase {
         }
     }
     
-    func testReplaceMeasureAtIndex() {
-        do {
-            try staff.replaceMeasure(at: 0, with: measure2)
-            let replacedMeasure = try staff.measure(at: 0) as? Measure
-            XCTAssertEqual(replacedMeasure, measure2)
-        } catch {
-            XCTFail(String(describing: error))
-        }
-    }
-    
-    func testReplaceMeasureWithRepeat() {
-        do {
-            try staff.replaceMeasure(at: 5, with: measure1)
-            let replacedMeasure = try staff.measure(at: 5) as? Measure
-            let repeatedMeasure = try staff.measure(at: 6)
-            let immutableMeasure = measure1 as ImmutableMeasure
-            XCTAssertEqual(replacedMeasure, measure1)
-            XCTAssertEqual(repeatedMeasure.noteCount, immutableMeasure.noteCount)
-            for (index, note) in repeatedMeasure.notes.enumerated() {
-                XCTAssertTrue(note == immutableMeasure.notes[index])
-            }
-        } catch {
-            XCTFail(String(describing: error))
-        }
-    }
+    // MARK: - replaceMeasure(at:, with:)
+    // MARK: Failures
     
     func testReplaceRepeatedMeasure() {
         do {
@@ -961,4 +938,30 @@ class StaffTests: XCTestCase {
             expected(StaffError.repeatedMeasureCannotBeModified, actual: error)
         }
     }
+    
+    // MARK: Successes
+    
+    func testReplaceMeasureAtIndex() {
+        do {
+            try staff.replaceMeasure(at: 0, with: measure2)
+            let replacedMeasure = Measure(try staff.measure(at: 0))
+            XCTAssertEqual(replacedMeasure, measure2)
+        } catch {
+            XCTFail(String(describing: error))
+        }
+    }
+    
+    func testReplaceMeasureWithRepeat() {
+        do {
+            try staff.replaceMeasure(at: 5, with: measure1)
+            let replacedMeasure = Measure(try staff.measure(at: 5))
+            let repeatedMeasure = Measure(try staff.measure(at: 6))
+            XCTAssertEqual(replacedMeasure, measure1)
+            XCTAssertEqual(repeatedMeasure, measure1)
+        } catch {
+            XCTFail(String(describing: error))
+        }
+    }
+    
+    
 }

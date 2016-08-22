@@ -119,6 +119,49 @@ protocol NoteCollection {
     var noteCount: Int
 }
 ```
+### NoteDuration
+It used to be an enum and the dot was a property on note. However, you can create a `Tuplet` with it's base note as a dotted note. Therefore, it makes sense to have a `NoteDuration` combine the value (eighth, quarter, etc.) with the number of dots. This also makes sense, because these two properties combined are what dictate the length of a note.
+
+Now, `Tuplet` will be able to have a `NoteDuration` that will describe the base note type completely.
+#### API Before
+```swift
+public enum NoteDuration: Int {
+    case whole = 1
+    case half = 2
+    case quarter = 4
+    // ...
+}
+```
+#### API After
+```swift
+public struct NoteDuration {
+    public enum Value {
+        case long
+        case large
+        case doubleWhole
+        case whole
+        case half
+        // ...
+    }
+    public let value: Value
+    public let dotCount: Int
+    public var timeSignatureValue: Int? {
+        switch value {
+        case whole: return 1
+        case half: 2
+        // ...
+        case .long, .large, .doubleWhole: return nil
+        }
+    }
+    
+    private init(value: Value)
+    public init(value: Value, dotCount: Int) throws
+    
+    public static let long = NoteDuration(value: .long)
+    public static let large = NoteDuration(value: .large)
+    // ...
+}
+```
 
 ## Sources
 http://www2.siba.fi/muste1/index.php?id=100&la=en

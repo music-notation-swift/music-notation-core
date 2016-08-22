@@ -53,7 +53,7 @@ public struct NoteDuration {
         case .sixtyFourth: return 64
         case .oneTwentyEighth: return 128
         case .twoFiftySixth: return 256
-        default: return nil
+        case .long, .large, .doubleWhole: return nil
         }
     }
 

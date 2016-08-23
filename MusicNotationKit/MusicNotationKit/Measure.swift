@@ -50,28 +50,104 @@ public struct Measure: ImmutableMeasure {
         noteCount += note.noteCount
     }
 
-    public mutating func insertNote(_ note: Note, at index: Int) throws {
-        // TODO: Implement
+	public mutating func insertNote(_ note: Note, at index: Int, beforeTuplet: Bool = true) throws {
+		let noteCollectionIndex = try noteCollectionIndexFromNoteIndex(index)
+		
+		// Not a repeat, just insert
+		if noteCollectionIndex.tupletIndex == nil {
+			notes.insert(note, at: noteCollectionIndex.noteIndex)
+			noteCount += note.noteCount
+		} else {
+			if beforeTuplet && noteCollectionIndex.tupletIndex == 0 {
+				notes.insert(note, at: noteCollectionIndex.noteIndex)
+				noteCount += note.noteCount
+				return
+			}
+			
+			guard var tuplet = notes[noteCollectionIndex.noteIndex] as? Tuplet,
+				let tupletIndex = noteCollectionIndex.tupletIndex else {
+					assertionFailure("Index translation showed should be a tuplet, but it's not")
+					throw MeasureError.internalError
+			}
+			try tuplet.insertNote(note, at: tupletIndex)
+			notes[noteCollectionIndex.noteIndex] = tuplet
+		}
     }
 
-    public mutating func removeNote(at index: Int) throws {
-        // TODO: Implement
+	// TODO: Pending Tuplet implementation details. If tuplets become inmutable, then the 
+	// implementation will have to change.
+	//
+	// TODO: What should be the behavior when Tuplet notes count <= 2. If trying to remove a
+	// note from a tuplet of two notes, convert the remaining note into a Note?
+	public mutating func removeNote(at index: Int, removeTuplet: Bool = true) throws {
+        let noteCollectionIndex = try noteCollectionIndexFromNoteIndex(index)
+		
+		let requestedNoteCurrentTie = try tieStateForNoteIndex(noteCollectionIndex)
+		if requestedNoteCurrentTie != nil {
+			throw MeasureError.invalidRequestedTieState
+		}
+		
+		if noteCollectionIndex.tupletIndex == nil {
+			guard let note = notes[noteCollectionIndex.noteIndex] as? Note else {
+				assertionFailure("NoteCollection was not a Note as expected")
+				throw MeasureError.internalError
+			}
+			notes.remove(at: noteCollectionIndex.noteIndex)
+			noteCount -= note.noteCount
+		} else {
+			if removeTuplet && noteCollectionIndex.tupletIndex == 0 {
+				notes.remove(at: noteCollectionIndex.noteIndex)
+				return
+			}
+			
+			guard var tuplet = notes[noteCollectionIndex.noteIndex] as? Tuplet,
+				let tupletIndex = noteCollectionIndex.tupletIndex else {
+				assertionFailure("Index translation showed should be a tuplet, but it's not")
+				throw MeasureError.internalError
+			}
+			try tuplet.removeNote(at: tupletIndex)
+			if tuplet.noteCount == 0 {
+				notes.remove(at: noteCollectionIndex.noteIndex)
+				return
+			}
+			
+			notes[noteCollectionIndex.noteIndex] = tuplet
+		}
     }
 
+	// Remove notes from range. Tuplet instances within the range are
+	// removed as well. Removes entire Tuplet if the end portion of the 
+	// range falls within the note range of a Tuplet.
+	// TODO: Need to talk about how the indexRange works. This needs to be
+	// documented. Revisit staff insert measure.
+	// TODO: Don't care about removing tuplets and notes within the range?
     public mutating func removeNotesInRange(_ indexRange: Range<Int>) throws {
-        // TODO: Implement
+        // TODO: Check for invalid tie issues. Only allow a closed tie (start-end)
+		// between the range, or no tie at all. This includes checking ties
+		// inside Tuplets.
+		let start = try noteCollectionIndexFromNoteIndex(indexRange.lowerBound)
+		let end = try noteCollectionIndexFromNoteIndex(indexRange.upperBound)
+		notes.removeSubrange(start.noteIndex...end.noteIndex)
     }
 
     public mutating func addTuplet(_ tuplet: Tuplet) {
         notes.append(tuplet)
     }
-
+	
+	// TODO: Is it  okay to insert things between ties?
     public mutating func insertTuplet(_ tuplet: Tuplet, at index: Int) throws {
-        // TODO: Implement
+		let noteCollectionIndex = try noteCollectionIndexFromNoteIndex(index)
+		// TODO: make sure that index does not belong to a tuplet note.
+		notes.insert(tuplet, at: noteCollectionIndex.noteIndex)
     }
 
+	// TODO: Take into account ties.
     public mutating func removeTuplet(_ tuplet: Tuplet, at index: Int) throws {
-        // TODO: Implement
+		let noteCollectionIndex = try noteCollectionIndexFromNoteIndex(index)
+		if noteCollectionIndex.tupletIndex == nil {
+			throw MeasureError.noTieAtIndex
+		}
+		notes.remove(at: noteCollectionIndex.noteIndex)
     }
 
     internal mutating func startTie(at index: Int) throws {
@@ -90,7 +166,7 @@ public struct Measure: ImmutableMeasure {
         let secondaryIndex: (noteIndex: Int, tupletIndex: Int?)?
         let secondaryRequestedTieState: Tie
 
-        let requestedNoteCurrentTie = try tieStateForNoteIndex(requestedIndex.noteIndex, tupletIndex: requestedIndex.tupletIndex)
+		let requestedNoteCurrentTie = try tieStateForNoteIndex(requestedIndex)
 
         // Calculate secondary Index and tie states //
         let removal = requestedTieState == nil
@@ -232,15 +308,15 @@ public struct Measure: ImmutableMeasure {
         }
     }
 
-    private func tieStateForNoteIndex(_ noteIndex: Int, tupletIndex: Int?) throws -> Tie? {
-        if let tupletIndex = tupletIndex {
-            guard let tuplet = notes[noteIndex] as? Tuplet else {
+	private func tieStateForNoteIndex(_ index: NoteCollectionIndex) throws -> Tie? {
+        if let tupletIndex = index.tupletIndex {
+            guard let tuplet = notes[index.noteIndex] as? Tuplet else {
                 assertionFailure("NoteCollection was not a Tuplet as expected")
                 throw MeasureError.internalError
             }
             return tuplet.notes[tupletIndex].tie
         } else {
-            guard let note = notes[noteIndex] as? Note else {
+            guard let note = notes[index.noteIndex] as? Note else {
                 assertionFailure("NoteCollection was not a Note as expected")
                 throw MeasureError.internalError
             }
@@ -281,4 +357,5 @@ public enum MeasureError: Error {
     case noNextNote
     case invalidRequestedTieState
     case internalError
+	case noTieAtIndex
 }

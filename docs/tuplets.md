@@ -24,6 +24,19 @@ There are certain ratios that are standard, like a triplet would usually have a 
 
 There should only be a need to list the standard ratios for 2-9. In this case, we can just list them in `Tuplet` struct. This way, if the second number is not specific in the initializer and the first number is one of these, we can fill in the second number according to th static list of default ratios.
 
+**Open** Can we have one standard ratio per number? Seems like it may the standard may be based on the time signature.
+
+Right now the assumption is that these are the standard ratios:
+
+    2: 3
+    3: 2
+    4: 3
+    5: 4
+    6: 4
+    7: 4
+    8: 6
+    9: 8
+
 ## Compound Tuplets
 You can have a tuplet that is made up of another tuplet, which is made up of another tuplet, and so on. 
 
@@ -52,8 +65,12 @@ struct Tuplet: NoteCollection {
     public let noteTimingCount: Int
     
     init(_ count: Int, _ baseNoteDuration: NoteDuration, inSpaceOf baseCount: Int? = nil, notes: [NoteCollection]) throws
+    
     mutating func replaceNote(at index: Int, with note: Note) throws
-    mutating func replaceNote(at index: Int, with tuplet: Tuplet) throws
+    mutating func replaceNote(at index: Int, with notes: [Note]) throws
+    mutating func replaceNote(at index: Int, with tuplet: Tuplet)
+    mutating func replaceNotes(in range: Range<Int>, with notes: [Note])
+    mutating func replaceNotes(in range: Range<Int>, with tuplet: Tuplet) throws
 }
 ```
 ### Secondary duration
@@ -91,6 +108,12 @@ let customOctuplet = try! Tuplet(
 ## Implementation Details
 ### Indexing for `replaceNote`
 We will need to use a similar method used in other places to have an expanded set of indexes to get to each note. Please see [design doc](https://github.com/drumnkyle/music-notation-swift/blob/master/docs/indexing-methodolgy.md). This is needed because there can be compound tuplets and we want to be able to replace a single note with either a `Note` or `Tuplet`. Therefore, we need to be able to index into a single note even if it is within a compound `Tuplet`.
+
+The `Tuplet` will have its own indexes and the `Measure` will get the indexes for a `Tuplet` for its purposes.
+
+This one will differ a bit, because you can have a `Tuplet` that contains `Tuplet`s.
+
+**Open**: Still figuring out how to represent this case.
 
 ## Other API Changes
 ### NoteCollection

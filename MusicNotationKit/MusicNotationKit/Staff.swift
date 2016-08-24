@@ -64,11 +64,11 @@ public struct Staff {
         let notesHolderIndex = try notesHolderIndexFromMeasureIndex(index)
         // Not a repeat, just insert
         if notesHolderIndex.repeatMeasureIndex == nil {
-            notesHolders.insert(measure, at: index)
+            notesHolders.insert(measure, at: notesHolderIndex.notesHolderIndex)
             measureCount += measure.measureCount
         } else {
             if beforeRepeat && notesHolderIndex.repeatMeasureIndex == 0 {
-                notesHolders.insert(measure, at: index)
+                notesHolders.insert(measure, at: notesHolderIndex.notesHolderIndex)
                 measureCount += measure.measureCount
                 return
             }

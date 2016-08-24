@@ -15,7 +15,7 @@ class TupletTests: XCTestCase {
 	let tone2 = Tone(accidental: .sharp, noteLetter: .b, octave: .octave1)
 	let tone3 = Tone(accidental: .natural, noteLetter: .d, octave: .octave1)
     let quarterRest = Note(noteDuration: .quarter)
-	let eighthRest = Note(noteDuration: .eighth)
+    let eighthRest = Note(noteDuration: .eighth)
 	var quarterNote1: Note!
 	var quarterNote2: Note!
 	var quarterNote3: Note!

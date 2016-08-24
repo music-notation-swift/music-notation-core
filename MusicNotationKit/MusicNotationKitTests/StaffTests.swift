@@ -125,6 +125,23 @@ class StaffTests: XCTestCase {
         }
     }
 
+	func testInsertMeasureNoRepeatAtEnd() {
+		let measure = Measure(
+			timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
+			key: Key(noteLetter: .c))
+		do {
+			try staff.insertMeasure(measure, at: 14)
+			let addedMeasure = try staff.measure(at: 14)
+			let beforeMeasure = try staff.measure(at: 13)
+			let afterMeasure = try staff.measure(at: 15)
+			XCTAssertEqual(Measure(addedMeasure), measure)
+			XCTAssertEqual(Measure(beforeMeasure), measure6)
+			XCTAssertEqual(Measure(afterMeasure), measure3)
+		} catch {
+			XCTFail(String(describing: error))
+		}
+	}
+	
     func testInsertMeasureInRepeat() {
         let measure = Measure(
             timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),

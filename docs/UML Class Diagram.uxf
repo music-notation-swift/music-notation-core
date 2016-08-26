@@ -74,10 +74,9 @@ NoteLetter</panel_attributes>
       <x>200</x>
       <y>590</y>
       <w>130</w>
-      <h>50</h>
+      <h>30</h>
     </coordinates>
-    <panel_attributes>&lt;&lt;enum&gt;&gt;
-NoteDuration</panel_attributes>
+    <panel_attributes>NoteDuration</panel_attributes>
     <additional_attributes/>
   </element>
   <element>

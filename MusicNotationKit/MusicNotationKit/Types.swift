@@ -25,30 +25,6 @@ public enum Striking {
     case right, down
 }
 
-public enum NoteDuration {
-    case whole
-    case half
-    case quarter
-    case eighth
-    case sixteenth
-    case thirtySecond
-    case sixtyFourth
-}
-
-extension NoteDuration: CustomDebugStringConvertible {
-    public var debugDescription: String {
-        switch self {
-        case .whole: return "1"
-        case .half: return "1/2"
-        case .quarter: return "1/4"
-        case .eighth: return "1/8"
-        case .sixteenth: return "1/16"
-        case .thirtySecond: return "1/32"
-        case .sixtyFourth: return "1/64"
-        }
-    }
-}
-
 public enum Accidental {
     case sharp
     case doubleSharp
@@ -87,20 +63,6 @@ public enum Clef {
 public enum Instrument {
     case guitar6
     case drums
-}
-
-public enum Dot {
-    case single
-    case double
-}
-
-extension Dot: CustomDebugStringConvertible {
-    public var debugDescription: String {
-        switch self {
-        case .single: return "."
-        case .double: return ".."
-        }
-    }
 }
 
 public enum Accent {

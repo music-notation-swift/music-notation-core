@@ -43,7 +43,7 @@ class MeasureTests: XCTestCase {
             XCTAssertNotNil(note.tie)
             XCTAssert(note.tie == .begin)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -59,7 +59,7 @@ class MeasureTests: XCTestCase {
             XCTAssertNotNil(note2.tie)
             XCTAssert(note2.tie == .end)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -74,7 +74,7 @@ class MeasureTests: XCTestCase {
             XCTAssert(note1.tie == .begin)
             XCTAssert(note2.tie == .end)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -99,7 +99,7 @@ class MeasureTests: XCTestCase {
             XCTAssert(note1.tie == .begin)
             XCTAssert(tuplet2.notes[0].tie == .end)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -124,7 +124,7 @@ class MeasureTests: XCTestCase {
             let tuplet = measure.notes[3] as! Tuplet
             XCTAssert(tuplet.notes[2].tie == .begin)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -149,7 +149,7 @@ class MeasureTests: XCTestCase {
             XCTAssert(tuplet.notes[0].tie == .beginAndEnd)
             XCTAssert(tuplet.notes[1].tie == .end)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -173,7 +173,7 @@ class MeasureTests: XCTestCase {
             let tuplet = measure.notes[3] as! Tuplet
             XCTAssert(tuplet.notes[2].tie == .begin)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -247,7 +247,7 @@ class MeasureTests: XCTestCase {
             XCTAssertNil(firstNote.tie)
             XCTAssertNil(secondNote.tie)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -266,7 +266,7 @@ class MeasureTests: XCTestCase {
             XCTAssert(firstNote.tie == .end)
             XCTAssertNil(secondNote.tie)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -396,7 +396,7 @@ class MeasureTests: XCTestCase {
             XCTAssertEqual(index.noteIndex, 2)
             XCTAssertNil(index.tupletIndex)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -424,7 +424,7 @@ class MeasureTests: XCTestCase {
             XCTAssertEqual(index2.noteIndex, 2)
             XCTAssertNil(index2.tupletIndex)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 

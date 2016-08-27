@@ -6,8 +6,6 @@
 //  Copyright (c) 2015 Kyle Sherman. All rights reserved.
 //
 
-import Foundation
-
 public struct TimeSignature {
 	
 	public let topNumber: Int
@@ -28,14 +26,14 @@ extension TimeSignature: CustomDebugStringConvertible {
 	}
 }
 
-extension TimeSignature: Equatable {}
-
-public func ==(lhs: TimeSignature, rhs: TimeSignature) -> Bool {
-	if lhs.topNumber == rhs.topNumber &&
-		lhs.bottomNumber == rhs.bottomNumber &&
-		lhs.tempo == rhs.tempo {
-			return true
-	} else {
-		return false
-	}
+extension TimeSignature: Equatable {
+    public static func ==(lhs: TimeSignature, rhs: TimeSignature) -> Bool {
+        if lhs.topNumber == rhs.topNumber &&
+            lhs.bottomNumber == rhs.bottomNumber &&
+            lhs.tempo == rhs.tempo {
+            return true
+        } else {
+            return false
+        }
+    }
 }

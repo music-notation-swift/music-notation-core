@@ -102,10 +102,10 @@ public struct Tuplet {
     }
 }
 
-extension Tuplet: Equatable {}
-
-public func ==(lhs: Tuplet, rhs: Tuplet) -> Bool {
-    return lhs.notes == rhs.notes
+extension Tuplet: Equatable {
+    public static func ==(lhs: Tuplet, rhs: Tuplet) -> Bool {
+        return lhs.notes == rhs.notes
+    }
 }
 
 extension Tuplet: NoteCollection {
@@ -119,7 +119,7 @@ extension Tuplet: CustomDebugStringConvertible {
     }
 }
 
-public enum TupletError: ErrorProtocol {
+public enum TupletError: Error {
     case invalidNumberOfNotes
     case groupingFull
     case tooFewNotes

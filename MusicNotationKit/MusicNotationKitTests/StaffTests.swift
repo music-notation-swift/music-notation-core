@@ -13,6 +13,15 @@ class StaffTests: XCTestCase {
 
     var staff: Staff!
 
+    var measure1: Measure!
+    var measure2: Measure!
+    var measure3: Measure!
+    var measure4: Measure!
+    var measure5: Measure!
+    var measure6: Measure!
+    var repeat1: MeasureRepeat!
+    var repeat2: MeasureRepeat!
+
     override func setUp() {
         super.setUp()
         staff = Staff(clef: .treble, instrument: .guitar6)
@@ -21,38 +30,38 @@ class StaffTests: XCTestCase {
         let note = Note(noteDuration: .sixteenth,
                         tone: Tone(noteLetter: .c, octave: .octave1))
         let tuplet = try! Tuplet(notes: [note, note, note])
-        let measure1 = Measure(
+        measure1 = Measure(
             timeSignature: timeSignature,
             key: key,
             notes: [note, note, note, note, tuplet]
         )
-        let measure2 = Measure(
+        measure2 = Measure(
             timeSignature: timeSignature,
             key: key,
             notes: [tuplet, note, note]
         )
-        let measure3 = Measure(
+        measure3 = Measure(
             timeSignature: timeSignature,
             key: key,
             notes: [note, note, note, note, tuplet]
         )
-        let measure4 = Measure(
+        measure4 = Measure(
             timeSignature: timeSignature,
             key: key,
             notes: [note, note, note, note]
         )
-        let measure5 = Measure(
+        measure5 = Measure(
             timeSignature: timeSignature,
             key: key,
             notes: [tuplet, note, note, note, note]
         )
-        let measure6 = Measure(
+        measure6 = Measure(
             timeSignature: timeSignature,
             key: key,
             notes: [tuplet, tuplet, note, note]
         )
-        let repeat1 = try! MeasureRepeat(measures: [measure4])
-        let repeat2 = try! MeasureRepeat(measures: [measure4, measure4], repeatCount: 2)
+        repeat1 = try! MeasureRepeat(measures: [measure4])
+        repeat2 = try! MeasureRepeat(measures: [measure4, measure4], repeatCount: 2)
         staff.appendMeasure(measure1)
         staff.appendMeasure(measure2)
         staff.appendMeasure(measure3)
@@ -62,6 +71,209 @@ class StaffTests: XCTestCase {
         staff.appendRepeat(repeat2) // index = 7
         staff.appendMeasure(measure6) // index = 13
         staff.appendMeasure(measure3)
+    }
+
+    // MARK: - insertMeasure(_:, at:)
+    // MARK: Failures
+
+    func testInsertMeasureInvalidIndex() {
+        let measure = Measure(
+            timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
+            key: Key(noteLetter: .c))
+        do {
+            try staff.insertMeasure(measure, at: 15)
+            shouldFail()
+        } catch StaffError.measureIndexOutOfRange {
+        } catch {
+            expected(StaffError.measureIndexOutOfRange, actual: error)
+        }
+    }
+
+    func testInsertMeasureInRepeatedMeasures() {
+        let measure = Measure(
+            timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
+            key: Key(noteLetter: .c))
+        do {
+            try staff.insertMeasure(measure, at: 10, beforeRepeat: true)
+            shouldFail()
+        } catch MeasureRepeatError.cannotModifyRepeatedMeasures {
+        } catch {
+            expected(MeasureRepeatError.cannotModifyRepeatedMeasures, actual: error)
+        }
+    }
+
+    // MARK: Successes
+    
+    func testDescription() {
+        XCTAssertEqual(staff.debugDescription, "staff(treble guitar6 |4/4: 1/16c1,1/16c1,1/16c1,1/16c1,[1/16c1, 1/16c1, 1/16c1]|, |4/4: [1/16c1, 1/16c1, 1/16c1],1/16c1,1/16c1|, |4/4: 1/16c1,1/16c1,1/16c1,1/16c1,[1/16c1, 1/16c1, 1/16c1]|, |4/4: 1/16c1,1/16c1,1/16c1,1/16c1|, |4/4: [1/16c1, 1/16c1, 1/16c1],1/16c1,1/16c1,1/16c1,1/16c1|, [ |4/4: 1/16c1,1/16c1,1/16c1,1/16c1| ] × 2, [ |4/4: 1/16c1,1/16c1,1/16c1,1/16c1|, |4/4: 1/16c1,1/16c1,1/16c1,1/16c1| ] × 3, |4/4: [1/16c1, 1/16c1, 1/16c1],[1/16c1, 1/16c1, 1/16c1],1/16c1,1/16c1|, |4/4: 1/16c1,1/16c1,1/16c1,1/16c1,[1/16c1, 1/16c1, 1/16c1]|)")
+    }
+
+    func testInsertMeasureNoRepeat() {
+        let measure = Measure(
+            timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
+            key: Key(noteLetter: .c))
+        do {
+            try staff.insertMeasure(measure, at: 1)
+            let addedMeasure = try staff.measure(at: 1)
+            let beforeMeasure = try staff.measure(at: 0)
+            let afterMeasure = try staff.measure(at: 2)
+            XCTAssertEqual(Measure(addedMeasure), measure)
+            XCTAssertEqual(Measure(beforeMeasure), measure1)
+            XCTAssertEqual(Measure(afterMeasure), measure2)
+        } catch {
+            XCTFail(String(describing: error))
+        }
+    }
+
+	func testInsertMeasureNoRepeatAtEnd() {
+		let measure = Measure(
+			timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
+			key: Key(noteLetter: .c))
+		do {
+			try staff.insertMeasure(measure, at: 14)
+			let addedMeasure = try staff.measure(at: 14)
+			let beforeMeasure = try staff.measure(at: 13)
+			let afterMeasure = try staff.measure(at: 15)
+			XCTAssertEqual(Measure(addedMeasure), measure)
+			XCTAssertEqual(Measure(beforeMeasure), measure6)
+			XCTAssertEqual(Measure(afterMeasure), measure3)
+		} catch {
+			XCTFail(String(describing: error))
+		}
+	}
+	
+    func testInsertMeasureInRepeat() {
+        let measure = Measure(
+            timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
+            key: Key(noteLetter: .c))
+        do {
+            try staff.insertMeasure(measure, at: 5, beforeRepeat: false)
+            let actualRepeat = try staff.measureRepeat(at: 5)
+            let expectedRepeat = try MeasureRepeat(measures: [measure, measure4])
+            XCTAssertEqual(actualRepeat, expectedRepeat)
+        } catch {
+            XCTFail(String(describing: error))
+        }
+    }
+
+    func testInsertMeasureInRepeatAtEnd() {
+        let measure = Measure(
+            timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
+            key: Key(noteLetter: .c))
+        do {
+            try staff.insertMeasure(measure, at: 6, beforeRepeat: false)
+            let actualRepeat = try staff.measureRepeat(at: 5)
+            let expectedRepeat = try MeasureRepeat(measures: [measure4, measure])
+            XCTAssertEqual(actualRepeat, expectedRepeat)
+        } catch {
+            XCTFail(String(describing: error))
+        }
+    }
+
+    func testInsertMeasureBeforeRepeat() {
+        let measure = Measure(
+            timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
+            key: Key(noteLetter: .c))
+        do {
+            try staff.insertMeasure(measure, at: 5, beforeRepeat: true)
+            let _ = try staff.measureRepeat(at: 6)
+            let addedMeasure = try staff.measure(at: 5)
+            let beforeMeasure = try staff.measure(at: 4)
+            XCTAssertEqual(Measure(addedMeasure), measure)
+            XCTAssertEqual(Measure(beforeMeasure), measure5)
+        } catch {
+            XCTFail(String(describing: error))
+        }
+    }
+
+    func testInsertMeasureNoRepeatWithWrongFlag() {
+        let measure = Measure(
+            timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
+            key: Key(noteLetter: .c))
+        do {
+            // Ignores the flag, since it's not a repeat
+            try staff.insertMeasure(measure, at: 1, beforeRepeat: false)
+            let addedMeasure = try staff.measure(at: 1)
+            let beforeMeasure = try staff.measure(at: 0)
+            let afterMeasure = try staff.measure(at: 2)
+            XCTAssertEqual(Measure(addedMeasure), measure)
+            XCTAssertEqual(Measure(beforeMeasure), measure1)
+            XCTAssertEqual(Measure(afterMeasure), measure2)
+        } catch {
+            XCTFail(String(describing: error))
+        }
+    }
+
+    func testInsertMeasureInMeasureRepeatWithWrongFlag() {
+        let measure = Measure(
+            timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
+            key: Key(noteLetter: .c))
+        do {
+            // Ignores teh flag since you can only insert it into the repeat
+            try staff.insertMeasure(measure, at: 6, beforeRepeat: true)
+            let actualRepeat = try staff.measureRepeat(at: 5)
+            let expectedRepeat = try MeasureRepeat(measures: [measure4, measure])
+            XCTAssertEqual(actualRepeat, expectedRepeat)
+        } catch {
+            XCTFail(String(describing: error))
+        }
+    }
+
+    // MARK: - insertRepeat(_:, at:)
+    // MARK: Failures
+
+    func testInsertRepeatInvalidIndex() {
+        do {
+            let measureRepeat = try MeasureRepeat(measures: [measure4])
+            try staff.insertRepeat(measureRepeat, at: 50)
+            shouldFail()
+        } catch StaffError.measureIndexOutOfRange {
+        } catch {
+            expected(StaffError.measureIndexOutOfRange, actual: error)
+        }
+    }
+
+    func testInsertRepeatInRepeat() {
+        do {
+            let measureRepeat = try MeasureRepeat(measures: [measure5])
+            try staff.insertRepeat(measureRepeat, at: 6)
+            shouldFail()
+        } catch StaffError.cannotInsertRepeatWhereOneAlreadyExists {
+        } catch {
+            expected(StaffError.cannotInsertRepeatWhereOneAlreadyExists, actual: error)
+        }
+    }
+
+    // MARK: Successes
+
+    func testInsertRepeatSingleMeasure() {
+        do {
+            let measureRepeat = try MeasureRepeat(measures: [measure4])
+            try staff.insertRepeat(measureRepeat, at: 1)
+            let beforeRepeat = try staff.measure(at: 0)
+            let actualRepeat = try staff.measureRepeat(at: 1)
+            let afterRepeat = try staff.measure(at: 3)
+            XCTAssertEqual(Measure(beforeRepeat), measure1)
+            XCTAssertEqual(Measure(afterRepeat), measure2)
+            XCTAssertEqual(actualRepeat, measureRepeat)
+        } catch {
+            XCTFail(String(describing: error))
+        }
+    }
+
+    func testInsertRepeatBeforeOtherRepeat() {
+        do {
+            let measureRepeat = try MeasureRepeat(measures: [measure5])
+            try staff.insertRepeat(measureRepeat, at: 5)
+            let beforeRepeat = try staff.measure(at: 4)
+            let actualRepeat = try staff.measureRepeat(at: 5)
+            let afterRepeat = try staff.measureRepeat(at: 7)
+            XCTAssertEqual(Measure(beforeRepeat), measure5)
+            XCTAssertEqual(afterRepeat, repeat1)
+            XCTAssertEqual(actualRepeat, measureRepeat)
+        } catch {
+            XCTFail(String(describing: error))
+        }
     }
 
     // MARK: - startTieFromNote(at:, inMeasureAt:)
@@ -141,7 +353,7 @@ class StaffTests: XCTestCase {
             XCTAssert(firstNote.tie == .begin)
             XCTAssert(secondNote.tie == .end)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -159,7 +371,7 @@ class StaffTests: XCTestCase {
             XCTAssert(secondNote.tie == .beginAndEnd)
             XCTAssert(thirdNote.tie == .end)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -174,7 +386,7 @@ class StaffTests: XCTestCase {
             XCTAssert(firstNote.tie == .begin)
             XCTAssert(secondNote.tie == .end)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -190,7 +402,7 @@ class StaffTests: XCTestCase {
             XCTAssert(firstNote.tie == .begin)
             XCTAssert(secondNote.tie == .end)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -206,7 +418,7 @@ class StaffTests: XCTestCase {
             XCTAssert(firstNote.tie == .begin)
             XCTAssert(secondNote.tie == .end)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -222,7 +434,7 @@ class StaffTests: XCTestCase {
             XCTAssert(firstNote.tie == .begin)
             XCTAssert(secondNote.tie == .end)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -238,7 +450,7 @@ class StaffTests: XCTestCase {
             XCTAssert(firstNote.tie == .begin)
             XCTAssert(secondNote.tie == .end)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -253,7 +465,7 @@ class StaffTests: XCTestCase {
             XCTAssert(firstNote.tie == .begin)
             XCTAssert(secondNote.tie == .end)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -268,7 +480,7 @@ class StaffTests: XCTestCase {
             XCTAssert(firstNote.tie == .begin)
             XCTAssert(secondNote.tie == .end)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -285,7 +497,7 @@ class StaffTests: XCTestCase {
             XCTAssert(firstNote.tie == .begin)
             XCTAssert(secondNote.tie == .end)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -321,7 +533,7 @@ class StaffTests: XCTestCase {
             let firstNote = measure.notes[0] as! Note
             XCTAssertNil(firstNote.tie)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -335,7 +547,7 @@ class StaffTests: XCTestCase {
             XCTAssertNil(firstNote.tie)
             XCTAssertNil(secondNote.tie)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -350,7 +562,7 @@ class StaffTests: XCTestCase {
             XCTAssertEqual(firstNote.tie, .begin)
             XCTAssertEqual(secondNote.tie, .end)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -366,7 +578,7 @@ class StaffTests: XCTestCase {
             XCTAssertNil(firstNote.tie)
             XCTAssertNil(secondNote.tie)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -382,7 +594,7 @@ class StaffTests: XCTestCase {
             XCTAssertNil(firstNote.tie)
             XCTAssertNil(secondNote.tie)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -398,7 +610,7 @@ class StaffTests: XCTestCase {
             XCTAssertNil(firstNote.tie)
             XCTAssertNil(secondNote.tie)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -414,7 +626,7 @@ class StaffTests: XCTestCase {
             XCTAssertNil(firstNote.tie)
             XCTAssertNil(secondNote.tie)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -431,7 +643,7 @@ class StaffTests: XCTestCase {
             XCTAssertNil(firstNote.tie)
             XCTAssertNil(secondNote.tie)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -448,7 +660,7 @@ class StaffTests: XCTestCase {
             XCTAssertNil(firstNote.tie)
             XCTAssertNil(secondNote.tie)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -467,7 +679,7 @@ class StaffTests: XCTestCase {
             XCTAssert(secondNote.tie == .end)
             XCTAssertNil(thirdNote.tie)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -492,7 +704,7 @@ class StaffTests: XCTestCase {
             XCTAssertEqual(indexes.notesHolderIndex, 2)
             XCTAssertNil(indexes.repeatMeasureIndex)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -502,7 +714,7 @@ class StaffTests: XCTestCase {
             XCTAssertEqual(indexes.notesHolderIndex, 6)
             XCTAssertEqual(indexes.repeatMeasureIndex, 1)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -512,7 +724,7 @@ class StaffTests: XCTestCase {
             XCTAssertEqual(indexes.notesHolderIndex, 6)
             XCTAssertEqual(indexes.repeatMeasureIndex, 2)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -522,7 +734,7 @@ class StaffTests: XCTestCase {
             XCTAssertEqual(indexes.notesHolderIndex, 7)
             XCTAssertNil(indexes.repeatMeasureIndex)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -557,7 +769,7 @@ class StaffTests: XCTestCase {
             let expected = staff.notesHolders[5]
             XCTAssertEqual(actual as? MeasureRepeat, expected as? MeasureRepeat)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -567,7 +779,7 @@ class StaffTests: XCTestCase {
             let expected = staff.notesHolders[6]
             XCTAssertEqual(actual as? MeasureRepeat, expected as? MeasureRepeat)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -577,7 +789,7 @@ class StaffTests: XCTestCase {
             let expected = staff.notesHolders[5]
             XCTAssertEqual(actual as? MeasureRepeat, expected as? MeasureRepeat)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -587,7 +799,7 @@ class StaffTests: XCTestCase {
             let expected = staff.notesHolders[6]
             XCTAssertEqual(actual as? MeasureRepeat, expected as? MeasureRepeat)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -597,7 +809,7 @@ class StaffTests: XCTestCase {
             let expected = staff.notesHolders[0]
             XCTAssertEqual(actual as? Measure, expected as? Measure)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -631,7 +843,7 @@ class StaffTests: XCTestCase {
             let measure = try staff.measure(at:1)
             XCTAssertEqual(measure as? Measure, staff.notesHolders[1] as? Measure)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
     
@@ -641,7 +853,7 @@ class StaffTests: XCTestCase {
             let measureRepeat = staff.notesHolders[5] as! MeasureRepeat
             XCTAssertEqual(measureThatRepeats as? RepeatedMeasure, measureRepeat.expand()[0] as? RepeatedMeasure)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
     
@@ -653,7 +865,7 @@ class StaffTests: XCTestCase {
             XCTAssertNotNil(expectedMeasure as? RepeatedMeasure)
             XCTAssertEqual(repeatedMeasure as? RepeatedMeasure, expectedMeasure as? RepeatedMeasure)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
     
@@ -685,7 +897,7 @@ class StaffTests: XCTestCase {
             let measureRepeat = try staff.measureRepeat(at:1)
             XCTAssertNil(measureRepeat)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
     
@@ -697,7 +909,7 @@ class StaffTests: XCTestCase {
             let expected = staff.notesHolders[5] as! MeasureRepeat
             XCTAssertEqual(measureRepeat, expected)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
     
@@ -707,7 +919,7 @@ class StaffTests: XCTestCase {
             let expected = staff.notesHolders[6] as! MeasureRepeat
             XCTAssertEqual(measureRepeat, expected)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
     
@@ -717,7 +929,7 @@ class StaffTests: XCTestCase {
             let expected = staff.notesHolders[5] as! MeasureRepeat
             XCTAssertEqual(measureRepeat, expected)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
     
@@ -727,7 +939,46 @@ class StaffTests: XCTestCase {
             let expected = staff.notesHolders[6] as! MeasureRepeat
             XCTAssertEqual(measureRepeat, expected)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
+    
+    // MARK: - replaceMeasure(at:, with:)
+    // MARK: Failures
+    
+    func testReplaceRepeatedMeasure() {
+        do {
+            try staff.replaceMeasure(at: 6, with: measure1)
+            shouldFail()
+        } catch StaffError.repeatedMeasureCannotBeModified {
+        } catch {
+            expected(StaffError.repeatedMeasureCannotBeModified, actual: error)
+        }
+    }
+    
+    // MARK: Successes
+    
+    func testReplaceMeasureAtIndex() {
+        do {
+            try staff.replaceMeasure(at: 0, with: measure2)
+            let replacedMeasure = Measure(try staff.measure(at: 0))
+            XCTAssertEqual(replacedMeasure, measure2)
+        } catch {
+            XCTFail(String(describing: error))
+        }
+    }
+    
+    func testReplaceMeasureWithRepeat() {
+        do {
+            try staff.replaceMeasure(at: 5, with: measure1)
+            let replacedMeasure = Measure(try staff.measure(at: 5))
+            let repeatedMeasure = Measure(try staff.measure(at: 6))
+            XCTAssertEqual(replacedMeasure, measure1)
+            XCTAssertEqual(repeatedMeasure, measure1)
+        } catch {
+            XCTFail(String(describing: error))
+        }
+    }
+    
+    
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<diagram program="umlet" version="13.3">
+<diagram program="umlet" version="14.2">
   <zoom_level>10</zoom_level>
   <element>
     <type>com.baselet.element.old.element.Class</type>
@@ -74,10 +74,9 @@ NoteLetter</panel_attributes>
       <x>200</x>
       <y>590</y>
       <w>130</w>
-      <h>50</h>
+      <h>30</h>
     </coordinates>
-    <panel_attributes>&lt;&lt;enum&gt;&gt;
-NoteDuration</panel_attributes>
+    <panel_attributes>NoteDuration</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -531,10 +530,35 @@ ImmutableMeasure</panel_attributes>
       <x>60</x>
       <y>300</y>
       <w>130</w>
-      <h>60</h>
+      <h>50</h>
     </coordinates>
-    <panel_attributes>MeasureRepeat can generate this
+    <panel_attributes>MeasureRepeat 
+can generate this
 bg=orange</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>330</x>
+      <y>700</y>
+      <w>210</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;enum&gt;&gt;
+MeasureDurationValidator</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>370</x>
+      <y>750</y>
+      <w>130</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;enum&gt;&gt;
+CompletionState</panel_attributes>
     <additional_attributes/>
   </element>
 </diagram>

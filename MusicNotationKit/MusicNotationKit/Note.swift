@@ -13,7 +13,6 @@ public struct Note {
 
     public let isRest: Bool
 
-    public var dot: Dot?
     public var accent: Accent?
     public var isStaccato: Bool = false
     public var dynamics: Dynamics?
@@ -87,21 +86,20 @@ public struct Note {
     }
 }
 
-extension Note: Equatable {}
-
-public func ==(lhs: Note, rhs: Note) -> Bool {
-    if lhs.noteDuration == rhs.noteDuration &&
-        lhs.tones == rhs.tones &&
-        lhs.isRest == rhs.isRest &&
-        lhs.dot == rhs.dot &&
-        lhs.accent == rhs.accent &&
-        lhs.isStaccato == rhs.isStaccato &&
-        lhs.dynamics == rhs.dynamics &&
-        lhs.striking == rhs.striking &&
-        lhs.tie == rhs.tie {
-        return true
-    } else {
-        return false
+extension Note: Equatable {
+    public static func ==(lhs: Note, rhs: Note) -> Bool {
+        if lhs.noteDuration == rhs.noteDuration &&
+            lhs.tones == rhs.tones &&
+            lhs.isRest == rhs.isRest &&
+            lhs.accent == rhs.accent &&
+            lhs.isStaccato == rhs.isStaccato &&
+            lhs.dynamics == rhs.dynamics &&
+            lhs.striking == rhs.striking &&
+            lhs.tie == rhs.tie {
+            return true
+        } else {
+            return false
+        }
     }
 }
 
@@ -122,16 +120,10 @@ extension Note: CustomDebugStringConvertible {
                 tonesString = ""
             }
         }
-        let dotString: String
-        if let dot = dot {
-            dotString = "\(dot)"
-        } else {
-            dotString = ""
-        }
-        return "\(tie == .end || tie == .beginAndEnd ? "_" : "")\(noteDuration)\(dotString)\(tonesString)\(isRest ? "R" : "")\(tie == .begin || tie == .beginAndEnd ? "_" : "")"
+        return "\(tie == .end || tie == .beginAndEnd ? "_" : "")\(noteDuration)\(tonesString)\(isRest ? "R" : "")\(tie == .begin || tie == .beginAndEnd ? "_" : "")"
     }
 }
 
-public enum NoteError: ErrorProtocol {
+public enum NoteError: Error {
     case invalidRequestedTieState
 }

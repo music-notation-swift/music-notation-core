@@ -20,17 +20,38 @@ public struct Tuplet: NoteCollection {
     /// The number of notes that this tuplet fits in the space of
     public let noteTimingCount: Int
 
+    public static let standardRatios = [
+        2: 3,
+        3: 2,
+        4: 3,
+        5: 4,
+        6: 4,
+        7: 4,
+        8: 6,
+        9: 8,
+    ]
+
     public init(_ count: Int, _ baseNoteDuration: NoteDuration, inSpaceOf baseCount: Int? = nil, notes: [NoteCollection]) throws {
         self.notes = notes
         noteDuration = baseNoteDuration
-        noteTimingCount = baseCount
+        if let baseCount = baseCount {
+            noteTimingCount = baseCount
+        } else if let baseCount = Tuplet.standardRatios[count] {
+            noteTimingCount = baseCount
+        } else {
+            throw TupletError.countHasNoStandardRatio
+        }
     }
 
     // MARK: - Methods
     // MARK: Public
 
-    public mutating func replaceNote(at index: Int, with notes: [Note]) throws {
+    public mutating func replaceNote(at index: Int, with note: Note) throws {
         notes[index] = note
+    }
+
+    public mutating func replaceNote(at index: Int, with notes: [Note]) throws {
+
     }
 
     public mutating func replaceNote(at index: Int, with tuplet: Tuplet) throws {
@@ -67,7 +88,6 @@ extension Tuplet: CustomDebugStringConvertible {
 }
 
 public enum TupletError: Error {
-    case restsNotValid
-    case notSameDuration
     case invalidIndex
+    case countHasNoStandardRatio
 }

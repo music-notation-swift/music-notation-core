@@ -49,7 +49,7 @@ class TupletTests: XCTestCase {
         // count specified is something not in 2-9 range and no base count specified
     }
 
-    func testInitFailForNoEmptyNotes() {
+    func testInitFailForEmptyNotes() {
 
     }
 

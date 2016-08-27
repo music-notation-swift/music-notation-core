@@ -52,7 +52,7 @@ class NoteTests: XCTestCase {
             try note.modifyTie(.begin)
             XCTAssert(note.tie == .begin)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -62,7 +62,7 @@ class NoteTests: XCTestCase {
             try note.modifyTie(.end)
             XCTAssert(note.tie == .end)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -72,7 +72,7 @@ class NoteTests: XCTestCase {
             try note.modifyTie(.beginAndEnd)
             XCTAssert(note.tie == .beginAndEnd)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -82,7 +82,7 @@ class NoteTests: XCTestCase {
             try note.modifyTie(.end)
             XCTAssert(note.tie == .beginAndEnd)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -92,7 +92,7 @@ class NoteTests: XCTestCase {
             try note.modifyTie(.begin)
             XCTAssert(note.tie == .beginAndEnd)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -102,7 +102,7 @@ class NoteTests: XCTestCase {
             try note.modifyTie(.begin)
             XCTAssert(note.tie == .begin)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -112,7 +112,7 @@ class NoteTests: XCTestCase {
             try note.modifyTie(.end)
             XCTAssert(note.tie == .end)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 

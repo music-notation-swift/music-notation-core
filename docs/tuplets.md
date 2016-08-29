@@ -24,7 +24,7 @@ There are certain ratios that are standard, like a triplet would usually have a 
 
 There should only be a need to list the standard ratios for 2-9. In this case, we can just list them in `Tuplet` struct. This way, if the second number is not specific in the initializer and the first number is one of these, we can fill in the second number according to th static list of default ratios.
 
-**Open** Can we have one standard ratio per number? Seems like it may the standard may be based on the time signature.
+**Open**: Can we have one standard ratio per number? Seems like the standard may be based on the time signature. If not, we can use the following standard ratios.
 
 Right now the assumption is that these are the standard ratios:
 

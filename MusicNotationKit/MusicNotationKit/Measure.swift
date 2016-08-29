@@ -24,7 +24,7 @@ public struct Measure: ImmutableMeasure, Equatable {
     private var noteCollectionIndexes: [[NoteCollectionIndex]] = [[NoteCollectionIndex]]()
 
     public init(timeSignature: TimeSignature, key: Key) {
-        self.init(timeSignature: timeSignature, key: key, notes: [[]])
+        self.init(timeSignature: timeSignature, key: key, notes: [[NoteCollection]]())
     }
 
     public init(timeSignature: TimeSignature, key: Key, notes: [[NoteCollection]]) {

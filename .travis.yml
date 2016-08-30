@@ -6,3 +6,5 @@ script:
   xcodebuild test -workspace MusicNotation.xcworkspace -scheme MusicNotationKit -sdk macosx
 after_success:
   - bash <(curl -s https://codecov.io/bash)
+notifications:
+  slack: musicnotationswift:GAuOCY6YxRaZHrDvGRXRF9Im

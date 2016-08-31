@@ -253,7 +253,7 @@ public struct Staff {
 					secondNote = tuplet.notes[tupletIndex]
 				}
 				
-				if firstNote != secondNote {
+				if firstNote.tones != secondNote.tones {
 					throw StaffError.noSameNoteTie
 				}
 			}

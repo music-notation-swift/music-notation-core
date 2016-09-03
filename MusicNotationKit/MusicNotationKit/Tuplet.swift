@@ -115,7 +115,7 @@ extension Tuplet: NoteCollection {
 
 extension Tuplet: CustomDebugStringConvertible {
     public var debugDescription: String {
-        return "\(notes)"
+        return "\(noteCount)\(notes)"
     }
 }
 

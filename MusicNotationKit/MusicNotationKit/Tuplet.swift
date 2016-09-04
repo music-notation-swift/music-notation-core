@@ -74,6 +74,37 @@ public struct Tuplet: NoteCollection {
     // MARK: - Methods
     // MARK: Public
 
+    public func note(at index: Int) throws -> Note {
+        guard index >= 0 && index < flatIndexes.count else {
+            throw TupletError.invalidIndex
+        }
+        let fullIndexes = flatIndexes[index]
+        var finalTuplet: Tuplet? = self
+        guard fullIndexes.count != 0 else {
+            assertionFailure("one of the index arrays was empty")
+            throw TupletError.internalError
+        }
+
+        // nested function to get a note from the `finalTuplet` using the indexes last index
+        func note(from indexes: [Int]) throws -> Note {
+            if let lastIndex = fullIndexes.last,
+                let note = finalTuplet?.notes[lastIndex] as? Note {
+                return note
+            } else {
+                assertionFailure("last index was not a note")
+                throw TupletError.internalError
+            }
+        }
+
+        guard fullIndexes.count != 1 else {
+            return try note(from: fullIndexes)
+        }
+        for tupletIndex in 0..<fullIndexes.count - 1 {
+            finalTuplet = finalTuplet?.notes[fullIndexes[tupletIndex]] as? Tuplet
+        }
+        return try note(from: fullIndexes)
+    }
+
     public mutating func replaceNote(at index: Int, with note: Note) throws {
         throw NSError()
     }
@@ -157,4 +188,5 @@ public enum TupletError: Error {
     case countMustBeLargerThan1
     case notesDoNotFillTuplet
     case notesOverfillTuplet
+    case internalError
 }

@@ -272,7 +272,7 @@ class TupletTests: XCTestCase {
             // This is worth 4 quarter notes
             let quintuplet = try? Tuplet(
                 5,
-                .quarterNote,
+                .quarter,
                 notes: [
                     quarterNote1, quarterNote2, quarterNote3, quarterNote1, quarterNote2
                 ])
@@ -283,7 +283,7 @@ class TupletTests: XCTestCase {
                 .quarter,
                 notes: [
                     quarterNote1, quarterNote2, quarterNote3, quarterNote1,
-                    quintuplet
+                    quintuplet!
                 ])
         } catch TupletError.notesOverfillTuplet {
         } catch {
@@ -295,7 +295,7 @@ class TupletTests: XCTestCase {
         do {
             let triplet = try? Tuplet(
                 3,
-                .quarterNote,
+                .quarter,
                 notes: [
                     quarterNote1, quarterNote2, quarterNote3
                 ])
@@ -319,41 +319,59 @@ class TupletTests: XCTestCase {
 		do {
 			// Test 2 - 9
 			let _ = try Tuplet(
+                2,
+                .quarter,
                 notes: [
                     quarterNote1, quarterNote2
                 ])
 			let _ = try Tuplet(
+                3,
+                .quarter,
                 notes: [
                     quarterNote1, quarterNote2, quarterNote3
                 ])
             let _ = try Tuplet(
+                4,
+                .quarter,
                 notes: [
                     quarterNote1, quarterNote2, quarterNote3, quarterNote1
                 ])
             let _ = try Tuplet(
+                5,
+                .quarter,
                 notes: [
                     quarterNote1, quarterNote2, quarterNote3, quarterNote1, quarterNote2
                 ])
             let _ = try Tuplet(
+                6,
+                .quarter,
                 notes: [
                     quarterNote1, quarterNote2, quarterNote3, quarterNote1, quarterNote2, quarterNote3
                 ])
             let _ = try Tuplet(
+                7,
+                .quarter,
                 notes: [
                     quarterNote1, quarterNote2, quarterNote3, quarterNote1, quarterNote2, quarterNote3, quarterNote1
                 ])
             let _ = try Tuplet(
+                8,
+                .quarter,
                 notes: [
                     quarterNote1, quarterNote2, quarterNote3, quarterNote1, quarterNote2, quarterNote3, quarterNote1,
                     quarterNote2
                 ])
             let _ = try Tuplet(
+                9,
+                .quarter,
                 notes: [
                     quarterNote1, quarterNote2, quarterNote3, quarterNote1, quarterNote2, quarterNote3, quarterNote1,
                     quarterNote2, quarterNote3
                 ])
 			// Test with a chord
 			let _ = try Tuplet(
+                2,
+                .quarter,
                 notes: [
                     quarterNote1, quarterChord
                 ])
@@ -448,7 +466,7 @@ class TupletTests: XCTestCase {
         do {
             let _ = try Tuplet(
                 4,
-                dottedQuarterNote,
+                NoteDuration(value: .quarter, dotCount: 1),
                 inSpaceOf: 2,
                 notes: [
                     dottedQuarterNote, dottedQuarterNote, dottedQuarterNote, dottedQuarterNote,
@@ -488,7 +506,7 @@ class TupletTests: XCTestCase {
                 .eighth,
                 inSpaceOf: 9,
                 notes: [
-                    quintuplet!, eighthNote, eighthNote, eighthNote,
+                    quintuplet, eighthNote, eighthNote, eighthNote,
                     eighthNote, eighthNote, eighthNote, eighthNote
                 ])
         } catch {

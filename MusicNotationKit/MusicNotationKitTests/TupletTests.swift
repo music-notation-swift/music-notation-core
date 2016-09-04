@@ -27,14 +27,14 @@ class TupletTests: XCTestCase {
 	
     override func setUp() {
         super.setUp()
-		quarterNote1 = Note(noteDuration: .quarter, tone: tone1)
-		quarterNote2 = Note(noteDuration: .quarter, tone: tone1)
-		quarterNote3 = Note(noteDuration: .quarter, tone: tone2)
-		eighthNote = Note(noteDuration: .eighth, tone: tone1)
-		quarterChord = Note(noteDuration: .quarter, tones: [tone1, tone2, tone3])
-		eighthChord = Note(noteDuration: .eighth, tones: [tone1, tone2, tone3])
+        quarterNote1 = Note(noteDuration: .quarter, tone: tone1)
+        quarterNote2 = Note(noteDuration: .quarter, tone: tone1)
+        quarterNote3 = Note(noteDuration: .quarter, tone: tone2)
+        eighthNote = Note(noteDuration: .eighth, tone: tone1)
+        quarterChord = Note(noteDuration: .quarter, tones: [tone1, tone2, tone3])
+        eighthChord = Note(noteDuration: .eighth, tones: [tone1, tone2, tone3])
     }
-    
+
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()

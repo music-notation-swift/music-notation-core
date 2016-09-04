@@ -12,14 +12,24 @@
 public struct Tuplet: NoteCollection {
 
     /// The notes that make up the tuplet. They can be other tuplets.
-    public private(set) var notes: [NoteCollection]
+    public private(set) var notes: [NoteCollection] {
+        didSet {
+            flatIndexes = recomputeFlatIndexes()
+        }
+    }
     /// The number of notes of the specified duration that this tuplet contains
     public var noteCount: Int { return notes.count }
     /// The duration of the notes that define this tuplet
     public let noteDuration: NoteDuration
     /// The number of notes that this tuplet fits in the space of
     public let noteTimingCount: Int
+    /// A 2-dimensional array that can be used to index into every note in the tuplet within compound tuplets as well.
+    public var flatIndexes: [[Int]] = [[Int]]()
 
+    /**
+     This maps the standard number of notes in the tuplet (`noteCount`), to the number of notes the tuplet should fit
+     in the space of (`noteTimingCount`).
+     */
     public static let standardRatios = [
         2: 3,
         3: 2,
@@ -31,7 +41,25 @@ public struct Tuplet: NoteCollection {
         9: 8,
     ]
 
+    /**
+     There are two ways you can initialize a `Tuplet`: 
+     
+     1) If you would like to create a tuplet with a count between
+        2 and 9, inclusive, and wish to use the standard ratio associated with that count, then you can specify only the
+        `count`, `baseDuration` and `notes`. Example:
+        ````
+        Tuplet(3, .quarter, [quarterNote1, quarterNote2, quarterNote3])
+        ````
+     2) If you would like specify a non-standard ratio or a `count` larger than 9, then you must specify the
+        `baseCount` parameter. Example:
+        ````
+        Tuplet(35, .sixteenth, inSpaceOf: 25, notes: [sixteenth1, ... sixteenth35])
+        ````
+     */
     public init(_ count: Int, _ baseNoteDuration: NoteDuration, inSpaceOf baseCount: Int? = nil, notes: [NoteCollection]) throws {
+        guard count > 1 else {
+            throw TupletError.countMustBeLargerThan1
+        }
         self.notes = notes
         noteDuration = baseNoteDuration
         if let baseCount = baseCount {
@@ -47,23 +75,59 @@ public struct Tuplet: NoteCollection {
     // MARK: Public
 
     public mutating func replaceNote(at index: Int, with note: Note) throws {
-        notes[index] = note
+        throw NSError()
     }
 
     public mutating func replaceNote(at index: Int, with notes: [Note]) throws {
-
+        throw NSError()
     }
 
     public mutating func replaceNote(at index: Int, with tuplet: Tuplet) throws {
+        throw NSError()
+    }
 
+    public mutating func replaceNotes(in range: Range<Int>, with notes: Note) throws {
+        throw NSError()
     }
 
     public mutating func replaceNotes(in range: Range<Int>, with notes: [Note]) throws {
-
+        throw NSError()
     }
 
     public mutating func replaceNotes(in range: Range<Int>, with tuplet: Tuplet) throws {
+        throw NSError()
+    }
 
+    // MARK: Private
+
+    internal mutating func replaceNote(at index: Int, with noteCollection: NoteCollection) throws {
+        throw NSError()
+    }
+
+    internal mutating func replaceNote(at index: Int, with noteCollections: [NoteCollection]) throws {
+        throw NSError()
+    }
+
+    internal mutating func replaceNotes(in range: Range<Int>, with noteCollection: NoteCollection) throws {
+        throw NSError()
+    }
+
+    internal mutating func replaceNotes(in range: Range<Int>, with noteCollections: [NoteCollection]) throws {
+        throw NSError()
+    }
+
+    internal mutating func recomputeFlatIndexes(parentIndexes: [Int] = [Int]()) -> [[Int]] {
+        flatIndexes = [[Int]]()
+        for (index, noteCollection) in notes.enumerated() {
+            if noteCollection is Note {
+                let newIndexes = [parentIndexes.flatMap { $0 }, [index]].flatMap { $0 }
+                flatIndexes.append(newIndexes)
+            } else if var tuplet = noteCollection as? Tuplet {
+                let parents = [parentIndexes, [index]].flatMap { $0 }
+                flatIndexes.append(contentsOf: tuplet.recomputeFlatIndexes(parentIndexes: parents))
+            }
+        }
+        return flatIndexes
     }
 }
 
@@ -90,4 +154,7 @@ extension Tuplet: CustomDebugStringConvertible {
 public enum TupletError: Error {
     case invalidIndex
     case countHasNoStandardRatio
+    case countMustBeLargerThan1
+    case notesDoNotFillTuplet
+    case notesOverfillTuplet
 }

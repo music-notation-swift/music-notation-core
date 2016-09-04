@@ -60,6 +60,17 @@ public struct Tuplet: NoteCollection {
         guard count > 1 else {
             throw TupletError.countMustBeLargerThan1
         }
+        let notesAmount = notes.reduce(0.0) { prev, noteCollection in
+            return Double(prev) + noteCollection.noteDuration.equal(to: baseNoteDuration) *
+                Double(noteCollection.noteTimingCount)
+        }
+        guard notesAmount == Double(count) else {
+            if notesAmount < Double(count) {
+                throw TupletError.notesDoNotFillTuplet
+            } else {
+                throw TupletError.notesOverfillTuplet
+            }
+        }
         self.notes = notes
         noteDuration = baseNoteDuration
         if let baseCount = baseCount {

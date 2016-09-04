@@ -533,37 +533,119 @@ class TupletTests: XCTestCase {
     // MARK: Failures
 
     func testReplaceNoteWithNoteTooLong() {
-
+        do {
+            var tuplet = try Tuplet(3, .eighth, notes: [eighthNote, eighthNote, eighthNote])
+            try tuplet.replaceNote(at: 1, with: quarterNote1)
+            shouldFail()
+        } catch TupletError.replacingCollectionNotSameDuration {
+        } catch {
+            expected(TupletError.replacingCollectionNotSameDuration, actual: error)
+        }
     }
 
     func testReplaceNoteWithNoteTooShort() {
-
+        do {
+            var tuplet = try Tuplet(3, .quarter, notes: [quarterNote1, quarterNote2, quarterNote3])
+            try tuplet.replaceNote(at: 0, with: eighthNote)
+            shouldFail()
+        } catch TupletError.replacingCollectionNotSameDuration {
+        } catch {
+            expected(TupletError.replacingCollectionNotSameDuration, actual: error)
+        }
     }
 
     func testReplaceNoteInTupletWithNoteTooShort() {
-
+        do {
+            let triplet = try? Tuplet(3, .quarter, notes: [quarterNote1, quarterNote2, quarterNote3])
+            XCTAssertNotNil(triplet)
+            var tuplet = try Tuplet(5, .quarter, notes: [
+                triplet!, quarterNote1, quarterNote2, quarterNote3
+                ])
+            try tuplet.replaceNote(at: 1, with: eighthNote)
+            shouldFail()
+        } catch TupletError.replacingCollectionNotSameDuration {
+        } catch {
+            expected(TupletError.replacingCollectionNotSameDuration, actual: error)
+        }
     }
 
     func testReplaceNoteInTupletWithNoteTooLong() {
-
+        do {
+            let triplet = try? Tuplet(3, .eighth, notes: [eighthNote, eighthNote, eighthNote])
+            XCTAssertNotNil(triplet)
+            var tuplet = try Tuplet(5, .eighth, notes: [
+                triplet!, eighthNote, eighthNote, eighthNote
+                ])
+            try tuplet.replaceNote(at: 1, with: quarterNote1)
+            shouldFail()
+        } catch TupletError.replacingCollectionNotSameDuration {
+        } catch {
+            expected(TupletError.replacingCollectionNotSameDuration, actual: error)
+        }
     }
 
     // MARK: Successes
 
     func testReplaceNoteWithRestOfSameDuration() {
-
+        do {
+            var tuplet = try Tuplet(3, .quarter, notes: [quarterNote1, quarterNote2, quarterNote3])
+            try tuplet.replaceNote(at: 0, with: quarterRest)
+            XCTAssertEqual(try tuplet.note(at: 0), quarterRest)
+            XCTAssertEqual(try tuplet.note(at: 1), quarterNote2)
+            XCTAssertEqual(try tuplet.note(at: 2), quarterNote3)
+        } catch {
+            XCTFail(String(describing: error))
+        }
     }
 
     func testReplaceNoteInTupletWithRestOfSameDuration() {
-
+        do {
+            let triplet = try? Tuplet(3, .quarter, notes: [quarterNote1, quarterNote2, quarterNote3])
+            XCTAssertNotNil(triplet)
+            var tuplet = try Tuplet(5, .quarter, notes: [
+                triplet!, quarterNote1, quarterNote2, quarterNote3
+                ])
+            try tuplet.replaceNote(at: 1, with: quarterRest)
+            XCTAssertEqual(try tuplet.note(at: 0), quarterNote1)
+            XCTAssertEqual(try tuplet.note(at: 1), quarterRest)
+            XCTAssertEqual(try tuplet.note(at: 2), quarterNote3)
+            XCTAssertEqual(try tuplet.note(at: 3), quarterNote1)
+            XCTAssertEqual(try tuplet.note(at: 4), quarterNote2)
+            XCTAssertEqual(try tuplet.note(at: 5), quarterNote3)
+        } catch {
+            XCTFail(String(describing: error))
+        }
     }
 
     func testReplaceNoteWithNoteOfSameDuration() {
-
+        do {
+            var tuplet = try Tuplet(3, .quarter, notes: [quarterNote1, quarterNote2, quarterNote3])
+            try tuplet.replaceNote(at: 0, with: quarterNote3)
+            XCTAssertEqual(try tuplet.note(at: 0), quarterNote3)
+            XCTAssertEqual(try tuplet.note(at: 1), quarterNote2)
+            XCTAssertEqual(try tuplet.note(at: 2), quarterNote3)
+        } catch {
+            XCTFail(String(describing: error))
+        }
     }
 
-    func testReplaceNoteWithNotesOfShorterDuration() {
-
+    func testReplaceNoteInTupletWithNoteOfSameDuration() {
+        do {
+            let triplet = try? Tuplet(3, .quarter, notes: [quarterNote1, quarterNote2, quarterNote3])
+            XCTAssertNotNil(triplet)
+            var tuplet = try Tuplet(5, .quarter, notes: [
+                triplet!, quarterNote1, quarterNote2, quarterNote3
+                ])
+            try tuplet.replaceNote(at: 1, with: quarterNote1)
+            XCTAssertEqual(try tuplet.note(at: 0), quarterNote1)
+            XCTAssertEqual(try tuplet.note(at: 1), quarterNote1)
+            XCTAssertEqual(try tuplet.note(at: 2), quarterNote3)
+            XCTAssertEqual(try tuplet.note(at: 3), quarterNote1)
+            XCTAssertEqual(try tuplet.note(at: 4), quarterNote2)
+            XCTAssertEqual(try tuplet.note(at: 5), quarterNote3)
+        } catch {
+            XCTFail(String(describing: error))
+        }
     }
 
     // MARK: - replaceNote(at:with:[Note])

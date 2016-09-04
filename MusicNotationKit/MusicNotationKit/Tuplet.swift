@@ -80,6 +80,7 @@ public struct Tuplet: NoteCollection {
         } else {
             throw TupletError.countHasNoStandardRatio
         }
+        flatIndexes = recomputeFlatIndexes()
     }
 
     // MARK: - Methods
@@ -117,7 +118,7 @@ public struct Tuplet: NoteCollection {
     }
 
     public mutating func replaceNote(at index: Int, with note: Note) throws {
-        throw NSError()
+        try replaceNote(at: index, with: note as NoteCollection)
     }
 
     public mutating func replaceNote(at index: Int, with notes: [Note]) throws {
@@ -125,7 +126,7 @@ public struct Tuplet: NoteCollection {
     }
 
     public mutating func replaceNote(at index: Int, with tuplet: Tuplet) throws {
-        throw NSError()
+        try replaceNote(at: index, with: tuplet)
     }
 
     public mutating func replaceNotes(in range: Range<Int>, with notes: Note) throws {
@@ -143,7 +144,29 @@ public struct Tuplet: NoteCollection {
     // MARK: Private
 
     internal mutating func replaceNote(at index: Int, with noteCollection: NoteCollection) throws {
-        throw NSError()
+        // validate they are the same duration
+        let noteToReplace = try note(at: index)
+        let noteCollectionDuration = noteToReplace.noteDuration.equal(to: noteCollection.noteDuration) *
+            Double(noteCollection.noteTimingCount)
+        guard noteCollectionDuration == 1 else {
+            throw TupletError.replacingCollectionNotSameDuration
+        }
+        let fullIndexes = flatIndexes[index]
+        try replaceNote(at: fullIndexes, with: noteCollection)
+    }
+
+    private mutating func replaceNote(at indexes: [Int], with newCollection: NoteCollection) throws {
+        guard indexes.count != 1 else {
+            notes[indexes[0]] = newCollection
+            return
+        }
+        guard var tuplet = notes[indexes[0]] as? Tuplet else {
+            assertionFailure("all indexes before the last should be tuplets. Must be an error in flatIndexes")
+            throw TupletError.internalError
+        }
+        let slice = Array(indexes[1..<indexes.count])
+        try tuplet.replaceNote(at: slice, with: newCollection)
+        notes[indexes[0]] = tuplet
     }
 
     internal mutating func replaceNote(at index: Int, with noteCollections: [NoteCollection]) throws {
@@ -199,5 +222,6 @@ public enum TupletError: Error {
     case countMustBeLargerThan1
     case notesDoNotFillTuplet
     case notesOverfillTuplet
+    case replacingCollectionNotSameDuration
     case internalError
 }

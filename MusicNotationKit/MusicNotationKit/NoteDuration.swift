@@ -82,6 +82,48 @@ public struct NoteDuration {
     public static let sixtyFourth = NoteDuration(value: .sixtyFourth)
     public static let oneTwentyEighth = NoteDuration(value: .oneTwentyEighth)
     public static let twoFiftySixth = NoteDuration(value: .twoFiftySixth)
+
+    public static func number(of noteDuration: NoteDuration, equalTo baseNoteDuration: NoteDuration) -> Double {
+        let mathValues: [NoteDuration.Value: Int] = [
+            .long: 2048,
+            .large: 1024,
+            .doubleWhole: 512,
+            .whole: 256,
+            .half: 128,
+            .quarter: 64,
+            .eighth: 32,
+            .sixteenth: 16,
+            .thirtySecond: 8,
+            .sixtyFourth: 4,
+            .oneTwentyEighth: 2,
+            .twoFiftySixth: 1
+        ]
+
+        func mathValue(for duration: NoteDuration) -> Int {
+            var mathValue = mathValues[duration.value] ?? 0
+            var dotValue = mathValue / 2
+            for _ in 0..<duration.dotCount {
+                mathValue += dotValue
+                dotValue = dotValue / 2
+            }
+            return mathValue
+        }
+
+        let baseMathValue = mathValue(for: baseNoteDuration)
+        let equalityMathValue = mathValue(for: noteDuration)
+
+        let fullNotes = Double(baseMathValue / equalityMathValue)
+        if fullNotes >= 1 {
+            let decimalValue = Double(baseMathValue % equalityMathValue) / Double(baseMathValue)
+            return fullNotes + decimalValue
+        } else {
+            return Double(baseMathValue) / Double(equalityMathValue)
+        }
+    }
+
+    public func equal(to noteDuration: NoteDuration) -> Double {
+        return NoteDuration.number(of: noteDuration, equalTo: self)
+    }
 }
 
 extension NoteDuration: Hashable {

@@ -8,6 +8,14 @@
 
 import XCTest
 
+func assertNoErrorThrown<T>(_ expression: @autoclosure () throws -> T) {
+    do {
+        _ = try expression()
+    } catch {
+        XCTFail("Expected no error, but got: \(error)")
+    }
+}
+
 func expected<T>(_ expected: T, actual: Error, functionName: String = #function, lineNum: Int = #line) {
     XCTFail("Expected: \(expected), Actual: \(actual) @ \(functionName): \(lineNum)")
 }

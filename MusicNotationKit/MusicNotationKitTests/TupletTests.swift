@@ -11,18 +11,20 @@ import XCTest
 
 class TupletTests: XCTestCase {
 
-    let tone1 = Tone(accidental: .none, noteLetter: .a, octave: .octave1)
-    let tone2 = Tone(accidental: .sharp, noteLetter: .b, octave: .octave1)
-    let tone3 = Tone(accidental: .natural, noteLetter: .d, octave: .octave1)
-    let quarterRest = Note(noteDuration: .quarter)
-    let eighthRest = Note(noteDuration: .eighth)
-    var quarterNote1: Note!
-    var quarterNote2: Note!
-    var quarterNote3: Note!
-    var eighthNote: Note!
-    var quarterChord: Note!
-    var eighthChord: Note!
-
+	let tone1 = Tone(noteLetter: .a, octave: .octave1)
+	let tone2 = Tone(accidental: .sharp, noteLetter: .b, octave: .octave1)
+	let tone3 = Tone(accidental: .natural, noteLetter: .d, octave: .octave1)
+	let quarterRest = Note(noteDuration: .quarter)
+	let eighthRest = Note(noteDuration: .eighth)
+    let dottedQuarterNote = Note(noteDuration: try! NoteDuration(value: .quarter, dotCount: 1),
+                                 tone: Tone(noteLetter: .c, octave: .octave3))
+	var quarterNote1: Note!
+	var quarterNote2: Note!
+	var quarterNote3: Note!
+	var eighthNote: Note!
+	var quarterChord: Note!
+	var eighthChord: Note!
+	
     override func setUp() {
         super.setUp()
         quarterNote1 = Note(noteDuration: .quarter, tone: tone1)
@@ -41,132 +43,650 @@ class TupletTests: XCTestCase {
     // MARK: - init(notes:)
     // MARK: Failures
 
-    func testInitFailsIfHasRest() {
+    func testInitFailForCountLessThan2() {
         do {
-            let _ = try Tuplet(notes: [quarterNote1, quarterRest])
+            let _ = try Tuplet(1, .quarter, notes: [quarterNote1])
             shouldFail()
-        } catch TupletError.restsNotValid {
+        } catch TupletError.countMustBeLargerThan1 {
         } catch {
-            expected(TupletError.restsNotValid, actual: error)
+            expected(TupletError.countMustBeLargerThan1, actual: error)
         }
     }
 
-    func testInitFailsIfTooManyNotes() {
+    func testInitFailForOddCountNoBaseCount() {
+        // count specified is something not in 2-9 range and no base count specified
         do {
-            let _ = try Tuplet(notes: [quarterNote1, quarterNote2, quarterNote3, quarterNote1, quarterNote2, quarterNote3, quarterNote1, quarterNote2])
+            let _ = try Tuplet(
+                10,
+                .quarter,
+                notes: [
+                    quarterNote1, quarterNote2, quarterNote3, quarterNote1, quarterNote2,
+                    quarterNote1, quarterNote2, quarterNote3, quarterNote1, quarterNote2
+                ])
             shouldFail()
-        } catch TupletError.invalidNumberOfNotes {
+        } catch TupletError.countHasNoStandardRatio {
         } catch {
-            expected(TupletError.invalidNumberOfNotes, actual: error)
+            expected(TupletError.countHasNoStandardRatio, actual: error)
         }
     }
 
-    func testInitFailsIfTooFewNotes1() {
+    func testInitFailForEmptyNotes() {
+        // standard ratio
         do {
-            let _ = try Tuplet(notes: [quarterNote1])
+            let _ = try Tuplet(3, .eighth, notes: [])
             shouldFail()
-        } catch TupletError.invalidNumberOfNotes {
+        } catch TupletError.notesDoNotFillTuplet {
         } catch {
-            expected(TupletError.invalidNumberOfNotes, actual: error)
+            expected(TupletError.notesDoNotFillTuplet, actual: error)
+        }
+
+        // non-standard ratio
+        do {
+            let _ = try Tuplet(11, .eighth, inSpaceOf: 9, notes: [])
+            shouldFail()
+        } catch TupletError.notesDoNotFillTuplet {
+        } catch {
+            expected(TupletError.notesDoNotFillTuplet, actual: error)
         }
     }
 
-    func testInitFailsIfTooFewNotes0() {
+    func testInitFailForNotesSameDurationNotEnough() {
+        // standard ratio
         do {
-            let _ = try Tuplet(notes: [])
+            let _ = try Tuplet(3, .quarter, notes: [quarterNote1, quarterNote2])
             shouldFail()
-        } catch TupletError.invalidNumberOfNotes {
+        } catch TupletError.notesDoNotFillTuplet {
         } catch {
-            expected(TupletError.invalidNumberOfNotes, actual: error)
+            expected(TupletError.notesDoNotFillTuplet, actual: error)
+        }
+
+        // non-standard ratio
+        do {
+            let _ = try Tuplet(11, .quarter, inSpaceOf: 9, notes: [quarterNote1, quarterNote2, quarterNote3])
+            shouldFail()
+        } catch TupletError.notesDoNotFillTuplet {
+        } catch {
+            expected(TupletError.notesDoNotFillTuplet, actual: error)
         }
     }
 
-    func testInitFailsIfNonUniformDuration() {
+    func testInitFailForNotesSameDurationTooMany() {
+        // standard ratio
         do {
-            let _ = try Tuplet(notes: [quarterNote1, quarterNote2, quarterNote3, eighthNote])
+            let _ = try Tuplet(3, .quarter, notes: [quarterNote1, quarterNote2, quarterNote3, quarterNote1])
             shouldFail()
-        } catch TupletError.notSameDuration {
+        } catch TupletError.notesOverfillTuplet {
         } catch {
-            expected(TupletError.notSameDuration, actual: error)
+            expected(TupletError.notesOverfillTuplet, actual: error)
+        }
+
+        // non-standard ratio
+        do {
+            let _ = try Tuplet(
+                5,
+                .quarter,
+                inSpaceOf: 2,
+                notes: [
+                    quarterNote1, quarterNote2, quarterNote3, quarterNote1, quarterNote2, quarterNote3, quarterNote1
+                ])
+            shouldFail()
+        } catch TupletError.notesOverfillTuplet {
+        } catch {
+            expected(TupletError.notesOverfillTuplet, actual: error)
+        }
+    }
+
+    func testInitFailForNotesShorterNotEnough() {
+        // standard ratio
+        do {
+            let _ = try Tuplet(4, .quarter, notes: [eighthNote, eighthNote, quarterNote1])
+            shouldFail()
+        } catch TupletError.notesDoNotFillTuplet {
+        } catch {
+            expected(TupletError.notesDoNotFillTuplet, actual: error)
+        }
+
+        // non-standard ratio
+        do {
+            let _ = try Tuplet(
+                5,
+                .quarter,
+                inSpaceOf: 3,
+                notes: [
+                    eighthNote, eighthNote,
+                    eighthNote, eighthNote,
+                    quarterNote3
+                ])
+            shouldFail()
+        } catch TupletError.notesDoNotFillTuplet {
+        } catch {
+            expected(TupletError.notesDoNotFillTuplet, actual: error)
+        }
+    }
+
+    func testInitFailForShorterTooMany() {
+        // standard ratio
+        do {
+            let _ = try Tuplet(
+                4,
+                .quarter,
+                notes: [
+                    eighthNote, eighthNote, eighthNote, eighthNote, quarterNote1, quarterNote2, quarterNote3
+                ])
+            shouldFail()
+        } catch TupletError.notesOverfillTuplet {
+        } catch {
+            expected(TupletError.notesOverfillTuplet, actual: error)
+        }
+
+        // non-standard ratio
+        do {
+            let _ = try Tuplet(
+                5,
+                .quarter,
+                inSpaceOf: 2,
+                notes: [
+                    quarterNote1, quarterNote2, quarterNote3,
+                    eighthNote, eighthNote, quarterNote1, eighthNote
+                ])
+            shouldFail()
+        } catch TupletError.notesOverfillTuplet {
+        } catch {
+            expected(TupletError.notesOverfillTuplet, actual: error)
+        }
+    }
+
+    func testInitFailForLongerNotEnough() {
+        // standard ratio
+        do {
+            let _ = try Tuplet(4, .eighth, notes: [quarterNote1, eighthNote])
+            shouldFail()
+        } catch TupletError.notesDoNotFillTuplet {
+        } catch {
+            expected(TupletError.notesDoNotFillTuplet, actual: error)
+        }
+
+        // non-standard ratio
+        do {
+            let _ = try Tuplet(11, .eighth, inSpaceOf: 9, notes: [eighthNote, eighthNote, quarterNote1])
+            shouldFail()
+        } catch TupletError.notesDoNotFillTuplet {
+        } catch {
+            expected(TupletError.notesDoNotFillTuplet, actual: error)
+        }
+    }
+
+    func testInitFailForLongerTooMany() {
+        // standard ratio
+        do {
+            let _ = try Tuplet(
+                5,
+                .eighth,
+                notes: [
+                    eighthNote, quarterNote1, eighthNote, quarterNote2
+                ])
+            shouldFail()
+        } catch TupletError.notesOverfillTuplet {
+        } catch {
+            expected(TupletError.notesOverfillTuplet, actual: error)
+        }
+
+        // non-standard ratio
+        do {
+            let _ = try Tuplet(
+                5,
+                .eighth,
+                inSpaceOf: 2,
+                notes: [
+                    eighthNote, quarterNote1, eighthNote, quarterNote2
+                ])
+            shouldFail()
+        } catch TupletError.notesOverfillTuplet {
+        } catch {
+            expected(TupletError.notesOverfillTuplet, actual: error)
+        }
+    }
+
+    func testInitFailForSameDurationWithRestsNotEnough() {
+        // standard ratio
+        do {
+            let _ = try Tuplet(3, .quarter, notes: [quarterNote1, quarterRest])
+            shouldFail()
+        } catch TupletError.notesDoNotFillTuplet {
+        } catch {
+            expected(TupletError.notesDoNotFillTuplet, actual: error)
+        }
+
+        // non-standard ratio
+        do {
+            let _ = try Tuplet(11, .quarter, inSpaceOf: 9, notes: [quarterNote1, quarterRest, quarterNote3])
+            shouldFail()
+        } catch TupletError.notesDoNotFillTuplet {
+        } catch {
+            expected(TupletError.notesDoNotFillTuplet, actual: error)
+        }
+    }
+
+    func testInitFailForCompoundTupletTooLarge() {
+        do {
+            // This is worth 4 quarter notes
+            let quintuplet = try? Tuplet(
+                5,
+                .quarter,
+                notes: [
+                    quarterNote1, quarterNote2, quarterNote3, quarterNote1, quarterNote2
+                ])
+            XCTAssertNotNil(quintuplet)
+            // 8 quarter notes long instead of 7
+            let _ = try Tuplet(
+                7,
+                .quarter,
+                notes: [
+                    quarterNote1, quarterNote2, quarterNote3, quarterNote1,
+                    quintuplet!
+                ])
+        } catch TupletError.notesOverfillTuplet {
+        } catch {
+            expected(TupletError.notesOverfillTuplet, actual: error)
+        }
+    }
+
+    func testInitFailForCompoundTupletTooSmall() {
+        do {
+            let triplet = try? Tuplet(
+                3,
+                .quarter,
+                notes: [
+                    quarterNote1, quarterNote2, quarterNote3
+                ])
+            XCTAssertNotNil(triplet)
+            let _ = try Tuplet(
+                7,
+                .quarter,
+                notes: [
+                    quarterNote1, quarterNote2, quarterNote3,
+                    triplet!
+                ])
+        } catch TupletError.notesDoNotFillTuplet {
+        } catch {
+            expected(TupletError.notesDoNotFillTuplet, actual: error)
         }
     }
 
     // MARK: Successes
 
-    func testInitSuccessForAllCombinations() {
+	func testInitSuccessForAllStandardCombinations() {
+		do {
+			// Test 2 - 9
+			let _ = try Tuplet(
+                2,
+                .quarter,
+                notes: [
+                    quarterNote1, quarterNote2
+                ])
+			let _ = try Tuplet(
+                3,
+                .quarter,
+                notes: [
+                    quarterNote1, quarterNote2, quarterNote3
+                ])
+            let _ = try Tuplet(
+                4,
+                .quarter,
+                notes: [
+                    quarterNote1, quarterNote2, quarterNote3, quarterNote1
+                ])
+            let _ = try Tuplet(
+                5,
+                .quarter,
+                notes: [
+                    quarterNote1, quarterNote2, quarterNote3, quarterNote1, quarterNote2
+                ])
+            let _ = try Tuplet(
+                6,
+                .quarter,
+                notes: [
+                    quarterNote1, quarterNote2, quarterNote3, quarterNote1, quarterNote2, quarterNote3
+                ])
+            let _ = try Tuplet(
+                7,
+                .quarter,
+                notes: [
+                    quarterNote1, quarterNote2, quarterNote3, quarterNote1, quarterNote2, quarterNote3, quarterNote1
+                ])
+            let _ = try Tuplet(
+                8,
+                .quarter,
+                notes: [
+                    quarterNote1, quarterNote2, quarterNote3, quarterNote1, quarterNote2, quarterNote3, quarterNote1,
+                    quarterNote2
+                ])
+            let _ = try Tuplet(
+                9,
+                .quarter,
+                notes: [
+                    quarterNote1, quarterNote2, quarterNote3, quarterNote1, quarterNote2, quarterNote3, quarterNote1,
+                    quarterNote2, quarterNote3
+                ])
+			// Test with a chord
+			let _ = try Tuplet(
+                2,
+                .quarter,
+                notes: [
+                    quarterNote1, quarterChord
+                ])
+		} catch {
+			XCTFail(String(describing: error))
+		}
+	}
+
+    func testInitSuccessForStandardMixedDurations() {
         do {
-            // Test 2 - 7
-            let _ = try Tuplet(notes: [quarterNote1, quarterNote2])
-            let _ = try Tuplet(notes: [quarterNote1, quarterNote2, quarterNote3])
-            let _ = try Tuplet(notes: [quarterNote1, quarterNote2, quarterNote3, quarterNote1])
-            let _ = try Tuplet(notes: [quarterNote1, quarterNote2, quarterNote3, quarterNote1, quarterNote2])
-            let _ = try Tuplet(notes: [quarterNote1, quarterNote2, quarterNote3, quarterNote1, quarterNote2, quarterNote3])
-            let _ = try Tuplet(notes: [quarterNote1, quarterNote2, quarterNote3, quarterNote1, quarterNote2, quarterNote3, quarterNote1])
-            // Test with a chord
-            let _ = try Tuplet(notes: [quarterNote1, quarterChord])
+            let _ = try Tuplet(
+                5,
+                .quarter,
+                notes: [
+                    quarterNote1, eighthNote, eighthNote, quarterNote2, quarterNote3, eighthNote, eighthNote
+                ])
         } catch {
             XCTFail(String(describing: error))
         }
     }
 
-    // MARK: - appendNote(_:)
+    func testInitSuccessForStandardDottedBase() {
+        do {
+            let baseDuration = try? NoteDuration(value: .quarter, dotCount: 1)
+            XCTAssertNotNil(baseDuration)
+            let _ = try Tuplet(
+                3,
+                baseDuration!,
+                notes: [
+                    dottedQuarterNote, dottedQuarterNote, dottedQuarterNote
+                ])
+        } catch {
+            XCTFail(String(describing: error))
+        }
+    }
+
+    func testInitSuccessForStandardDottedBaseMixedDuration() {
+        do {
+            let baseDuration = try? NoteDuration(value: .quarter, dotCount: 1)
+            XCTAssertNotNil(baseDuration)
+            let _ = try Tuplet(
+                3,
+                baseDuration!,
+                notes: [
+                    dottedQuarterNote, quarterNote1, eighthNote, dottedQuarterNote
+                ])
+        } catch {
+            XCTFail(String(describing: error))
+        }
+    }
+
+    func testInitSuccessForStandardCompound() {
+        do {
+            let triplet = try? Tuplet(3, .eighth, notes: [eighthNote, eighthNote, eighthNote])
+            XCTAssertNotNil(triplet)
+            let _ = try Tuplet(
+                5,
+                .eighth,
+                notes: [
+                    triplet!, eighthNote, eighthNote, eighthNote
+                ]
+            )
+        } catch {
+            XCTFail(String(describing: error))
+        }
+    }
+
+    func testInitSuccessForStandardWithRests() {
+        do {
+            let _ = try Tuplet(3, .quarter, notes: [quarterNote1, quarterRest, quarterNote3])
+        } catch {
+            XCTFail(String(describing: error))
+        }
+    }
+
+    func testInitSuccessForNonStandardSameDuration() {
+        do {
+            let _ = try Tuplet(
+                7,
+                .eighth,
+                inSpaceOf: 6,
+                notes: [
+                    eighthNote, eighthNote, eighthNote, eighthNote,
+                    eighthNote, eighthNote, eighthNote
+                ])
+        } catch {
+            XCTFail(String(describing: error))
+        }
+    }
+
+    func testInitSuccessForNonStandardDottedBase() {
+        do {
+            let _ = try Tuplet(
+                4,
+                NoteDuration(value: .quarter, dotCount: 1),
+                inSpaceOf: 2,
+                notes: [
+                    dottedQuarterNote, dottedQuarterNote, dottedQuarterNote, dottedQuarterNote,
+                ])
+        } catch {
+            XCTFail(String(describing: error))
+        }
+    }
+
+    func testInitSuccessForNonStandardCompound() {
+        do {
+            // Space of 4 eighth notes
+            let quintuplet = try? Tuplet(5, .eighth, notes: [eighthNote, eighthNote, eighthNote, eighthNote, eighthNote])
+            XCTAssertNotNil(quintuplet)
+            let _ = try Tuplet(
+                11,
+                .eighth,
+                inSpaceOf: 9,
+                notes: [
+                    quintuplet!, eighthNote, eighthNote, eighthNote,
+                    eighthNote, eighthNote, eighthNote, eighthNote
+                ])
+        } catch {
+            XCTFail(String(describing: error))
+        }
+    }
+
+    func testInitSuccessForNonStandardNestedCompound() {
+        do {
+            // Space of 4 eighth notes
+            let triplet = try? Tuplet(3, .eighth, notes: [eighthNote, eighthNote, eighthNote])
+            XCTAssertNotNil(triplet)
+            let quintuplet = try Tuplet(5, .eighth, notes: [eighthNote, eighthNote, eighthNote, triplet!])
+            XCTAssertNotNil(quintuplet)
+            let _ = try Tuplet(
+                11,
+                .eighth,
+                inSpaceOf: 9,
+                notes: [
+                    quintuplet, eighthNote, eighthNote, eighthNote,
+                    eighthNote, eighthNote, eighthNote, eighthNote
+                ])
+        } catch {
+            XCTFail(String(describing: error))
+        }
+    }
+
+    func testInitSuccessForNonStandardWithRests() {
+        do {
+            let _ = try Tuplet(
+                7,
+                .quarter,
+                inSpaceOf: 6,
+                notes: [
+                    quarterNote1, quarterNote2, quarterRest, quarterNote3,
+                    quarterRest, quarterRest, quarterNote1
+                ])
+        } catch {
+            XCTFail(String(describing: error))
+        }
+    }
+
+    // MARK: - replaceNote(at:with:Note)
     // MARK: Failures
 
-    func testAppendNoteFailsIfTupletFull() {
+    func testReplaceNoteWithNoteTooLong() {
         do {
-            var noteGroup = try Tuplet(notes: [quarterNote1, quarterNote2, quarterNote3, quarterNote1, quarterNote2, quarterNote3, quarterNote1])
-            try noteGroup.appendNote(quarterNote3)
+            var tuplet = try Tuplet(3, .eighth, notes: [eighthNote, eighthNote, eighthNote])
+            try tuplet.replaceNote(at: 1, with: quarterNote1)
             shouldFail()
-        } catch TupletError.groupingFull {
+        } catch TupletError.replacingCollectionNotSameDuration {
         } catch {
-            expected(TupletError.groupingFull, actual: error)
+            expected(TupletError.replacingCollectionNotSameDuration, actual: error)
         }
     }
 
-    func testAppendNoteFailsIfRest() {
+    func testReplaceNoteWithNoteTooShort() {
         do {
-            var noteGroup = try Tuplet(notes: [quarterNote1, quarterNote2])
-            try noteGroup.appendNote(quarterRest)
+            var tuplet = try Tuplet(3, .quarter, notes: [quarterNote1, quarterNote2, quarterNote3])
+            try tuplet.replaceNote(at: 0, with: eighthNote)
             shouldFail()
-        } catch TupletError.restsNotValid {
+        } catch TupletError.replacingCollectionNotSameDuration {
         } catch {
-            expected(TupletError.restsNotValid, actual: error)
+            expected(TupletError.replacingCollectionNotSameDuration, actual: error)
         }
     }
 
-    func testAppendNoteFailsIfInvalidDuration() {
+    func testReplaceNoteInTupletWithNoteTooShort() {
         do {
-            var noteGroup = try Tuplet(notes: [quarterNote1, quarterNote2])
-            try noteGroup.appendNote(eighthNote)
+            let triplet = try? Tuplet(3, .quarter, notes: [quarterNote1, quarterNote2, quarterNote3])
+            XCTAssertNotNil(triplet)
+            var tuplet = try Tuplet(5, .quarter, notes: [
+                triplet!, quarterNote1, quarterNote2, quarterNote3
+                ])
+            try tuplet.replaceNote(at: 1, with: eighthNote)
             shouldFail()
-        } catch TupletError.notSameDuration {
+        } catch TupletError.replacingCollectionNotSameDuration {
         } catch {
-            expected(TupletError.notSameDuration, actual: error)
+            expected(TupletError.replacingCollectionNotSameDuration, actual: error)
+        }
+    }
+
+    func testReplaceNoteInTupletWithNoteTooLong() {
+        do {
+            let triplet = try? Tuplet(3, .eighth, notes: [eighthNote, eighthNote, eighthNote])
+            XCTAssertNotNil(triplet)
+            var tuplet = try Tuplet(5, .eighth, notes: [
+                triplet!, eighthNote, eighthNote, eighthNote
+                ])
+            try tuplet.replaceNote(at: 1, with: quarterNote1)
+            shouldFail()
+        } catch TupletError.replacingCollectionNotSameDuration {
+        } catch {
+            expected(TupletError.replacingCollectionNotSameDuration, actual: error)
         }
     }
 
     // MARK: Successes
 
-    func testAppendNoteSuccess() {
+    func testReplaceNoteWithRestOfSameDuration() {
         do {
-            // Test 2 - 7
-            var group2 = try Tuplet(notes: [quarterNote1, quarterNote2])
-            try group2.appendNote(quarterNote1)
-            var group3 = try Tuplet(notes: [quarterNote1, quarterNote2, quarterNote3])
-            try group3.appendNote(quarterNote1)
-            var group4 = try Tuplet(notes: [quarterNote1, quarterNote2, quarterNote3, quarterNote1])
-            try group4.appendNote(quarterNote1)
-            var group5 = try Tuplet(notes: [quarterNote1, quarterNote2, quarterNote3, quarterNote1, quarterNote2])
-            try group5.appendNote(quarterNote1)
-            var group6 = try Tuplet(notes: [quarterNote1, quarterNote2, quarterNote3, quarterNote1, quarterNote2, quarterNote3])
-            try group6.appendNote(quarterNote1)
-            // Test with a chord
-            var group7 = try Tuplet(notes: [quarterNote1, quarterChord])
-            try group7.appendNote(quarterNote1)
-            // Test appending chord
-            try group2.appendNote(quarterChord)
+            var tuplet = try Tuplet(3, .quarter, notes: [quarterNote1, quarterNote2, quarterNote3])
+            try tuplet.replaceNote(at: 0, with: quarterRest)
+            XCTAssertEqual(try tuplet.note(at: 0), quarterRest)
+            XCTAssertEqual(try tuplet.note(at: 1), quarterNote2)
+            XCTAssertEqual(try tuplet.note(at: 2), quarterNote3)
         } catch {
             XCTFail(String(describing: error))
         }
     }
+
+    func testReplaceNoteInTupletWithRestOfSameDuration() {
+        do {
+            let triplet = try? Tuplet(3, .quarter, notes: [quarterNote1, quarterNote2, quarterNote3])
+            XCTAssertNotNil(triplet)
+            var tuplet = try Tuplet(5, .quarter, notes: [
+                triplet!, quarterNote1, quarterNote2, quarterNote3
+                ])
+            try tuplet.replaceNote(at: 1, with: quarterRest)
+            XCTAssertEqual(try tuplet.note(at: 0), quarterNote1)
+            XCTAssertEqual(try tuplet.note(at: 1), quarterRest)
+            XCTAssertEqual(try tuplet.note(at: 2), quarterNote3)
+            XCTAssertEqual(try tuplet.note(at: 3), quarterNote1)
+            XCTAssertEqual(try tuplet.note(at: 4), quarterNote2)
+            XCTAssertEqual(try tuplet.note(at: 5), quarterNote3)
+        } catch {
+            XCTFail(String(describing: error))
+        }
+    }
+
+    func testReplaceNoteWithNoteOfSameDuration() {
+        do {
+            var tuplet = try Tuplet(3, .quarter, notes: [quarterNote1, quarterNote2, quarterNote3])
+            try tuplet.replaceNote(at: 0, with: quarterNote3)
+            XCTAssertEqual(try tuplet.note(at: 0), quarterNote3)
+            XCTAssertEqual(try tuplet.note(at: 1), quarterNote2)
+            XCTAssertEqual(try tuplet.note(at: 2), quarterNote3)
+        } catch {
+            XCTFail(String(describing: error))
+        }
+    }
+
+    func testReplaceNoteInTupletWithNoteOfSameDuration() {
+        do {
+            let triplet = try? Tuplet(3, .quarter, notes: [quarterNote1, quarterNote2, quarterNote3])
+            XCTAssertNotNil(triplet)
+            var tuplet = try Tuplet(5, .quarter, notes: [
+                triplet!, quarterNote1, quarterNote2, quarterNote3
+                ])
+            try tuplet.replaceNote(at: 1, with: quarterNote1)
+            XCTAssertEqual(try tuplet.note(at: 0), quarterNote1)
+            XCTAssertEqual(try tuplet.note(at: 1), quarterNote1)
+            XCTAssertEqual(try tuplet.note(at: 2), quarterNote3)
+            XCTAssertEqual(try tuplet.note(at: 3), quarterNote1)
+            XCTAssertEqual(try tuplet.note(at: 4), quarterNote2)
+            XCTAssertEqual(try tuplet.note(at: 5), quarterNote3)
+        } catch {
+            XCTFail(String(describing: error))
+        }
+    }
+
+    // MARK: - replaceNote(at:with:[Note])
+    // MARK: Failures
+
+    // MARK: Successes
+
+
+    // MARK: - replaceNote(at:with:Tuplet)
+    // MARK: Failures
+
+    func testReplaceNoteWithTupletTooLong() {
+
+    }
+
+    func testReplaceNoteWithTupletTooShort() {
+
+    }
+
+    func testReplaceNoteInTupletWithTupletTooLong() {
+
+    }
+
+    func testReplaceNoteInTupletWithTupletTooShort() {
+
+    }
+
+    // MARK: Successes
+
+    // MARK: - replaceNotes(in:with:Note)
+    // MARK: Failures
+
+    // MARK: Successes
+
+    // MARK: - replaceNotes(in:with:[Note])
+    // MARK: Failures
+
+    // MARK: Successes
+
+    // MARK: - replaceNotes(in:with:Tuplet)
+    // MARK: Failures
+
+    // MARK: Successes
 }

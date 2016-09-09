@@ -167,13 +167,13 @@ public struct Measure: ImmutableMeasure, Equatable {
                 break
             }
             var tuplet = notes[setIndex][secondaryIndex.noteIndex] as! Tuplet
-            secondNote = tuplet.notes[secondTupletIndex]
+            secondNote = try tuplet.note(at: secondTupletIndex)
             try secondaryModificationMethod(&secondNote)(secondaryRequestedTieState)
             try tuplet.replaceNote(at: secondTupletIndex, with: secondNote)
             notes[setIndex][secondaryIndex.noteIndex] = tuplet
         case let (firstTupletIndex?, nil):
             var tuplet = notes[setIndex][requestedIndex.noteIndex] as! Tuplet
-            firstNote = tuplet.notes[firstTupletIndex]
+            firstNote = try tuplet.note(at: firstTupletIndex)
             try requestedModificationMethod(&firstNote)(primaryRequestedTieState)
             try tuplet.replaceNote(at: firstTupletIndex, with: firstNote)
             notes[setIndex][requestedIndex.noteIndex] = tuplet
@@ -186,16 +186,16 @@ public struct Measure: ImmutableMeasure, Equatable {
         case let (firstTupletIndex?, secondTupletIndex?):
             if requestedIndex.noteIndex == secondaryIndex?.noteIndex {
                 var tuplet = notes[setIndex][requestedIndex.noteIndex] as! Tuplet
-                firstNote = tuplet.notes[firstTupletIndex]
+                firstNote = try tuplet.note(at: firstTupletIndex)
                 try requestedModificationMethod(&firstNote)(primaryRequestedTieState)
                 try tuplet.replaceNote(at: firstTupletIndex, with: firstNote)
-                secondNote = tuplet.notes[secondTupletIndex]
+                secondNote = try tuplet.note(at: secondTupletIndex)
                 try secondaryModificationMethod(&secondNote)(secondaryRequestedTieState)
                 try tuplet.replaceNote(at: secondTupletIndex, with: secondNote)
                 notes[setIndex][requestedIndex.noteIndex] = tuplet
             } else {
                 var firstTuplet = notes[setIndex][requestedIndex.noteIndex] as! Tuplet
-                firstNote = firstTuplet.notes[firstTupletIndex]
+                firstNote = try firstTuplet.note(at: firstTupletIndex)
                 try requestedModificationMethod(&firstNote)(primaryRequestedTieState)
                 try firstTuplet.replaceNote(at: firstTupletIndex, with: firstNote)
                 notes[setIndex][requestedIndex.noteIndex] = firstTuplet
@@ -203,7 +203,7 @@ public struct Measure: ImmutableMeasure, Equatable {
                     break
                 }
                 var secondTuplet = notes[setIndex][secondaryIndex.noteIndex] as! Tuplet
-                secondNote = secondTuplet.notes[secondTupletIndex]
+                secondNote = try secondTuplet.note(at: secondTupletIndex)
                 try secondaryModificationMethod(&secondNote)(secondaryRequestedTieState)
                 try secondTuplet.replaceNote(at: secondTupletIndex, with: secondNote)
                 notes[setIndex][secondaryIndex.noteIndex] = secondTuplet
@@ -244,7 +244,7 @@ public struct Measure: ImmutableMeasure, Equatable {
                 assertionFailure("NoteCollection was not a Tuplet as expected")
                 throw MeasureError.internalError
             }
-            return tuplet.notes[tupletIndex].tie
+            return try tuplet.note(at: tupletIndex).tie
         } else {
             guard let note = notes[setIndex][noteIndex] as? Note else {
                 assertionFailure("NoteCollection was not a Note as expected")

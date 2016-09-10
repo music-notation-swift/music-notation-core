@@ -86,18 +86,30 @@ class NoteDurationTests: XCTestCase {
         }
     }
 
-    // MARK: - equal(to:)
+    // MARK: - number(of:equalTo:)
     // MARK: Successes
 
     func testEqualToForSameDuration() {
-        let noteDuration = NoteDuration.eighth
-        XCTAssertEqual(noteDuration.equal(to: NoteDuration.eighth), 1)
+        XCTAssertEqual(NoteDuration.number(of: .large, within: .large), 1)
+        XCTAssertEqual(NoteDuration.number(of: .long, within: .long), 1)
+        XCTAssertEqual(NoteDuration.number(of: .doubleWhole, within: .doubleWhole), 1)
+        XCTAssertEqual(NoteDuration.number(of: .whole, within: .whole), 1)
+        XCTAssertEqual(NoteDuration.number(of: .half, within: .half), 1)
+        XCTAssertEqual(NoteDuration.number(of: .quarter, within: .quarter), 1)
+        XCTAssertEqual(NoteDuration.number(of: .eighth, within: .eighth), 1)
+        XCTAssertEqual(NoteDuration.number(of: .sixteenth, within: .sixteenth), 1)
+        XCTAssertEqual(NoteDuration.number(of: .thirtySecond, within: .thirtySecond), 1)
+        XCTAssertEqual(NoteDuration.number(of: .sixtyFourth, within: .sixtyFourth), 1)
+        XCTAssertEqual(NoteDuration.number(of: .oneTwentyEighth, within: .oneTwentyEighth), 1)
+        XCTAssertEqual(NoteDuration.number(of: .twoFiftySixth, within: .twoFiftySixth), 1)
     }
 
     func testEqualToForSameDurationSingleDot() {
         do {
             let noteDuration = try NoteDuration(value: .quarter, dotCount: 1)
-            XCTAssertEqual(noteDuration.equal(to: try NoteDuration(value: .quarter, dotCount: 1)), 1)
+            XCTAssertEqual(
+                NoteDuration.number(of: try NoteDuration(value: .quarter, dotCount: 1), within: noteDuration),
+                1)
         } catch {
             XCTFail(String(describing: error))
         }
@@ -106,7 +118,9 @@ class NoteDurationTests: XCTestCase {
     func testEqualToForSameDurationMultipleDot() {
         do {
             let noteDuration = try NoteDuration(value: .quarter, dotCount: 3)
-            XCTAssertEqual(noteDuration.equal(to: try NoteDuration(value: .quarter, dotCount: 3)), 1)
+            XCTAssertEqual(
+                NoteDuration.number(of: try NoteDuration(value: .quarter, dotCount: 3), within: noteDuration),
+                1)
         } catch {
             XCTFail(String(describing: error))
         }
@@ -114,23 +128,27 @@ class NoteDurationTests: XCTestCase {
 
     func testEqualToForSmallerDuration() {
         let noteDuration = NoteDuration.sixteenth
-        XCTAssertEqual(noteDuration.equal(to: NoteDuration.sixtyFourth), 4)
+        XCTAssertEqual(NoteDuration.number(of: .sixtyFourth, within: noteDuration), 4)
     }
 
     func testEqualToForLargerDuration() {
         let noteDuration = NoteDuration.quarter
-        XCTAssertEqual(noteDuration.equal(to: NoteDuration.whole), 0.25)
+        XCTAssertEqual(NoteDuration.number(of: .whole, within: noteDuration), 0.25)
     }
 
     func testEqualToForSmallerDurationSingleDotFromNoDot() {
         let noteDuration = NoteDuration.quarter
-        XCTAssertEqual(noteDuration.equal(to: try NoteDuration(value: .eighth, dotCount: 1)), 1.25)
+        XCTAssertEqual(
+            NoteDuration.number(of: try NoteDuration(value: .eighth, dotCount: 1), within: noteDuration),
+            1.25)
     }
 
     func testEqualToForSmallerDurationSingleDotFromSingleDot() {
         do {
             let noteDuration = try NoteDuration(value: .quarter, dotCount: 1)
-            XCTAssertEqual(noteDuration.equal(to: try NoteDuration(value: .sixteenth, dotCount: 1)), 4)
+            XCTAssertEqual(
+                NoteDuration.number(of: try NoteDuration(value: .sixteenth, dotCount: 1), within: noteDuration),
+                4)
         } catch {
             XCTFail(String(describing: error))
         }
@@ -139,7 +157,9 @@ class NoteDurationTests: XCTestCase {
     func testEqualToForSmallerDurationDoubleDotFromDoubleDot() {
         do {
             let noteDuration = try NoteDuration(value: .quarter, dotCount: 2)
-            XCTAssertEqual(noteDuration.equal(to: try NoteDuration(value: .thirtySecond, dotCount: 2)), 8)
+            XCTAssertEqual(
+                NoteDuration.number(of: try NoteDuration(value: .thirtySecond, dotCount: 2), within: noteDuration),
+                8)
         } catch {
             XCTFail(String(describing: error))
         }

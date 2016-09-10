@@ -60,12 +60,12 @@ public struct Tuplet: NoteCollection {
         guard count > 1 else {
             throw TupletError.countMustBeLargerThan1
         }
-        let notesAmount = notes.reduce(0.0) { prev, noteCollection in
-            return Double(prev) + noteCollection.noteDuration.equal(to: baseNoteDuration) *
-                Double(noteCollection.noteTimingCount)
+        let fullTupletTicks = count * baseNoteDuration.ticks
+        let notesTicks = notes.reduce(0) { prev, noteCollection in
+            return prev + noteCollection.noteDuration.ticks * noteCollection.noteTimingCount
         }
-        guard notesAmount == Double(count) else {
-            if notesAmount < Double(count) {
+        guard notesTicks == fullTupletTicks else {
+            if notesTicks < fullTupletTicks {
                 throw TupletError.notesDoNotFillTuplet
             } else {
                 throw TupletError.notesOverfillTuplet
@@ -146,7 +146,9 @@ public struct Tuplet: NoteCollection {
     internal mutating func replaceNote(at index: Int, with noteCollection: NoteCollection) throws {
         // validate they are the same duration
         let noteToReplace = try note(at: index)
-        let noteCollectionDuration = noteToReplace.noteDuration.equal(to: noteCollection.noteDuration) *
+        let noteCollectionDuration = NoteDuration.number(
+            of: noteToReplace.noteDuration,
+            within: noteCollection.noteDuration) *
             Double(noteCollection.noteTimingCount)
         guard noteCollectionDuration == 1 else {
             throw TupletError.replacingCollectionNotSameDuration

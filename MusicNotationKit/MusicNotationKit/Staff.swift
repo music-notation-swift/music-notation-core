@@ -228,37 +228,12 @@ public struct Staff {
 				secondNotesHolderIndex.notesHolderIndex,
 				repeatMeasureIndex: secondNotesHolderIndex.repeatMeasureIndex)
             guard secondMeasure.noteCount[setIndex] > 0 else {
-
                 throw StaffError.noNextNoteToTie
             }
 
 			if !removeTie {
-				let firstNoteIndex = try firstMeasure.noteCollectionIndexFromNoteIndex(noteIndex, inSet: setIndex)
-				var firstNote: Note
-				if firstNoteIndex.tupletIndex == nil {
-					firstNote = firstMeasure.notes[setIndex][firstNoteIndex.noteIndex] as! Note
-				} else {
-					guard let tuplet = firstMeasure.notes[setIndex][firstNoteIndex.noteIndex] as? Tuplet,
-						let tupletIndex = firstNoteIndex.tupletIndex else {
-							assertionFailure("Index translation showed should be a tuplet, but it's not")
-							throw StaffError.internalError
-					}
-					firstNote = try tuplet.note(at: tupletIndex)
-				}
-				
-				let secondNoteIndex = try secondMeasure.noteCollectionIndexFromNoteIndex(0, inSet: setIndex)
-				var secondNote: Note
-				if secondNoteIndex.tupletIndex == nil {
-					secondNote = secondMeasure.notes[setIndex][secondNoteIndex.noteIndex] as! Note
-				} else {
-					guard let tuplet = secondMeasure.notes[setIndex][secondNoteIndex.noteIndex] as? Tuplet,
-						let tupletIndex = secondNoteIndex.tupletIndex else {
-							assertionFailure("Index translation showed should be a tuplet, but it's not")
-							throw StaffError.internalError
-					}
-					secondNote = try tuplet.note(at: tupletIndex)
-				}
-				
+				let firstNote = try firstMeasure.note(at: noteIndex, inSet: setIndex)
+				let secondNote = try secondMeasure.note(at: 0, inSet: setIndex)
 				if firstNote.tones != secondNote.tones {
 					throw StaffError.noSameNoteTie
 				}

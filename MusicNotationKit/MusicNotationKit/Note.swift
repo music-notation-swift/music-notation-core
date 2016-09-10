@@ -50,6 +50,16 @@ public struct Note: NoteCollection {
         self.noteDuration = noteDuration
         self.tones = tones
     }
+	
+	// MARK: - Methods
+	// MARK: Public
+	
+	public func note(at index: Int) throws -> Note {
+		guard index == 0 else {
+			throw NoteError.invalidNoteIndex
+		}
+		return self
+	}
 
     internal mutating func modifyTie(_ request: Tie) throws {
         // Nothing to do if it's the same value
@@ -125,4 +135,5 @@ extension Note: CustomDebugStringConvertible {
 
 public enum NoteError: Error {
     case invalidRequestedTieState
+	case invalidNoteIndex
 }

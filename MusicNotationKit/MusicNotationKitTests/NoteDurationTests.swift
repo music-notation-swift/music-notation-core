@@ -90,8 +90,18 @@ class NoteDurationTests: XCTestCase {
     // MARK: Successes
 
     func testEqualToForSameDuration() {
-        let noteDuration = NoteDuration.eighth
-        XCTAssertEqual(NoteDuration.number(of: .eighth, within: noteDuration), 1)
+        XCTAssertEqual(NoteDuration.number(of: .large, within: .large), 1)
+        XCTAssertEqual(NoteDuration.number(of: .long, within: .long), 1)
+        XCTAssertEqual(NoteDuration.number(of: .doubleWhole, within: .doubleWhole), 1)
+        XCTAssertEqual(NoteDuration.number(of: .whole, within: .whole), 1)
+        XCTAssertEqual(NoteDuration.number(of: .half, within: .half), 1)
+        XCTAssertEqual(NoteDuration.number(of: .quarter, within: .quarter), 1)
+        XCTAssertEqual(NoteDuration.number(of: .eighth, within: .eighth), 1)
+        XCTAssertEqual(NoteDuration.number(of: .sixteenth, within: .sixteenth), 1)
+        XCTAssertEqual(NoteDuration.number(of: .thirtySecond, within: .thirtySecond), 1)
+        XCTAssertEqual(NoteDuration.number(of: .sixtyFourth, within: .sixtyFourth), 1)
+        XCTAssertEqual(NoteDuration.number(of: .oneTwentyEighth, within: .oneTwentyEighth), 1)
+        XCTAssertEqual(NoteDuration.number(of: .twoFiftySixth, within: .twoFiftySixth), 1)
     }
 
     func testEqualToForSameDurationSingleDot() {

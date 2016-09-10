@@ -29,36 +29,36 @@ class StaffTests: XCTestCase {
         let key = Key(noteLetter: .c)
         let note = Note(noteDuration: .sixteenth,
                         tone: Tone(noteLetter: .c, octave: .octave1))
-        let tuplet = try! Tuplet(notes: [note, note, note])
+        let tuplet = try! Tuplet(3, .sixteenth, notes: [note, note, note])
         measure1 = Measure(
             timeSignature: timeSignature,
             key: key,
-            notes: [note, note, note, note, tuplet]
+            notes: [[note, note, note, note, tuplet]]
         )
         measure2 = Measure(
             timeSignature: timeSignature,
             key: key,
-            notes: [tuplet, note, note]
+            notes: [[tuplet, note, note]]
         )
         measure3 = Measure(
             timeSignature: timeSignature,
             key: key,
-            notes: [note, note, note, note, tuplet]
+            notes: [[note, note, note, note, tuplet]]
         )
         measure4 = Measure(
             timeSignature: timeSignature,
             key: key,
-            notes: [note, note, note, note]
+            notes: [[note, note, note, note]]
         )
         measure5 = Measure(
             timeSignature: timeSignature,
             key: key,
-            notes: [tuplet, note, note, note, note]
+            notes: [[tuplet, note, note, note, note]]
         )
         measure6 = Measure(
             timeSignature: timeSignature,
             key: key,
-            notes: [tuplet, tuplet, note, note]
+            notes: [[tuplet, tuplet, note, note]]
         )
         repeat1 = try! MeasureRepeat(measures: [measure4])
         repeat2 = try! MeasureRepeat(measures: [measure4, measure4], repeatCount: 2)
@@ -105,7 +105,7 @@ class StaffTests: XCTestCase {
     // MARK: Successes
     
     func testDescription() {
-        XCTAssertEqual(staff.debugDescription, "staff(treble guitar6 |4/4: 1/16c1,1/16c1,1/16c1,1/16c1,[1/16c1, 1/16c1, 1/16c1]|, |4/4: [1/16c1, 1/16c1, 1/16c1],1/16c1,1/16c1|, |4/4: 1/16c1,1/16c1,1/16c1,1/16c1,[1/16c1, 1/16c1, 1/16c1]|, |4/4: 1/16c1,1/16c1,1/16c1,1/16c1|, |4/4: [1/16c1, 1/16c1, 1/16c1],1/16c1,1/16c1,1/16c1,1/16c1|, [ |4/4: 1/16c1,1/16c1,1/16c1,1/16c1| ] × 2, [ |4/4: 1/16c1,1/16c1,1/16c1,1/16c1|, |4/4: 1/16c1,1/16c1,1/16c1,1/16c1| ] × 3, |4/4: [1/16c1, 1/16c1, 1/16c1],[1/16c1, 1/16c1, 1/16c1],1/16c1,1/16c1|, |4/4: 1/16c1,1/16c1,1/16c1,1/16c1,[1/16c1, 1/16c1, 1/16c1]|)")
+        XCTAssertEqual(staff.debugDescription, "staff(treble guitar6 |4/4: [1/16c1, 1/16c1, 1/16c1, 1/16c1, 3[1/16c1, 1/16c1, 1/16c1]]|, |4/4: [3[1/16c1, 1/16c1, 1/16c1], 1/16c1, 1/16c1]|, |4/4: [1/16c1, 1/16c1, 1/16c1, 1/16c1, 3[1/16c1, 1/16c1, 1/16c1]]|, |4/4: [1/16c1, 1/16c1, 1/16c1, 1/16c1]|, |4/4: [3[1/16c1, 1/16c1, 1/16c1], 1/16c1, 1/16c1, 1/16c1, 1/16c1]|, [ |4/4: [1/16c1, 1/16c1, 1/16c1, 1/16c1]| ] × 2, [ |4/4: [1/16c1, 1/16c1, 1/16c1, 1/16c1]|, |4/4: [1/16c1, 1/16c1, 1/16c1, 1/16c1]| ] × 3, |4/4: [3[1/16c1, 1/16c1, 1/16c1], 3[1/16c1, 1/16c1, 1/16c1], 1/16c1, 1/16c1]|, |4/4: [1/16c1, 1/16c1, 1/16c1, 1/16c1, 3[1/16c1, 1/16c1, 1/16c1]]|)")
     }
 
     func testInsertMeasureNoRepeat() {
@@ -348,8 +348,8 @@ class StaffTests: XCTestCase {
             let firstMeasureIndex = 0
             try staff.startTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
             let measure = staff.notesHolders[firstMeasureIndex] as! Measure
-            let firstNote = measure.notes[firstNoteIndex] as! Note
-            let secondNote = measure.notes[firstNoteIndex + 1] as! Note
+            let firstNote = measure.notes[0][firstNoteIndex] as! Note
+            let secondNote = measure.notes[0][firstNoteIndex + 1] as! Note
             XCTAssert(firstNote.tie == .begin)
             XCTAssert(secondNote.tie == .end)
         } catch {
@@ -364,9 +364,9 @@ class StaffTests: XCTestCase {
             try staff.startTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
             try staff.startTieFromNote(at: firstNoteIndex + 1, inMeasureAt: firstMeasureIndex)
             let measure = staff.notesHolders[firstMeasureIndex] as! Measure
-            let firstNote = measure.notes[firstNoteIndex] as! Note
-            let secondNote = measure.notes[firstNoteIndex + 1] as! Note
-            let thirdNote = measure.notes[firstNoteIndex + 2] as! Note
+            let firstNote = measure.notes[0][firstNoteIndex] as! Note
+            let secondNote = measure.notes[0][firstNoteIndex + 1] as! Note
+            let thirdNote = measure.notes[0][firstNoteIndex + 2] as! Note
             XCTAssert(firstNote.tie == .begin)
             XCTAssert(secondNote.tie == .beginAndEnd)
             XCTAssert(thirdNote.tie == .end)
@@ -381,8 +381,8 @@ class StaffTests: XCTestCase {
             let firstMeasureIndex = 13
             try staff.startTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
             let measure = staff.notesHolders[7] as! Measure
-            let firstNote = (measure.notes[0] as! Tuplet).notes[2]
-            let secondNote = (measure.notes[1] as! Tuplet).notes[0]
+            let firstNote = try (measure.notes[0][0] as! Tuplet).note(at: 2)
+            let secondNote = try (measure.notes[0][1] as! Tuplet).note(at: 0)
             XCTAssert(firstNote.tie == .begin)
             XCTAssert(secondNote.tie == .end)
         } catch {
@@ -397,8 +397,8 @@ class StaffTests: XCTestCase {
             try staff.startTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
             let firstMeasure = staff.notesHolders[firstMeasureIndex] as! Measure
             let secondMeasure = staff.notesHolders[firstMeasureIndex + 1] as! Measure
-            let firstNote = firstMeasure.notes[2] as! Note
-            let secondNote = secondMeasure.notes[0] as! Note
+            let firstNote = firstMeasure.notes[0][2] as! Note
+            let secondNote = secondMeasure.notes[0][0] as! Note
             XCTAssert(firstNote.tie == .begin)
             XCTAssert(secondNote.tie == .end)
         } catch {
@@ -413,8 +413,8 @@ class StaffTests: XCTestCase {
             try staff.startTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
             let firstMeasure = staff.notesHolders[firstMeasureIndex] as! Measure
             let secondMeasure = staff.notesHolders[firstMeasureIndex + 1] as! Measure
-            let firstNote = firstMeasure.notes[3] as! Note
-            let secondNote = (secondMeasure.notes[0] as! Tuplet).notes[0]
+            let firstNote = firstMeasure.notes[0][3] as! Note
+            let secondNote = try (secondMeasure.notes[0][0] as! Tuplet).note(at: 0)
             XCTAssert(firstNote.tie == .begin)
             XCTAssert(secondNote.tie == .end)
         } catch {
@@ -429,8 +429,8 @@ class StaffTests: XCTestCase {
             try staff.startTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
             let firstMeasure = staff.notesHolders[firstMeasureIndex] as! Measure
             let secondMeasure = staff.notesHolders[firstMeasureIndex + 1] as! Measure
-            let firstNote = (firstMeasure.notes[4] as! Tuplet).notes[2]
-            let secondNote = secondMeasure.notes[0] as! Note
+            let firstNote = try (firstMeasure.notes[0][4] as! Tuplet).note(at: 2)
+            let secondNote = secondMeasure.notes[0][0] as! Note
             XCTAssert(firstNote.tie == .begin)
             XCTAssert(secondNote.tie == .end)
         } catch {
@@ -445,8 +445,8 @@ class StaffTests: XCTestCase {
             try staff.startTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
             let firstMeasure = staff.notesHolders[firstMeasureIndex] as! Measure
             let secondMeasure = staff.notesHolders[firstMeasureIndex + 1] as! Measure
-            let firstNote = (firstMeasure.notes[4] as! Tuplet).notes[2]
-            let secondNote = (secondMeasure.notes[0] as! Tuplet).notes[0]
+            let firstNote = try (firstMeasure.notes[0][4] as! Tuplet).note(at: 2)
+            let secondNote = try (secondMeasure.notes[0][0] as! Tuplet).note(at: 0)
             XCTAssert(firstNote.tie == .begin)
             XCTAssert(secondNote.tie == .end)
         } catch {
@@ -460,8 +460,8 @@ class StaffTests: XCTestCase {
             let firstMeasureIndex = 5
             try staff.startTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
             let firstMeasure = (staff.notesHolders[firstMeasureIndex] as! MeasureRepeat).measures[0]
-            let firstNote = firstMeasure.notes[firstNoteIndex] as! Note
-            let secondNote = firstMeasure.notes[firstNoteIndex + 1] as! Note
+            let firstNote = firstMeasure.notes[0][firstNoteIndex] as! Note
+            let secondNote = firstMeasure.notes[0][firstNoteIndex + 1] as! Note
             XCTAssert(firstNote.tie == .begin)
             XCTAssert(secondNote.tie == .end)
         } catch {
@@ -475,8 +475,8 @@ class StaffTests: XCTestCase {
             let firstMeasureIndex = 7
             try staff.startTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
             let firstMeasure = (staff.notesHolders[6] as! MeasureRepeat).measures[0]
-            let firstNote = firstMeasure.notes[firstNoteIndex] as! Note
-            let secondNote = firstMeasure.notes[firstNoteIndex + 1] as! Note
+            let firstNote = firstMeasure.notes[0][firstNoteIndex] as! Note
+            let secondNote = firstMeasure.notes[0][firstNoteIndex + 1] as! Note
             XCTAssert(firstNote.tie == .begin)
             XCTAssert(secondNote.tie == .end)
         } catch {
@@ -492,8 +492,8 @@ class StaffTests: XCTestCase {
             let measureRepeat = staff.notesHolders[6] as! MeasureRepeat
             let firstMeasure = measureRepeat.measures[0]
             let secondMeasure = measureRepeat.measures[1]
-            let firstNote = firstMeasure.notes[firstNoteIndex] as! Note
-            let secondNote = secondMeasure.notes[0] as! Note
+            let firstNote = firstMeasure.notes[0][firstNoteIndex] as! Note
+            let secondNote = secondMeasure.notes[0][0] as! Note
             XCTAssert(firstNote.tie == .begin)
             XCTAssert(secondNote.tie == .end)
         } catch {
@@ -530,7 +530,7 @@ class StaffTests: XCTestCase {
         do {
             try staff.removeTieFromNote(at: 0, inMeasureAt: 0)
             let measure = staff.notesHolders[0] as! Measure
-            let firstNote = measure.notes[0] as! Note
+            let firstNote = measure.notes[0][0] as! Note
             XCTAssertNil(firstNote.tie)
         } catch {
             XCTFail(String(describing: error))
@@ -542,8 +542,8 @@ class StaffTests: XCTestCase {
             try staff.startTieFromNote(at: 0, inMeasureAt: 0)
             try staff.removeTieFromNote(at: 1, inMeasureAt: 0)
             let measure = staff.notesHolders[0] as! Measure
-            let firstNote = measure.notes[0] as! Note
-            let secondNote = measure.notes[1] as! Note
+            let firstNote = measure.notes[0][0] as! Note
+            let secondNote = measure.notes[0][1] as! Note
             XCTAssertNil(firstNote.tie)
             XCTAssertNil(secondNote.tie)
         } catch {
@@ -557,8 +557,8 @@ class StaffTests: XCTestCase {
             try staff.startTieFromNote(at: 1, inMeasureAt: 0)
             try staff.removeTieFromNote(at: 1, inMeasureAt: 0)
             let measure = staff.notesHolders[0] as! Measure
-            let firstNote = measure.notes[0] as! Note
-            let secondNote = measure.notes[1] as! Note
+            let firstNote = measure.notes[0][0] as! Note
+            let secondNote = measure.notes[0][1] as! Note
             XCTAssertEqual(firstNote.tie, .begin)
             XCTAssertEqual(secondNote.tie, .end)
         } catch {
@@ -573,8 +573,8 @@ class StaffTests: XCTestCase {
             try staff.startTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
             try staff.removeTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
             let measure = staff.notesHolders[firstMeasureIndex] as! Measure
-            let firstNote = measure.notes[firstNoteIndex] as! Note
-            let secondNote = measure.notes[firstNoteIndex + 1] as! Note
+            let firstNote = measure.notes[0][firstNoteIndex] as! Note
+            let secondNote = measure.notes[0][firstNoteIndex + 1] as! Note
             XCTAssertNil(firstNote.tie)
             XCTAssertNil(secondNote.tie)
         } catch {
@@ -589,8 +589,8 @@ class StaffTests: XCTestCase {
             try staff.startTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
             try staff.removeTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
             let measure = staff.notesHolders[firstMeasureIndex] as! Measure
-            let firstNote = (measure.notes[firstNoteIndex] as! Tuplet).notes[0]
-            let secondNote = (measure.notes[firstNoteIndex] as! Tuplet).notes[1]
+            let firstNote = try (measure.notes[0][firstNoteIndex] as! Tuplet).note(at: 0)
+            let secondNote = try (measure.notes[0][firstNoteIndex] as! Tuplet).note(at: 1)
             XCTAssertNil(firstNote.tie)
             XCTAssertNil(secondNote.tie)
         } catch {
@@ -605,8 +605,8 @@ class StaffTests: XCTestCase {
             try staff.startTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
             try staff.removeTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
             let measure = staff.notesHolders[firstMeasureIndex] as! Measure
-            let firstNote = (measure.notes[0] as! Tuplet).notes[firstNoteIndex]
-            let secondNote = measure.notes[1] as! Note
+            let firstNote = try (measure.notes[0][0] as! Tuplet).note(at: firstNoteIndex)
+            let secondNote = measure.notes[0][1] as! Note
             XCTAssertNil(firstNote.tie)
             XCTAssertNil(secondNote.tie)
         } catch {
@@ -621,8 +621,8 @@ class StaffTests: XCTestCase {
             try staff.startTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
             try staff.removeTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
             let measure = staff.notesHolders[7] as! Measure
-            let firstNote = (measure.notes[0] as! Tuplet).notes[firstNoteIndex]
-            let secondNote = (measure.notes[1] as! Tuplet).notes[0]
+            let firstNote = try (measure.notes[0][0] as! Tuplet).note(at: firstNoteIndex)
+            let secondNote = try (measure.notes[0][1] as! Tuplet).note(at: 0)
             XCTAssertNil(firstNote.tie)
             XCTAssertNil(secondNote.tie)
         } catch {
@@ -638,8 +638,8 @@ class StaffTests: XCTestCase {
             try staff.removeTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
             let measure1 = staff.notesHolders[firstMeasureIndex] as! Measure
             let measure2 = staff.notesHolders[firstMeasureIndex + 1] as! Measure
-            let firstNote = (measure1.notes[4] as! Tuplet).notes[2]
-            let secondNote = measure2.notes[0] as! Note
+            let firstNote = try (measure1.notes[0][4] as! Tuplet).note(at: 2)
+            let secondNote = measure2.notes[0][0] as! Note
             XCTAssertNil(firstNote.tie)
             XCTAssertNil(secondNote.tie)
         } catch {
@@ -655,8 +655,8 @@ class StaffTests: XCTestCase {
             try staff.removeTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
             let measure1 = staff.notesHolders[firstMeasureIndex] as! Measure
             let measure2 = staff.notesHolders[firstMeasureIndex + 1] as! Measure
-            let firstNote = (measure1.notes[4] as! Tuplet).notes[2]
-            let secondNote = (measure2.notes[0] as! Tuplet).notes[0]
+            let firstNote = try (measure1.notes[0][4] as! Tuplet).note(at: 2)
+            let secondNote = try (measure2.notes[0][0] as! Tuplet).note(at: 0)
             XCTAssertNil(firstNote.tie)
             XCTAssertNil(secondNote.tie)
         } catch {
@@ -672,9 +672,9 @@ class StaffTests: XCTestCase {
             try staff.startTieFromNote(at: firstNoteIndex + 1, inMeasureAt: firstMeasureIndex)
             try staff.removeTieFromNote(at: firstNoteIndex + 1, inMeasureAt: firstMeasureIndex)
             let measure = staff.notesHolders[firstMeasureIndex] as! Measure
-            let firstNote = measure.notes[firstNoteIndex] as! Note
-            let secondNote = measure.notes[firstNoteIndex + 1] as! Note
-            let thirdNote = measure.notes[firstNoteIndex + 2] as! Note
+            let firstNote = measure.notes[0][firstNoteIndex] as! Note
+            let secondNote = measure.notes[0][firstNoteIndex + 1] as! Note
+            let thirdNote = measure.notes[0][firstNoteIndex + 2] as! Note
             XCTAssert(firstNote.tie == .begin)
             XCTAssert(secondNote.tie == .end)
             XCTAssertNil(thirdNote.tie)

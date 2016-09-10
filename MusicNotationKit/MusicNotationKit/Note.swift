@@ -6,9 +6,13 @@
 //  Copyright (c) 2015 Kyle Sherman. All rights reserved.
 //
 
-public struct Note {
+public struct Note: NoteCollection {
 
+    // NoteCollection
+    public let noteCount = 1
     public let noteDuration: NoteDuration
+    public let noteTimingCount = 1
+
     public let tones: [Tone]
 
     public let isRest: Bool
@@ -101,11 +105,6 @@ extension Note: Equatable {
             return false
         }
     }
-}
-
-extension Note: NoteCollection {
-
-    public var noteCount: Int { return 1 }
 }
 
 extension Note: CustomDebugStringConvertible {

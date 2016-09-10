@@ -136,6 +136,8 @@ public struct Staff {
 
      - parameter noteIndex: The index of the note in the specified measure to begin the tie.
      - parameter measureIndex: The index of the measure that contains the note at which the tie should begin.
+     - parameter setIndex: The index of the set of notes you want to modify. There can be multiple sets of notes
+        that make up a full measure on their own. i.e. bass drum notes and hi-hat notes. See `Measure` for more info.
      - throws:
          - `StaffError.noteIndexoutOfRange`
          - `StaffError.noNextNoteToTie` if the note specified is the last note in the staff.
@@ -145,8 +147,8 @@ public struct Staff {
          - `StaffError.internalError`, `MeasureError.internalError` if the function has an internal implementation error.
          - `MeasureError.noteIndexOutOfRange`
      */
-    public mutating func startTieFromNote(at noteIndex: Int, inMeasureAt measureIndex: Int) throws {
-        try modifyTieForNote(at: noteIndex, inMeasureAt: measureIndex, removeTie: false)
+    public mutating func startTieFromNote(at noteIndex: Int, inMeasureAt measureIndex: Int, inSet setIndex: Int = 0) throws {
+        try modifyTieForNote(at: noteIndex, inMeasureAt: measureIndex, removeTie: false, inSet: setIndex)
     }
 
     /**
@@ -154,6 +156,8 @@ public struct Staff {
 
      - parameter noteIndex: The index of the note in the specified measure where the tie begins.
      - parameter measureIndex: The index of the measure that contains the note at which the tie begins.
+     - parameter setIndex: The index of the set of notes you want to modify. There can be multiple sets of notes
+        that make up a full measure on their own. i.e. bass drum notes and hi-hat notes. See `Measure` for more info.
      - throws:
          - `StaffError.noteIndexoutOfRange`
          - `StaffError.noNextNoteToTie` if the note specified is the last note in the staff.
@@ -163,8 +167,8 @@ public struct Staff {
          - `MeasureError.noteIndexOutOfRange`
          - `StaffError.internalError`, `MeasureError.internalError` if the function has an internal implementation error.
      */
-    public mutating func removeTieFromNote(at noteIndex: Int, inMeasureAt measureIndex: Int) throws {
-        try modifyTieForNote(at: noteIndex, inMeasureAt: measureIndex, removeTie: true)
+    public mutating func removeTieFromNote(at noteIndex: Int, inMeasureAt measureIndex: Int, inSet setIndex: Int = 0) throws {
+        try modifyTieForNote(at: noteIndex, inMeasureAt: measureIndex, removeTie: true, inSet: setIndex)
     }
 
     /**
@@ -203,16 +207,17 @@ public struct Staff {
         return notesHolders[notesHolderIndex]
     }
 
-    private mutating func modifyTieForNote(at noteIndex: Int, inMeasureAt measureIndex: Int, removeTie: Bool) throws {
+    private mutating func modifyTieForNote(at noteIndex: Int, inMeasureAt measureIndex: Int, removeTie: Bool, inSet setIndex: Int) throws {
         let notesHolderIndex = try notesHolderIndexFromMeasureIndex(measureIndex)
 
         // Ensure first measure information provided is valid for tie
         var firstMeasure = try mutableMeasureFromNotesHolderIndex(notesHolderIndex.notesHolderIndex, repeatMeasureIndex: notesHolderIndex.repeatMeasureIndex)
-        guard noteIndex < firstMeasure.noteCount else {
+        guard noteIndex < firstMeasure.noteCount[setIndex] else {
             throw StaffError.noteIndexOutOfRange
         }
 
-        if noteIndex == firstMeasure.noteCount - 1 {
+
+        if noteIndex == firstMeasure.noteCount[setIndex] - 1 {
             let secondNotesHolderIndex: (notesHolderIndex: Int, repeatMeasureIndex: Int?)
             do {
                 secondNotesHolderIndex = try notesHolderIndexFromMeasureIndex(measureIndex + 1)
@@ -222,35 +227,36 @@ public struct Staff {
             var secondMeasure = try mutableMeasureFromNotesHolderIndex(
 				secondNotesHolderIndex.notesHolderIndex,
 				repeatMeasureIndex: secondNotesHolderIndex.repeatMeasureIndex)
-            guard secondMeasure.noteCount > 0 else {
+            guard secondMeasure.noteCount[setIndex] > 0 else {
+
                 throw StaffError.noNextNoteToTie
             }
 
 			if !removeTie {
-				let firstNoteIndex = try firstMeasure.noteCollectionIndexFromNoteIndex(noteIndex)
+				let firstNoteIndex = try firstMeasure.noteCollectionIndexFromNoteIndex(noteIndex, inSet: setIndex)
 				var firstNote: Note
 				if firstNoteIndex.tupletIndex == nil {
-					firstNote = firstMeasure.notes[firstNoteIndex.noteIndex] as! Note
+					firstNote = firstMeasure.notes[setIndex][firstNoteIndex.noteIndex] as! Note
 				} else {
-					guard let tuplet = firstMeasure.notes[firstNoteIndex.noteIndex] as? Tuplet,
+					guard let tuplet = firstMeasure.notes[setIndex][firstNoteIndex.noteIndex] as? Tuplet,
 						let tupletIndex = firstNoteIndex.tupletIndex else {
 							assertionFailure("Index translation showed should be a tuplet, but it's not")
 							throw StaffError.internalError
 					}
-					firstNote = tuplet.notes[tupletIndex]
+					firstNote = try tuplet.note(at: tupletIndex)
 				}
 				
-				let secondNoteIndex = try secondMeasure.noteCollectionIndexFromNoteIndex(0)
+				let secondNoteIndex = try secondMeasure.noteCollectionIndexFromNoteIndex(0, inSet: setIndex)
 				var secondNote: Note
 				if secondNoteIndex.tupletIndex == nil {
-					secondNote = secondMeasure.notes[secondNoteIndex.noteIndex] as! Note
+					secondNote = secondMeasure.notes[setIndex][secondNoteIndex.noteIndex] as! Note
 				} else {
-					guard let tuplet = secondMeasure.notes[secondNoteIndex.noteIndex] as? Tuplet,
+					guard let tuplet = secondMeasure.notes[setIndex][secondNoteIndex.noteIndex] as? Tuplet,
 						let tupletIndex = secondNoteIndex.tupletIndex else {
 							assertionFailure("Index translation showed should be a tuplet, but it's not")
 							throw StaffError.internalError
 					}
-					secondNote = tuplet.notes[tupletIndex]
+					secondNote = try tuplet.note(at: tupletIndex)
 				}
 				
 				if firstNote.tones != secondNote.tones {
@@ -259,14 +265,14 @@ public struct Staff {
 			}
 			
 			// Modify tie and update second Measure. The first Measure update is done later.
-			try firstMeasure.modifyTie(at: noteIndex, requestedTieState: removeTie ? nil : .begin )
-			try secondMeasure.modifyTie(at: 0, requestedTieState: removeTie ? nil : .end)
+			try firstMeasure.modifyTie(at: noteIndex, requestedTieState: removeTie ? nil : .begin, inSet: setIndex)
+			try secondMeasure.modifyTie(at: 0, requestedTieState: removeTie ? nil : .end, inSet: setIndex)
 			try replaceMeasure(at: measureIndex + 1, with: secondMeasure)
         } else {
 			if removeTie {
-				try firstMeasure.removeTie(at: noteIndex)
+				try firstMeasure.removeTie(at: noteIndex, inSet: setIndex)
 			} else {
-				try firstMeasure.startTie(at: noteIndex)
+				try firstMeasure.startTie(at: noteIndex, inSet: setIndex)
 			}
         }
 		

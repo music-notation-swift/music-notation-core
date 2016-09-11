@@ -64,11 +64,7 @@ public enum MeasureDurationValidator {
                 overflowingNotes: Range(
                     uncheckedBounds: (overFilledStartIndex, measure.noteCount[setIndex])
                 ))
-            }
-            switch filledTicks {
-            case fullMeasureTicksBudget:
-                return .full
-            default:
+            } else {
                 return .invalid
             }
         }

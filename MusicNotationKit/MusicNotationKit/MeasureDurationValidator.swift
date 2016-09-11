@@ -8,8 +8,6 @@
 
 public enum MeasureDurationValidator {
 
-    internal static let ticksPerBaseNote = 1024
-
     public enum CompletionState: Equatable {
         case notFull(availableNotes: [NoteDuration : Int])
         case full
@@ -32,31 +30,29 @@ public enum MeasureDurationValidator {
         }
     }
 
-    public static func completionState(of measure: ImmutableMeasure) -> CompletionState {
-        let fullMeasureTicksBudget = measure.timeSignature.topNumber * ticksPerBaseNote
+    /**
+     For the given measure, returns an array of `CompletionState` for each set in the measure in order.
+     */
+    public static func completionState(of measure: ImmutableMeasure) -> [CompletionState] {
         let baseDuration: NoteDuration
         do {
             baseDuration = try baseNoteDuration(from: measure)
         } catch {
-            return .invalid
+            return [.invalid]
         }
-        var filledTicks: Double = 0
-        for noteCollection in measure.notes {
-            if let note = noteCollection as? Note {
-                filledTicks += Double(ticks(for: note.noteDuration, baseDuration: baseDuration))
-                filledTicks += Double(ticksFromDot(for: note, baseDuration: baseDuration))
-            } else if let tuplet = noteCollection as? Tuplet {
-
-            } else {
-                assertionFailure("NoteCollection was note a known type (tuplet or note)")
+        let fullMeasureTicksBudget = measure.timeSignature.topNumber * baseDuration.ticks
+        // Validate each set separately
+        return measure.notes.map { noteCollection in
+            let filledTicks = noteCollection.reduce(0) { prev, currentCollection in
+                return prev + currentCollection.noteTimingCount * currentCollection.noteDuration.ticks
+            }
+            switch filledTicks {
+            case fullMeasureTicksBudget:
+                return .full
+            // TODO: Add other cases
+            default:
                 return .invalid
             }
-        }
-        switch filledTicks {
-        case Double(fullMeasureTicksBudget):
-            return .full
-        default:
-            return .invalid
         }
     }
 
@@ -72,34 +68,10 @@ public enum MeasureDurationValidator {
         // TODO: (Kyle) We should validate in TimeSignature to make sure the number
         // isn't too large. Then I guess we can make this a force unwrap, because the math above 
         // means it will always be a power of 2 and NoteDuration is always power of 2.
-        if let noteDuration = NoteDuration(rawValue: rationalizedBottomNumber) {
-            return noteDuration
+        if let timeSignatureValue = NoteDuration.TimeSignatureValue(rawValue: rationalizedBottomNumber) {
+            return NoteDuration(timeSignatureValue: timeSignatureValue)
         } else {
             throw MeasureDurationValidatorError.invalidBottomNumber
-        }
-    }
-
-    internal static func ticks(for duration: NoteDuration, baseDuration: NoteDuration) -> Int {
-        let basePower = log(Double(baseDuration.rawValue)) / log(2)
-        let durationPower = log(Double(duration.rawValue)) / log(2)
-        let difference = durationPower - basePower
-        let factor = pow(2, abs(difference))
-        if difference < 0 {
-            return ticksPerBaseNote * Int(factor)
-        } else {
-            return ticksPerBaseNote / Int(factor)
-        }
-    }
-
-    internal static func ticksFromDot(for note: Note, baseDuration: NoteDuration) -> Int {
-        let ticksForDuration = ticks(for: note.noteDuration, baseDuration: baseDuration)
-        switch note.dot {
-        case nil:
-            return 0
-        case .single?:
-            return ticksForDuration / 2
-        case .double?:
-            return ticksForDuration / 2 + ticksForDuration / 4
         }
     }
 }

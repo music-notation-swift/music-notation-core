@@ -38,91 +38,91 @@ class MeasureDurationValidatorTests: XCTestCase {
         let key = Key(noteLetter: .c)
         var staff = Staff(clef: .treble, instrument: .guitar6)
         let dotted16: Note = {
-            var note = Note(noteDuration: .sixteenth, tone: Tone(noteLetter: .c, octave: .octave0))
-            note.dot = .single
-            return note
+            return Note(
+                noteDuration: try! NoteDuration(value: .sixteenth, dotCount: 1),
+                tone: Tone(noteLetter: .c, octave: .octave0))
         }()
         let doubleDottedEighth: Note = {
-            var note = Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave0))
-            note.dot = .double
-            return note
+            return Note(
+                noteDuration: try! NoteDuration(value: .eighth, dotCount: 2),
+                tone: Tone(noteLetter: .c, octave: .octave0))
         }()
         let quarter = Note(noteDuration: .quarter, tone: Tone(noteLetter: .c, octave: .octave0))
         let thirtySecond = Note(noteDuration: .thirtySecond, tone: Tone(noteLetter: .c, octave: .octave0))
         let halfRest = Note(noteDuration: .half)
-        let quarterTriplet = try! Tuplet(notes: [quarter, quarter, quarter])
+        let quarterTriplet = try! Tuplet(3, .quarter, notes: [quarter, quarter, quarter])
 
         fullMeasure = Measure(
             timeSignature: MeasureDurationValidatorTests.standardTimeSignature,
             key: key,
-            notes: [quarter, quarter, thirtySecond, thirtySecond, thirtySecond, thirtySecond, quarter, dotted16,
-                    thirtySecond]
+            notes: [[quarter, quarter, thirtySecond, thirtySecond, thirtySecond, thirtySecond, quarter, dotted16,
+                    thirtySecond]]
         )
         // Missing 1 3/4 beats
         notFullMeasure = Measure(
             timeSignature: MeasureDurationValidatorTests.standardTimeSignature,
             key: key,
-            notes: [quarterTriplet, thirtySecond, thirtySecond]
+            notes: [[quarterTriplet, thirtySecond, thirtySecond]]
         )
         // Missing 1 1/8 beats
         notFullMeasureDotted = Measure(
             timeSignature: MeasureDurationValidatorTests.standardTimeSignature,
             key: key,
-            notes: [halfRest, doubleDottedEighth]
+            notes: [[halfRest, doubleDottedEighth]]
         )
         // Overfilled by the last 2 quarter notes. Full if they aren't there
         overfilledMeasure = Measure(
             timeSignature: MeasureDurationValidatorTests.standardTimeSignature,
             key: key,
-            notes: [halfRest, quarter, dotted16, thirtySecond, thirtySecond, thirtySecond, thirtySecond, thirtySecond,
-                    quarter, quarter]
+            notes: [[halfRest, quarter, dotted16, thirtySecond, thirtySecond, thirtySecond, thirtySecond, thirtySecond,
+                    quarter, quarter]]
         )
         // The last sixteenth fills the measure, but the dot puts it over the edge
         overfilledWithDotMeasure = Measure(
             timeSignature: MeasureDurationValidatorTests.standardTimeSignature,
             key: key,
-            notes: [halfRest, quarter, thirtySecond, thirtySecond, thirtySecond, thirtySecond, thirtySecond,
-                    thirtySecond, dotted16]
+            notes: [[halfRest, quarter, thirtySecond, thirtySecond, thirtySecond, thirtySecond, thirtySecond,
+                    thirtySecond, dotted16]]
         )
         // Quarter is too much, but when removed, the measure is not full
         overfilledWithTooLargeMeasure = Measure(
             timeSignature: MeasureDurationValidatorTests.standardTimeSignature,
             key: key,
-            notes: [quarter, quarter, quarter, doubleDottedEighth, quarter]
+            notes: [[quarter, quarter, quarter, doubleDottedEighth, quarter]]
         )
         fullMeasureOddTimeSignature = Measure(
             timeSignature: MeasureDurationValidatorTests.oddTimeSignature,
             key: key,
-            notes: [dotted16, thirtySecond, quarter, quarter, thirtySecond, thirtySecond]
+            notes: [[dotted16, thirtySecond, quarter, quarter, thirtySecond, thirtySecond]]
         )
         // Missing a quarter note (4 beats)
         notFullMeasureOddTimeSignature = Measure(
             timeSignature: MeasureDurationValidatorTests.oddTimeSignature,
             key: key,
-            notes: [dotted16, thirtySecond, quarter, thirtySecond, thirtySecond]
+            notes: [[dotted16, thirtySecond, quarter, thirtySecond, thirtySecond]]
         )
         // Overfilled by the half rest. Full if removed
         overfilledMeasureOddTimeSignature = Measure(
             timeSignature: MeasureDurationValidatorTests.oddTimeSignature,
             key: key,
-            notes: [dotted16, thirtySecond, quarter, thirtySecond, thirtySecond, quarter, halfRest]
+            notes: [[dotted16, thirtySecond, quarter, thirtySecond, thirtySecond, quarter, halfRest]]
         )
         fullMeasureIrrationalTimeSignature = Measure(
             timeSignature: MeasureDurationValidatorTests.irrationalTimeSignature,
             key: key,
-            notes: [quarter, quarter, quarter]
+            notes: [[quarter, quarter, quarter]]
         )
         // Missing one quarter note
         notFullMeasureIrrationalTimeSignature = Measure(
             timeSignature: MeasureDurationValidatorTests.irrationalTimeSignature,
             key: key,
-            notes: [quarter, quarter]
+            notes: [[quarter, quarter]]
         )
         // Overfilled by one quarter note
         overfilledMeasureIrrationalTimeSignature = Measure(
             timeSignature: MeasureDurationValidatorTests.irrationalTimeSignature,
             key: key,
-            notes: [quarter, quarter, quarter, quarter]
+            notes: [[quarter, quarter, quarter, quarter]]
         )
         // Add all to staff
         staff.appendMeasure(fullMeasure)
@@ -146,15 +146,15 @@ class MeasureDurationValidatorTests: XCTestCase {
     func testCompletionStateFull() {
         XCTAssertEqual(
             MeasureDurationValidator.completionState(of: fullMeasure),
-            MeasureDurationValidator.CompletionState.full
+            [MeasureDurationValidator.CompletionState.full]
         )
         XCTAssertEqual(
             MeasureDurationValidator.completionState(of: fullMeasureOddTimeSignature),
-            MeasureDurationValidator.CompletionState.full
+            [MeasureDurationValidator.CompletionState.full]
         )
         XCTAssertEqual(
             MeasureDurationValidator.completionState(of: fullMeasureIrrationalTimeSignature),
-            MeasureDurationValidator.CompletionState.full
+            [MeasureDurationValidator.CompletionState.full]
         )
     }
 
@@ -163,35 +163,35 @@ class MeasureDurationValidatorTests: XCTestCase {
     func testCompletionStateNotFullForEmpty() {
         XCTAssertEqual(
             MeasureDurationValidator.completionState(of: emptyMeasure),
-            MeasureDurationValidator.CompletionState.notFull(availableNotes: [.whole: 1])
+            [MeasureDurationValidator.CompletionState.notFull(availableNotes: [.whole: 1])]
         )
     }
 
     func testCompletionStateNotFullForStandard() {
         XCTAssertEqual(
             MeasureDurationValidator.completionState(of: notFullMeasure),
-            MeasureDurationValidator.CompletionState.notFull(availableNotes: [.quarter: 1, .eighth: 1, .sixteenth: 1])
+            [MeasureDurationValidator.CompletionState.notFull(availableNotes: [.quarter: 1, .eighth: 1, .sixteenth: 1])]
         )
     }
 
     func testCompletionStateNotFullForDotted() {
         XCTAssertEqual(
             MeasureDurationValidator.completionState(of: notFullMeasure),
-            MeasureDurationValidator.CompletionState.notFull(availableNotes: [.quarter: 1, .thirtySecond: 1])
+            [MeasureDurationValidator.CompletionState.notFull(availableNotes: [.quarter: 1, .thirtySecond: 1])]
         )
     }
 
     func testCompletionStateNotFullForOddTimeSignature() {
         XCTAssertEqual(
             MeasureDurationValidator.completionState(of: notFullMeasureOddTimeSignature),
-            MeasureDurationValidator.CompletionState.notFull(availableNotes: [.quarter: 1])
+            [MeasureDurationValidator.CompletionState.notFull(availableNotes: [.quarter: 1])]
         )
     }
 
     func testCompletionStateNotFullForIrrationalTimeSignature() {
         XCTAssertEqual(
             MeasureDurationValidator.completionState(of: notFullMeasureIrrationalTimeSignature),
-            MeasureDurationValidator.CompletionState.notFull(availableNotes: [.quarter: 1])
+            [MeasureDurationValidator.CompletionState.notFull(availableNotes: [.quarter: 1])]
         )
     }
 
@@ -200,35 +200,35 @@ class MeasureDurationValidatorTests: XCTestCase {
     func testCompletionStateOverfilledForOneExtra() {
         XCTAssertEqual(
             MeasureDurationValidator.completionState(of: overfilledWithTooLargeMeasure),
-            MeasureDurationValidator.CompletionState.overfilled(overflowingNotes: Range(4...4))
+            [MeasureDurationValidator.CompletionState.overfilled(overflowingNotes: Range(4...4))]
         )
     }
 
     func testCompletionStateOverfilledForMultipleExtra() {
         XCTAssertEqual(
             MeasureDurationValidator.completionState(of: overfilledMeasure),
-            MeasureDurationValidator.CompletionState.overfilled(overflowingNotes: Range(8...9))
+            [MeasureDurationValidator.CompletionState.overfilled(overflowingNotes: Range(8...9))]
         )
     }
 
     func testCompletionStateOverfilledForSingleExtraOddTimeSignature() {
         XCTAssertEqual(
             MeasureDurationValidator.completionState(of: overfilledMeasureOddTimeSignature),
-            MeasureDurationValidator.CompletionState.overfilled(overflowingNotes: Range(6...6))
+            [MeasureDurationValidator.CompletionState.overfilled(overflowingNotes: Range(6...6))]
         )
     }
 
     func testCompletionStateOverfilledTooFullBecauseOfDot() {
         XCTAssertEqual(
             MeasureDurationValidator.completionState(of: overfilledWithDotMeasure),
-            MeasureDurationValidator.CompletionState.overfilled(overflowingNotes: Range(8...8))
+            [MeasureDurationValidator.CompletionState.overfilled(overflowingNotes: Range(8...8))]
         )
     }
 
     func testCompletionStateOverfilledForSingleExtraIrrationalTimeSignature() {
         XCTAssertEqual(
             MeasureDurationValidator.completionState(of: overfilledMeasureIrrationalTimeSignature),
-            MeasureDurationValidator.CompletionState.overfilled(overflowingNotes: Range(3...3))
+            [MeasureDurationValidator.CompletionState.overfilled(overflowingNotes: Range(3...3))]
         )
     }
 
@@ -348,7 +348,7 @@ class MeasureDurationValidatorTests: XCTestCase {
             let baseNoteDurationOdd = try MeasureDurationValidator.baseNoteDuration(from: fullMeasureOddTimeSignature)
             XCTAssertEqual(baseNoteDurationOdd, .sixteenth)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -357,131 +357,7 @@ class MeasureDurationValidatorTests: XCTestCase {
             let baseNoteDurationIrrational = try MeasureDurationValidator.baseNoteDuration(from: fullMeasureIrrationalTimeSignature)
             XCTAssertEqual(baseNoteDurationIrrational, .quarter)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
-    }
-
-    // MARK: - ticks(for:givenBaseDuration:)
-
-    func testTicksForDurationForSameAsBaseStandard() {
-        let baseDuration: NoteDuration = .quarter
-        let duration: NoteDuration = .quarter
-        XCTAssertEqual(MeasureDurationValidator.ticks(for: duration, baseDuration: baseDuration),
-                       MeasureDurationValidator.ticksPerBaseNote
-        )
-    }
-
-    func testTicksForDurationForSmallerStandard() {
-        let baseDuration: NoteDuration = .sixteenth
-        let duration: NoteDuration = .quarter
-        XCTAssertEqual(MeasureDurationValidator.ticks(for: duration, baseDuration: baseDuration),
-                       MeasureDurationValidator.ticksPerBaseNote * 4
-        )
-    }
-
-    func testTicksForDurationForLargerStandard() {
-        let baseDuration: NoteDuration = .whole
-        let duration: NoteDuration = .quarter
-        XCTAssertEqual(MeasureDurationValidator.ticks(for: duration, baseDuration: baseDuration),
-                       MeasureDurationValidator.ticksPerBaseNote / 4
-        )
-    }
-
-    func testTicksForDurationForSameAsBaseOdd() {
-        let baseDuration: NoteDuration = .sixteenth
-        let duration: NoteDuration = .sixteenth
-        XCTAssertEqual(MeasureDurationValidator.ticks(for: duration, baseDuration: baseDuration),
-                       MeasureDurationValidator.ticksPerBaseNote
-        )
-    }
-
-    func testTicksForDurationForSmallerOdd() {
-        let baseDuration: NoteDuration = .thirtySecond
-        let duration: NoteDuration = .sixteenth
-        XCTAssertEqual(MeasureDurationValidator.ticks(for: duration, baseDuration: baseDuration),
-                       MeasureDurationValidator.ticksPerBaseNote * 2
-        )
-    }
-
-    func testTicksForDurationForLargerOdd() {
-        let baseDuration: NoteDuration = .quarter
-        let duration: NoteDuration = .sixteenth
-        XCTAssertEqual(MeasureDurationValidator.ticks(for: duration, baseDuration: baseDuration),
-                       MeasureDurationValidator.ticksPerBaseNote / 4
-        )
-    }
-
-    // MARK: - ticksFromDot(for:baseDuration:)
-
-    func testTicksFromDotForNoDotSameAsBase() {
-
-    }
-
-    func testTicksFromDotForNoDotSmaller() {
-
-    }
-
-    func testTicksFromDotForNoDotLarger() {
-
-    }
-
-    func testTicksFromDotForNoDotRestSameAsBase() {
-
-    }
-
-    func testTicksFromDotForNoDotRestSmaller() {
-
-    }
-
-    func testTicksFromDotForNoDotRestLarger() {
-
-    }
-
-    func testTicksFromDotForSingleDotSameAsBase() {
-
-    }
-
-    func testTicksFromDotForSingleDotSmaller() {
-
-    }
-
-    func testTicksFromDotForSingleDotLarger() {
-
-    }
-
-    func testTicksFromDotForSingleDotRestSameAsBase() {
-
-    }
-
-    func testTicksFromDotForSingleDotRestSmaller() {
-
-    }
-
-    func testTicksFromDotForSingleDotRestLarger() {
-
-    }
-
-    func testTicksFromDotForDoubleDotSameAsBase() {
-
-    }
-
-    func testTicksFromDotForDoubleDotSmaller() {
-
-    }
-
-    func testTicksFromDotForDoubleDotLarger() {
-
-    }
-
-    func testTicksFromDotForDoubleDotRestSameAsBase() {
-
-    }
-
-    func testTicksFromDotForDoubleDotRestSmaller() {
-
-    }
-
-    func testTicksFromDotForDoubleDotRestLarger() {
-
     }
 }

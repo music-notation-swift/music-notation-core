@@ -42,14 +42,32 @@ public enum MeasureDurationValidator {
         }
         let fullMeasureTicksBudget = measure.timeSignature.topNumber * baseDuration.ticks
         // Validate each set separately
+        var setIndex = 0
         return measure.notes.map { noteCollection in
+            defer {
+                setIndex += 1
+            }
+            var overFilledStartIndex: Int?
+            var index: Int = 0
             let filledTicks = noteCollection.reduce(0) { prev, currentCollection in
-                return prev + currentCollection.noteTimingCount * currentCollection.noteDuration.ticks
+                let newTicks = prev + currentCollection.noteTimingCount * currentCollection.noteDuration.ticks
+                if newTicks > fullMeasureTicksBudget && overFilledStartIndex == nil {
+                    overFilledStartIndex = index
+                }
+                index += 1
+                return newTicks
+            }
+            if filledTicks == fullMeasureTicksBudget {
+                return .full
+            } else if let overFilledStartIndex = overFilledStartIndex {
+                return .overfilled(
+                overflowingNotes: Range(
+                    uncheckedBounds: (overFilledStartIndex, measure.noteCount[setIndex])
+                ))
             }
             switch filledTicks {
             case fullMeasureTicksBudget:
                 return .full
-            // TODO: Add other cases
             default:
                 return .invalid
             }

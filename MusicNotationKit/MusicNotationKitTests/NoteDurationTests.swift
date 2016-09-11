@@ -204,6 +204,6 @@ class NoteDurationTests: XCTestCase {
         XCTAssertEqual(NoteDuration.thirtySecond.timeSignatureValue?.rawValue, 32)
         XCTAssertEqual(NoteDuration.sixtyFourth.timeSignatureValue?.rawValue, 64)
         XCTAssertEqual(NoteDuration.oneTwentyEighth.timeSignatureValue?.rawValue, 128)
-        XCTAssertEqual(NoteDuration.twoFiftySixth.timeSignatureValue?.rawValue, 256)
+        XCTAssertNil(NoteDuration.twoFiftySixth.timeSignatureValue?.rawValue)
     }
 }

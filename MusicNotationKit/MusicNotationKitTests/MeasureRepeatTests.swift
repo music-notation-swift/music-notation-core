@@ -15,8 +15,8 @@ class MeasureRepeatTests: XCTestCase {
     static let key = Key(noteLetter: .c)
     static let note1 = Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1))
     static let note2 = Note(noteDuration: .quarter, tone: Tone(noteLetter: .d, octave: .octave1))
-    let measure1 = Measure(timeSignature: timeSignature, key: key, notes: [note1, note1])
-    let measure2 = Measure(timeSignature: timeSignature, key: key, notes: [note2, note2])
+    let measure1 = Measure(timeSignature: timeSignature, key: key, notes: [[note1, note1]])
+    let measure2 = Measure(timeSignature: timeSignature, key: key, notes: [[note2, note2]])
 
     // MARK: - init(measures:repeateCount:)
     // MARK: Failures
@@ -48,7 +48,7 @@ class MeasureRepeatTests: XCTestCase {
             let measureRepeat = try MeasureRepeat(measures: [measure1])
             XCTAssertEqual(measureRepeat.repeatCount, 1)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -56,7 +56,7 @@ class MeasureRepeatTests: XCTestCase {
         do {
             let _ = try MeasureRepeat(measures: [measure2], repeatCount: 3)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -64,7 +64,7 @@ class MeasureRepeatTests: XCTestCase {
         do {
             let _ = try MeasureRepeat(measures: [measure1, measure2], repeatCount: 4)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -80,10 +80,10 @@ class MeasureRepeatTests: XCTestCase {
                 return
             }
             XCTAssertTrue(compareImmutableMeasureArrays(actual: actual, expected: expected))
-            XCTAssertEqual(String(measureRepeat), "[ |4/4: 1/8c1,1/8c1| ] × 2")
+            XCTAssertEqual(String(describing: measureRepeat), "[ |4/4: [1/8c1, 1/8c1]| ] × 2")
         }
         catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -98,10 +98,10 @@ class MeasureRepeatTests: XCTestCase {
                 return
             }
             XCTAssertTrue(compareImmutableMeasureArrays(actual: actual, expected: expected))
-            XCTAssertEqual(String(measureRepeat), "[ |4/4: 1/8c1,1/8c1| ] × 4")
+            XCTAssertEqual(String(describing: measureRepeat), "[ |4/4: [1/8c1, 1/8c1]| ] × 4")
         }
         catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -117,10 +117,10 @@ class MeasureRepeatTests: XCTestCase {
                 return
             }
             XCTAssertTrue(compareImmutableMeasureArrays(actual: actual, expected: expected))
-            XCTAssertEqual(String(measureRepeat), "[ |4/4: 1/8c1,1/8c1|, |4/4: 1/4d1,1/4d1| ] × 2")
+            XCTAssertEqual(String(describing: measureRepeat), "[ |4/4: [1/8c1, 1/8c1]|, |4/4: [1/4d1, 1/4d1]| ] × 2")
         }
         catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -141,10 +141,10 @@ class MeasureRepeatTests: XCTestCase {
                 return
             }
             XCTAssertTrue(compareImmutableMeasureArrays(actual: actual, expected: expected))
-            XCTAssertEqual(String(measureRepeat), "[ |4/4: 1/8c1,1/8c1|, |4/4: 1/4d1,1/4d1| ] × 4")
+            XCTAssertEqual(String(describing: measureRepeat), "[ |4/4: [1/8c1, 1/8c1]|, |4/4: [1/4d1, 1/4d1]| ] × 4")
         }
         catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -157,7 +157,7 @@ class MeasureRepeatTests: XCTestCase {
             let measureRepeat2 = try MeasureRepeat(measures: [measure2, measure1, measure2])
             XCTAssertFalse(measureRepeat1 == measureRepeat2)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -167,7 +167,7 @@ class MeasureRepeatTests: XCTestCase {
             let measureRepeat2 = try MeasureRepeat(measures: [measure1, measure2, measure1])
             XCTAssertFalse(measureRepeat1 == measureRepeat2)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -177,7 +177,7 @@ class MeasureRepeatTests: XCTestCase {
             let measureRepeat2 = try MeasureRepeat(measures: [measure2, measure1, measure2])
             XCTAssertFalse(measureRepeat1 == measureRepeat2)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -187,7 +187,7 @@ class MeasureRepeatTests: XCTestCase {
             let measureRepeat2 = try MeasureRepeat(measures: [measure1, measure2], repeatCount: 3)
             XCTAssertFalse(measureRepeat1 == measureRepeat2)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -199,7 +199,7 @@ class MeasureRepeatTests: XCTestCase {
             let measureRepeat2 = try MeasureRepeat(measures: [measure1], repeatCount: 2)
             XCTAssertTrue(measureRepeat1 == measureRepeat2)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 

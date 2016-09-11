@@ -1,0 +1,190 @@
+//
+//  NoteDuration.swift
+//  MusicNotationKit
+//
+//  Created by Kyle Sherman on 8/20/16.
+//  Copyright © 2016 Kyle Sherman. All rights reserved.
+//
+
+public struct NoteDuration {
+
+    public enum Value: CustomDebugStringConvertible {
+        case large
+        case long
+        case doubleWhole
+        case whole
+        case half
+        case quarter
+        case eighth
+        case sixteenth
+        case thirtySecond
+        case sixtyFourth
+        case oneTwentyEighth
+        case twoFiftySixth
+
+        public var debugDescription: String {
+            switch self {
+            case .large: return "8"
+            case .long: return "4"
+            case .doubleWhole: return "2"
+            case .whole: return "1"
+            case .half: return "1/2"
+            case .quarter: return "1/4"
+            case .eighth: return "1/8"
+            case .sixteenth: return "1/16"
+            case .thirtySecond: return "1/32"
+            case .sixtyFourth: return "1/64"
+            case .oneTwentyEighth: return "1/128"
+            case .twoFiftySixth: return "1/256"
+            }
+        }
+    }
+
+    /// The duration value of the `NoteDuration`. i.e. eighth, sixteenth, etc.
+    public let value: Value
+    /// The number of dots for this `NoteDuration`.
+    public let dotCount: Int
+    /**
+     The value for which the bottom number of time signature will be if this duration value is used.
+     */
+    public var timeSignatureValue: Int? {
+        switch value {
+        case .whole: return 1
+        case .half: return 2
+        case .quarter: return 4
+        case .eighth: return 8
+        case .sixteenth: return 16
+        case .thirtySecond: return 32
+        case .sixtyFourth: return 64
+        case .oneTwentyEighth: return 128
+        case .twoFiftySixth: return 256
+        case .long, .large, .doubleWhole: return nil
+        }
+    }
+    /**
+     This is the number of ticks for the duration with the `dotCount` taken into account. This is a mathematical
+     representation of a `NoteDuration` that can be used for different calculations of equivalence.
+     */
+    internal var ticks: Int {
+        var ticks: Int = 0
+        let baseTicks: Int = {
+            switch value {
+            case .large: return 65_536
+            case .long: return 32_768
+            case .doubleWhole: return 16_384
+            case .whole: return 8192
+            case .half: return 4096
+            case .quarter: return 2048
+            case .eighth: return 1024
+            case .sixteenth: return 512
+            case .thirtySecond: return 256
+            case .sixtyFourth: return 128
+            case .oneTwentyEighth: return 64
+            case .twoFiftySixth: return 32
+            }
+        }()
+        ticks += baseTicks
+        var dotValue = baseTicks / 2
+        for _ in 0..<dotCount {
+            ticks += dotValue
+            dotValue = dotValue / 2
+        }
+        return ticks
+    }
+
+    private init(value: Value) {
+        self.value = value
+        self.dotCount = 0
+    }
+
+    /**
+     Use this initializer if you would like to create a `NoteDuration` with 1 or more dots. 
+     Otherwise, use the static properties if you do not need any dots.
+     
+     - parameter value: The value of the duration. i.e. whole, quarter, eighth, etc.
+     - parameter dotCount: The number of dots for this duration.
+     - throws:
+        - `NoteDurationError.negativeDotCountInvalid`
+     */
+    public init(value: Value, dotCount: Int) throws {
+        guard dotCount >= 0 else {
+            throw NoteDurationError.negativeDotCountInvalid
+        }
+        self.value = value
+        self.dotCount = dotCount
+    }
+
+    public static let large = NoteDuration(value: .large)
+    public static let long = NoteDuration(value: .long)
+    public static let doubleWhole = NoteDuration(value: .doubleWhole)
+    public static let whole = NoteDuration(value: .whole)
+    public static let half = NoteDuration(value: .half)
+    public static let quarter = NoteDuration(value: .quarter)
+    public static let eighth = NoteDuration(value: .eighth)
+    public static let sixteenth = NoteDuration(value: .sixteenth)
+    public static let thirtySecond = NoteDuration(value: .thirtySecond)
+    public static let sixtyFourth = NoteDuration(value: .sixtyFourth)
+    public static let oneTwentyEighth = NoteDuration(value: .oneTwentyEighth)
+    public static let twoFiftySixth = NoteDuration(value: .twoFiftySixth)
+
+    /**
+     This can be used to find out how many of a certain duration fits within another a duration. This takes into account
+     the `dotCount` as well.
+     
+     For example: How many eighth notes fit within a quarter note?
+     `NoteDuration.number(of: .eighth, within: .quarter)` = 2.0
+     
+     - parameter noteDuration: the `NoteDuration` you would like to see how many would fit.
+     - parameter baseNoteDuration: the `NoteDuration` that you would to see how many of the first duration will fit into.
+     - returns: A `Double` representing how many of the first duration fit within the second. If the first duration is
+        larger than the second, it will be a decimal number less than 0.
+     */
+    public static func number(of noteDuration: NoteDuration, within baseNoteDuration: NoteDuration) -> Double {
+        let baseTicks = baseNoteDuration.ticks
+        let equalityTicks = noteDuration.ticks
+
+        let fullNotes = Double(baseTicks / equalityTicks)
+        if fullNotes >= 1 {
+            let decimalValue = Double(baseTicks % equalityTicks) / Double(baseTicks)
+            return fullNotes + decimalValue
+        } else {
+            return Double(baseTicks) / Double(equalityTicks)
+        }
+    }
+}
+
+extension NoteDuration: Hashable {
+    public var hashValue: Int {
+        let valueAsHash: Int
+        if let timeSignatureValue = timeSignatureValue {
+            valueAsHash = timeSignatureValue
+        } else {
+            switch value {
+            case .doubleWhole: valueAsHash = -2
+            case .long: valueAsHash = -4
+            case .large: valueAsHash = -8
+            default:
+                assertionFailure("Should have been covered already")
+                valueAsHash = 0
+            }
+        }
+        return valueAsHash ^ dotCount
+    }
+}
+
+extension NoteDuration: Equatable {
+    public static func ==(lhs: NoteDuration, rhs: NoteDuration) -> Bool {
+        return lhs.value == rhs.value && lhs.dotCount == rhs.dotCount
+    }
+}
+
+extension NoteDuration: CustomDebugStringConvertible {
+    public var debugDescription: String {
+        let dots = String(repeating: ".", count: dotCount)
+        return "\(value.debugDescription)\(dots)"
+    }
+}
+
+public enum NoteDurationError: Error {
+    case negativeDotCountInvalid
+}

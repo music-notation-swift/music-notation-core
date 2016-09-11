@@ -6,14 +6,17 @@
 //  Copyright (c) 2015 Kyle Sherman. All rights reserved.
 //
 
-public struct Note {
+public struct Note: NoteCollection {
 
+    // NoteCollection
+    public let noteCount = 1
     public let noteDuration: NoteDuration
+    public let noteTimingCount = 1
+
     public let tones: [Tone]
 
     public let isRest: Bool
 
-    public var dot: Dot?
     public var accent: Accent?
     public var isStaccato: Bool = false
     public var dynamics: Dynamics?
@@ -92,7 +95,6 @@ extension Note: Equatable {
         if lhs.noteDuration == rhs.noteDuration &&
             lhs.tones == rhs.tones &&
             lhs.isRest == rhs.isRest &&
-            lhs.dot == rhs.dot &&
             lhs.accent == rhs.accent &&
             lhs.isStaccato == rhs.isStaccato &&
             lhs.dynamics == rhs.dynamics &&
@@ -103,11 +105,6 @@ extension Note: Equatable {
             return false
         }
     }
-}
-
-extension Note: NoteCollection {
-
-    public var noteCount: Int { return 1 }
 }
 
 extension Note: CustomDebugStringConvertible {
@@ -122,13 +119,7 @@ extension Note: CustomDebugStringConvertible {
                 tonesString = ""
             }
         }
-        let dotString: String
-        if let dot = dot {
-            dotString = "\(dot)"
-        } else {
-            dotString = ""
-        }
-        return "\(tie == .end || tie == .beginAndEnd ? "_" : "")\(noteDuration)\(dotString)\(tonesString)\(isRest ? "R" : "")\(tie == .begin || tie == .beginAndEnd ? "_" : "")"
+        return "\(tie == .end || tie == .beginAndEnd ? "_" : "")\(noteDuration)\(tonesString)\(isRest ? "R" : "")\(tie == .begin || tie == .beginAndEnd ? "_" : "")"
     }
 }
 

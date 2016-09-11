@@ -72,12 +72,27 @@ http://usermanuals.musicxml.com/MusicXML/Content/ST-MusicXML-note-type-value.htm
 
 New enum: `MeasureDurationValidator` with all static methods.
 
+### Latest Draft
+
 ```swift
 public enum MeasureDurationValidator {
     public enum CompletionState {
-        case NotFull
-        case Full
-        case Overfilled
+        case notFull(availableNotes: [NoteDuration : Int])
+        case full
+        case overfilled(overflowingNotes: Range<Int>)
+    }
+    public static func completionState(of measure: ImmutableMeasure) -> CompletionState
+    public static func number(of noteDuration: NoteDuration, fittingIn: ImmutableMeasure) -> Int
+```
+
+### First Draft
+
+```swift
+public enum MeasureDurationValidator {
+    public enum CompletionState {
+        case notFull
+        case full
+        case overfilled
     }
     public static func completionState(of measure: Measure) -> CompletionState
     public static func number(of noteDuration: NoteDuration, fittingIn: Measure) -> Int
@@ -94,6 +109,7 @@ Changes to `Measure`:
 - There may be a way to reuse functionality from `Staff.insertMeasure`, so think about it...
 
 Opens:
+- How to deal with irrational meter (i.e. 4/3 time signature)
 - ~~Good to have the ability to tell what can be used to fill the measure.~~
 - ~~Let the API caller know that the measure is incomplete.~~
 - ~~Add the ability to split the measure.~~ See changes for `Staff`

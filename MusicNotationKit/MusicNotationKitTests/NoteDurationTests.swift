@@ -86,6 +86,36 @@ class NoteDurationTests: XCTestCase {
         }
     }
 
+    // MARK: - init(timeSignatureValue:)
+    // Cannot fail
+
+    func testInitTimeSignatureValue() {
+        XCTAssertEqual(
+            NoteDuration(timeSignatureValue: NoteDuration.TimeSignatureValue(value: .whole)!),
+            .whole)
+        XCTAssertEqual(
+            NoteDuration(timeSignatureValue: NoteDuration.TimeSignatureValue(value: .half)!),
+            .half)
+        XCTAssertEqual(
+            NoteDuration(timeSignatureValue: NoteDuration.TimeSignatureValue(value: .quarter)!),
+            .quarter)
+        XCTAssertEqual(
+            NoteDuration(timeSignatureValue: NoteDuration.TimeSignatureValue(value: .eighth)!),
+            .eighth)
+        XCTAssertEqual(
+            NoteDuration(timeSignatureValue: NoteDuration.TimeSignatureValue(value: .sixteenth)!),
+            .sixteenth)
+        XCTAssertEqual(
+            NoteDuration(timeSignatureValue: NoteDuration.TimeSignatureValue(value: .thirtySecond)!),
+            .thirtySecond)
+        XCTAssertEqual(
+            NoteDuration(timeSignatureValue: NoteDuration.TimeSignatureValue(value: .sixtyFourth)!),
+            .sixtyFourth)
+        XCTAssertEqual(
+            NoteDuration(timeSignatureValue: NoteDuration.TimeSignatureValue(value: .oneTwentyEighth)!),
+            .oneTwentyEighth)
+    }
+
     // MARK: - number(of:equalTo:)
     // MARK: Successes
 

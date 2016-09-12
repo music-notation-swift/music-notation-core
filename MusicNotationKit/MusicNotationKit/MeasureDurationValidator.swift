@@ -104,7 +104,7 @@ public enum MeasureDurationValidator {
         return findLargest(start: 0, end: allTicks.count - 1)
     }
 
-    public static func number(of noteDuration: NoteDuration, fittingIn measure: ImmutableMeasure) -> Int {
+    public static func number(of noteDuration: NoteDuration, fittingIn measure: ImmutableMeasure, inSet setIndex: Int = 0) -> Int {
         let baseDuration: NoteDuration
         do {
             baseDuration = try baseNoteDuration(from: measure)
@@ -112,8 +112,15 @@ public enum MeasureDurationValidator {
             // TODO: Write TimeSignature validation, so this isn't possible
             return 0
         }
-        
-        return 0
+        let fullMeasureTicksBudget = measure.timeSignature.topNumber * baseDuration.ticks
+        let alreadyFilledTicks = measure.notes[setIndex].reduce(0) { prev, currentCollection in
+            return prev + currentCollection.noteTimingCount * currentCollection.noteDuration.ticks
+        }
+        let availableTicks = fullMeasureTicksBudget - alreadyFilledTicks
+        guard availableTicks > 0 else {
+            return 0
+        }
+        return availableTicks / noteDuration.ticks
     }
 
     internal static func baseNoteDuration(from measure: ImmutableMeasure) throws -> NoteDuration {

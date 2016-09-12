@@ -245,13 +245,13 @@ class MeasureDurationValidatorTests: XCTestCase {
     }
 
     func testNumberOfFittingInForEmptyStandardTimeSignature() {
-        XCTAssertEqual(MeasureDurationValidator.number(of: .whole, fittingIn: fullMeasure), 1)
+        XCTAssertEqual(MeasureDurationValidator.number(of: .whole, fittingIn: emptyMeasure), 1)
         XCTAssertEqual(MeasureDurationValidator.number(of: .half, fittingIn: emptyMeasure), 2)
         XCTAssertEqual(MeasureDurationValidator.number(of: .quarter, fittingIn: emptyMeasure), 4)
-        XCTAssertEqual(MeasureDurationValidator.number(of: .eighth, fittingIn: fullMeasure), 8)
-        XCTAssertEqual(MeasureDurationValidator.number(of: .sixteenth, fittingIn: fullMeasure), 16)
-        XCTAssertEqual(MeasureDurationValidator.number(of: .thirtySecond, fittingIn: fullMeasure), 32)
-        XCTAssertEqual(MeasureDurationValidator.number(of: .sixtyFourth, fittingIn: fullMeasure), 64)
+        XCTAssertEqual(MeasureDurationValidator.number(of: .eighth, fittingIn: emptyMeasure), 8)
+        XCTAssertEqual(MeasureDurationValidator.number(of: .sixteenth, fittingIn: emptyMeasure), 16)
+        XCTAssertEqual(MeasureDurationValidator.number(of: .thirtySecond, fittingIn: emptyMeasure), 32)
+        XCTAssertEqual(MeasureDurationValidator.number(of: .sixtyFourth, fittingIn: emptyMeasure), 64)
     }
 
     func testNumberOfFittingInForStandardTimeSignature() {

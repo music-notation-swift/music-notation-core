@@ -64,14 +64,55 @@ public enum MeasureDurationValidator {
                 overflowingNotes: Range(
                     uncheckedBounds: (overFilledStartIndex, measure.noteCount[setIndex])
                 ))
+            } else if filledTicks < fullMeasureTicksBudget {
+                return .notFull(availableNotes: availableNotes(within: fullMeasureTicksBudget - filledTicks))
             } else {
                 return .invalid
             }
         }
     }
 
-    public static func number(of noteDuration: NoteDuration, fittingIn: ImmutableMeasure) -> Int {
-        // TODO: Implement
+    private static func availableNotes(within ticks: Int) -> [NoteDuration: Int] {
+        var ticksLeft = ticks
+        var availableNotes: [NoteDuration: Int] = [:]
+        while ticksLeft != 0 {
+            let duration = findLargestDuration(lessThan: ticksLeft)
+            let noteCount = ticksLeft / duration.ticks
+            availableNotes[duration] = noteCount
+            ticksLeft -= noteCount * duration.ticks
+        }
+        return availableNotes
+    }
+
+    private static func findLargestDuration(lessThan ticks: Int) -> NoteDuration {
+        let allDurations: [NoteDuration] = [.large, .long, .doubleWhole, .whole, .half, .quarter, .eighth, .sixteenth,
+                                            .thirtySecond, .sixtyFourth, .oneTwentyEighth, .twoFiftySixth]
+        let allTicks = allDurations.map { $0.ticks }
+        func findLargest(start: Int, end: Int) -> NoteDuration {
+            guard end - start > 1 else {
+                return allDurations[end]
+            }
+            let mid = (start + end) / 2
+            if allTicks[mid] < ticks {
+                return findLargest(start: start, end: mid)
+            } else if allTicks[mid] > ticks {
+                return findLargest(start: mid, end: end)
+            } else {
+                return allDurations[mid]
+            }
+        }
+        return findLargest(start: 0, end: allTicks.count - 1)
+    }
+
+    public static func number(of noteDuration: NoteDuration, fittingIn measure: ImmutableMeasure) -> Int {
+        let baseDuration: NoteDuration
+        do {
+            baseDuration = try baseNoteDuration(from: measure)
+        } catch {
+            // TODO: Write TimeSignature validation, so this isn't possible
+            return 0
+        }
+        
         return 0
     }
 

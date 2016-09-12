@@ -176,7 +176,7 @@ class MeasureDurationValidatorTests: XCTestCase {
 
     func testCompletionStateNotFullForDotted() {
         XCTAssertEqual(
-            MeasureDurationValidator.completionState(of: notFullMeasure),
+            MeasureDurationValidator.completionState(of: notFullMeasureDotted),
             [MeasureDurationValidator.CompletionState.notFull(availableNotes: [.quarter: 1, .thirtySecond: 1])]
         )
     }

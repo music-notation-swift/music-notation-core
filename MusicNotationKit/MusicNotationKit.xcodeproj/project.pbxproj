@@ -141,8 +141,8 @@
 				27AA71121C8D1BD900E2BF22 /* ImmutableMeasure.swift */,
 				27AA71141C9140C400E2BF22 /* RepeatedMeasure.swift */,
 				27AFEB561D6984CB0064ED27 /* NoteDuration.swift */,
-				270CC5211B2C06A200CA1A56 /* Supporting Files */,
 				27D03A5A1D56918F00FF2376 /* MeasureDurationValidator.swift */,
+				270CC5211B2C06A200CA1A56 /* Supporting Files */,
 			);
 			path = MusicNotationKit;
 			sourceTree = "<group>";

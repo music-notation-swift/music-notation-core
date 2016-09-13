@@ -392,7 +392,7 @@ class MeasureTests: XCTestCase {
         measure.addNote(Note(noteDuration: .quarter))
         measure.addNote(Note(noteDuration: .quarter))
         do {
-            let index = try measure.noteCollectionIndexFromNoteIndex(2, inSet: 0)
+			let index = try measure.noteCollectionIndex(from: 2, inSet: 0)
             XCTAssertEqual(index.noteIndex, 2)
             XCTAssertNil(index.tupletIndex)
         } catch {
@@ -413,14 +413,14 @@ class MeasureTests: XCTestCase {
             let note3 = Note(noteDuration: .eighth,
                              tone: Tone(noteLetter: .c, octave: .octave1))
             measure.addTuplet(try Tuplet(3, .eighth, notes: [note1, note2, note3]))
-            let index = try measure.noteCollectionIndexFromNoteIndex(2, inSet: 0)
+			let index = try measure.noteCollectionIndex(from: 2, inSet: 0)
             XCTAssertEqual(index.noteIndex, 1)
             XCTAssertNotNil(index.tupletIndex)
             XCTAssertEqual(index.tupletIndex!, 1)
 
             // Properly address regular note coming after a tuplet
             measure.addNote(Note(noteDuration: .eighth))
-            let index2 = try measure.noteCollectionIndexFromNoteIndex(4, inSet: 0)
+			let index2 = try measure.noteCollectionIndex(from: 4, inSet: 0)
             XCTAssertEqual(index2.noteIndex, 2)
             XCTAssertNil(index2.tupletIndex)
         } catch {
@@ -431,8 +431,8 @@ class MeasureTests: XCTestCase {
     private func setTie(at index: Int, functionName: String = #function, lineNum: Int = #line) {
         do {
             try measure.startTie(at: index, inSet: 0)
-            let (noteIndex1, tupletIndex1) = try measure.noteCollectionIndexFromNoteIndex(index, inSet: 0)
-            let (noteIndex2, tupletIndex2) = try measure.noteCollectionIndexFromNoteIndex(index + 1, inSet: 0)
+			let (noteIndex1, tupletIndex1) = try measure.noteCollectionIndex(from: index, inSet: 0)
+			let (noteIndex2, tupletIndex2) = try measure.noteCollectionIndex(from: index + 1, inSet: 0)
             let firstNote = noteFromMeasure(measure, noteIndex: noteIndex1,
                                             tupletIndex: tupletIndex1)
             let secondNote = noteFromMeasure(measure, noteIndex: noteIndex2,

@@ -47,28 +47,26 @@ public struct Measure: ImmutableMeasure, Equatable {
         recomputeNoteCollectionIndexes()
     }
 	
-	public func note(at index: Int, inSet setIndex: Int) throws -> Note {
-		let noteCollectionIndex = try noteCollectionIndexFromNoteIndex(index, inSet: setIndex)
-		var noteIndex = 0
-		if noteCollectionIndex.tupletIndex != nil {
-			noteIndex = noteCollectionIndex.tupletIndex!
-		}
-		return try notes[setIndex][noteCollectionIndex.noteIndex].note(at: noteIndex)
+	public func note(at index: Int, inSet setIndex: Int = 0) throws -> Note {
+		let collectionIndex = try noteCollectionIndex(from: index, inSet: setIndex)
+		let noteIndex = collectionIndex.tupletIndex ?? 0
+		return try notes[setIndex][collectionIndex.noteIndex].note(at: noteIndex)
 	}
 
-	public mutating func replaceNote(at index: Int, inSet setIndex: Int, with note: Note) throws {
-		let noteCollectionIndex = try noteCollectionIndexFromNoteIndex(index, inSet: setIndex)
-		if noteCollectionIndex.tupletIndex == nil {
-			notes[setIndex][noteCollectionIndex.noteIndex] = note
+	public mutating func replaceNote(at index: Int, with note: Note, inSet setIndex: Int = 0) throws {
+		let collectionIndex = try noteCollectionIndex(from: index, inSet: setIndex)
+
+		guard let tupletIndex = collectionIndex.tupletIndex else {
+			notes[setIndex][collectionIndex.noteIndex] = note
 			return
 		}
 		
-		guard var tuplet = notes[setIndex][noteCollectionIndex.noteIndex] as? Tuplet,
-			let tupletIndex = noteCollectionIndex.tupletIndex else {
+		guard var tuplet = notes[setIndex][collectionIndex.noteIndex] as? Tuplet  else {
+			assertionFailure("note collection should be tuplet, but cast failed")
 			throw MeasureError.internalError
 		}
 		try tuplet.replaceNote(at: tupletIndex, with: note)
-		notes[setIndex][noteCollectionIndex.noteIndex] = tuplet
+		notes[setIndex][collectionIndex.noteIndex] = tuplet
 	}
 	
     public mutating func addNote(_ note: Note, inSet setIndex: Int = 0) {
@@ -116,7 +114,7 @@ public struct Measure: ImmutableMeasure, Equatable {
         let secondaryIndex: Int
         let secondaryRequestedTieState: Tie
 
-        let requestedNoteCurrentTie = try tieStateForNoteIndex(index, inSet: setIndex)
+		let requestedNoteCurrentTie = try tieState(forNoteIndex: index, inSet: setIndex)
 
         // Calculate secondary Index and tie states //
         let removal = requestedTieState == nil
@@ -172,16 +170,16 @@ public struct Measure: ImmutableMeasure, Equatable {
 
 		var firstNote = try note(at: index, inSet: setIndex)
 		try requestedModificationMethod(&firstNote)(primaryRequestedTieState)
-		try replaceNote(at: index, inSet: setIndex, with: firstNote)
+		try replaceNote(at: index, with: firstNote, inSet: setIndex)
 		
 		if secondaryIndex < noteCount[setIndex] && secondaryIndex >= 0 {
 			var secondNote = try note(at: secondaryIndex, inSet: setIndex)
 			try secondaryModificationMethod(&secondNote)(secondaryRequestedTieState)
-			try replaceNote(at: secondaryIndex, inSet: setIndex, with: secondNote)
+			try replaceNote(at: secondaryIndex, with: secondNote, inSet: setIndex)
 		}
     }
 
-    internal func noteCollectionIndexFromNoteIndex(_ index: Int, inSet setIndex: Int) throws -> NoteCollectionIndex {
+    internal func noteCollectionIndex(from index: Int, inSet setIndex: Int) throws -> NoteCollectionIndex {
         // Gets the index of the given element in the notes array by translating the index of the
         // single note within the NoteCollection array.
         guard index >= 0 && notes[setIndex].count > 0 else { throw MeasureError.noteIndexOutOfRange }
@@ -208,7 +206,7 @@ public struct Measure: ImmutableMeasure, Equatable {
         }
     }
 
-    private func tieStateForNoteIndex(_ index: Int, inSet setIndex: Int) throws -> Tie? {
+    private func tieState(forNoteIndex index: Int, inSet setIndex: Int) throws -> Tie? {
 		return try note(at: index, inSet: setIndex).tie
     }
 }

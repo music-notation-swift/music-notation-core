@@ -58,6 +58,16 @@ public enum NoteLetter {
 public enum Clef {
     case treble
     case bass
+    case tenor
+    case alto
+    case neutral    // Un-pitched (drums, percussion, etc.)
+    case tab        // For tabulature (guitar, etc.)
+    // Less common clefs
+    case frenchViolin
+    case soprano
+    case mezzoSoprano
+    case baritone
+    case suboctaveTreble
 }
 
 public enum Instrument {

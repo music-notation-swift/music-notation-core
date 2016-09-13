@@ -83,7 +83,7 @@ class MeasureTests: XCTestCase {
         ]
         assertNoErrorThrown {
             // setup
-            let tuplet = try Tuplet(notes: notes)
+            let tuplet = try Tuplet(3, .eighth, notes: notes)
             measure.addTuplet(tuplet)
 
             // test
@@ -91,7 +91,7 @@ class MeasureTests: XCTestCase {
             let note1 = measure.notes[0][2] as! Note
             let tuplet2 = measure.notes[0][3] as! Tuplet
             XCTAssert(note1.tie == .begin)
-            XCTAssert(tuplet2.notes[0].tie == .end)
+            XCTAssert(try tuplet2.note(at: 0).tie == .end)
         }
     }
 
@@ -107,14 +107,14 @@ class MeasureTests: XCTestCase {
         ]
         assertNoErrorThrown {
             // setup
-            let tupletSetup = try Tuplet(notes: notes)
+            let tupletSetup = try Tuplet(3, .eighth, notes: notes)
             measure.addTuplet(tupletSetup)
 
             // test
             try measure.startTie(at: 2, inSet: 0)
             try measure.startTie(at: 5, inSet: 0)
             let tuplet = measure.notes[0][3] as! Tuplet
-            XCTAssert(tuplet.notes[2].tie == .begin)
+            XCTAssert(try tuplet.note(at: 2).tie == .begin)
         }
     }
 
@@ -129,15 +129,15 @@ class MeasureTests: XCTestCase {
         ]
         assertNoErrorThrown {
             // setup
-            let tupletSetup = try Tuplet(notes: notes)
+            let tupletSetup = try Tuplet(3, .eighth, notes: notes)
             measure.addTuplet(tupletSetup)
             try measure.startTie(at: 2, inSet: 0)
 
             // test
             try measure.startTie(at: 3, inSet: 0)
             let tuplet = measure.notes[0][3] as! Tuplet
-            XCTAssert(tuplet.notes[0].tie == .beginAndEnd)
-            XCTAssert(tuplet.notes[1].tie == .end)
+            XCTAssert(try tuplet.note(at: 0).tie == .beginAndEnd)
+            XCTAssert(try tuplet.note(at: 1).tie == .end)
         }
     }
 
@@ -152,14 +152,14 @@ class MeasureTests: XCTestCase {
         ]
         assertNoErrorThrown {
             // setup
-            let tupletSetup = try Tuplet(notes: notes)
+            let tupletSetup = try Tuplet(3, .eighth, notes: notes)
             measure.addTuplet(tupletSetup)
             try measure.startTie(at: 2, inSet: 0)
 
             // test
             try measure.startTie(at: 5, inSet: 0)
             let tuplet = measure.notes[0][3] as! Tuplet
-            XCTAssert(tuplet.notes[2].tie == .begin)
+            XCTAssert(try tuplet.note(at: 2).tie == .begin)
         }
     }
 
@@ -167,8 +167,8 @@ class MeasureTests: XCTestCase {
         assertNoErrorThrown {
             let note = Note(noteDuration: .sixteenth,
                             tone: Tone(noteLetter: .c, octave: .octave1))
-            let tuplet1 = try Tuplet(notes: [note, note, note])
-            let tuplet2 = try Tuplet(notes: [note, note, note, note, note])
+            let tuplet1 = try Tuplet(3, .sixteenth, notes: [note, note, note])
+            let tuplet2 = try Tuplet(5, .sixteenth, notes: [note, note, note, note, note])
             measure.addTuplet(tuplet1)
             measure.addTuplet(tuplet2)
             try measure.startTie(at: 2, inSet: 0)
@@ -252,7 +252,7 @@ class MeasureTests: XCTestCase {
         let note = Note(noteDuration: .sixteenth,
                         tone: Tone(noteLetter: .c, octave: .octave1))
         assertNoErrorThrown {
-            let tuplet = try Tuplet(notes: [note, note, note])
+            let tuplet = try Tuplet(3, .sixteenth, notes: [note, note, note])
             measure.addTuplet(tuplet)
             measure.addNote(note)
         }
@@ -275,7 +275,7 @@ class MeasureTests: XCTestCase {
 
         let note = Note(noteDuration: .sixteenth, tone: Tone(noteLetter: .c, octave: .octave1))
         assertNoErrorThrown {
-            let tuplet = try Tuplet(notes: [note, note, note])
+            let tuplet = try Tuplet(3, .sixteenth, notes: [note, note, note])
             measure.addTuplet(tuplet)
             measure.addNote(note)
         }
@@ -298,7 +298,7 @@ class MeasureTests: XCTestCase {
 
         let note = Note(noteDuration: .sixteenth, tone: Tone(noteLetter: .c, octave: .octave1))
         assertNoErrorThrown {
-            let tuplet = try Tuplet(notes: [note, note, note])
+            let tuplet = try Tuplet(3, .sixteenth, notes: [note, note, note])
             measure.addTuplet(tuplet)
             measure.addNote(note)
         }
@@ -321,14 +321,14 @@ class MeasureTests: XCTestCase {
 
         let note = Note(noteDuration: .sixteenth, tone: Tone(noteLetter: .c, octave: .octave1))
         assertNoErrorThrown {
-            let tuplet = try Tuplet(notes: [note, note, note])
+            let tuplet = try Tuplet(3, .sixteenth, notes: [note, note, note])
             measure.addTuplet(tuplet)
             measure.addNote(note)
         }
 
         assertNoErrorThrown {
-            let tuplet1 = try Tuplet(notes: [note, note, note, note, note])
-            let tuplet2 = try Tuplet(notes: [note, note, note])
+            let tuplet1 = try Tuplet(5, .sixteenth, notes: [note, note, note, note, note])
+            let tuplet2 = try Tuplet(3, .sixteenth, notes: [note, note, note])
             measure.addTuplet(tuplet1)
             measure.addTuplet(tuplet2)
             setTie(at: 11)
@@ -367,7 +367,7 @@ class MeasureTests: XCTestCase {
                              tone: Tone(noteLetter: .b, octave: .octave1))
             let note3 = Note(noteDuration: .eighth,
                              tone: Tone(noteLetter: .c, octave: .octave1))
-            try measure.addTuplet(Tuplet(notes: [note1, note2, note3]))
+            measure.addTuplet(try Tuplet(3, .eighth, notes: [note1, note2, note3]))
             let index = try measure.noteCollectionIndexFromNoteIndex(2, inSet: 0)
             XCTAssertEqual(index.noteIndex, 1)
             XCTAssertNotNil(index.tupletIndex)
@@ -400,7 +400,7 @@ class MeasureTests: XCTestCase {
     private func noteFromMeasure(_ measure: Measure, noteIndex: Int, tupletIndex: Int?) -> Note {
         if let tupletIndex = tupletIndex {
             let tuplet = measure.notes[0][noteIndex] as! Tuplet
-            return tuplet.notes[tupletIndex]
+            return try! tuplet.note(at: tupletIndex)
         } else {
             return measure.notes[0][noteIndex] as! Note
         }

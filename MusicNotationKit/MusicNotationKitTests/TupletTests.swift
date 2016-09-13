@@ -42,59 +42,39 @@ class TupletTests: XCTestCase {
     // MARK: Failures
 
     func testInitFailsIfHasRest() {
-        do {
-            let _ = try Tuplet(notes: [quarterNote1, quarterRest])
-            shouldFail()
-        } catch TupletError.restsNotValid {
-        } catch {
-            expected(TupletError.restsNotValid, actual: error)
+        assertThrowsError(TupletError.restsNotValid) {
+            _ = try Tuplet(notes: [quarterNote1, quarterRest])
         }
     }
 
     func testInitFailsIfTooManyNotes() {
-        do {
-            let _ = try Tuplet(notes: [quarterNote1, quarterNote2, quarterNote3, quarterNote1, quarterNote2, quarterNote3, quarterNote1, quarterNote2])
-            shouldFail()
-        } catch TupletError.invalidNumberOfNotes {
-        } catch {
-            expected(TupletError.invalidNumberOfNotes, actual: error)
+        assertThrowsError(TupletError.invalidNumberOfNotes) {
+            _ = try Tuplet(notes: [quarterNote1, quarterNote2, quarterNote3, quarterNote1, quarterNote2, quarterNote3, quarterNote1, quarterNote2])
         }
     }
 
     func testInitFailsIfTooFewNotes1() {
-        do {
-            let _ = try Tuplet(notes: [quarterNote1])
-            shouldFail()
-        } catch TupletError.invalidNumberOfNotes {
-        } catch {
-            expected(TupletError.invalidNumberOfNotes, actual: error)
+        assertThrowsError(TupletError.invalidNumberOfNotes) {
+            _ = try Tuplet(notes: [quarterNote1])
         }
     }
 
     func testInitFailsIfTooFewNotes0() {
-        do {
-            let _ = try Tuplet(notes: [])
-            shouldFail()
-        } catch TupletError.invalidNumberOfNotes {
-        } catch {
-            expected(TupletError.invalidNumberOfNotes, actual: error)
+        assertThrowsError(TupletError.invalidNumberOfNotes) {
+            _ = try Tuplet(notes: [])
         }
     }
 
     func testInitFailsIfNonUniformDuration() {
-        do {
-            let _ = try Tuplet(notes: [quarterNote1, quarterNote2, quarterNote3, eighthNote])
-            shouldFail()
-        } catch TupletError.notSameDuration {
-        } catch {
-            expected(TupletError.notSameDuration, actual: error)
+        assertThrowsError(TupletError.notSameDuration) {
+            _ = try Tuplet(notes: [quarterNote1, quarterNote2, quarterNote3, eighthNote])
         }
     }
 
     // MARK: Successes
 
     func testInitSuccessForAllCombinations() {
-        do {
+        assertNoErrorThrown {
             // Test 2 - 7
             let _ = try Tuplet(notes: [quarterNote1, quarterNote2])
             let _ = try Tuplet(notes: [quarterNote1, quarterNote2, quarterNote3])
@@ -104,8 +84,6 @@ class TupletTests: XCTestCase {
             let _ = try Tuplet(notes: [quarterNote1, quarterNote2, quarterNote3, quarterNote1, quarterNote2, quarterNote3, quarterNote1])
             // Test with a chord
             let _ = try Tuplet(notes: [quarterNote1, quarterChord])
-        } catch {
-            XCTFail(String(describing: error))
         }
     }
 
@@ -113,42 +91,30 @@ class TupletTests: XCTestCase {
     // MARK: Failures
 
     func testAppendNoteFailsIfTupletFull() {
-        do {
+        assertThrowsError(TupletError.groupingFull) {
             var noteGroup = try Tuplet(notes: [quarterNote1, quarterNote2, quarterNote3, quarterNote1, quarterNote2, quarterNote3, quarterNote1])
             try noteGroup.appendNote(quarterNote3)
-            shouldFail()
-        } catch TupletError.groupingFull {
-        } catch {
-            expected(TupletError.groupingFull, actual: error)
         }
     }
 
     func testAppendNoteFailsIfRest() {
-        do {
+        assertThrowsError(TupletError.restsNotValid) {
             var noteGroup = try Tuplet(notes: [quarterNote1, quarterNote2])
             try noteGroup.appendNote(quarterRest)
-            shouldFail()
-        } catch TupletError.restsNotValid {
-        } catch {
-            expected(TupletError.restsNotValid, actual: error)
         }
     }
 
     func testAppendNoteFailsIfInvalidDuration() {
-        do {
+        assertThrowsError(TupletError.notSameDuration) {
             var noteGroup = try Tuplet(notes: [quarterNote1, quarterNote2])
             try noteGroup.appendNote(eighthNote)
-            shouldFail()
-        } catch TupletError.notSameDuration {
-        } catch {
-            expected(TupletError.notSameDuration, actual: error)
         }
     }
 
     // MARK: Successes
 
     func testAppendNoteSuccess() {
-        do {
+        assertNoErrorThrown {
             // Test 2 - 7
             var group2 = try Tuplet(notes: [quarterNote1, quarterNote2])
             try group2.appendNote(quarterNote1)
@@ -165,8 +131,6 @@ class TupletTests: XCTestCase {
             try group7.appendNote(quarterNote1)
             // Test appending chord
             try group2.appendNote(quarterChord)
-        } catch {
-            XCTFail(String(describing: error))
         }
     }
 }

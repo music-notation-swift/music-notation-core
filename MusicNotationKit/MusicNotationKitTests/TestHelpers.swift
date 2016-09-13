@@ -8,18 +8,17 @@
 
 import XCTest
 
-func assertNoErrorThrown<T>(_ expression: @autoclosure () throws -> T) {
+func assertThrowsError<T: Error>(_ expectedError: T, expression: () throws -> ()) where T: Equatable {
+    XCTAssertThrowsError(try expression()) { error in
+        XCTAssertEqual(error as? T, expectedError, "Expected error \(expectedError), but got: \(error).")
+    }
+}
+
+func assertNoErrorThrown(expression: () throws -> ()) {
     do {
-        _ = try expression()
+        try expression()
     } catch {
         XCTFail("Expected no error, but got: \(error)")
     }
 }
 
-func expected<T>(_ expected: T, actual: Error, functionName: String = #function, lineNum: Int = #line) {
-    XCTFail("Expected: \(expected), Actual: \(actual) @ \(functionName): \(lineNum)")
-}
-
-func shouldFail(_ functionName: String = #function, lineNum: Int = #line) {
-    XCTFail("Should have failed, but didn't @ \(functionName): \(lineNum)")
-}

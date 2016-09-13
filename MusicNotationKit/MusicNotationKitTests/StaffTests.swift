@@ -80,12 +80,9 @@ class StaffTests: XCTestCase {
         let measure = Measure(
             timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
             key: Key(noteLetter: .c))
-        do {
+        
+        assertThrowsError(StaffError.measureIndexOutOfRange) {
             try staff.insertMeasure(measure, at: 15)
-            shouldFail()
-        } catch StaffError.measureIndexOutOfRange {
-        } catch {
-            expected(StaffError.measureIndexOutOfRange, actual: error)
         }
     }
 
@@ -93,12 +90,9 @@ class StaffTests: XCTestCase {
         let measure = Measure(
             timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
             key: Key(noteLetter: .c))
-        do {
+        
+        assertThrowsError(MeasureRepeatError.cannotModifyRepeatedMeasures) {
             try staff.insertMeasure(measure, at: 10, beforeRepeat: true)
-            shouldFail()
-        } catch MeasureRepeatError.cannotModifyRepeatedMeasures {
-        } catch {
-            expected(MeasureRepeatError.cannotModifyRepeatedMeasures, actual: error)
         }
     }
 
@@ -112,7 +106,7 @@ class StaffTests: XCTestCase {
         let measure = Measure(
             timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
             key: Key(noteLetter: .c))
-        do {
+        assertNoErrorThrown {
             try staff.insertMeasure(measure, at: 1)
             let addedMeasure = try staff.measure(at: 1)
             let beforeMeasure = try staff.measure(at: 0)
@@ -120,8 +114,6 @@ class StaffTests: XCTestCase {
             XCTAssertEqual(Measure(addedMeasure), measure)
             XCTAssertEqual(Measure(beforeMeasure), measure1)
             XCTAssertEqual(Measure(afterMeasure), measure2)
-        } catch {
-            XCTFail(String(describing: error))
         }
     }
 
@@ -129,7 +121,7 @@ class StaffTests: XCTestCase {
 		let measure = Measure(
 			timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
 			key: Key(noteLetter: .c))
-		do {
+        assertNoErrorThrown {
 			try staff.insertMeasure(measure, at: 14)
 			let addedMeasure = try staff.measure(at: 14)
 			let beforeMeasure = try staff.measure(at: 13)
@@ -137,8 +129,6 @@ class StaffTests: XCTestCase {
 			XCTAssertEqual(Measure(addedMeasure), measure)
 			XCTAssertEqual(Measure(beforeMeasure), measure6)
 			XCTAssertEqual(Measure(afterMeasure), measure3)
-		} catch {
-			XCTFail(String(describing: error))
 		}
 	}
 	
@@ -146,13 +136,11 @@ class StaffTests: XCTestCase {
         let measure = Measure(
             timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
             key: Key(noteLetter: .c))
-        do {
+        assertNoErrorThrown {
             try staff.insertMeasure(measure, at: 5, beforeRepeat: false)
             let actualRepeat = try staff.measureRepeat(at: 5)
             let expectedRepeat = try MeasureRepeat(measures: [measure, measure4])
             XCTAssertEqual(actualRepeat, expectedRepeat)
-        } catch {
-            XCTFail(String(describing: error))
         }
     }
 
@@ -160,13 +148,11 @@ class StaffTests: XCTestCase {
         let measure = Measure(
             timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
             key: Key(noteLetter: .c))
-        do {
+        assertNoErrorThrown {
             try staff.insertMeasure(measure, at: 6, beforeRepeat: false)
             let actualRepeat = try staff.measureRepeat(at: 5)
             let expectedRepeat = try MeasureRepeat(measures: [measure4, measure])
             XCTAssertEqual(actualRepeat, expectedRepeat)
-        } catch {
-            XCTFail(String(describing: error))
         }
     }
 
@@ -174,15 +160,13 @@ class StaffTests: XCTestCase {
         let measure = Measure(
             timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
             key: Key(noteLetter: .c))
-        do {
+        assertNoErrorThrown {
             try staff.insertMeasure(measure, at: 5, beforeRepeat: true)
             let _ = try staff.measureRepeat(at: 6)
             let addedMeasure = try staff.measure(at: 5)
             let beforeMeasure = try staff.measure(at: 4)
             XCTAssertEqual(Measure(addedMeasure), measure)
             XCTAssertEqual(Measure(beforeMeasure), measure5)
-        } catch {
-            XCTFail(String(describing: error))
         }
     }
 
@@ -190,7 +174,7 @@ class StaffTests: XCTestCase {
         let measure = Measure(
             timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
             key: Key(noteLetter: .c))
-        do {
+        assertNoErrorThrown {
             // Ignores the flag, since it's not a repeat
             try staff.insertMeasure(measure, at: 1, beforeRepeat: false)
             let addedMeasure = try staff.measure(at: 1)
@@ -199,8 +183,6 @@ class StaffTests: XCTestCase {
             XCTAssertEqual(Measure(addedMeasure), measure)
             XCTAssertEqual(Measure(beforeMeasure), measure1)
             XCTAssertEqual(Measure(afterMeasure), measure2)
-        } catch {
-            XCTFail(String(describing: error))
         }
     }
 
@@ -208,14 +190,12 @@ class StaffTests: XCTestCase {
         let measure = Measure(
             timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
             key: Key(noteLetter: .c))
-        do {
-            // Ignores teh flag since you can only insert it into the repeat
+        assertNoErrorThrown {
+            // Ignores the flag since you can only insert it into the repeat
             try staff.insertMeasure(measure, at: 6, beforeRepeat: true)
             let actualRepeat = try staff.measureRepeat(at: 5)
             let expectedRepeat = try MeasureRepeat(measures: [measure4, measure])
             XCTAssertEqual(actualRepeat, expectedRepeat)
-        } catch {
-            XCTFail(String(describing: error))
         }
     }
 
@@ -223,31 +203,23 @@ class StaffTests: XCTestCase {
     // MARK: Failures
 
     func testInsertRepeatInvalidIndex() {
-        do {
+        assertThrowsError(StaffError.measureIndexOutOfRange) {
             let measureRepeat = try MeasureRepeat(measures: [measure4])
             try staff.insertRepeat(measureRepeat, at: 50)
-            shouldFail()
-        } catch StaffError.measureIndexOutOfRange {
-        } catch {
-            expected(StaffError.measureIndexOutOfRange, actual: error)
         }
     }
 
     func testInsertRepeatInRepeat() {
-        do {
+        assertThrowsError(StaffError.cannotInsertRepeatWhereOneAlreadyExists) {
             let measureRepeat = try MeasureRepeat(measures: [measure5])
             try staff.insertRepeat(measureRepeat, at: 6)
-            shouldFail()
-        } catch StaffError.cannotInsertRepeatWhereOneAlreadyExists {
-        } catch {
-            expected(StaffError.cannotInsertRepeatWhereOneAlreadyExists, actual: error)
         }
     }
 
     // MARK: Successes
 
     func testInsertRepeatSingleMeasure() {
-        do {
+        assertNoErrorThrown {
             let measureRepeat = try MeasureRepeat(measures: [measure4])
             try staff.insertRepeat(measureRepeat, at: 1)
             let beforeRepeat = try staff.measure(at: 0)
@@ -256,13 +228,11 @@ class StaffTests: XCTestCase {
             XCTAssertEqual(Measure(beforeRepeat), measure1)
             XCTAssertEqual(Measure(afterRepeat), measure2)
             XCTAssertEqual(actualRepeat, measureRepeat)
-        } catch {
-            XCTFail(String(describing: error))
         }
     }
 
     func testInsertRepeatBeforeOtherRepeat() {
-        do {
+        assertNoErrorThrown {
             let measureRepeat = try MeasureRepeat(measures: [measure5])
             try staff.insertRepeat(measureRepeat, at: 5)
             let beforeRepeat = try staff.measure(at: 4)
@@ -271,8 +241,6 @@ class StaffTests: XCTestCase {
             XCTAssertEqual(Measure(beforeRepeat), measure5)
             XCTAssertEqual(afterRepeat, repeat1)
             XCTAssertEqual(actualRepeat, measureRepeat)
-        } catch {
-            XCTFail(String(describing: error))
         }
     }
 
@@ -280,70 +248,46 @@ class StaffTests: XCTestCase {
     // MARK: Failures
 
     func testStartTieFailIfNoteIndexInvalid() {
-        do {
+        assertThrowsError(StaffError.noteIndexOutOfRange) {
             try staff.startTieFromNote(at: 10, inMeasureAt: 0)
-            shouldFail()
-        } catch StaffError.noteIndexOutOfRange {
-        } catch {
-            expected(StaffError.noteIndexOutOfRange, actual: error)
         }
     }
 
     func testStartTieFailIfMeasureIndexInvalid() {
-        do {
+        assertThrowsError(StaffError.measureIndexOutOfRange) {
             try staff.startTieFromNote(at: 0, inMeasureAt: 25)
-            shouldFail()
-        } catch StaffError.measureIndexOutOfRange {
-        } catch {
-            expected(StaffError.measureIndexOutOfRange, actual: error)
         }
     }
 
     func testStartTieFailIfNoNextNote() {
-        do {
+        assertThrowsError(StaffError.noNextNoteToTie) {
             try staff.startTieFromNote(at: 6, inMeasureAt: 14)
-            shouldFail()
-        } catch StaffError.noNextNoteToTie {
-        } catch {
-            expected(StaffError.noNextNoteToTie, actual: error)
         }
     }
 
     func testStartTieFailIfLastNoteOfSingleMeasureRepeat() {
         // Reason: can't finish in the next measure
-        do {
+        assertThrowsError(StaffError.repeatedMeasureCannotHaveTie) {
             try staff.startTieFromNote(at: 3, inMeasureAt: 5)
-            shouldFail()
-        } catch StaffError.repeatedMeasureCannotHaveTie {
-        } catch {
-            expected(StaffError.repeatedMeasureCannotHaveTie, actual: error)
         }
     }
 
     func testStartTieFailIfLastNoteInLastMeasureOfMultiMeasureRepeat() {
-        do {
+        assertThrowsError(StaffError.repeatedMeasureCannotHaveTie) {
             try staff.startTieFromNote(at: 3, inMeasureAt: 8)
-            shouldFail()
-        } catch StaffError.repeatedMeasureCannotHaveTie {
-        } catch {
-            expected(StaffError.repeatedMeasureCannotHaveTie, actual: error)
         }
     }
 
     func testStartTieFailIfNotesWithinRepeatAfterTheFirstCount() {
-        do {
+        assertThrowsError(StaffError.repeatedMeasureCannotHaveTie) {
             try staff.startTieFromNote(at: 0, inMeasureAt: 9)
-            shouldFail()
-        } catch StaffError.repeatedMeasureCannotHaveTie {
-        } catch {
-            expected(StaffError.repeatedMeasureCannotHaveTie, actual: error)
         }
     }
 
     // MARK: Successes
 
     func testStartTieWithinMeasureIfHasNextNote() {
-        do {
+        assertNoErrorThrown {
             let firstNoteIndex = 0
             let firstMeasureIndex = 0
             try staff.startTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
@@ -352,13 +296,11 @@ class StaffTests: XCTestCase {
             let secondNote = measure.notes[0][firstNoteIndex + 1] as! Note
             XCTAssert(firstNote.tie == .begin)
             XCTAssert(secondNote.tie == .end)
-        } catch {
-            XCTFail(String(describing: error))
         }
     }
 
     func testStartTieWithinMeasureIfAlreadyEndOfTie() {
-        do {
+        assertNoErrorThrown {
             let firstNoteIndex = 0
             let firstMeasureIndex = 0
             try staff.startTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
@@ -370,13 +312,11 @@ class StaffTests: XCTestCase {
             XCTAssert(firstNote.tie == .begin)
             XCTAssert(secondNote.tie == .beginAndEnd)
             XCTAssert(thirdNote.tie == .end)
-        } catch {
-            XCTFail(String(describing: error))
         }
     }
 
     func testStartTieWithinMeasureTupletToTuplet() {
-        do {
+        assertNoErrorThrown {
             let firstNoteIndex = 2
             let firstMeasureIndex = 13
             try staff.startTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
@@ -385,13 +325,11 @@ class StaffTests: XCTestCase {
             let secondNote = (measure.notes[0][1] as! Tuplet).notes[0]
             XCTAssert(firstNote.tie == .begin)
             XCTAssert(secondNote.tie == .end)
-        } catch {
-            XCTFail(String(describing: error))
         }
     }
 
     func testStartTieAcrossMeasuresNoteToNote() {
-        do {
+        assertNoErrorThrown {
             let firstNoteIndex = 4
             let firstMeasureIndex = 1
             try staff.startTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
@@ -401,13 +339,11 @@ class StaffTests: XCTestCase {
             let secondNote = secondMeasure.notes[0][0] as! Note
             XCTAssert(firstNote.tie == .begin)
             XCTAssert(secondNote.tie == .end)
-        } catch {
-            XCTFail(String(describing: error))
         }
     }
 
     func testStartTieAcrossMeasuresNoteToTuplet() {
-        do {
+        assertNoErrorThrown {
             let firstNoteIndex = 3
             let firstMeasureIndex = 3
             try staff.startTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
@@ -417,13 +353,11 @@ class StaffTests: XCTestCase {
             let secondNote = (secondMeasure.notes[0][0] as! Tuplet).notes[0]
             XCTAssert(firstNote.tie == .begin)
             XCTAssert(secondNote.tie == .end)
-        } catch {
-            XCTFail(String(describing: error))
         }
     }
 
     func testStartTieAcrossMeasuresTupletToNote() {
-        do {
+        assertNoErrorThrown {
             let firstNoteIndex = 6
             let firstMeasureIndex = 2
             try staff.startTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
@@ -433,13 +367,11 @@ class StaffTests: XCTestCase {
             let secondNote = secondMeasure.notes[0][0] as! Note
             XCTAssert(firstNote.tie == .begin)
             XCTAssert(secondNote.tie == .end)
-        } catch {
-            XCTFail(String(describing: error))
         }
     }
 
     func testStartTieAcrossMeasuresTupletToTuplet() {
-        do {
+        assertNoErrorThrown {
             let firstNoteIndex = 6
             let firstMeasureIndex = 0
             try staff.startTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
@@ -449,13 +381,11 @@ class StaffTests: XCTestCase {
             let secondNote = (secondMeasure.notes[0][0] as! Tuplet).notes[0]
             XCTAssert(firstNote.tie == .begin)
             XCTAssert(secondNote.tie == .end)
-        } catch {
-            XCTFail(String(describing: error))
         }
     }
 
     func testStartTieBothNotesWithinSingleMeasureRepeat() {
-        do {
+        assertNoErrorThrown {
             let firstNoteIndex = 0
             let firstMeasureIndex = 5
             try staff.startTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
@@ -464,13 +394,11 @@ class StaffTests: XCTestCase {
             let secondNote = firstMeasure.notes[0][firstNoteIndex + 1] as! Note
             XCTAssert(firstNote.tie == .begin)
             XCTAssert(secondNote.tie == .end)
-        } catch {
-            XCTFail(String(describing: error))
         }
     }
 
     func testStartTieBothNotesWithinMultiMeasureRepeat() {
-        do {
+        assertNoErrorThrown {
             let firstNoteIndex = 0
             let firstMeasureIndex = 7
             try staff.startTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
@@ -479,13 +407,11 @@ class StaffTests: XCTestCase {
             let secondNote = firstMeasure.notes[0][firstNoteIndex + 1] as! Note
             XCTAssert(firstNote.tie == .begin)
             XCTAssert(secondNote.tie == .end)
-        } catch {
-            XCTFail(String(describing: error))
         }
     }
 
     func testStartTieNotesFromContiguousMeasuresWithinRepeat() {
-        do {
+        assertNoErrorThrown {
             let firstNoteIndex = 3
             let firstMeasureIndex = 7
             try staff.startTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
@@ -496,8 +422,6 @@ class StaffTests: XCTestCase {
             let secondNote = secondMeasure.notes[0][0] as! Note
             XCTAssert(firstNote.tie == .begin)
             XCTAssert(secondNote.tie == .end)
-        } catch {
-            XCTFail(String(describing: error))
         }
     }
 
@@ -505,40 +429,30 @@ class StaffTests: XCTestCase {
     // MARK: Failures
 
     func testRemoveTieFailIfNoteIndexInvalid() {
-        do {
+        assertThrowsError(StaffError.noteIndexOutOfRange) {
             try staff.removeTieFromNote(at: 10, inMeasureAt: 0)
-            shouldFail()
-        } catch StaffError.noteIndexOutOfRange {
-        } catch {
-            expected(StaffError.noteIndexOutOfRange, actual: error)
         }
     }
 
     func testRemoveTieFailIfMeasureIndexInvalid() {
-        do {
+        assertThrowsError(StaffError.measureIndexOutOfRange) {
             try staff.removeTieFromNote(at: 0, inMeasureAt: 25)
-            shouldFail()
-        } catch StaffError.measureIndexOutOfRange {
-        } catch {
-            expected(StaffError.measureIndexOutOfRange, actual: error)
         }
     }
 
     // MARK: Successes
 
     func testRemoveTieIfNotTied() {
-        do {
+        assertNoErrorThrown {
             try staff.removeTieFromNote(at: 0, inMeasureAt: 0)
             let measure = staff.notesHolders[0] as! Measure
             let firstNote = measure.notes[0][0] as! Note
             XCTAssertNil(firstNote.tie)
-        } catch {
-            XCTFail(String(describing: error))
         }
     }
 
     func testRemoveTieIfEndOfTie() {
-        do {
+        assertNoErrorThrown {
             try staff.startTieFromNote(at: 0, inMeasureAt: 0)
             try staff.removeTieFromNote(at: 1, inMeasureAt: 0)
             let measure = staff.notesHolders[0] as! Measure
@@ -546,13 +460,11 @@ class StaffTests: XCTestCase {
             let secondNote = measure.notes[0][1] as! Note
             XCTAssertNil(firstNote.tie)
             XCTAssertNil(secondNote.tie)
-        } catch {
-            XCTFail(String(describing: error))
         }
     }
 
     func testRemoveTieBeginIfBeginAndEndOfTie() {
-        do {
+        assertNoErrorThrown {
             try staff.startTieFromNote(at: 0, inMeasureAt: 0)
             try staff.startTieFromNote(at: 1, inMeasureAt: 0)
             try staff.removeTieFromNote(at: 1, inMeasureAt: 0)
@@ -561,13 +473,11 @@ class StaffTests: XCTestCase {
             let secondNote = measure.notes[0][1] as! Note
             XCTAssertEqual(firstNote.tie, .begin)
             XCTAssertEqual(secondNote.tie, .end)
-        } catch {
-            XCTFail(String(describing: error))
         }
     }
 
     func testRemoveTieWithinMeasureNoteToNote() {
-        do {
+        assertNoErrorThrown {
             let firstNoteIndex = 0
             let firstMeasureIndex = 0
             try staff.startTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
@@ -577,13 +487,11 @@ class StaffTests: XCTestCase {
             let secondNote = measure.notes[0][firstNoteIndex + 1] as! Note
             XCTAssertNil(firstNote.tie)
             XCTAssertNil(secondNote.tie)
-        } catch {
-            XCTFail(String(describing: error))
         }
     }
 
     func testRemoveTieWithinMeasureWithinTuplet() {
-        do {
+        assertNoErrorThrown {
             let firstNoteIndex = 4
             let firstMeasureIndex = 0
             try staff.startTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
@@ -593,13 +501,11 @@ class StaffTests: XCTestCase {
             let secondNote = (measure.notes[0][firstNoteIndex] as! Tuplet).notes[1]
             XCTAssertNil(firstNote.tie)
             XCTAssertNil(secondNote.tie)
-        } catch {
-            XCTFail(String(describing: error))
         }
     }
 
     func testRemoveTieWithinMeasureFromTupletToNote() {
-        do {
+        assertNoErrorThrown {
             let firstNoteIndex = 2
             let firstMeasureIndex = 1
             try staff.startTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
@@ -609,13 +515,11 @@ class StaffTests: XCTestCase {
             let secondNote = measure.notes[0][1] as! Note
             XCTAssertNil(firstNote.tie)
             XCTAssertNil(secondNote.tie)
-        } catch {
-            XCTFail(String(describing: error))
         }
     }
 
     func testRemoveTieWithinMeasureFromTupletToNewTuplet() {
-        do {
+        assertNoErrorThrown {
             let firstNoteIndex = 2
             let firstMeasureIndex = 13
             try staff.startTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
@@ -625,13 +529,11 @@ class StaffTests: XCTestCase {
             let secondNote = (measure.notes[0][1] as! Tuplet).notes[0]
             XCTAssertNil(firstNote.tie)
             XCTAssertNil(secondNote.tie)
-        } catch {
-            XCTFail(String(describing: error))
         }
     }
 
     func testRemoveTieAcrossMeasuresFromTupletToNote() {
-        do {
+        assertNoErrorThrown {
             let firstNoteIndex = 4
             let firstMeasureIndex = 2
             try staff.startTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
@@ -642,13 +544,11 @@ class StaffTests: XCTestCase {
             let secondNote = measure2.notes[0][0] as! Note
             XCTAssertNil(firstNote.tie)
             XCTAssertNil(secondNote.tie)
-        } catch {
-            XCTFail(String(describing: error))
         }
     }
 
     func testRemoveTieAcrosssMeasuresFromTupletToNewTuplet() {
-        do {
+        assertNoErrorThrown {
             let firstNoteIndex = 6
             let firstMeasureIndex = 0
             try staff.startTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
@@ -659,13 +559,11 @@ class StaffTests: XCTestCase {
             let secondNote = (measure2.notes[0][0] as! Tuplet).notes[0]
             XCTAssertNil(firstNote.tie)
             XCTAssertNil(secondNote.tie)
-        } catch {
-            XCTFail(String(describing: error))
         }
     }
 
     func testremoveTieFromNoteThatIsBeginAndEnd() {
-        do {
+        assertNoErrorThrown {
             let firstNoteIndex = 0
             let firstMeasureIndex = 0
             try staff.startTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
@@ -678,8 +576,6 @@ class StaffTests: XCTestCase {
             XCTAssert(firstNote.tie == .begin)
             XCTAssert(secondNote.tie == .end)
             XCTAssertNil(thirdNote.tie)
-        } catch {
-            XCTFail(String(describing: error))
         }
     }
 
@@ -687,54 +583,42 @@ class StaffTests: XCTestCase {
     // MARK: Failures
 
     func testNotesHolderIndexForOutOfRangeMeasureIndex() {
-        do {
+        assertThrowsError(StaffError.measureIndexOutOfRange) {
             let _ = try staff.notesHolderIndexFromMeasureIndex(20)
-            shouldFail()
-        } catch StaffError.measureIndexOutOfRange {
-        } catch {
-            expected(StaffError.measureIndexOutOfRange, actual: error)
         }
     }
 
     // MARK: Successes
 
     func testNotesHolderIndexForNoRepeats() {
-        do {
+        assertNoErrorThrown {
             let indexes = try staff.notesHolderIndexFromMeasureIndex(2)
             XCTAssertEqual(indexes.notesHolderIndex, 2)
             XCTAssertNil(indexes.repeatMeasureIndex)
-        } catch {
-            XCTFail(String(describing: error))
         }
     }
 
     func testNotesHolderIndexForOriginalRepeatedMeasure() {
-        do {
+        assertNoErrorThrown {
             let indexes = try staff.notesHolderIndexFromMeasureIndex(8)
             XCTAssertEqual(indexes.notesHolderIndex, 6)
             XCTAssertEqual(indexes.repeatMeasureIndex, 1)
-        } catch {
-            XCTFail(String(describing: error))
         }
     }
 
     func testNotesHolderIndexForRepeatedMeasure() {
-        do {
+        assertNoErrorThrown {
             let indexes = try staff.notesHolderIndexFromMeasureIndex(9)
             XCTAssertEqual(indexes.notesHolderIndex, 6)
             XCTAssertEqual(indexes.repeatMeasureIndex, 2)
-        } catch {
-            XCTFail(String(describing: error))
         }
     }
 
     func testNotesHolderIndexForAfterRepeat() {
-        do {
+        assertNoErrorThrown {
             let indexes = try staff.notesHolderIndexFromMeasureIndex(13)
             XCTAssertEqual(indexes.notesHolderIndex, 7)
             XCTAssertNil(indexes.repeatMeasureIndex)
-        } catch {
-            XCTFail(String(describing: error))
         }
     }
 
@@ -742,74 +626,56 @@ class StaffTests: XCTestCase {
     // MARK: Failures
 
     func testNotesHolderAtMeasureIndexForInvalidIndexNegative() {
-        do {
+        assertThrowsError(StaffError.measureIndexOutOfRange) {
             let _ = try staff.notesHolderAtMeasureIndex(-3)
-            shouldFail()
-        } catch StaffError.measureIndexOutOfRange {
-        } catch {
-            expected(StaffError.measureIndexOutOfRange, actual: error)
         }
     }
 
     func testNotesHolderAtMeasureIndexForInvalidIndexTooLarge() {
-        do {
+        assertThrowsError(StaffError.measureIndexOutOfRange) {
             let _ = try staff.notesHolderAtMeasureIndex(99)
-            shouldFail()
-        } catch StaffError.measureIndexOutOfRange {
-        } catch {
-            expected(StaffError.measureIndexOutOfRange, actual: error)
         }
     }
 
     // MARK: Successes
 
     func testNotesHolderAtMeasureIndexForFirstMeasureThatIsRepeated() {
-        do {
+        assertNoErrorThrown {
             let actual = try staff.notesHolderAtMeasureIndex(5)
             let expected = staff.notesHolders[5]
             XCTAssertEqual(actual as? MeasureRepeat, expected as? MeasureRepeat)
-        } catch {
-            XCTFail(String(describing: error))
         }
     }
 
     func testNotesHolderAtMeasureIndexForSecondMeasureThatIsRepeated() {
-        do {
+        assertNoErrorThrown {
             let actual = try staff.notesHolderAtMeasureIndex(8)
             let expected = staff.notesHolders[6]
             XCTAssertEqual(actual as? MeasureRepeat, expected as? MeasureRepeat)
-        } catch {
-            XCTFail(String(describing: error))
         }
     }
 
     func testNotesHolderAtMeasureIndexForRepeatedMeasureInFirstRepeat() {
-        do {
+        assertNoErrorThrown {
             let actual = try staff.notesHolderAtMeasureIndex(6)
             let expected = staff.notesHolders[5]
             XCTAssertEqual(actual as? MeasureRepeat, expected as? MeasureRepeat)
-        } catch {
-            XCTFail(String(describing: error))
         }
     }
 
     func testNotesHolderAtMeasureIndexForRepeatedMeasureInSecondRepeat() {
-        do {
+        assertNoErrorThrown {
             let actual = try staff.notesHolderAtMeasureIndex(12)
             let expected = staff.notesHolders[6]
             XCTAssertEqual(actual as? MeasureRepeat, expected as? MeasureRepeat)
-        } catch {
-            XCTFail(String(describing: error))
         }
     }
 
     func testNotesHolderAtMeasureIndexForRegularMeasure() {
-        do {
+        assertNoErrorThrown {
             let actual = try staff.notesHolderAtMeasureIndex(0)
             let expected = staff.notesHolders[0]
             XCTAssertEqual(actual as? Measure, expected as? Measure)
-        } catch {
-            XCTFail(String(describing: error))
         }
     }
 
@@ -817,55 +683,41 @@ class StaffTests: XCTestCase {
     // MARK: Failures
 
     func testMeasureAtIndexForInvalidIndexNegative() {
-        do {
+        assertThrowsError(StaffError.measureIndexOutOfRange) {
             let _ = try staff.measure(at:-1)
-            shouldFail()
-        } catch StaffError.measureIndexOutOfRange {
-        } catch {
-            expected(StaffError.measureIndexOutOfRange, actual: error)
         }
     }
     
     func testMeasureAtIndexForInvalidIndexTooLarge() {
-        do {
+        assertThrowsError(StaffError.measureIndexOutOfRange) {
             let _ = try staff.measure(at:staff.notesHolders.count + 10)
-            shouldFail()
-        } catch StaffError.measureIndexOutOfRange {
-        } catch {
-            expected(StaffError.measureIndexOutOfRange, actual: error)
         }
     }
     
     // MARK: Successes
     
     func testMeasureAtIndexForRegularMeasure() {
-        do {
+        assertNoErrorThrown {
             let measure = try staff.measure(at:1)
             XCTAssertEqual(measure as? Measure, staff.notesHolders[1] as? Measure)
-        } catch {
-            XCTFail(String(describing: error))
         }
     }
     
     func testMeasureAtIndexForMeasureThatRepeats() {
-        do {
+        assertNoErrorThrown {
             let measureThatRepeats = try staff.measure(at:5)
             let measureRepeat = staff.notesHolders[5] as! MeasureRepeat
             XCTAssertEqual(measureThatRepeats as? RepeatedMeasure, measureRepeat.expand()[0] as? RepeatedMeasure)
-        } catch {
-            XCTFail(String(describing: error))
         }
     }
     
     func testMeasureAtIndexForRepeatedMeasure() {
-        do {
+        assertNoErrorThrown {
             let repeatedMeasure = try staff.measure(at:6)
             let measureRepeat = staff.notesHolders[5] as! MeasureRepeat
             let expectedMeasure = measureRepeat.expand()[1]
             XCTAssertNotNil(expectedMeasure as? RepeatedMeasure)
             XCTAssertEqual(repeatedMeasure as? RepeatedMeasure, expectedMeasure as? RepeatedMeasure)
-        } catch {
-            XCTFail(String(describing: error))
         }
     }
     
@@ -873,73 +725,56 @@ class StaffTests: XCTestCase {
     // MARK: Failures
     
     func testMeasureRepeatAtIndexForInvalidIndexNegative() {
-        do {
+        assertThrowsError(StaffError.measureIndexOutOfRange) {
             let _ = try staff.measureRepeat(at:-1)
-            shouldFail()
-        } catch StaffError.measureIndexOutOfRange {
-        } catch {
-            expected(StaffError.measureIndexOutOfRange, actual: error)
         }
     }
     
     func testMeasureRepeatAtIndexForInvalidIndexTooLarge() {
-        do {
+        assertThrowsError(StaffError.measureIndexOutOfRange) {
             let _ = try staff.measureRepeat(at:staff.notesHolders.count + 10)
-            shouldFail()
-        } catch StaffError.measureIndexOutOfRange {
-        } catch {
-            expected(StaffError.measureIndexOutOfRange, actual: error)
-        }
-    }
-    
-    func testMeasureRepeatAtIndexForMeasureNotPartOfRepeat() {
-        do {
-            let measureRepeat = try staff.measureRepeat(at:1)
-            XCTAssertNil(measureRepeat)
-        } catch {
-            XCTFail(String(describing: error))
         }
     }
     
     // MARK: Successes
+
+    
+    func testMeasureRepeatAtIndexForMeasureNotPartOfRepeat() {
+        assertNoErrorThrown {
+            let measureRepeat = try staff.measureRepeat(at:1)
+            XCTAssertNil(measureRepeat)
+        }
+    }
     
     func testMeasureRepeatAtIndexForFirstMeasureThatIsRepeated() {
-        do {
+        assertNoErrorThrown {
             let measureRepeat = try staff.measureRepeat(at:5)
             let expected = staff.notesHolders[5] as! MeasureRepeat
             XCTAssertEqual(measureRepeat, expected)
-        } catch {
-            XCTFail(String(describing: error))
         }
     }
     
     func testMeasureRepeatAtIndexForSecondMeasureThatIsRepeated() {
-        do {
+        assertNoErrorThrown {
             let measureRepeat = try staff.measureRepeat(at:8)
             let expected = staff.notesHolders[6] as! MeasureRepeat
             XCTAssertEqual(measureRepeat, expected)
-        } catch {
-            XCTFail(String(describing: error))
         }
     }
     
     func testMeasureRepeatAtIndexForRepeatedMeasureInFirstRepeat() {
-        do {
+        assertNoErrorThrown {
             let measureRepeat = try staff.measureRepeat(at:6)
             let expected = staff.notesHolders[5] as! MeasureRepeat
             XCTAssertEqual(measureRepeat, expected)
-        } catch {
-            XCTFail(String(describing: error))
         }
     }
     
     func testMeasureRepeatAtIndexForRepeatedMeasureInSecondRepeat() {
-        do {
+        assertNoErrorThrown {
             let measureRepeat = try staff.measureRepeat(at:12)
             let expected = staff.notesHolders[6] as! MeasureRepeat
             XCTAssertEqual(measureRepeat, expected)
-        } catch {
-            XCTFail(String(describing: error))
         }
     }
     
@@ -947,36 +782,28 @@ class StaffTests: XCTestCase {
     // MARK: Failures
     
     func testReplaceRepeatedMeasure() {
-        do {
+        assertThrowsError(StaffError.repeatedMeasureCannotBeModified) {
             try staff.replaceMeasure(at: 6, with: measure1)
-            shouldFail()
-        } catch StaffError.repeatedMeasureCannotBeModified {
-        } catch {
-            expected(StaffError.repeatedMeasureCannotBeModified, actual: error)
         }
     }
     
     // MARK: Successes
     
     func testReplaceMeasureAtIndex() {
-        do {
+        assertNoErrorThrown {
             try staff.replaceMeasure(at: 0, with: measure2)
             let replacedMeasure = Measure(try staff.measure(at: 0))
             XCTAssertEqual(replacedMeasure, measure2)
-        } catch {
-            XCTFail(String(describing: error))
         }
     }
     
     func testReplaceMeasureWithRepeat() {
-        do {
+        assertNoErrorThrown {
             try staff.replaceMeasure(at: 5, with: measure1)
             let replacedMeasure = Measure(try staff.measure(at: 5))
             let repeatedMeasure = Measure(try staff.measure(at: 6))
             XCTAssertEqual(replacedMeasure, measure1)
             XCTAssertEqual(repeatedMeasure, measure1)
-        } catch {
-            XCTFail(String(describing: error))
         }
     }
     

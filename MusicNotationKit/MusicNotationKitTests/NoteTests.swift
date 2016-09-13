@@ -23,15 +23,15 @@ class NoteTests: XCTestCase {
 
     func testModifyTieBeginAndEndTryBegin() {
         note.tie = .beginAndEnd
-        XCTAssertThrowsError(try note.modifyTie(.begin)) { error in
-            XCTAssertEqual(error as? NoteError, .invalidRequestedTieState)
+        assertThrowsError(NoteError.invalidRequestedTieState) {
+            try note.modifyTie(.begin)
         }
     }
 
     func testModifyTieBeginAndEndTryEnd() {
         note.tie = .beginAndEnd
-        XCTAssertThrowsError(try note.modifyTie(.end)) { error in
-            XCTAssertEqual(error as? NoteError, .invalidRequestedTieState)
+        assertThrowsError(NoteError.invalidRequestedTieState) {
+            try note.modifyTie(.end)
         }
     }
 
@@ -39,49 +39,49 @@ class NoteTests: XCTestCase {
 
     func testModifyTieNilTryBegin() {
         note.tie = nil
-        assertNoErrorThrown(try note.modifyTie(.begin))
+        assertNoErrorThrown { try note.modifyTie(.begin) }
         XCTAssert(note.tie == .begin)
     }
 
     func testModifyTieNilTryEnd() {
         note.tie = nil
-        assertNoErrorThrown(try note.modifyTie(.end))
+        assertNoErrorThrown { try note.modifyTie(.end) }
         XCTAssert(note.tie == .end)
     }
 
     func testModifyTieNilTryBeginAndEnd() {
         note.tie = nil
-        assertNoErrorThrown(try note.modifyTie(.beginAndEnd))
+        assertNoErrorThrown { try note.modifyTie(.beginAndEnd) }
         XCTAssert(note.tie == .beginAndEnd)
     }
 
     func testModifyTieBeginTryEnd() {
         note.tie = .begin
-        assertNoErrorThrown(try note.modifyTie(.end))
+        assertNoErrorThrown { try note.modifyTie(.end) }
         XCTAssert(note.tie == .beginAndEnd)
     }
 
     func testModifyTieEndTryBegin() {
         note.tie = .end
-        assertNoErrorThrown(try note.modifyTie(.begin))
+        assertNoErrorThrown { try note.modifyTie(.begin) }
         XCTAssert(note.tie == .beginAndEnd)
     }
 
     func testModifyTieBeginTryBegin() {
         note.tie = .begin
-        assertNoErrorThrown(try note.modifyTie(.begin))
+        assertNoErrorThrown { try note.modifyTie(.begin) }
         XCTAssert(note.tie == .begin)
     }
 
     func testModifyTieBeginAndEndTryBeginAndEnd() {
         note.tie = .end
-        assertNoErrorThrown(try note.modifyTie(.end))
+        assertNoErrorThrown { try note.modifyTie(.end) }
         XCTAssert(note.tie == .end)
     }
 
     func testModifyTieEndTryEnd() {
         note.tie = .beginAndEnd
-        assertNoErrorThrown(try note.modifyTie(.beginAndEnd))
+        assertNoErrorThrown { try note.modifyTie(.beginAndEnd) }
         XCTAssert(note.tie == .beginAndEnd)
     }
 
@@ -91,24 +91,24 @@ class NoteTests: XCTestCase {
     func testRemoveTieNilTryBeginAndEnd() {
         note.tie = nil
         
-        XCTAssertThrowsError(try note.removeTie(.beginAndEnd)) { error in
-            XCTAssertEqual(error as? NoteError, .invalidRequestedTieState)
+        assertThrowsError(NoteError.invalidRequestedTieState) {
+            try note.removeTie(.beginAndEnd)
         }
     }
 
     func testRemoveTieEndTryBegin() {
         // Requested state doesn't match
         note.tie = .end
-        XCTAssertThrowsError(try note.removeTie(.begin)) { error in
-            XCTAssertEqual(error as? NoteError, .invalidRequestedTieState)
+        assertThrowsError(NoteError.invalidRequestedTieState) {
+            try note.removeTie(.begin)
         }
     }
 
     func testRemoveTieBeginTryEnd() {
         // Requested state doesn't match
         note.tie = .begin
-        XCTAssertThrowsError(try note.removeTie(.end)) { error in
-            XCTAssertEqual(error as? NoteError, .invalidRequestedTieState)
+        assertThrowsError(NoteError.invalidRequestedTieState) {
+            try note.removeTie(.end)
         }
     }
 
@@ -116,37 +116,37 @@ class NoteTests: XCTestCase {
 
     func testRemoveTieBegin() {
         note.tie = .begin
-        assertNoErrorThrown(try note.removeTie(.begin))
+        assertNoErrorThrown { try note.removeTie(.begin) }
         XCTAssertNil(note.tie)
     }
 
     func testRemoveTieEnd() {
         note.tie = .end
-        assertNoErrorThrown(try note.removeTie(.end))
+        assertNoErrorThrown { try note.removeTie(.end) }
         XCTAssertNil(note.tie)
     }
 
     func testRemoveTieBeginAndEndTryBegin() {
         note.tie = .beginAndEnd
-        assertNoErrorThrown(try note.removeTie(.begin))
+        assertNoErrorThrown { try note.removeTie(.begin) }
         XCTAssert(note.tie == .end)
     }
 
     func testRemoveTieBeginAndEndTryEnd() {
         note.tie = .beginAndEnd
-        assertNoErrorThrown(try note.removeTie(.end))
+        assertNoErrorThrown { try note.removeTie(.end) }
         XCTAssert(note.tie == .begin)
     }
 
     func testRemoveTieNilTryBegin() {
         note.tie = nil
-        assertNoErrorThrown(try note.removeTie(.begin))
+        assertNoErrorThrown { try note.removeTie(.begin) }
         XCTAssertNil(note.tie)
     }
 
     func testRemoveTieNilTryEnd() {
         note.tie = nil
-        assertNoErrorThrown(try note.removeTie(.end))
+        assertNoErrorThrown { try note.removeTie(.end) }
         XCTAssertNil(note.tie)
     }
 }

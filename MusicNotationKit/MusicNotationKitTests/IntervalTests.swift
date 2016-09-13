@@ -66,42 +66,26 @@ class IntervalTests: XCTestCase {
     }
     
     func testMajorOctaveInvalid() {
-        do {
+        assertThrowsError(IntervalError.invalidQuality) {
             _ = try Interval(quality: .major, number: 8)
-            shouldFail()
-        } catch IntervalError.invalidQuality {
-        } catch {
-            expected(IntervalError.invalidQuality, actual: error)
         }
     }
     
     func testPerfectNinthInvalid() {
-        do {
+        assertThrowsError(IntervalError.invalidQuality) {
             _ = try Interval(quality: .perfect, number: 9)
-            shouldFail()
-        } catch IntervalError.invalidQuality {
-        } catch {
-            expected(IntervalError.invalidQuality, actual: error)
         }
     }
     
     func testZeroInvalid() {
-        do {
+        assertThrowsError(IntervalError.numberNotPositive) {
             _ = try Interval(quality: .augmented, number: 0)
-            shouldFail()
-        } catch IntervalError.numberNotPositive {
-        } catch {
-            expected(IntervalError.numberNotPositive, actual: error)
         }
     }
     
     func testNegativeNumberInvalid() {
-        do {
+        assertThrowsError(IntervalError.numberNotPositive) {
             _ = try Interval(quality: .minor, number: -3)
-            shouldFail()
-        } catch IntervalError.numberNotPositive {
-        } catch {
-            expected(IntervalError.numberNotPositive, actual: error)
         }
     }
 }

@@ -22,56 +22,42 @@ class MeasureRepeatTests: XCTestCase {
     // MARK: Failures
 
     func testInitInvalidRepeatCount() {
-        do {
-            let _ = try MeasureRepeat(measures: [measure1], repeatCount: -2)
-            shouldFail()
-        } catch MeasureRepeatError.invalidRepeatCount {
-        } catch {
-            expected(MeasureRepeatError.invalidRepeatCount, actual: error)
+        assertThrowsError(MeasureRepeatError.invalidRepeatCount) {
+            _ = try MeasureRepeat(measures: [measure1], repeatCount: -2)
         }
     }
 
     func testInitNoMeasures() {
-        do {
-            let _ = try MeasureRepeat(measures: [])
-            shouldFail()
-        } catch MeasureRepeatError.noMeasures {
-        } catch {
-            expected(MeasureRepeatError.noMeasures, actual: error)
+        assertThrowsError(MeasureRepeatError.noMeasures) {
+            _ = try MeasureRepeat(measures: [])
         }
     }
 
     // MARK: Successes
 
     func testInitNotSpecifiedRepeatCount() {
-        do {
+        assertNoErrorThrown {
             let measureRepeat = try MeasureRepeat(measures: [measure1])
             XCTAssertEqual(measureRepeat.repeatCount, 1)
-        } catch {
-            XCTFail(String(describing: error))
         }
     }
 
     func testInitSingleMeasure() {
-        do {
-            let _ = try MeasureRepeat(measures: [measure2], repeatCount: 3)
-        } catch {
-            XCTFail(String(describing: error))
+        assertNoErrorThrown {
+            _ = try MeasureRepeat(measures: [measure2], repeatCount: 3)
         }
     }
 
     func testInitMultipleMeasures() {
-        do {
-            let _ = try MeasureRepeat(measures: [measure1, measure2], repeatCount: 4)
-        } catch {
-            XCTFail(String(describing: error))
+        assertNoErrorThrown {
+            _ = try MeasureRepeat(measures: [measure1, measure2], repeatCount: 4)
         }
     }
 
     // MARK: - expand()
 
     func testExpandSingleMeasureRepeatedOnce() {
-        do {
+        assertNoErrorThrown {
             let measureRepeat = try MeasureRepeat(measures: [measure1], repeatCount: 1)
             let expected = [measure1, RepeatedMeasure(immutableMeasure: measure1)] as [ImmutableMeasure]
             let actual = measureRepeat.expand()
@@ -82,13 +68,10 @@ class MeasureRepeatTests: XCTestCase {
             XCTAssertTrue(compareImmutableMeasureArrays(actual: actual, expected: expected))
             XCTAssertEqual(String(describing: measureRepeat), "[ |4/4: [1/8c1, 1/8c1]| ] × 2")
         }
-        catch {
-            XCTFail(String(describing: error))
-        }
     }
 
     func testExpandSingleMeasureRepeatedMany() {
-        do {
+        assertNoErrorThrown {
             let measureRepeat = try MeasureRepeat(measures: [measure1], repeatCount: 3)
             let repeatedMeasure = RepeatedMeasure(immutableMeasure: measure1)
             let expected = [measure1, repeatedMeasure, repeatedMeasure, repeatedMeasure] as [ImmutableMeasure]
@@ -100,13 +83,10 @@ class MeasureRepeatTests: XCTestCase {
             XCTAssertTrue(compareImmutableMeasureArrays(actual: actual, expected: expected))
             XCTAssertEqual(String(describing: measureRepeat), "[ |4/4: [1/8c1, 1/8c1]| ] × 4")
         }
-        catch {
-            XCTFail(String(describing: error))
-        }
     }
 
     func testExpandManyMeasuresRepeatedOnce() {
-        do {
+        assertNoErrorThrown {
             let measureRepeat = try MeasureRepeat(measures: [measure1, measure2], repeatCount: 1)
             let repeatedMeasure1 = RepeatedMeasure(immutableMeasure: measure1)
             let repeatedMeasure2 = RepeatedMeasure(immutableMeasure: measure2)
@@ -119,13 +99,10 @@ class MeasureRepeatTests: XCTestCase {
             XCTAssertTrue(compareImmutableMeasureArrays(actual: actual, expected: expected))
             XCTAssertEqual(String(describing: measureRepeat), "[ |4/4: [1/8c1, 1/8c1]|, |4/4: [1/4d1, 1/4d1]| ] × 2")
         }
-        catch {
-            XCTFail(String(describing: error))
-        }
     }
 
     func testExpandManyMeasuresRepeatedMany() {
-        do {
+        assertNoErrorThrown {
             let measureRepeat = try MeasureRepeat(measures: [measure1, measure2], repeatCount: 3)
             let repeatedMeasure1 = RepeatedMeasure(immutableMeasure: measure1)
             let repeatedMeasure2 = RepeatedMeasure(immutableMeasure: measure2)
@@ -143,63 +120,50 @@ class MeasureRepeatTests: XCTestCase {
             XCTAssertTrue(compareImmutableMeasureArrays(actual: actual, expected: expected))
             XCTAssertEqual(String(describing: measureRepeat), "[ |4/4: [1/8c1, 1/8c1]|, |4/4: [1/4d1, 1/4d1]| ] × 4")
         }
-        catch {
-            XCTFail(String(describing: error))
-        }
     }
 
     // MARK: - ==
     // MARK: Failures
 
     func testEqualitySameMeasureCountDifferentMeasures() {
-        do {
+        assertNoErrorThrown {
             let measureRepeat1 = try MeasureRepeat(measures: [measure1, measure2, measure1])
             let measureRepeat2 = try MeasureRepeat(measures: [measure2, measure1, measure2])
             XCTAssertFalse(measureRepeat1 == measureRepeat2)
-        } catch {
-            XCTFail(String(describing: error))
         }
     }
 
     func testEqualityDifferentMeasureCountSameMeasures() {
-        do {
+        assertNoErrorThrown {
             let measureRepeat1 = try MeasureRepeat(measures: [measure1, measure2])
             let measureRepeat2 = try MeasureRepeat(measures: [measure1, measure2, measure1])
             XCTAssertFalse(measureRepeat1 == measureRepeat2)
-        } catch {
-            XCTFail(String(describing: error))
         }
     }
 
     func testEqualityDifferentMeasureCountDifferentMeasures() {
-        do {
+        assertNoErrorThrown {
             let measureRepeat1 = try MeasureRepeat(measures: [measure1, measure2])
             let measureRepeat2 = try MeasureRepeat(measures: [measure2, measure1, measure2])
             XCTAssertFalse(measureRepeat1 == measureRepeat2)
-        } catch {
-            XCTFail(String(describing: error))
         }
     }
 
     func testEqualityDifferentRepeatCount() {
-        do {
+        assertNoErrorThrown {
             let measureRepeat1 = try MeasureRepeat(measures: [measure1, measure2], repeatCount: 2)
             let measureRepeat2 = try MeasureRepeat(measures: [measure1, measure2], repeatCount: 3)
             XCTAssertFalse(measureRepeat1 == measureRepeat2)
-        } catch {
-            XCTFail(String(describing: error))
         }
     }
 
     // MARK: Successes
 
     func testEqualitySucceeds() {
-        do {
+        assertNoErrorThrown {
             let measureRepeat1 = try MeasureRepeat(measures: [measure1], repeatCount: 2)
             let measureRepeat2 = try MeasureRepeat(measures: [measure1], repeatCount: 2)
             XCTAssertTrue(measureRepeat1 == measureRepeat2)
-        } catch {
-            XCTFail(String(describing: error))
         }
     }
 

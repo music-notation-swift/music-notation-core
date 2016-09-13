@@ -169,14 +169,23 @@ public struct Measure: ImmutableMeasure, Equatable {
         let secondaryModificationMethod = removal ? Note.removeTie : Note.modifyTie
 
 		var firstNote = try note(at: index, inSet: setIndex)
-		try requestedModificationMethod(&firstNote)(primaryRequestedTieState)
-		try replaceNote(at: index, with: firstNote, inSet: setIndex)
 		
 		if secondaryIndex < noteCount[setIndex] && secondaryIndex >= 0 {
 			var secondNote = try note(at: secondaryIndex, inSet: setIndex)
+			
+			// Before we modify the tie state for the notes, we make sure that both have
+			// the same tone. Ignore check if the removal flag is set.
+			guard removal || firstNote.tones == secondNote.tones else {
+				throw MeasureError.noSameNoteTie
+			}
+
 			try secondaryModificationMethod(&secondNote)(secondaryRequestedTieState)
 			try replaceNote(at: secondaryIndex, with: secondNote, inSet: setIndex)
 		}
+		
+		
+		try requestedModificationMethod(&firstNote)(primaryRequestedTieState)
+		try replaceNote(at: index, with: firstNote, inSet: setIndex)
     }
 
     internal func noteCollectionIndex(from index: Int, inSet setIndex: Int) throws -> NoteCollectionIndex {
@@ -225,4 +234,5 @@ public enum MeasureError: Error {
     case noNextNote
     case invalidRequestedTieState
     case internalError
+	case noSameNoteTie
 }

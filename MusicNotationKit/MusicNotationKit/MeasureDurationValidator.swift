@@ -63,19 +63,14 @@ public enum MeasureDurationValidator {
         }
         let fullMeasureTicksBudget = measure.timeSignature.topNumber * baseDuration.ticks
         // Validate each set separately
-        var setIndex = 0
-        return measure.notes.map { noteCollection in
-            defer {
-                setIndex += 1
-            }
+        return measure.notes.enumerated().map { (setIndex, noteCollection) in
             var overFilledStartIndex: Int?
-            var index: Int = 0
-            let filledTicks = noteCollection.reduce(0) { prev, currentCollection in
+            let filledTicks = noteCollection.enumerated().reduce(0) { prev, indexAndCollection in
+                let (index, currentCollection) = indexAndCollection
                 let newTicks = prev + currentCollection.noteTimingCount * currentCollection.noteDuration.ticks
                 if newTicks > fullMeasureTicksBudget && overFilledStartIndex == nil {
                     overFilledStartIndex = index
                 }
-                index += 1
                 return newTicks
             }
             if filledTicks == fullMeasureTicksBudget {

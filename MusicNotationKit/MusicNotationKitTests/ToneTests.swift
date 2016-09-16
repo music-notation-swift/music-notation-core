@@ -42,6 +42,15 @@ class ToneTests: XCTestCase {
     }
     
     // MARK: - ==
+    // MARK: Failures
+    
+    func testNotEqual() {
+        let tone1 = Tone(accidental: .flat, noteLetter: .b, octave: .octave5)
+        let tone2 = Tone(accidental: .flat, noteLetter: .b, octave: .octave4)
+        
+        XCTAssertNotEqual(tone1, tone2)
+    }
+
     // MARK: Successes
     
     func testEqual() {
@@ -51,16 +60,7 @@ class ToneTests: XCTestCase {
         XCTAssertEqual(tone1, tone2)
     }
     
-    // MARK: Failures
-    
-    func testNotEqual() {
-        let tone1 = Tone(accidental: .flat, noteLetter: .b, octave: .octave5)
-        let tone2 = Tone(accidental: .flat, noteLetter: .b, octave: .octave4)
-        
-        XCTAssertNotEqual(tone1, tone2)
-    }
-    
-    // MARK: - Midi numbers
+    // MARK: - MIDI numbers
     // MARK: Successes
     
     func testRidiculouslyLowNote() {
@@ -87,7 +87,33 @@ class ToneTests: XCTestCase {
         XCTAssertEqual(tone.midiNoteNumber, 107)
     }
     
-    // MARK: - Enharmonic
+    // MARK: - isEnharmonic(with:)
+    // MARK: Failures
+    
+    func testDifferentAccidentals() {
+        let tone1 = Tone(accidental: .flat, noteLetter: .d, octave: .octave1)
+        let tone2 = Tone(accidental: .sharp, noteLetter: .d, octave: .octave1)
+        
+        XCTAssertNotEqual(tone1, tone2)
+        XCTAssertFalse(tone1.isEnharmonic(with: tone2))
+    }
+    
+    func testSamePitchDifferentOctaves() {
+        let tone1 = Tone(accidental: .natural, noteLetter: .e, octave: .octave5)
+        let tone2 = Tone(accidental: .natural, noteLetter: .e, octave: .octave6)
+        
+        XCTAssertNotEqual(tone1, tone2)
+        XCTAssertFalse(tone1.isEnharmonic(with: tone2))
+    }
+    
+    func testEnharmonicPitchDifferentOctaves() {
+        let tone1 = Tone(accidental: .doubleSharp, noteLetter: .f, octave: .octave2)
+        let tone2 = Tone(accidental: .natural, noteLetter: .g, octave: .octave5)
+        
+        XCTAssertNotEqual(tone1, tone2)
+        XCTAssertFalse(tone1.isEnharmonic(with: tone2))
+    }
+
     // MARK: Successes
     
     func testSameToneIsEnharmonic() {
@@ -132,21 +158,4 @@ class ToneTests: XCTestCase {
         XCTAssertTrue(tone1.isEnharmonic(with: tone2))
     }
     
-    // MARK: Failures
-    
-    func testDifferentAccidentals() {
-        let tone1 = Tone(accidental: .flat, noteLetter: .d, octave: .octave1)
-        let tone2 = Tone(accidental: .sharp, noteLetter: .d, octave: .octave1)
-        
-        XCTAssertNotEqual(tone1, tone2)
-        XCTAssertFalse(tone1.isEnharmonic(with: tone2))
-    }
-    
-    func testDifferentOctaves() {
-        let tone1 = Tone(accidental: .natural, noteLetter: .e, octave: .octave5)
-        let tone2 = Tone(accidental: .natural, noteLetter: .e, octave: .octave6)
-        
-        XCTAssertNotEqual(tone1, tone2)
-        XCTAssertFalse(tone1.isEnharmonic(with: tone2))
-    }
 }

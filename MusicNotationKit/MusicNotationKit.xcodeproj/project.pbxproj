@@ -33,6 +33,7 @@
 		E92BD6031D4FD0A500061BCD /* Interval.swift in Sources */ = {isa = PBXBuildFile; fileRef = E92BD6021D4FD0A500061BCD /* Interval.swift */; };
 		E92BD6051D4FD0FF00061BCD /* IntervalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E92BD6041D4FD0FF00061BCD /* IntervalTests.swift */; };
 		E98D30AE1D4BFB7100C6DF5E /* ToneTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E98D30AD1D4BFB7100C6DF5E /* ToneTests.swift */; };
+		E9D762E11D8C4ECC0005AAB6 /* Enharmonic.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9D762E01D8C4ECC0005AAB6 /* Enharmonic.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -76,6 +77,7 @@
 		E92BD6021D4FD0A500061BCD /* Interval.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Interval.swift; sourceTree = "<group>"; };
 		E92BD6041D4FD0FF00061BCD /* IntervalTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntervalTests.swift; sourceTree = "<group>"; };
 		E98D30AD1D4BFB7100C6DF5E /* ToneTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToneTests.swift; sourceTree = "<group>"; };
+		E9D762E01D8C4ECC0005AAB6 /* Enharmonic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Enharmonic.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -135,6 +137,7 @@
 				27AA71121C8D1BD900E2BF22 /* ImmutableMeasure.swift */,
 				27AA71141C9140C400E2BF22 /* RepeatedMeasure.swift */,
 				27AFEB561D6984CB0064ED27 /* NoteDuration.swift */,
+				E9D762E01D8C4ECC0005AAB6 /* Enharmonic.swift */,
 				270CC5211B2C06A200CA1A56 /* Supporting Files */,
 			);
 			path = MusicNotationKit;
@@ -298,6 +301,7 @@
 				E92BD6031D4FD0A500061BCD /* Interval.swift in Sources */,
 				270F46A31B2FE4D900FDF4FF /* NoteHolder.swift in Sources */,
 				27AFEB571D6984CB0064ED27 /* NoteDuration.swift in Sources */,
+				E9D762E11D8C4ECC0005AAB6 /* Enharmonic.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

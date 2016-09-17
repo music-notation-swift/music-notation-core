@@ -137,19 +137,15 @@ public struct Tuplet: NoteCollection {
         try replaceNote(at: fullIndexes, with: noteCollection)
     }
 
-    public mutating func replaceNote(at index: Int, with notes: [Note]) throws {
+    public mutating func replaceNote<T: NoteCollection>(at index: Int, with noteCollections: [T]) throws {
         throw NSError()
     }
 
-    public mutating func replaceNotes(in range: Range<Int>, with notes: Note) throws {
+    public mutating func replaceNotes<T: NoteCollection>(in range: Range<Int>, with noteCollection: T) throws {
         throw NSError()
     }
 
-    public mutating func replaceNotes(in range: Range<Int>, with notes: [Note]) throws {
-        throw NSError()
-    }
-
-    public mutating func replaceNotes(in range: Range<Int>, with tuplet: Tuplet) throws {
+    public mutating func replaceNotes<T: NoteCollection>(in range: Range<Int>, with notes: [T]) throws {
         throw NSError()
     }
 

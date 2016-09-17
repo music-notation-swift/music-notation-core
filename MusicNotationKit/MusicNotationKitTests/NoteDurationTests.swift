@@ -30,12 +30,8 @@ class NoteDurationTests: XCTestCase {
     // MARK: Failures
 
     func testInitNegativeDotCount() {
-        do {
-            let _ = try NoteDuration(value: .quarter, dotCount: -1)
-            shouldFail()
-        } catch NoteDurationError.negativeDotCountInvalid {
-        } catch {
-            expected(NoteDurationError.negativeDotCountInvalid, actual: error)
+        assertThrowsError(NoteDurationError.negativeDotCountInvalid) {
+            _ = try NoteDuration(value: .quarter, dotCount: -1)
         }
     }
 
@@ -43,46 +39,37 @@ class NoteDurationTests: XCTestCase {
 
     func testInitDotCountZero() {
         let dotCount = 0
-        var currentValue: NoteDuration.Value?
-        do {
+        
+        assertNoErrorThrown {
             try allValues.forEach {
-                currentValue = $0
                 let duration = try NoteDuration(value: $0, dotCount: dotCount)
                 XCTAssertEqual(duration.value, $0)
                 XCTAssertEqual(duration.dotCount, dotCount)
             }
-        } catch {
-            XCTFail("\(error) for value: \(currentValue!)")
         }
     }
 
     func testInitDotCountNonZero() {
         let dotCount = 2
-        var currentValue: NoteDuration.Value?
-        do {
+        
+        assertNoErrorThrown {
             try allValues.forEach {
-                currentValue = $0
                 let duration = try NoteDuration(value: $0, dotCount: dotCount)
                 XCTAssertEqual(duration.value, $0)
                 XCTAssertEqual(duration.dotCount, dotCount)
             }
-        } catch {
-            XCTFail("\(error) for value: \(currentValue!)")
         }
     }
 
     func testInitDotCountLargerThan4() {
         let dotCount = 5
-        var currentValue: NoteDuration.Value?
-        do {
+        
+        assertNoErrorThrown {
             try allValues.forEach {
-                currentValue = $0
                 let duration = try NoteDuration(value: $0, dotCount: dotCount)
                 XCTAssertEqual(duration.value, $0)
                 XCTAssertEqual(duration.dotCount, dotCount)
             }
-        } catch {
-            XCTFail("\(error) for value: \(currentValue!)")
         }
     }
 
@@ -135,24 +122,20 @@ class NoteDurationTests: XCTestCase {
     }
 
     func testEqualToForSameDurationSingleDot() {
-        do {
+        assertNoErrorThrown {
             let noteDuration = try NoteDuration(value: .quarter, dotCount: 1)
             XCTAssertEqual(
                 NoteDuration.number(of: try NoteDuration(value: .quarter, dotCount: 1), within: noteDuration),
                 1)
-        } catch {
-            XCTFail(String(describing: error))
         }
     }
 
     func testEqualToForSameDurationMultipleDot() {
-        do {
+        assertNoErrorThrown {
             let noteDuration = try NoteDuration(value: .quarter, dotCount: 3)
             XCTAssertEqual(
                 NoteDuration.number(of: try NoteDuration(value: .quarter, dotCount: 3), within: noteDuration),
                 1)
-        } catch {
-            XCTFail(String(describing: error))
         }
     }
 
@@ -174,24 +157,20 @@ class NoteDurationTests: XCTestCase {
     }
 
     func testEqualToForSmallerDurationSingleDotFromSingleDot() {
-        do {
+        assertNoErrorThrown {
             let noteDuration = try NoteDuration(value: .quarter, dotCount: 1)
             XCTAssertEqual(
                 NoteDuration.number(of: try NoteDuration(value: .sixteenth, dotCount: 1), within: noteDuration),
                 4)
-        } catch {
-            XCTFail(String(describing: error))
         }
     }
 
     func testEqualToForSmallerDurationDoubleDotFromDoubleDot() {
-        do {
+        assertNoErrorThrown {
             let noteDuration = try NoteDuration(value: .quarter, dotCount: 2)
             XCTAssertEqual(
                 NoteDuration.number(of: try NoteDuration(value: .thirtySecond, dotCount: 2), within: noteDuration),
                 8)
-        } catch {
-            XCTFail(String(describing: error))
         }
     }
 

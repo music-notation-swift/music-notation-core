@@ -42,3 +42,40 @@ extension Tone: Equatable {
         }
     }
 }
+
+extension Tone {
+    public var midiNoteNumber: Int {
+        var result = (octave.rawValue + 1) * 12
+        
+        switch noteLetter {
+        case .c: break
+        case .d: result += 2
+        case .e: result += 4
+        case .f: result += 5
+        case .g: result += 7
+        case .a: result += 9
+        case .b: result += 11
+        }
+        
+        switch accidental {
+        case .flat?:
+            result -= 1
+        case .sharp?:
+            result += 1
+        case .doubleFlat?:
+            result -= 2
+        case .doubleSharp?:
+            result += 2
+        default:
+            break
+        }
+        
+        return result
+    }
+}
+
+extension Tone: Enharmonic {
+    public func isEnharmonic(with other: Tone) -> Bool {
+        return self.midiNoteNumber == other.midiNoteNumber
+    }
+}

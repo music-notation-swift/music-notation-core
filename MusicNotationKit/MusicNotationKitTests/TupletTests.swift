@@ -429,25 +429,52 @@ class TupletTests: XCTestCase {
         }
     }
 
-    // MARK: - replaceNote(at:with:Note)
+    // MARK: - note(at:)
+    // MARK: Failures
+
+    func testNoteAtForInvalidIndexNegative() {
+        assertThrowsError(TupletError.invalidIndex) {
+            let tuplet = try Tuplet(3, .eighth, notes: [eighthNote, eighthNote, eighthNote])
+            _ = try tuplet.note(at: -1)
+        }
+    }
+
+    func testNoteAtForInvalidIndexTooLarge() {
+        assertThrowsError(TupletError.invalidIndex) {
+            let tuplet = try Tuplet(3, .eighth, notes: [eighthNote, eighthNote, eighthNote])
+            _ = try tuplet.note(at: 5)
+        }
+    }
+
+    // MARK: Successes
+
+    func testNoteAtSuccess() {
+        assertNoErrorThrown() {
+            let tuplet = try Tuplet(5, .eighth, notes: [eighthNote, eighthNote, eighthRest, eighthNote, eighthNote])
+            let note = try tuplet.note(at: 2)
+            XCTAssertEqual(note, eighthRest)
+        }
+    }
+
+    // MARK: - replaceNote(at:with:)
     // MARK: Failures
 
     func testReplaceNoteWithNoteTooLong() {
-        assertThrowsError(TupletError.replacingCollectionNotSameDuration) {
+        assertThrowsError(TupletError.replacingNoteNotSameDuration) {
             var tuplet = try Tuplet(3, .eighth, notes: [eighthNote, eighthNote, eighthNote])
             try tuplet.replaceNote(at: 1, with: quarterNote1)
         }
     }
 
     func testReplaceNoteWithNoteTooShort() {
-        assertThrowsError(TupletError.replacingCollectionNotSameDuration) {
+        assertThrowsError(TupletError.replacingNoteNotSameDuration) {
             var tuplet = try Tuplet(3, .quarter, notes: [quarterNote1, quarterNote2, quarterNote3])
             try tuplet.replaceNote(at: 0, with: eighthNote)
         }
     }
 
     func testReplaceNoteInTupletWithNoteTooShort() {
-        assertThrowsError(TupletError.replacingCollectionNotSameDuration) {
+        assertThrowsError(TupletError.replacingNoteNotSameDuration) {
             let triplet = try? Tuplet(3, .quarter, notes: [quarterNote1, quarterNote2, quarterNote3])
             XCTAssertNotNil(triplet)
             var tuplet = try Tuplet(5, .quarter, notes: [
@@ -458,13 +485,21 @@ class TupletTests: XCTestCase {
     }
 
     func testReplaceNoteInTupletWithNoteTooLong() {
-        assertThrowsError(TupletError.replacingCollectionNotSameDuration) {
+        assertThrowsError(TupletError.replacingNoteNotSameDuration) {
             let triplet = try? Tuplet(3, .eighth, notes: [eighthNote, eighthNote, eighthNote])
             XCTAssertNotNil(triplet)
             var tuplet = try Tuplet(5, .eighth, notes: [
                 triplet!, eighthNote, eighthNote, eighthNote
                 ])
             try tuplet.replaceNote(at: 1, with: quarterNote1)
+        }
+    }
+
+    func testReplaceNoteWithTupletTooLong() {
+        assertThrowsError(TupletError.replacingTupletNotSameDuration) {
+            let triplet = try Tuplet(3, .eighth, notes: [eighthNote, eighthNote, eighthNote])
+            var tuplet = try Tuplet(5, .eighth, notes: [eighthNote, eighthNote, eighthNote, eighthNote, eighthNote])
+            try tuplet.replaceNote(at: 0, with: triplet)
         }
     }
 
@@ -526,28 +561,6 @@ class TupletTests: XCTestCase {
 
     // MARK: - replaceNote(at:with:[Note])
     // MARK: Failures
-
-    // MARK: Successes
-
-
-    // MARK: - replaceNote(at:with:Tuplet)
-    // MARK: Failures
-
-    func testReplaceNoteWithTupletTooLong() {
-
-    }
-
-    func testReplaceNoteWithTupletTooShort() {
-
-    }
-
-    func testReplaceNoteInTupletWithTupletTooLong() {
-
-    }
-
-    func testReplaceNoteInTupletWithTupletTooShort() {
-
-    }
 
     // MARK: Successes
 

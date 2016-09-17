@@ -330,34 +330,26 @@ class MeasureDurationValidatorTests: XCTestCase {
     func testBaseNoteDurationForTooLargeBottomNumber() {
         let timeSignature = TimeSignature(topNumber: 4, bottomNumber: 256, tempo: 120)
         let measure = Measure(timeSignature: timeSignature, key: Key(noteLetter: .c))
-        do {
+        assertThrowsError(MeasureDurationValidatorError.invalidBottomNumber) {
             let _ = try MeasureDurationValidator.baseNoteDuration(from: measure)
-            shouldFail()
-        } catch MeasureDurationValidatorError.invalidBottomNumber {
-        } catch {
-            expected(MeasureDurationValidatorError.invalidBottomNumber, actual: error)
         }
     }
 
     // MARK: Successes
 
     func testBaseNoteDurationForCommonBottomNumber() {
-        do {
+        assertNoErrorThrown() {
             let baseNoteDuration = try MeasureDurationValidator.baseNoteDuration(from: fullMeasure)
             XCTAssertEqual(baseNoteDuration, .quarter)
             let baseNoteDurationOdd = try MeasureDurationValidator.baseNoteDuration(from: fullMeasureOddTimeSignature)
             XCTAssertEqual(baseNoteDurationOdd, .sixteenth)
-        } catch {
-            XCTFail(String(describing: error))
         }
     }
 
     func testBaseNoteDurationForIrrationalBottomNumber() {
-        do {
+        assertNoErrorThrown() {
             let baseNoteDurationIrrational = try MeasureDurationValidator.baseNoteDuration(from: fullMeasureIrrationalTimeSignature)
             XCTAssertEqual(baseNoteDurationIrrational, .quarter)
-        } catch {
-            XCTFail(String(describing: error))
         }
     }
 }

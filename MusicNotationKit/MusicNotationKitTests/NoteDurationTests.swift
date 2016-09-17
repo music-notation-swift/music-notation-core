@@ -73,6 +73,36 @@ class NoteDurationTests: XCTestCase {
         }
     }
 
+    // MARK: - init(timeSignatureValue:)
+    // Cannot fail
+
+    func testInitTimeSignatureValue() {
+        XCTAssertEqual(
+            NoteDuration(timeSignatureValue: NoteDuration.TimeSignatureValue(value: .whole)!),
+            .whole)
+        XCTAssertEqual(
+            NoteDuration(timeSignatureValue: NoteDuration.TimeSignatureValue(value: .half)!),
+            .half)
+        XCTAssertEqual(
+            NoteDuration(timeSignatureValue: NoteDuration.TimeSignatureValue(value: .quarter)!),
+            .quarter)
+        XCTAssertEqual(
+            NoteDuration(timeSignatureValue: NoteDuration.TimeSignatureValue(value: .eighth)!),
+            .eighth)
+        XCTAssertEqual(
+            NoteDuration(timeSignatureValue: NoteDuration.TimeSignatureValue(value: .sixteenth)!),
+            .sixteenth)
+        XCTAssertEqual(
+            NoteDuration(timeSignatureValue: NoteDuration.TimeSignatureValue(value: .thirtySecond)!),
+            .thirtySecond)
+        XCTAssertEqual(
+            NoteDuration(timeSignatureValue: NoteDuration.TimeSignatureValue(value: .sixtyFourth)!),
+            .sixtyFourth)
+        XCTAssertEqual(
+            NoteDuration(timeSignatureValue: NoteDuration.TimeSignatureValue(value: .oneTwentyEighth)!),
+            .oneTwentyEighth)
+    }
+
     // MARK: - number(of:equalTo:)
     // MARK: Successes
 
@@ -175,14 +205,14 @@ class NoteDurationTests: XCTestCase {
         XCTAssertNil(NoteDuration.large.timeSignatureValue)
         XCTAssertNil(NoteDuration.long.timeSignatureValue)
         XCTAssertNil(NoteDuration.doubleWhole.timeSignatureValue)
-        XCTAssertEqual(NoteDuration.whole.timeSignatureValue, 1)
-        XCTAssertEqual(NoteDuration.half.timeSignatureValue, 2)
-        XCTAssertEqual(NoteDuration.quarter.timeSignatureValue, 4)
-        XCTAssertEqual(NoteDuration.eighth.timeSignatureValue, 8)
-        XCTAssertEqual(NoteDuration.sixteenth.timeSignatureValue, 16)
-        XCTAssertEqual(NoteDuration.thirtySecond.timeSignatureValue, 32)
-        XCTAssertEqual(NoteDuration.sixtyFourth.timeSignatureValue, 64)
-        XCTAssertEqual(NoteDuration.oneTwentyEighth.timeSignatureValue, 128)
-        XCTAssertEqual(NoteDuration.twoFiftySixth.timeSignatureValue, 256)
+        XCTAssertEqual(NoteDuration.whole.timeSignatureValue?.rawValue, 1)
+        XCTAssertEqual(NoteDuration.half.timeSignatureValue?.rawValue, 2)
+        XCTAssertEqual(NoteDuration.quarter.timeSignatureValue?.rawValue, 4)
+        XCTAssertEqual(NoteDuration.eighth.timeSignatureValue?.rawValue, 8)
+        XCTAssertEqual(NoteDuration.sixteenth.timeSignatureValue?.rawValue, 16)
+        XCTAssertEqual(NoteDuration.thirtySecond.timeSignatureValue?.rawValue, 32)
+        XCTAssertEqual(NoteDuration.sixtyFourth.timeSignatureValue?.rawValue, 64)
+        XCTAssertEqual(NoteDuration.oneTwentyEighth.timeSignatureValue?.rawValue, 128)
+        XCTAssertNil(NoteDuration.twoFiftySixth.timeSignatureValue?.rawValue)
     }
 }

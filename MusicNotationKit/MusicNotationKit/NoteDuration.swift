@@ -40,6 +40,49 @@ public struct NoteDuration {
         }
     }
 
+    /**
+     This holds the value for the bottom number of the time signature and relates the `NoteDuration.Value` to this
+     number or nil if it cannot be used for the bottom number of a time signature.
+     */
+    public enum TimeSignatureValue: Int {
+        case whole = 1
+        case half = 2
+        case quarter = 4
+        case eighth = 8
+        case sixteenth = 16
+        case thirtySecond = 32
+        case sixtyFourth = 64
+        case oneTwentyEighth = 128
+        // As far as I can tell, 128th note is the largest allowed
+
+        init?(value: Value) {
+            switch value {
+            case .whole: self = .whole
+            case .half: self = .half
+            case .quarter: self = .quarter
+            case .eighth: self = .eighth
+            case .sixteenth: self = .sixteenth
+            case .thirtySecond: self = .thirtySecond
+            case .sixtyFourth: self = .sixtyFourth
+            case .oneTwentyEighth: self = .oneTwentyEighth
+            default: return nil
+            }
+        }
+
+        fileprivate var duration: NoteDuration {
+            switch self {
+            case .whole: return .whole
+            case .half: return .half
+            case .quarter: return .quarter
+            case .eighth: return .eighth
+            case .sixteenth: return .sixteenth
+            case .thirtySecond: return .thirtySecond
+            case .sixtyFourth: return .sixtyFourth
+            case .oneTwentyEighth: return .oneTwentyEighth
+            }
+        }
+    }
+
     /// The duration value of the `NoteDuration`. i.e. eighth, sixteenth, etc.
     public let value: Value
     /// The number of dots for this `NoteDuration`.
@@ -47,20 +90,7 @@ public struct NoteDuration {
     /**
      The value for which the bottom number of time signature will be if this duration value is used.
      */
-    public var timeSignatureValue: Int? {
-        switch value {
-        case .whole: return 1
-        case .half: return 2
-        case .quarter: return 4
-        case .eighth: return 8
-        case .sixteenth: return 16
-        case .thirtySecond: return 32
-        case .sixtyFourth: return 64
-        case .oneTwentyEighth: return 128
-        case .twoFiftySixth: return 256
-        case .long, .large, .doubleWhole: return nil
-        }
-    }
+    public let timeSignatureValue: TimeSignatureValue?
     /**
      This is the number of ticks for the duration with the `dotCount` taken into account. This is a mathematical
      representation of a `NoteDuration` that can be used for different calculations of equivalence.
@@ -95,6 +125,7 @@ public struct NoteDuration {
     private init(value: Value) {
         self.value = value
         self.dotCount = 0
+        self.timeSignatureValue = TimeSignatureValue(value: value)
     }
 
     /**
@@ -112,6 +143,14 @@ public struct NoteDuration {
         }
         self.value = value
         self.dotCount = dotCount
+        self.timeSignatureValue = TimeSignatureValue(value: value)
+    }
+
+    /**
+     Initialize a `NoteDuration` from a `TimeSignatureValue` which encapsulates the bottom number of a `TimeSignature`.
+     */
+    public init(timeSignatureValue: TimeSignatureValue) {
+        self = timeSignatureValue.duration
     }
 
     public static let large = NoteDuration(value: .large)
@@ -157,7 +196,7 @@ extension NoteDuration: Hashable {
     public var hashValue: Int {
         let valueAsHash: Int
         if let timeSignatureValue = timeSignatureValue {
-            valueAsHash = timeSignatureValue
+            valueAsHash = timeSignatureValue.rawValue
         } else {
             switch value {
             case .doubleWhole: valueAsHash = -2

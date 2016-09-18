@@ -8,17 +8,31 @@
 
 import XCTest
 
-func assertThrowsError<T: Error>(_ expectedError: T, expression: () throws -> ()) where T: Equatable {
-    XCTAssertThrowsError(try expression()) { error in
-        XCTAssertEqual(error as? T, expectedError, "Expected error \(expectedError), but got: \(error).")
+extension XCTestCase {
+
+    func assertThrowsError<T: Error>(_ expectedError: T, inFile file: String = #file, atLine line: UInt = #line,
+                           expression: () throws -> ()) where T: Equatable {
+        do {
+            try expression()
+            recordFailure(withDescription: "Expected error \(expectedError), but got no error.",
+                inFile: file,
+                atLine: line,
+                expected: false)
+        } catch {
+            if error as? T != expectedError {
+                recordFailure(withDescription: "Expected error \(expectedError), but got: \(error).",
+                    inFile: file,
+                    atLine: line,
+                    expected: false)
+            }
+        }
+    }
+
+    func assertNoErrorThrown(inFile file: String = #file, atLine line: UInt = #line, expression: () throws -> ()) {
+        do {
+            try expression()
+        } catch {
+            recordFailure(withDescription: "Expected no error, but got: \(error)", inFile: file, atLine: line, expected: false)
+        }
     }
 }
-
-func assertNoErrorThrown(expression: () throws -> ()) {
-    do {
-        try expression()
-    } catch {
-        XCTFail("Expected no error, but got: \(error)")
-    }
-}
-

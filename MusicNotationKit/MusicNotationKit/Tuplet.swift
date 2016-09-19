@@ -139,14 +139,16 @@ public struct Tuplet: NoteCollection {
         guard try notes(at: range, sameDurationAs: [noteCollection]) else {
             throw TupletError.replacementNotSameDuration
         }
-        throw TupletError.internalError
+        let flatIndexesInRange = Array(flatIndexes[range])
+        try replaceNotes(at: flatIndexesInRange, with: noteCollection)
     }
 
     public mutating func replaceNotes<T: NoteCollection>(in range: CountableClosedRange<Int>, with noteCollections: [T]) throws {
         guard try notes(at: range, sameDurationAs: noteCollections) else {
             throw TupletError.replacementNotSameDuration
         }
-        throw TupletError.internalError
+        let flatIndexesInRange = Array(flatIndexes[range])
+        try replaceNotes(at: flatIndexesInRange, with: noteCollections)
     }
 
     // MARK: Private
@@ -194,11 +196,96 @@ public struct Tuplet: NoteCollection {
     }
 
     private mutating func replaceNotes(at flatIndexes: [[Int]], with noteCollection: NoteCollection) throws {
-        throw TupletError.internalError
+        // If at the same depth, it is simple
+        let countsSet = Set(flatIndexes.map { $0.count })
+        if countsSet.count == 1 {
+            // Remove all notes to replace
+            for flatIndex in flatIndexes {
+                guard flatIndex.count != 1 else {
+                    notes.remove(at: flatIndex[0])
+                    return
+                }
+                guard var tuplet = notes[flatIndex[0]] as? Tuplet else {
+                    assertionFailure("all indexes before the last should be tuplets. Must be an error in flatIndexes")
+                    throw TupletError.internalError
+                }
+                let slice = Array(flatIndex[1..<flatIndex.count])
+                try tuplet.replaceNotes(at: [slice], with: noteCollection)
+
+            }
+            // Insert at the first index
+
+        }
     }
 
     private mutating func replaceNotes(at flatIndexes: [[Int]], with noteCollections: [NoteCollection]) throws {
         throw TupletError.internalError
+    }
+
+    private func isValidReplacementRange(flatIndexes: [[Int]]) throws -> Bool {
+        // If multiple tuplets are encountered, they all need to be fully covered
+        var lastFlatIndexCount = 0
+        var lastFlatIndexNoteCount = 0
+        var currentNoteCount = 0
+        var tupletCount = 0
+        var returnValue = true
+        for flatIndex in flatIndexes {
+            if flatIndex.count == 1 {
+                // Non-tuplets are fine
+                lastFlatIndexCount = 0
+                currentNoteCount = 0
+                continue
+            }
+            if flatIndex.count == lastFlatIndexCount {
+                currentNoteCount += 1
+                continue
+            }
+            if currentNoteCount != lastFlatIndexNoteCount {
+                returnValue = false
+            }
+            var currentTuplet = self
+            var slice = flatIndex
+            lastFlatIndexCount = flatIndex.count
+            repeat {
+                guard let tuplet = currentTuplet.notes[slice[0]] as? Tuplet else {
+                    assertionFailure("all indexes before the last should be tuplets. Must be an error in flatIndexes")
+                    throw TupletError.internalError
+                }
+                currentTuplet = tuplet
+                slice = Array(flatIndex[1..<flatIndex.count])
+            } while slice.count != 1
+            lastFlatIndexNoteCount = currentTuplet.noteCount
+            tupletCount += 1
+        }
+        if tupletCount > 1 {
+            return returnValue
+        } else {
+            return true
+        }
+    }
+
+    private mutating func removeNotes(at flatIndexes: [[Int]]) throws {
+        // If all at the same depth, it is simple
+        let countsSet = Set(flatIndexes.map { $0.count })
+        if countsSet.count == 1 {
+            if flatIndexes[0].count != 1 {
+                // recurse to get to actual tuplet
+                let first = flatIndexes[0]
+                let sliced = Array(flatIndexes.map { Array($0[1..<first.count]) })
+                guard var tuplet = notes[first[0]] as? Tuplet else {
+                    assertionFailure("all indexes before the last should be tuplets. Must be an error in flatIndexes")
+                    throw TupletError.internalError
+                }
+                try tuplet.removeNotes(at: sliced)
+            } else {
+                let firstItem = flatIndexes[0][0]
+                let lastIndex = flatIndexes.count - 1
+                let lastItem = flatIndexes[lastIndex][0]
+                notes.removeSubrange(firstItem...lastItem)
+            }
+        } else {
+
+        }
     }
 
     internal mutating func recomputeFlatIndexes(parentIndexes: [Int] = [Int]()) -> [[Int]] {
@@ -243,5 +330,6 @@ public enum TupletError: Error {
     case notesDoNotFillTuplet
     case notesOverfillTuplet
     case replacementNotSameDuration
+    case rangeToReplaceMustFullyCoverMultipleTuplets
     case internalError
 }

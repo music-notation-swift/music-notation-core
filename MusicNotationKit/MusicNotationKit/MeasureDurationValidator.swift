@@ -29,7 +29,7 @@ public enum MeasureDurationValidator {
     public enum CompletionState: Equatable {
         case notFull(availableNotes: [NoteDuration : Int])
         case full
-        case overfilled(overflowingNotes: Range<Int>)
+        case overfilled(overflowingNotes: CountableRange<Int>)
         case invalid
 
         public static func ==(lhs: CompletionState, rhs: CompletionState) -> Bool {
@@ -77,7 +77,7 @@ public enum MeasureDurationValidator {
                 return .full
             } else if let overFilledStartIndex = overFilledStartIndex {
                 return .overfilled(
-                overflowingNotes: Range(
+                overflowingNotes: CountableRange(
                     uncheckedBounds: (overFilledStartIndex, measure.noteCount[setIndex])
                 ))
             } else if filledTicks < fullMeasureTicksBudget {

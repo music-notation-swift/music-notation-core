@@ -24,7 +24,7 @@ public struct Tuplet: NoteCollection {
     /// The number of notes that this tuplet fits in the space of
     public let noteTimingCount: Int
     /// A 2-dimensional array that can be used to index into every note in the tuplet within compound tuplets as well.
-    public var flatIndexes: [[Int]] = [[Int]]()
+    internal var flatIndexes: [[Int]] = [[Int]]()
 
     /**
      This maps the standard number of notes in the tuplet (`noteCount`), to the number of notes the tuplet should fit
@@ -119,37 +119,50 @@ public struct Tuplet: NoteCollection {
 
     public mutating func replaceNote<T: NoteCollection>(at index: Int, with noteCollection: T) throws {
         // validate they are the same duration
-        let noteToReplace = try note(at: index)
-        let noteCollectionDuration = NoteDuration.number(
-            of: noteToReplace.noteDuration,
-            within: noteCollection.noteDuration) *
-            Double(noteCollection.noteTimingCount)
-        guard noteCollectionDuration == 1 else {
-            switch noteCollection {
-            case is Note: throw TupletError.replacingNoteNotSameDuration
-            case is Tuplet: throw TupletError.replacingTupletNotSameDuration
-            default:
-                assertionFailure("Unknown NoteCollection type")
-                throw TupletError.internalError
-            }
+        guard try notes(at: [index], sameDurationAs: [noteCollection]) else {
+            throw TupletError.replacementNotSameDuration
         }
-        let fullIndexes = flatIndexes[index]
-        try replaceNote(at: fullIndexes, with: noteCollection)
+        let flatIndex = flatIndexes[index]
+        try replaceNote(at: flatIndex, with: noteCollection)
     }
 
     public mutating func replaceNote<T: NoteCollection>(at index: Int, with noteCollections: [T]) throws {
-        throw NSError()
+        // validate they are the same duration
+        guard try notes(at: [index], sameDurationAs: noteCollections) else {
+            throw TupletError.replacementNotSameDuration
+        }
+        let flatIndex = flatIndexes[index]
+        try replaceNote(at: flatIndex, with: noteCollections)
     }
 
-    public mutating func replaceNotes<T: NoteCollection>(in range: Range<Int>, with noteCollection: T) throws {
-        throw NSError()
+    public mutating func replaceNotes<T: NoteCollection>(in range: CountableClosedRange<Int>, with noteCollection: T) throws {
+        guard try notes(at: range, sameDurationAs: [noteCollection]) else {
+            throw TupletError.replacementNotSameDuration
+        }
+        throw TupletError.internalError
     }
 
-    public mutating func replaceNotes<T: NoteCollection>(in range: Range<Int>, with notes: [T]) throws {
-        throw NSError()
+    public mutating func replaceNotes<T: NoteCollection>(in range: CountableClosedRange<Int>, with noteCollections: [T]) throws {
+        guard try notes(at: range, sameDurationAs: noteCollections) else {
+            throw TupletError.replacementNotSameDuration
+        }
+        throw TupletError.internalError
     }
 
     // MARK: Private
+
+    private func notes<T: NoteCollection, Indexes: Sequence>(
+        at indexes: Indexes,
+        sameDurationAs noteCollections: [T]) throws -> Bool where Indexes.Iterator.Element == Int {
+        let toReplaceTicks = try indexes.reduce(0) { prev, index in
+            let note = try self.note(at: index)
+            return prev + note.noteDuration.ticks * note.noteTimingCount
+        }
+        let replacingTicks = noteCollections.reduce(0) { prev, currentCollection in
+            return prev + currentCollection.noteDuration.ticks * currentCollection.noteTimingCount
+        }
+        return toReplaceTicks == replacingTicks
+    }
 
     private mutating func replaceNote(at flatIndex: [Int], with newCollection: NoteCollection) throws {
         guard flatIndex.count != 1 else {
@@ -165,16 +178,27 @@ public struct Tuplet: NoteCollection {
         notes[flatIndex[0]] = tuplet
     }
 
-    internal mutating func replaceNote(at index: Int, with noteCollections: [NoteCollection]) throws {
-        throw NSError()
+    private mutating func replaceNote(at flatIndex: [Int], with noteCollections: [NoteCollection]) throws {
+        guard flatIndex.count != 1 else {
+            notes.remove(at: flatIndex[0])
+            notes.insert(contentsOf: noteCollections, at: flatIndex[0])
+            return
+        }
+        guard var tuplet = notes[flatIndex[0]] as? Tuplet else {
+            assertionFailure("all indexes before the last should be tuplets. Must be an error in flatIndexes")
+            throw TupletError.internalError
+        }
+        let slice = Array(flatIndex[1..<flatIndex.count])
+        try tuplet.replaceNote(at: slice, with: noteCollections)
+        notes[flatIndex[0]] = tuplet
     }
 
-    internal mutating func replaceNotes(in range: Range<Int>, with noteCollection: NoteCollection) throws {
-        throw NSError()
+    private mutating func replaceNotes(at flatIndexes: [[Int]], with noteCollection: NoteCollection) throws {
+        throw TupletError.internalError
     }
 
-    internal mutating func replaceNotes(in range: Range<Int>, with noteCollections: [NoteCollection]) throws {
-        throw NSError()
+    private mutating func replaceNotes(at flatIndexes: [[Int]], with noteCollections: [NoteCollection]) throws {
+        throw TupletError.internalError
     }
 
     internal mutating func recomputeFlatIndexes(parentIndexes: [Int] = [Int]()) -> [[Int]] {
@@ -218,7 +242,6 @@ public enum TupletError: Error {
     case countMustBeLargerThan1
     case notesDoNotFillTuplet
     case notesOverfillTuplet
-    case replacingNoteNotSameDuration
-    case replacingTupletNotSameDuration
+    case replacementNotSameDuration
     case internalError
 }

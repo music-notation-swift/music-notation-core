@@ -200,35 +200,35 @@ class MeasureDurationValidatorTests: XCTestCase {
     func testCompletionStateOverfilledForOneExtra() {
         XCTAssertEqual(
             MeasureDurationValidator.completionState(of: overfilledWithTooLargeMeasure),
-            [MeasureDurationValidator.CompletionState.overfilled(overflowingNotes: Range(4...4))]
+            [MeasureDurationValidator.CompletionState.overfilled(overflowingNotes: 4..<5)]
         )
     }
 
     func testCompletionStateOverfilledForMultipleExtra() {
         XCTAssertEqual(
             MeasureDurationValidator.completionState(of: overfilledMeasure),
-            [MeasureDurationValidator.CompletionState.overfilled(overflowingNotes: Range(8...9))]
+            [MeasureDurationValidator.CompletionState.overfilled(overflowingNotes: 8..<10)]
         )
     }
 
     func testCompletionStateOverfilledForSingleExtraOddTimeSignature() {
         XCTAssertEqual(
             MeasureDurationValidator.completionState(of: overfilledMeasureOddTimeSignature),
-            [MeasureDurationValidator.CompletionState.overfilled(overflowingNotes: Range(6...6))]
+            [MeasureDurationValidator.CompletionState.overfilled(overflowingNotes: 6..<7)]
         )
     }
 
     func testCompletionStateOverfilledTooFullBecauseOfDot() {
         XCTAssertEqual(
             MeasureDurationValidator.completionState(of: overfilledWithDotMeasure),
-            [MeasureDurationValidator.CompletionState.overfilled(overflowingNotes: Range(8...8))]
+            [MeasureDurationValidator.CompletionState.overfilled(overflowingNotes: 8..<9)]
         )
     }
 
     func testCompletionStateOverfilledForSingleExtraIrrationalTimeSignature() {
         XCTAssertEqual(
             MeasureDurationValidator.completionState(of: overfilledMeasureIrrationalTimeSignature),
-            [MeasureDurationValidator.CompletionState.overfilled(overflowingNotes: Range(3...3))]
+            [MeasureDurationValidator.CompletionState.overfilled(overflowingNotes: 3..<4)]
         )
     }
 

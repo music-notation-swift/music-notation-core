@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		270CC5241B2C06A200CA1A56 /* MusicNotationKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 270CC5231B2C06A200CA1A56 /* MusicNotationKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		270CC52A1B2C06A200CA1A56 /* MusicNotationKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 270CC51E1B2C06A200CA1A56 /* MusicNotationKit.framework */; };
-		270CC5311B2C06A200CA1A56 /* MusicNotationKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 270CC5301B2C06A200CA1A56 /* MusicNotationKitTests.swift */; };
 		270CC53E1B2C06B700CA1A56 /* Measure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 270CC53A1B2C06B700CA1A56 /* Measure.swift */; };
 		270CC53F1B2C06B700CA1A56 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 270CC53B1B2C06B700CA1A56 /* Note.swift */; };
 		270CC5401B2C06B700CA1A56 /* TimeSignature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 270CC53C1B2C06B700CA1A56 /* TimeSignature.swift */; };
@@ -31,9 +30,12 @@
 		27AFEB571D6984CB0064ED27 /* NoteDuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27AFEB561D6984CB0064ED27 /* NoteDuration.swift */; };
 		27AFEB591D6A901F0064ED27 /* NoteDurationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27AFEB581D6A901F0064ED27 /* NoteDurationTests.swift */; };
 		27B670511B9ACDCE00347C4C /* StaffTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27B670501B9ACDCE00347C4C /* StaffTests.swift */; };
+		27D03A5B1D56918F00FF2376 /* MeasureDurationValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D03A5A1D56918F00FF2376 /* MeasureDurationValidator.swift */; };
+		27D03A5D1D5691EE00FF2376 /* MeasureDurationValidatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D03A5C1D5691EE00FF2376 /* MeasureDurationValidatorTests.swift */; };
 		E92BD6031D4FD0A500061BCD /* Interval.swift in Sources */ = {isa = PBXBuildFile; fileRef = E92BD6021D4FD0A500061BCD /* Interval.swift */; };
 		E92BD6051D4FD0FF00061BCD /* IntervalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E92BD6041D4FD0FF00061BCD /* IntervalTests.swift */; };
 		E98D30AE1D4BFB7100C6DF5E /* ToneTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E98D30AD1D4BFB7100C6DF5E /* ToneTests.swift */; };
+		E9D762E11D8C4ECC0005AAB6 /* Enharmonic.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9D762E01D8C4ECC0005AAB6 /* Enharmonic.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,7 +54,6 @@
 		270CC5231B2C06A200CA1A56 /* MusicNotationKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MusicNotationKit.h; sourceTree = "<group>"; };
 		270CC5291B2C06A200CA1A56 /* MusicNotationKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MusicNotationKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		270CC52F1B2C06A200CA1A56 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		270CC5301B2C06A200CA1A56 /* MusicNotationKitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicNotationKitTests.swift; sourceTree = "<group>"; };
 		270CC53A1B2C06B700CA1A56 /* Measure.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Measure.swift; sourceTree = "<group>"; };
 		270CC53B1B2C06B700CA1A56 /* Note.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
 		270CC53C1B2C06B700CA1A56 /* TimeSignature.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeSignature.swift; sourceTree = "<group>"; };
@@ -75,9 +76,12 @@
 		27AFEB561D6984CB0064ED27 /* NoteDuration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoteDuration.swift; sourceTree = "<group>"; };
 		27AFEB581D6A901F0064ED27 /* NoteDurationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoteDurationTests.swift; sourceTree = "<group>"; };
 		27B670501B9ACDCE00347C4C /* StaffTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StaffTests.swift; sourceTree = "<group>"; };
+		27D03A5A1D56918F00FF2376 /* MeasureDurationValidator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeasureDurationValidator.swift; sourceTree = "<group>"; };
+		27D03A5C1D5691EE00FF2376 /* MeasureDurationValidatorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeasureDurationValidatorTests.swift; sourceTree = "<group>"; };
 		E92BD6021D4FD0A500061BCD /* Interval.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Interval.swift; sourceTree = "<group>"; };
 		E92BD6041D4FD0FF00061BCD /* IntervalTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntervalTests.swift; sourceTree = "<group>"; };
 		E98D30AD1D4BFB7100C6DF5E /* ToneTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToneTests.swift; sourceTree = "<group>"; };
+		E9D762E01D8C4ECC0005AAB6 /* Enharmonic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Enharmonic.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -137,6 +141,8 @@
 				27AA71121C8D1BD900E2BF22 /* ImmutableMeasure.swift */,
 				27AA71141C9140C400E2BF22 /* RepeatedMeasure.swift */,
 				27AFEB561D6984CB0064ED27 /* NoteDuration.swift */,
+				E9D762E01D8C4ECC0005AAB6 /* Enharmonic.swift */,
+				27D03A5A1D56918F00FF2376 /* MeasureDurationValidator.swift */,
 				270CC5211B2C06A200CA1A56 /* Supporting Files */,
 			);
 			path = MusicNotationKit;
@@ -153,17 +159,17 @@
 		270CC52D1B2C06A200CA1A56 /* MusicNotationKitTests */ = {
 			isa = PBXGroup;
 			children = (
-				270CC5301B2C06A200CA1A56 /* MusicNotationKitTests.swift */,
 				270F46AE1B2FF2A100FDF4FF /* NoteTests.swift */,
-				270CC52E1B2C06A200CA1A56 /* Supporting Files */,
-				270F46B01B353DF400FDF4FF /* TupletTests.swift */,
-				27A0AA491B524B6400635541 /* TestHelpers.swift */,
 				275A58D11B54BD8B0023D5EF /* MeasureTests.swift */,
 				27B670501B9ACDCE00347C4C /* StaffTests.swift */,
 				27AA71161C9146FD00E2BF22 /* MeasureRepeatTests.swift */,
 				E98D30AD1D4BFB7100C6DF5E /* ToneTests.swift */,
 				E92BD6041D4FD0FF00061BCD /* IntervalTests.swift */,
 				27AFEB581D6A901F0064ED27 /* NoteDurationTests.swift */,
+				270F46B01B353DF400FDF4FF /* TupletTests.swift */,
+				27A0AA491B524B6400635541 /* TestHelpers.swift */,
+				27D03A5C1D5691EE00FF2376 /* MeasureDurationValidatorTests.swift */,
+				270CC52E1B2C06A200CA1A56 /* Supporting Files */,
 			);
 			path = MusicNotationKitTests;
 			sourceTree = "<group>";
@@ -298,9 +304,11 @@
 				270CC5411B2C06B700CA1A56 /* Types.swift in Sources */,
 				270F46A71B2FE8B400FDF4FF /* Tuplet.swift in Sources */,
 				270F46AD1B2FEC5500FDF4FF /* NoteCollection.swift in Sources */,
+				27D03A5B1D56918F00FF2376 /* MeasureDurationValidator.swift in Sources */,
 				E92BD6031D4FD0A500061BCD /* Interval.swift in Sources */,
 				270F46A31B2FE4D900FDF4FF /* NoteHolder.swift in Sources */,
 				27AFEB571D6984CB0064ED27 /* NoteDuration.swift in Sources */,
+				E9D762E11D8C4ECC0005AAB6 /* Enharmonic.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -311,10 +319,10 @@
 				275A58D21B54BD8B0023D5EF /* MeasureTests.swift in Sources */,
 				27AA71171C9146FD00E2BF22 /* MeasureRepeatTests.swift in Sources */,
 				E92BD6051D4FD0FF00061BCD /* IntervalTests.swift in Sources */,
+				27D03A5D1D5691EE00FF2376 /* MeasureDurationValidatorTests.swift in Sources */,
 				27B670511B9ACDCE00347C4C /* StaffTests.swift in Sources */,
 				E98D30AE1D4BFB7100C6DF5E /* ToneTests.swift in Sources */,
 				27A0AA4A1B524B6400635541 /* TestHelpers.swift in Sources */,
-				270CC5311B2C06A200CA1A56 /* MusicNotationKitTests.swift in Sources */,
 				270F46B11B353DF400FDF4FF /* TupletTests.swift in Sources */,
 				270F46AF1B2FF2A100FDF4FF /* NoteTests.swift in Sources */,
 				27AFEB591D6A901F0064ED27 /* NoteDurationTests.swift in Sources */,

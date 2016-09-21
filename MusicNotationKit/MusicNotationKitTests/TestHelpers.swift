@@ -8,10 +8,31 @@
 
 import XCTest
 
-func expected<T>(_ expected: T, actual: Error, functionName: String = #function, lineNum: Int = #line) {
-    XCTFail("Expected: \(expected), Actual: \(actual) @ \(functionName): \(lineNum)")
-}
+extension XCTestCase {
 
-func shouldFail(_ functionName: String = #function, lineNum: Int = #line) {
-    XCTFail("Should have failed, but didn't @ \(functionName): \(lineNum)")
+    func assertThrowsError<T: Error>(_ expectedError: T, inFile file: String = #file, atLine line: UInt = #line,
+                           expression: () throws -> ()) where T: Equatable {
+        do {
+            try expression()
+            recordFailure(withDescription: "Expected error \(expectedError), but got no error.",
+                inFile: file,
+                atLine: line,
+                expected: false)
+        } catch {
+            if error as? T != expectedError {
+                recordFailure(withDescription: "Expected error \(expectedError), but got: \(error).",
+                    inFile: file,
+                    atLine: line,
+                    expected: false)
+            }
+        }
+    }
+
+    func assertNoErrorThrown(inFile file: String = #file, atLine line: UInt = #line, expression: () throws -> ()) {
+        do {
+            try expression()
+        } catch {
+            recordFailure(withDescription: "Expected no error, but got: \(error)", inFile: file, atLine: line, expected: false)
+        }
+    }
 }

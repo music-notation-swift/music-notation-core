@@ -46,34 +46,34 @@ public struct Measure: ImmutableMeasure, Equatable {
         noteCount = immutableMeasure.noteCount
         recomputeNoteCollectionIndexes()
     }
-	
-	public func note(at index: Int, inSet setIndex: Int = 0) throws -> Note {
-		let collectionIndex = try noteCollectionIndex(from: index, inSet: setIndex)
-		let noteIndex = collectionIndex.tupletIndex ?? 0
-		return try notes[setIndex][collectionIndex.noteIndex].note(at: noteIndex)
-	}
 
-	public mutating func replaceNote(at index: Int, with note: Note, inSet setIndex: Int = 0) throws {
-		let collectionIndex = try noteCollectionIndex(from: index, inSet: setIndex)
+    public func note(at index: Int, inSet setIndex: Int = 0) throws -> Note {
+        let collectionIndex = try noteCollectionIndex(fromNoteIndex: index, inSet: setIndex)
+        let noteIndex = collectionIndex.tupletIndex ?? 0
+        return try notes[setIndex][collectionIndex.noteIndex].note(at: noteIndex)
+    }
 
-		guard let tupletIndex = collectionIndex.tupletIndex else {
-			notes[setIndex][collectionIndex.noteIndex] = note
-			return
-		}
-		
-		guard var tuplet = notes[setIndex][collectionIndex.noteIndex] as? Tuplet  else {
-			assertionFailure("note collection should be tuplet, but cast failed")
-			throw MeasureError.internalError
-		}
-		try tuplet.replaceNote(at: tupletIndex, with: note)
-		notes[setIndex][collectionIndex.noteIndex] = tuplet
-	}
-	
+    public mutating func replaceNote(at index: Int, with note: Note, inSet setIndex: Int = 0) throws {
+        let collectionIndex = try noteCollectionIndex(fromNoteIndex: index, inSet: setIndex)
+
+        guard let tupletIndex = collectionIndex.tupletIndex else {
+            notes[setIndex][collectionIndex.noteIndex] = note
+            return
+        }
+
+        guard var tuplet = notes[setIndex][collectionIndex.noteIndex] as? Tuplet  else {
+            assertionFailure("note collection should be tuplet, but cast failed")
+            throw MeasureError.internalError
+        }
+        try tuplet.replaceNote(at: tupletIndex, with: note)
+        notes[setIndex][collectionIndex.noteIndex] = tuplet
+    }
+
     public mutating func addNote(_ note: Note, inSet setIndex: Int = 0) {
         notes[setIndex].append(note)
         noteCount[setIndex] += note.noteCount
     }
-	
+
     public mutating func insertNote(_ note: Note, at index: Int, inSet setIndex: Int = 0) throws {
         // TODO: Implement
     }
@@ -88,7 +88,7 @@ public struct Measure: ImmutableMeasure, Equatable {
 
     public mutating func addTuplet(_ tuplet: Tuplet, inSet setIndex: Int = 0) {
         notes[setIndex].append(tuplet)
-		noteCount[setIndex] += tuplet.noteCount
+        noteCount[setIndex] += tuplet.noteCount
     }
 
     public mutating func insertTuplet(_ tuplet: Tuplet, at index: Int, inSet setIndex: Int = 0) throws {
@@ -114,7 +114,7 @@ public struct Measure: ImmutableMeasure, Equatable {
         let secondaryIndex: Int
         let secondaryRequestedTieState: Tie
 
-		let requestedNoteCurrentTie = try tieState(forNoteIndex: index, inSet: setIndex)
+        let requestedNoteCurrentTie = try tieState(for: index, inSet: setIndex)
 
         // Calculate secondary Index and tie states //
         let removal = requestedTieState == nil
@@ -164,31 +164,33 @@ public struct Measure: ImmutableMeasure, Equatable {
             throw MeasureError.invalidRequestedTieState
         }
 
-        // Modify the ties of the notes involved //
         let requestedModificationMethod = requestedTieState == nil ? Note.removeTie : Note.modifyTie
         let secondaryModificationMethod = removal ? Note.removeTie : Note.modifyTie
 
-		var firstNote = try note(at: index, inSet: setIndex)
-		
-		if secondaryIndex < noteCount[setIndex] && secondaryIndex >= 0 {
-			var secondNote = try note(at: secondaryIndex, inSet: setIndex)
-			
-			// Before we modify the tie state for the notes, we make sure that both have
-			// the same tone. Ignore check if the removal flag is set.
-			guard removal || firstNote.tones == secondNote.tones else {
-				throw MeasureError.noSameNoteTie
-			}
+        // Get first note here sho that we can compare the tone against second
+        // note later. The tone comparison must be done before modifying the state of
+        // the notes.
+        var firstNote = try note(at: index, inSet: setIndex)
 
-			try secondaryModificationMethod(&secondNote)(secondaryRequestedTieState)
-			try replaceNote(at: secondaryIndex, with: secondNote, inSet: setIndex)
-		}
-		
-		
-		try requestedModificationMethod(&firstNote)(primaryRequestedTieState)
-		try replaceNote(at: index, with: firstNote, inSet: setIndex)
+        if secondaryIndex < noteCount[setIndex] && secondaryIndex >= 0 {
+            var secondNote = try note(at: secondaryIndex, inSet: setIndex)
+
+            // Before we modify the tie state for the notes, we make sure that both have
+            // the same tone. Ignore check if the removal flag is set.
+            guard removal || firstNote.tones == secondNote.tones else {
+                throw MeasureError.notesMustHaveSameTonesToTie
+            }
+
+            try secondaryModificationMethod(&secondNote)(secondaryRequestedTieState)
+            try replaceNote(at: secondaryIndex, with: secondNote, inSet: setIndex)
+        }
+
+
+        try requestedModificationMethod(&firstNote)(primaryRequestedTieState)
+        try replaceNote(at: index, with: firstNote, inSet: setIndex)
     }
 
-    internal func noteCollectionIndex(from index: Int, inSet setIndex: Int) throws -> NoteCollectionIndex {
+    internal func noteCollectionIndex(fromNoteIndex index: Int, inSet setIndex: Int) throws -> NoteCollectionIndex {
         // Gets the index of the given element in the notes array by translating the index of the
         // single note within the NoteCollection array.
         guard index >= 0 && notes[setIndex].count > 0 else { throw MeasureError.noteIndexOutOfRange }
@@ -215,8 +217,8 @@ public struct Measure: ImmutableMeasure, Equatable {
         }
     }
 
-    private func tieState(forNoteIndex index: Int, inSet setIndex: Int) throws -> Tie? {
-		return try note(at: index, inSet: setIndex).tie
+    private func tieState(for index: Int, inSet setIndex: Int) throws -> Tie? {
+        return try note(at: index, inSet: setIndex).tie
     }
 }
 
@@ -234,5 +236,5 @@ public enum MeasureError: Error {
     case noNextNote
     case invalidRequestedTieState
     case internalError
-	case noSameNoteTie
+    case notesMustHaveSameTonesToTie
 }

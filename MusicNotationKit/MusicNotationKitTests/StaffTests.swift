@@ -19,6 +19,8 @@ class StaffTests: XCTestCase {
     var measure4: Measure!
     var measure5: Measure!
     var measure6: Measure!
+    var measure7: Measure!
+    var measure8: Measure!
     var repeat1: MeasureRepeat!
     var repeat2: MeasureRepeat!
 
@@ -29,7 +31,11 @@ class StaffTests: XCTestCase {
         let key = Key(noteLetter: .c)
         let note = Note(noteDuration: .sixteenth,
                         tone: Tone(noteLetter: .c, octave: .octave1))
+        let note2 = Note(noteDuration: .sixteenth,
+                         tone: Tone(noteLetter: .a, octave: .octave1))
         let tuplet = try! Tuplet(3, .sixteenth, notes: [note, note, note])
+        let tuplet2 = try! Tuplet(3, .sixteenth, notes: [note2, note, note])
+
         measure1 = Measure(
             timeSignature: timeSignature,
             key: key,
@@ -60,6 +66,16 @@ class StaffTests: XCTestCase {
             key: key,
             notes: [[tuplet, tuplet, note, note]]
         )
+        measure7 = Measure(
+            timeSignature: timeSignature,
+            key: key,
+            notes: [[note2, tuplet, tuplet, note]]
+        )
+        measure8 = Measure(
+            timeSignature: timeSignature,
+            key: key,
+            notes: [[tuplet2, note, note]]
+        )
         repeat1 = try! MeasureRepeat(measures: [measure4])
         repeat2 = try! MeasureRepeat(measures: [measure4, measure4], repeatCount: 2)
         staff.appendMeasure(measure1)
@@ -71,6 +87,8 @@ class StaffTests: XCTestCase {
         staff.appendRepeat(repeat2) // index = 7
         staff.appendMeasure(measure6) // index = 13
         staff.appendMeasure(measure3)
+        staff.appendMeasure(measure7)
+        staff.appendMeasure(measure8)
     }
 
     // MARK: - insertMeasure(_:, at:)
@@ -82,7 +100,7 @@ class StaffTests: XCTestCase {
             key: Key(noteLetter: .c))
         
         assertThrowsError(StaffError.measureIndexOutOfRange) {
-            try staff.insertMeasure(measure, at: 15)
+            try staff.insertMeasure(measure, at: 17)
         }
     }
 
@@ -99,7 +117,7 @@ class StaffTests: XCTestCase {
     // MARK: Successes
     
     func testDescription() {
-        XCTAssertEqual(staff.debugDescription, "staff(treble guitar6 |4/4: [1/16c1, 1/16c1, 1/16c1, 1/16c1, 3[1/16c1, 1/16c1, 1/16c1]]|, |4/4: [3[1/16c1, 1/16c1, 1/16c1], 1/16c1, 1/16c1]|, |4/4: [1/16c1, 1/16c1, 1/16c1, 1/16c1, 3[1/16c1, 1/16c1, 1/16c1]]|, |4/4: [1/16c1, 1/16c1, 1/16c1, 1/16c1]|, |4/4: [3[1/16c1, 1/16c1, 1/16c1], 1/16c1, 1/16c1, 1/16c1, 1/16c1]|, [ |4/4: [1/16c1, 1/16c1, 1/16c1, 1/16c1]| ] × 2, [ |4/4: [1/16c1, 1/16c1, 1/16c1, 1/16c1]|, |4/4: [1/16c1, 1/16c1, 1/16c1, 1/16c1]| ] × 3, |4/4: [3[1/16c1, 1/16c1, 1/16c1], 3[1/16c1, 1/16c1, 1/16c1], 1/16c1, 1/16c1]|, |4/4: [1/16c1, 1/16c1, 1/16c1, 1/16c1, 3[1/16c1, 1/16c1, 1/16c1]]|)")
+        XCTAssertEqual(staff.debugDescription, "staff(treble guitar6 |4/4: [1/16c1, 1/16c1, 1/16c1, 1/16c1, 3[1/16c1, 1/16c1, 1/16c1]]|, |4/4: [3[1/16c1, 1/16c1, 1/16c1], 1/16c1, 1/16c1]|, |4/4: [1/16c1, 1/16c1, 1/16c1, 1/16c1, 3[1/16c1, 1/16c1, 1/16c1]]|, |4/4: [1/16c1, 1/16c1, 1/16c1, 1/16c1]|, |4/4: [3[1/16c1, 1/16c1, 1/16c1], 1/16c1, 1/16c1, 1/16c1, 1/16c1]|, [ |4/4: [1/16c1, 1/16c1, 1/16c1, 1/16c1]| ] × 2, [ |4/4: [1/16c1, 1/16c1, 1/16c1, 1/16c1]|, |4/4: [1/16c1, 1/16c1, 1/16c1, 1/16c1]| ] × 3, |4/4: [3[1/16c1, 1/16c1, 1/16c1], 3[1/16c1, 1/16c1, 1/16c1], 1/16c1, 1/16c1]|, |4/4: [1/16c1, 1/16c1, 1/16c1, 1/16c1, 3[1/16c1, 1/16c1, 1/16c1]]|, |4/4: [1/16a1, 3[1/16c1, 1/16c1, 1/16c1], 3[1/16c1, 1/16c1, 1/16c1], 1/16c1]|, |4/4: [3[1/16a1, 1/16c1, 1/16c1], 1/16c1, 1/16c1]|)")
     }
 
     func testInsertMeasureNoRepeat() {
@@ -261,7 +279,7 @@ class StaffTests: XCTestCase {
 
     func testStartTieFailIfNoNextNote() {
         assertThrowsError(StaffError.noNextNoteToTie) {
-            try staff.startTieFromNote(at: 6, inMeasureAt: 14)
+            try staff.startTieFromNote(at: 4, inMeasureAt: 16)
         }
     }
 
@@ -281,6 +299,18 @@ class StaffTests: XCTestCase {
     func testStartTieFailIfNotesWithinRepeatAfterTheFirstCount() {
         assertThrowsError(StaffError.repeatedMeasureCannotHaveTie) {
             try staff.startTieFromNote(at: 0, inMeasureAt: 9)
+        }
+    }
+
+    func testStartTieAcrossMeasuresTupletToNoteDiffTone() {
+        assertThrowsError(StaffError.notesMustHaveSameTonesToTie) {
+            try staff.startTieFromNote(at: 6, inMeasureAt: 14)
+        }
+    }
+
+    func testStartTieAcrossMeasuresNoteToTupletDiffTone() {
+        assertThrowsError(StaffError.notesMustHaveSameTonesToTie) {
+            try staff.startTieFromNote(at: 7, inMeasureAt: 15)
         }
     }
 

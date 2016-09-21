@@ -179,6 +179,33 @@ class MeasureTests: XCTestCase {
         }
     }
 
+    // MARK: - startTie(at:)
+    // MARK: Failures
+
+    func testStartTieNoteHasDiffTone() {
+        measure.addNote(Note(noteDuration: .quarter, tone: Tone(noteLetter: .a, octave: .octave1)))
+        measure.addNote(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
+        assertThrowsError(MeasureError.notesMustHaveSameTonesToTie) {
+            try measure.startTie(at: 0, inSet: 0)
+        }
+    }
+
+    func testStartTieNextNoteInTupletDiffTone() {
+        measure.addNote(Note(noteDuration: .quarter, tone: Tone(noteLetter: .c, octave: .octave1)))
+        measure.addNote(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
+        measure.addNote(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
+        let notes = [
+            Note(noteDuration: .eighth, tone: Tone(noteLetter: .a, octave: .octave1)),
+            Note(noteDuration: .eighth, tone: Tone(noteLetter: .a, octave: .octave1)),
+            Note(noteDuration: .eighth, tone: Tone(noteLetter: .a, octave: .octave1))
+        ]
+        assertThrowsError(MeasureError.notesMustHaveSameTonesToTie) {
+            let tuplet = try Tuplet(3, .eighth, notes: notes)
+            measure.addTuplet(tuplet)
+            try measure.startTie(at: 2, inSet: 0)
+        }
+    }
+
     // MARK: - removeTie(at:)
     // MARK: Failures
 

@@ -75,15 +75,27 @@ public struct Measure: ImmutableMeasure, Equatable {
     }
 
     public mutating func insertNote(_ note: Note, at index: Int, inSet setIndex: Int = 0) throws {
-        // TODO: Implement
+        let collectionIndex = try noteCollectionIndex(fromNoteIndex: index, inSet: setIndex)
+
+        guard collectionIndex.tupletIndex == nil else {
+            throw MeasureError.insertNoteIntoTupletNotAllowed
+        }
+        notes[setIndex].insert(note, at: collectionIndex.noteIndex)
     }
 
     public mutating func removeNote(at index: Int, inSet setIndex: Int = 0) throws {
-        // TODO: Implement
+        let collectionIndex = try noteCollectionIndex(fromNoteIndex: index, inSet: setIndex)
+        // TODO(migue48): handle tuplets.
+        notes[setIndex].remove(at: collectionIndex.noteIndex)
     }
 
     public mutating func removeNotesInRange(_ indexRange: Range<Int>, inSet setIndex: Int = 0) throws {
-        // TODO: Implement
+        let start = indexRange.lowerBound
+        let end = indexRange.upperBound
+        for index in (start...end).reversed() {
+            // TODO(migue48): handle tuplets.
+            try removeNote(at: index, inSet: setIndex)
+        }
     }
 
     public mutating func addTuplet(_ tuplet: Tuplet, inSet setIndex: Int = 0) {
@@ -237,4 +249,5 @@ public enum MeasureError: Error {
     case invalidRequestedTieState
     case internalError
     case notesMustHaveSameTonesToTie
+    case insertNoteIntoTupletNotAllowed
 }

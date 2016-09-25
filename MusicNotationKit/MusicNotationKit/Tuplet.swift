@@ -291,26 +291,6 @@ public struct Tuplet: NoteCollection {
     private mutating func replaceNotes(at flatIndexes: [[Int]], with noteCollection: NoteCollection,
                                        firstNoteIndex: Int) throws {
         try replaceNotes(at: flatIndexes, with: [noteCollection], firstNoteIndex: firstNoteIndex)
-
-        // If at the same depth, it is simple
-//        let countsSet = Set(flatIndexes.map { $0.count })
-//        if countsSet.count == 1 {
-//            // Remove all notes to replace
-//            for flatIndex in flatIndexes {
-//                guard flatIndex.count != 1 else {
-//                    notes.remove(at: flatIndex[0])
-//                    return
-//                }
-//                guard var tuplet = notes[flatIndex[0]] as? Tuplet else {
-//                    assertionFailure("all indexes before the last should be tuplets. Must be an error in flatIndexes")
-//                    throw TupletError.internalError
-//                }
-//                let slice = Array(flatIndex[1..<flatIndex.count])
-//                try tuplet.replaceNotes(at: [slice], with: noteCollection)
-//
-//            }
-//
-//        }
     }
 
     private mutating func replaceNotes(at flatIndexes: [[Int]], with noteCollections: [NoteCollection],
@@ -388,31 +368,6 @@ public struct Tuplet: NoteCollection {
             return true
         }
     }
-
-//    private mutating func removeNotesRec(at flatIndexes: [[Int]]) throws -> [Int] {
-//        var indexesToRemove = [Int]()
-//        for flatIndex in flatIndexes {
-//            if flatIndex.count != 1 {
-//                // recurse to get to actual tuplet
-//                let first = flatIndexes[0]
-//                let sliced = Array(flatIndexes.map { Array($0.dropFirst()) })
-//                guard var tuplet = notes[first[0]] as? Tuplet else {
-//                    assertionFailure("all indexes before the last should be tuplets. Must be an error in flatIndexes")
-//                    throw TupletError.internalError
-//                }
-//                let indexesToRemove = try tuplet.removeNotesRec(at: sliced)
-//                let removeRange = indexesToRemove[0]..<indexesToRemove.last! + 1 // TODO: Remove !
-//                let tupletNotes = tuplet.notes
-//                if tupletNotes.indices ~= removeRange {
-//                    tuplet.notes.removeSubrange(removeRange)
-//                    notes[flatIndex[0]] = tuplet
-//                }
-//            } else {
-//                indexesToRemove.append(flatIndex[0])
-//            }
-//        }
-//        return indexesToRemove
-//    }
 
     private mutating func removeNotesRec(at flatIndexes: [[Int]]) throws {
         guard let first = flatIndexes.first else {

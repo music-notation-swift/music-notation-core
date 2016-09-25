@@ -157,13 +157,98 @@ public struct Tuplet: NoteCollection {
     private func notes<T: NoteCollection, Indexes: Sequence>(
         at indexes: Indexes,
         sameDurationAs noteCollections: [T]) throws -> Bool where Indexes.Iterator.Element == Int {
-        let toReplaceTicks = try indexes.reduce(0) { prev, index in
+        let neededFlatIndexes = indexes.map { flatIndexes[$0] }
+        // Figure out if any are full tuplets
+        var previousTupletIndex: Int?
+        var previousIndexCount: Int?
+        var indexesOfFullTuplets = [CountableClosedRange<Int>]()
+        var currentIndexesOfTuplet = [Int]()
+        func closedRange(fromIndexes: [Int]) throws -> CountableClosedRange<Int> {
+            if let first = currentIndexesOfTuplet.first, let last = currentIndexesOfTuplet.last {
+                return first...last
+            } else {
+                assertionFailure("current indexes was empty")
+                throw TupletError.internalError
+            }
+        }
+        for (index, flatIndex) in neededFlatIndexes.enumerated() {
+            if flatIndex.count == 1 {
+                previousTupletIndex = nil
+                previousIndexCount = nil
+                currentIndexesOfTuplet.removeAll()
+                continue
+            }
+            if previousIndexCount == nil {
+                previousIndexCount = flatIndex.count
+            } else if previousIndexCount != flatIndex.count {
+                previousTupletIndex = nil
+                currentIndexesOfTuplet.removeAll()
+            }
+            let nextToLast = flatIndex.index(before: flatIndex.count - 1)
+            if previousTupletIndex == nil {
+                currentIndexesOfTuplet.removeAll()
+                currentIndexesOfTuplet.append(index)
+                previousTupletIndex = flatIndex[nextToLast]
+            } else if previousTupletIndex != flatIndex[nextToLast] {
+                indexesOfFullTuplets.append(try closedRange(fromIndexes: currentIndexesOfTuplet))
+                previousTupletIndex = flatIndex[nextToLast]
+                currentIndexesOfTuplet.removeAll()
+                currentIndexesOfTuplet.append(index)
+            } else {
+                currentIndexesOfTuplet.append(index)
+            }
+        }
+        if !currentIndexesOfTuplet.isEmpty {
+            // See if the indexes in there are the full tuplet. You can check this by seeing if the next flat index
+            // has the same nextToLast index value and same count
+            let nextIndex = (indexes.max() ?? 0) + 1
+            if flatIndexes.count > nextIndex {
+                let nextFlatIndex = flatIndexes[nextIndex]
+                let currentFlatIndex = flatIndexes[currentIndexesOfTuplet[0]]
+                let nextToLast = currentFlatIndex.index(before: currentFlatIndex.count - 1)
+                if (currentFlatIndex.count != nextFlatIndex.count) ||
+                    (currentFlatIndex.count == nextFlatIndex.count &&
+                    currentFlatIndex[nextToLast] != currentFlatIndex[nextToLast]) {
+                    indexesOfFullTuplets.append(try closedRange(fromIndexes: currentIndexesOfTuplet))
+                }
+            } else {
+                indexesOfFullTuplets.append(try closedRange(fromIndexes: currentIndexesOfTuplet))
+            }
+        }
+
+        var nonFullTupletIndexes = Array(indexes)
+        var offsetBy = 0
+        for indexOfFullTuplet in indexesOfFullTuplets {
+            let offsetRange = (indexOfFullTuplet.lowerBound - offsetBy)...(indexOfFullTuplet.upperBound - offsetBy)
+            nonFullTupletIndexes.removeSubrange(offsetRange)
+            offsetBy += offsetRange.count
+        }
+
+        var toReplaceFullTupletTicks = 0
+        for indexOfFullTuplet in indexesOfFullTuplets {
+            let flatIndexOfTuplet = neededFlatIndexes[indexOfFullTuplet.lowerBound]
+            var tuplet: Tuplet? = self
+            var currentFlatIndex = ArraySlice(flatIndexOfTuplet)
+            repeat {
+                tuplet = tuplet?.notes[currentFlatIndex[0]] as? Tuplet
+                currentFlatIndex = flatIndexOfTuplet.dropFirst()
+            } while currentFlatIndex.count > 1
+            if let tuplet = tuplet {
+                toReplaceFullTupletTicks += tuplet.noteDuration.ticks * tuplet.noteTimingCount
+            } else {
+                assertionFailure("expected Tuplet, but was not one")
+                throw TupletError.internalError
+            }
+        }
+
+        let toReplaceWithoutFullTupletTicks = try nonFullTupletIndexes.reduce(0) { prev, index in
             let note = try self.note(at: index)
             return prev + note.noteDuration.ticks * note.noteTimingCount
         }
         let replacingTicks = noteCollections.reduce(0) { prev, currentCollection in
             return prev + currentCollection.noteDuration.ticks * currentCollection.noteTimingCount
         }
+        let toReplaceTicks = toReplaceWithoutFullTupletTicks + toReplaceFullTupletTicks
         return toReplaceTicks == replacingTicks
     }
 
@@ -301,7 +386,7 @@ public struct Tuplet: NoteCollection {
                     throw TupletError.internalError
                 }
                 let indexesToRemove = try tuplet.removeNotesRec(at: sliced)
-                let removeRange = indexesToRemove[0]..<indexesToRemove.last! + 1
+                let removeRange = indexesToRemove[0]..<indexesToRemove.last! + 1 // TODO: Remove !
                 let tupletNotes = tuplet.notes
                 if tupletNotes.indices ~= removeRange {
                     tuplet.notes.removeSubrange(removeRange)

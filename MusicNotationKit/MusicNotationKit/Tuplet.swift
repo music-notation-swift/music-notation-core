@@ -141,7 +141,7 @@ public struct Tuplet: NoteCollection {
             throw TupletError.replacementNotSameDuration
         }
         let flatIndexesInRange = Array(flatIndexes[range])
-        try replaceNotes(at: flatIndexesInRange, with: noteCollection)
+        try replaceNotes(at: flatIndexesInRange, with: noteCollection, firstNoteIndex: range.lowerBound)
     }
 
     public mutating func replaceNotes<T: NoteCollection>(in range: CountableClosedRange<Int>, with noteCollections: [T]) throws {
@@ -149,7 +149,7 @@ public struct Tuplet: NoteCollection {
             throw TupletError.replacementNotSameDuration
         }
         let flatIndexesInRange = Array(flatIndexes[range])
-        try replaceNotes(at: flatIndexesInRange, with: noteCollections)
+        try replaceNotes(at: flatIndexesInRange, with: noteCollections, firstNoteIndex: range.lowerBound)
     }
 
     // MARK: Private
@@ -173,6 +173,9 @@ public struct Tuplet: NoteCollection {
         }
         for (index, flatIndex) in neededFlatIndexes.enumerated() {
             if flatIndex.count == 1 {
+                if !currentIndexesOfTuplet.isEmpty {
+                    indexesOfFullTuplets.append(try closedRange(fromIndexes: currentIndexesOfTuplet))
+                }
                 previousTupletIndex = nil
                 previousIndexCount = nil
                 currentIndexesOfTuplet.removeAll()
@@ -285,8 +288,9 @@ public struct Tuplet: NoteCollection {
         notes[flatIndex[0]] = tuplet
     }
 
-    private mutating func replaceNotes(at flatIndexes: [[Int]], with noteCollection: NoteCollection) throws {
-        try replaceNotes(at: flatIndexes, with: [noteCollection])
+    private mutating func replaceNotes(at flatIndexes: [[Int]], with noteCollection: NoteCollection,
+                                       firstNoteIndex: Int) throws {
+        try replaceNotes(at: flatIndexes, with: [noteCollection], firstNoteIndex: firstNoteIndex)
 
         // If at the same depth, it is simple
 //        let countsSet = Set(flatIndexes.map { $0.count })
@@ -309,11 +313,18 @@ public struct Tuplet: NoteCollection {
 //        }
     }
 
-    private mutating func replaceNotes(at flatIndexes: [[Int]], with noteCollections: [NoteCollection]) throws {
+    private mutating func replaceNotes(at flatIndexes: [[Int]], with noteCollections: [NoteCollection],
+                                       firstNoteIndex: Int) throws {
         let unmodified = self
         try removeNotes(at: flatIndexes)
         // Insert at the first index
-        try insert(noteCollections, at: flatIndexes[0])
+        // Need to translate the index now that notes have been removed
+        if self.flatIndexes.count > firstNoteIndex {
+            try insert(noteCollections, at: self.flatIndexes[firstNoteIndex])
+        } else {
+            // Just append
+            notes.append(contentsOf: noteCollections)
+        }
         if !validate() {
             self = unmodified
             throw TupletError.rangeToReplaceMustFullyCoverMultipleTuplets
@@ -404,10 +415,11 @@ public struct Tuplet: NoteCollection {
 //    }
 
     private mutating func removeNotesRec(at flatIndexes: [[Int]]) throws {
-        guard let first = flatIndexes.first, let last = flatIndexes.last else {
+        guard let first = flatIndexes.first else {
             return
         }
-        if first.count != 1 {
+        // Need to get to the level where the final tuplet is
+        if first.count > 2 {
             // recurse to get to actual tuplet level
             let sliced = Array(flatIndexes.map { Array($0.dropFirst()) })
             guard var tuplet = notes[first[0]] as? Tuplet else {
@@ -417,8 +429,27 @@ public struct Tuplet: NoteCollection {
             try tuplet.removeNotesRec(at: sliced)
             // Set modified tuplet in enclosing tuplet's notes
             notes[first[0]] = tuplet
+        } else if first.count == 2 {
+            // This is the same as the method that calls this. Should be able to be extracted into helper function
+            let tupletIndexes = Set(flatIndexes.map { $0[0] })
+            let tupletGroups = tupletIndexes.map { tupletIndex in
+                flatIndexes.filter { group in
+                    return group[0] == tupletIndex
+                }
+            }
+            for tupletGroup in tupletGroups {
+                let removeRange = tupletGroup[0][1]...tupletGroup[tupletGroup.count - 1][1]
+                guard var tuplet = notes[tupletGroup[0][0]] as? Tuplet else {
+                    assertionFailure("all indexes before the last should be tuplets. Must be an error in flatIndexes")
+                    throw TupletError.internalError
+                }
+                tuplet.notes.removeSubrange(removeRange)
+                notes[tupletGroup[0][0]] = tuplet
+            }
         } else {
-            let removeRange = first[0]...last[0]
+            // They are not compound tuplets
+            // Just remove from the notes
+            let removeRange = flatIndexes[0][0]...flatIndexes[flatIndexes.count - 1][0]
             notes.removeSubrange(removeRange)
         }
     }

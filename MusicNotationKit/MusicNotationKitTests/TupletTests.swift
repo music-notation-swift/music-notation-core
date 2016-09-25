@@ -818,8 +818,8 @@ class TupletTests: XCTestCase {
             var tuplet = try Tuplet(5, .eighth, notes: [eighthNote, eighthNote, eighthNote, eighthNote, eighthNote])
             try tuplet.replaceNotes(in: 2...3, with: quarterNote1)
             XCTAssertEqual(try tuplet.note(at: 0), eighthNote)
-            XCTAssertEqual(try tuplet.note(at: 1), quarterNote1)
-            XCTAssertEqual(try tuplet.note(at: 2), eighthNote)
+            XCTAssertEqual(try tuplet.note(at: 1), eighthNote)
+            XCTAssertEqual(try tuplet.note(at: 2), quarterNote1)
             XCTAssertEqual(try tuplet.note(at: 3), eighthNote)
         }
     }

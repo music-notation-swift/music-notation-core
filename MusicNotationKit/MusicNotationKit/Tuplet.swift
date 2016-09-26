@@ -326,49 +326,6 @@ public struct Tuplet: NoteCollection {
         }
     }
 
-    // FIXME: Probably won't use this
-    private func isValidReplacementRange(flatIndexes: [[Int]]) throws -> Bool {
-        // If multiple tuplets are encountered, they all need to be fully covered
-        var lastFlatIndexCount = 0
-        var lastFlatIndexNoteCount = 0
-        var currentNoteCount = 0
-        var tupletCount = 0
-        var returnValue = true
-        for flatIndex in flatIndexes {
-            if flatIndex.count == 1 {
-                // Non-tuplets are fine
-                lastFlatIndexCount = 0
-                currentNoteCount = 0
-                continue
-            }
-            if flatIndex.count == lastFlatIndexCount {
-                currentNoteCount += 1
-                continue
-            }
-            if currentNoteCount != lastFlatIndexNoteCount {
-                returnValue = false
-            }
-            var currentTuplet = self
-            var slice = flatIndex
-            lastFlatIndexCount = flatIndex.count
-            repeat {
-                guard let tuplet = currentTuplet.notes[slice[0]] as? Tuplet else {
-                    assertionFailure("all indexes before the last should be tuplets. Must be an error in flatIndexes")
-                    throw TupletError.internalError
-                }
-                currentTuplet = tuplet
-                slice = Array(flatIndex[1..<flatIndex.count])
-            } while slice.count != 1
-            lastFlatIndexNoteCount = currentTuplet.noteCount
-            tupletCount += 1
-        }
-        if tupletCount > 1 {
-            return returnValue
-        } else {
-            return true
-        }
-    }
-
     private mutating func removeNotesRec(at flatIndexes: [[Int]]) throws {
         guard let first = flatIndexes.first else {
             return

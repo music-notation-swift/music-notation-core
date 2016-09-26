@@ -892,8 +892,54 @@ class TupletTests: XCTestCase {
     }
 
     // MARK: - replaceNotes<T: NoteCollection>(in:with:[T])
+    // replaceNotes<T: NoteCollection>(in:with:T) calls this method, so we will just do one sanity check for failure
+    // and success. There is missing coverage of multi-nested tuplets, and that will be checked here too.
+
     // MARK: Failures
-    
+
+    func testReplaceNotesInTupletWithNotesTooLarge() {
+        assertThrowsError(TupletError.replacementNotSameDuration) {
+            var tuplet = try Tuplet(3, .eighth, notes: [eighthNote, eighthNote, eighthNote])
+            try tuplet.replaceNotes(in: 0...1, with: [eighthNote, eighthNote, eighthNote])
+        }
+    }
+
     // MARK: Successes
-    
+
+    func testReplaceNotesInMultiNestedCompoundTupletWithNotesOfSameDuration() {
+        assertNoErrorThrown {
+            let triplet = try Tuplet(3, .eighth, notes: [eighthNote, eighthNote, eighthNote])
+            let quintuplet = try Tuplet(5, .eighth, notes: [triplet, triplet, eighthNote])
+            var tuplet = try Tuplet(9, .eighth, notes: [triplet, quintuplet, eighthNote, eighthNote, eighthNote])
+            try tuplet.replaceNotes(in: 6...8, with: [eighthRest, eighthRest])
+            XCTAssertEqual(try tuplet.note(at: 0), eighthNote)
+            XCTAssertEqual(try tuplet.note(at: 1), eighthNote)
+            XCTAssertEqual(try tuplet.note(at: 2), eighthNote)
+            XCTAssertEqual(try tuplet.note(at: 3), eighthNote)
+            XCTAssertEqual(try tuplet.note(at: 4), eighthNote)
+            XCTAssertEqual(try tuplet.note(at: 5), eighthNote)
+
+            XCTAssertEqual(try tuplet.note(at: 6), eighthRest)
+            XCTAssertEqual(try tuplet.note(at: 7), eighthRest)
+
+            XCTAssertEqual(try tuplet.note(at: 8), eighthNote)
+
+            XCTAssertEqual(try tuplet.note(at: 9), eighthNote)
+            XCTAssertEqual(try tuplet.note(at: 10), eighthNote)
+            XCTAssertEqual(try tuplet.note(at: 11), eighthNote)
+        }
+    }
+
+    func testReplaceNotesWithinMultiNestedCompoundTupletAndNotesWithNotesOfSameDuration() {
+        assertNoErrorThrown {
+            // Create same compound tuplet as above test
+            let triplet = try Tuplet(3, .eighth, notes: [eighthNote, eighthNote, eighthNote])
+            let quintuplet = try Tuplet(5, .eighth, notes: [triplet, triplet, eighthNote])
+            var tuplet = try Tuplet(9, .eighth, notes: [triplet, quintuplet, eighthNote, eighthNote, eighthNote])
+            try tuplet.replaceNotes(in: 3...10, with: [quarterNote1, quarterNote1, eighthNote])
+        }
+    }
+
+    // TODO: Equality tests
+
 }

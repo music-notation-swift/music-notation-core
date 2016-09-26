@@ -185,6 +185,9 @@ public struct Tuplet: NoteCollection {
                 previousIndexCount = flatIndex.count
             } else if previousIndexCount != flatIndex.count {
                 previousTupletIndex = nil
+                if !currentIndexesOfTuplet.isEmpty {
+                    indexesOfFullTuplets.append(try closedRange(fromIndexes: currentIndexesOfTuplet))
+                }
                 currentIndexesOfTuplet.removeAll()
             }
             let nextToLast = flatIndex.index(before: flatIndex.count - 1)
@@ -221,7 +224,10 @@ public struct Tuplet: NoteCollection {
                     indexesOfFullTuplets.append(try closedRange(fromIndexes: currentIndexesOfTuplet))
                 }
             }
+            currentIndexesOfTuplet.removeAll()
         }
+
+        // TODO: Need to account for case where multiple full tuplets complete a tuplet that had them as children
 
         var nonFullTupletIndexes = Array(indexes)
         var offsetBy = 0
@@ -235,11 +241,11 @@ public struct Tuplet: NoteCollection {
         for indexOfFullTuplet in indexesOfFullTuplets {
             let flatIndexOfTuplet = neededFlatIndexes[indexOfFullTuplet.lowerBound]
             var tuplet: Tuplet? = self
-            var currentFlatIndex = ArraySlice(flatIndexOfTuplet)
+            var currentFlatIndex = flatIndexOfTuplet
             repeat {
                 tuplet = tuplet?.notes[currentFlatIndex[0]] as? Tuplet
-                currentFlatIndex = flatIndexOfTuplet.dropFirst()
-            } while currentFlatIndex.count > 1
+                currentFlatIndex = Array(currentFlatIndex.dropFirst())
+            } while currentFlatIndex.count != 1
             if let tuplet = tuplet {
                 toReplaceFullTupletTicks += tuplet.noteDuration.ticks * tuplet.noteTimingCount
             } else {
@@ -413,9 +419,8 @@ public struct Tuplet: NoteCollection {
             return isValid
         } else if fullTupletTicks != notesTicks {
             return false
-        } else {
-            return true
         }
+        return true
     }
     
     internal mutating func recomputeFlatIndexes(parentIndexes: [Int] = [Int]()) -> [[Int]] {

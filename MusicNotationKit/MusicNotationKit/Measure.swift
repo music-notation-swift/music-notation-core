@@ -80,12 +80,15 @@ public struct Measure: ImmutableMeasure, Equatable {
         guard collectionIndex.tupletIndex == nil else {
             throw MeasureError.insertNoteIntoTupletNotAllowed
         }
+        try prepTiesForInsertion(at: index, inSet: setIndex)
         notes[setIndex].insert(note, at: collectionIndex.noteIndex)
     }
 
     public mutating func removeNote(at index: Int, inSet setIndex: Int = 0) throws {
         let collectionIndex = try noteCollectionIndex(fromNoteIndex: index, inSet: setIndex)
-        // TODO(migue48): handle tuplets.
+        guard collectionIndex.tupletIndex == nil else {
+            throw MeasureError.removeNoteFromTuplet
+        }
         notes[setIndex].remove(at: collectionIndex.noteIndex)
     }
 
@@ -93,8 +96,13 @@ public struct Measure: ImmutableMeasure, Equatable {
         let start = indexRange.lowerBound
         let end = indexRange.upperBound
         for index in (start...end).reversed() {
-            // TODO(migue48): handle tuplets.
-            try removeNote(at: index, inSet: setIndex)
+            let collectionIndex = try noteCollectionIndex(fromNoteIndex: index, inSet: setIndex)
+            try prepTiesForRemoval(at: index, inSet: setIndex)
+            if collectionIndex.tupletIndex != nil {
+                try removeTuplet(at: index, inSet: setIndex)
+            } else {
+                try removeNote(at: index, inSet: setIndex)
+            }
         }
     }
 
@@ -104,11 +112,53 @@ public struct Measure: ImmutableMeasure, Equatable {
     }
 
     public mutating func insertTuplet(_ tuplet: Tuplet, at index: Int, inSet setIndex: Int = 0) throws {
-        // TODO: Implement
+        let collectionIndex = try noteCollectionIndex(fromNoteIndex: index, inSet: setIndex)
+
+        guard collectionIndex.tupletIndex == nil else {
+            throw MeasureError.insertTupletIntoTupletNotAllowed
+        }
+        try prepTiesForInsertion(at: index, inSet: setIndex)
+        notes[setIndex].insert(tuplet, at: collectionIndex.noteIndex)
     }
 
-    public mutating func removeTuplet(_ tuplet: Tuplet, at index: Int, inSet setIndex: Int = 0) throws {
-        // TODO: Implement
+    public mutating func removeTuplet(at index: Int, inSet setIndex: Int = 0) throws {
+        let collectionIndex = try noteCollectionIndex(fromNoteIndex: index, inSet: setIndex)
+
+        guard collectionIndex.tupletIndex != nil else {
+            throw MeasureError.removeTupletFromNote
+        }
+
+        try prepTiesForRemoval(at: index, inSet: setIndex)
+
+        // TODO(migue48): The tupletIndex may be used to call into a function that
+        // will attempt to replace the tuplet into separate notes. This functionality
+        // may be provided in Tuplet class.
+        notes[setIndex].remove(at: collectionIndex.noteIndex)
+    }
+
+    // Check for tie state of note at index before insert. Since the new note is
+    // inserted before the current note, we have to make sure that the tie
+    // index is not .end or .beginend otherwise the tie state of adjacent
+    // notes will end up in a bad state.
+    internal mutating func prepTiesForInsertion(at index: Int, inSet setIndex: Int) throws {
+        let currIndexTieState = try tieState(for: index, inSet: setIndex)
+        if currIndexTieState == .end || currIndexTieState == .beginAndEnd {
+            guard index != 0 else {
+                throw MeasureError.invalidTieState
+            }
+            try removeTie(at: index, inSet: setIndex)
+        }
+    }
+
+    internal mutating func prepTiesForRemoval(at index: Int, inSet setIndex: Int) throws {
+        let currentIndexTieState = try tieState(for: index, inSet: setIndex)
+        guard currentIndexTieState != nil else {
+            return
+        }
+        guard index != 0 else {
+            throw MeasureError.invalidTieState
+        }
+        try removeTie(at: index, inSet: setIndex)
     }
 
     internal mutating func startTie(at index: Int, inSet setIndex: Int) throws {
@@ -247,7 +297,11 @@ public enum MeasureError: Error {
     case noteIndexOutOfRange
     case noNextNote
     case invalidRequestedTieState
+    case invalidTieState
     case internalError
     case notesMustHaveSameTonesToTie
     case insertNoteIntoTupletNotAllowed
+    case insertTupletIntoTupletNotAllowed
+    case removeNoteFromTuplet
+    case removeTupletFromNote
 }

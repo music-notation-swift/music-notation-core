@@ -7,27 +7,27 @@
 //
 
 public struct Tone {
-	
-	public let noteLetter: NoteLetter
-	public let accidental: Accidental
+    
+    public let noteLetter: NoteLetter
+    public let accidental: Accidental
     public let octave: Octave
-	
-	public init(noteLetter: NoteLetter, accidental: Accidental = .natural, octave: Octave) {
-		self.noteLetter = noteLetter
+    
+    public init(noteLetter: NoteLetter, accidental: Accidental = .natural, octave: Octave) {
+        self.noteLetter = noteLetter
         self.accidental = accidental
-		self.octave = octave
-	}
+        self.octave = octave
+    }
 }
 
 extension Tone: CustomDebugStringConvertible {
-	public var debugDescription: String {
+    public var debugDescription: String {
         switch accidental {
         case .natural:
             return "\(noteLetter)\(octave.rawValue)"
         default:
             return "\(noteLetter)\(accidental)\(octave.rawValue)"
         }
-	}
+    }
 }
 
 extension Tone: Equatable {

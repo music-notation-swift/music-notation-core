@@ -114,6 +114,61 @@ class MeasureTests: XCTestCase {
     // TODO: remove tuplet base case
     // TODO: remove tuplet when pointing index at note (negative test)
 
+    // MARK - prepTieForInsertion
+
+    func testPrepTieForInsertNote() {
+        measure.addNote(Note(noteDuration: .quarter, tone: Tone(noteLetter: .c, octave: .octave1)))
+        measure.addNote(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
+        measure.addNote(Note(noteDuration: .quarter, tone: Tone(noteLetter: .c, octave: .octave1)))
+        assertNoErrorThrown {
+            try measure.startTie(at: 1, inSet: 0)
+            let note = Note(noteDuration: .quarter, tone: Tone(noteLetter: .a, octave: .octave1))
+            try measure.insertNote(note, at: 1, inSet: 0)
+
+            let note1 = try measure.note(at: 1, inSet: 0)
+            let note2 = try measure.note(at: 2, inSet: 0)
+            let note3 = try measure.note(at: 3, inSet: 0)
+
+            XCTAssertNil(note1.tie)
+            XCTAssertNotNil(note2.tie)
+            XCTAssert(note2.tie == .begin)
+            XCTAssertNotNil(note3.tie)
+            XCTAssert(note3.tie == .end)
+        }
+    }
+
+    func testPrepTieForInsertNoteRemoveTie() {
+        measure.addNote(Note(noteDuration: .quarter, tone: Tone(noteLetter: .c, octave: .octave1)))
+        measure.addNote(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
+        assertNoErrorThrown {
+            try measure.startTie(at: 0, inSet: 0)
+            let note = Note(noteDuration: .quarter, tone: Tone(noteLetter: .c, octave: .octave1))
+            try measure.insertNote(note, at: 1, inSet: 0)
+
+            let note1 = try measure.note(at: 0, inSet: 0)
+            let note2 = try measure.note(at: 1, inSet: 0)
+            let note3 = try measure.note(at: 2, inSet: 0)
+
+            XCTAssertNil(note1.tie)
+            XCTAssertNil(note2.tie)
+            XCTAssertNil(note3.tie)
+        }
+    }
+
+    // MARK - prepTieForRemoval
+
+    func testPretTieForRemoveNote() {
+        measure.addNote(Note(noteDuration: .quarter, tone: Tone(noteLetter: .c, octave: .octave1)))
+        measure.addNote(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
+        assertNoErrorThrown {
+            try measure.startTie(at: 0, inSet: 0)
+            try measure.removeNote(at: 0)
+
+            let note1 = try measure.note(at: 0, inSet: 0)
+
+            XCTAssertNil(note1.tie)
+        }
+    }
 
     // MARK: - startTie(at:)
     // MARK: Successes

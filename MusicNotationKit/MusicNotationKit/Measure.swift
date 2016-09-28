@@ -89,6 +89,7 @@ public struct Measure: ImmutableMeasure, Equatable {
         guard collectionIndex.tupletIndex == nil else {
             throw MeasureError.removeNoteFromTuplet
         }
+        try prepTiesForRemoval(at: index, inSet: setIndex)
         notes[setIndex].remove(at: collectionIndex.noteIndex)
     }
 
@@ -155,8 +156,10 @@ public struct Measure: ImmutableMeasure, Equatable {
         guard currentIndexTieState != nil else {
             return
         }
-        guard index != 0 else {
-            throw MeasureError.invalidTieState
+        if currentIndexTieState == .end || currentIndexTieState == .beginAndEnd {
+            guard index != 0 else {
+                throw MeasureError.invalidTieState
+            }
         }
         try removeTie(at: index, inSet: setIndex)
     }

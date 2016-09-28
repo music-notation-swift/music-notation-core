@@ -12,8 +12,8 @@ import XCTest
 class TupletTests: XCTestCase {
 
 	let tone1 = Tone(noteLetter: .a, octave: .octave1)
-	let tone2 = Tone(accidental: .sharp, noteLetter: .b, octave: .octave1)
-	let tone3 = Tone(accidental: .natural, noteLetter: .d, octave: .octave1)
+	let tone2 = Tone(noteLetter: .b, accidental: .sharp, octave: .octave1)
+	let tone3 = Tone(noteLetter: .d, accidental: .natural, octave: .octave1)
 	let quarterRest = Note(noteDuration: .quarter)
 	let eighthRest = Note(noteDuration: .eighth)
     let dottedQuarterNote = Note(noteDuration: try! NoteDuration(value: .quarter, dotCount: 1),

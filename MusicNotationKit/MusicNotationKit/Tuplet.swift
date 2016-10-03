@@ -274,7 +274,7 @@ public struct Tuplet: NoteCollection {
             assertionFailure("all indexes before the last should be tuplets. Must be an error in flatIndexes")
             throw TupletError.internalError
         }
-        let slice = Array(flatIndex[1..<flatIndex.count])
+        let slice = Array(flatIndex.dropFirst())
         try tuplet.replaceNote(at: slice, with: newCollection)
         notes[flatIndex[0]] = tuplet
     }
@@ -289,7 +289,7 @@ public struct Tuplet: NoteCollection {
             assertionFailure("all indexes before the last should be tuplets. Must be an error in flatIndexes")
             throw TupletError.internalError
         }
-        let slice = Array(flatIndex[1..<flatIndex.count])
+        let slice = Array(flatIndex.dropFirst())
         try tuplet.replaceNote(at: slice, with: noteCollections)
         notes[flatIndex[0]] = tuplet
     }

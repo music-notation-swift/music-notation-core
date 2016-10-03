@@ -940,6 +940,48 @@ class TupletTests: XCTestCase {
         }
     }
 
-    // TODO: Equality tests
+    // MARK: - ==(lhs:rhs:)
+    // MARK: Failures
 
+    func testEqualityDifferentNumberOfNotes() {
+        assertNoErrorThrown {
+            let tuplet1 = try Tuplet(3, .eighth, notes: [eighthNote, eighthNote, eighthNote])
+            let tuplet2 = try Tuplet(3, .eighth, notes: [quarterNote1, eighthNote])
+            XCTAssertFalse(tuplet1 == tuplet2)
+        }
+    }
+
+    func testEqualityDifferentNotes() {
+        assertNoErrorThrown {
+            let tuplet1 = try Tuplet(3, .quarter, notes: [quarterNote1, quarterNote2, quarterNote3])
+            let tuplet2 = try Tuplet(3, .quarter, notes: [quarterNote1, quarterNote1, quarterNote1])
+            XCTAssertFalse(tuplet1 == tuplet2)
+        }
+    }
+
+    func testEqualitySameNotesDifferentTimingCount() {
+        assertNoErrorThrown {
+            let tuplet1 = try Tuplet(3, .eighth, notes: [eighthNote, eighthNote, eighthNote])
+            let tuplet2 = try Tuplet(3, .eighth, inSpaceOf: 1, notes: [eighthNote, eighthNote, eighthNote])
+            XCTAssertFalse(tuplet1 == tuplet2)
+        }
+    }
+
+    func testEqualityDifferentDuration() {
+        assertNoErrorThrown {
+            let tuplet1 = try Tuplet(3, .eighth, notes: [eighthNote, eighthNote, eighthNote])
+            let tuplet2 = try Tuplet(3, .quarter, notes: [quarterNote1, quarterNote1, quarterNote1])
+            XCTAssertFalse(tuplet1 == tuplet2)
+        }
+    }
+
+    // MARK: Success
+
+    func testEqualityTrue() {
+        assertNoErrorThrown {
+            let tuplet1 = try Tuplet(3, .eighth, notes: [eighthNote, eighthNote, eighthNote])
+            let tuplet2 = try Tuplet(3, .eighth, notes: [eighthNote, eighthNote, eighthNote])
+            XCTAssertTrue(tuplet1 == tuplet2)
+        }
+    }
 }

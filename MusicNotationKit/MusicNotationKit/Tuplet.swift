@@ -499,6 +499,11 @@ public struct Tuplet: NoteCollection {
 
 extension Tuplet: Equatable {
     public static func ==(lhs: Tuplet, rhs: Tuplet) -> Bool {
+        guard lhs.noteTimingCount == rhs.noteTimingCount &&
+            lhs.noteDuration == rhs.noteDuration &&
+            lhs.noteCount == rhs.noteCount else {
+                return false
+        }
         guard lhs.notes.count == rhs.notes.count else {
             return false
         }

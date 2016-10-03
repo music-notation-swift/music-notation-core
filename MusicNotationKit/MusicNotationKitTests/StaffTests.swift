@@ -114,7 +114,7 @@ class StaffTests: XCTestCase {
             XCTAssertEqual(Measure(beforeMeasure), measure1)
             XCTAssertEqual(Measure(afterMeasure), measure2)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -128,7 +128,7 @@ class StaffTests: XCTestCase {
             let expectedRepeat = try MeasureRepeat(measures: [measure, measure4])
             XCTAssertEqual(actualRepeat, expectedRepeat)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -142,7 +142,7 @@ class StaffTests: XCTestCase {
             let expectedRepeat = try MeasureRepeat(measures: [measure4, measure])
             XCTAssertEqual(actualRepeat, expectedRepeat)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -184,7 +184,7 @@ class StaffTests: XCTestCase {
             XCTAssertEqual(Measure(afterRepeat), measure2)
             XCTAssertEqual(actualRepeat, measureRepeat)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -265,7 +265,7 @@ class StaffTests: XCTestCase {
             XCTAssert(firstNote.tie == .begin)
             XCTAssert(secondNote.tie == .end)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -283,7 +283,7 @@ class StaffTests: XCTestCase {
             XCTAssert(secondNote.tie == .beginAndEnd)
             XCTAssert(thirdNote.tie == .end)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -298,7 +298,7 @@ class StaffTests: XCTestCase {
             XCTAssert(firstNote.tie == .begin)
             XCTAssert(secondNote.tie == .end)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -314,7 +314,7 @@ class StaffTests: XCTestCase {
             XCTAssert(firstNote.tie == .begin)
             XCTAssert(secondNote.tie == .end)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -330,7 +330,7 @@ class StaffTests: XCTestCase {
             XCTAssert(firstNote.tie == .begin)
             XCTAssert(secondNote.tie == .end)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -346,7 +346,7 @@ class StaffTests: XCTestCase {
             XCTAssert(firstNote.tie == .begin)
             XCTAssert(secondNote.tie == .end)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -362,7 +362,7 @@ class StaffTests: XCTestCase {
             XCTAssert(firstNote.tie == .begin)
             XCTAssert(secondNote.tie == .end)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -377,7 +377,7 @@ class StaffTests: XCTestCase {
             XCTAssert(firstNote.tie == .begin)
             XCTAssert(secondNote.tie == .end)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -392,7 +392,7 @@ class StaffTests: XCTestCase {
             XCTAssert(firstNote.tie == .begin)
             XCTAssert(secondNote.tie == .end)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -409,7 +409,7 @@ class StaffTests: XCTestCase {
             XCTAssert(firstNote.tie == .begin)
             XCTAssert(secondNote.tie == .end)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -445,7 +445,7 @@ class StaffTests: XCTestCase {
             let firstNote = measure.notes[0] as! Note
             XCTAssertNil(firstNote.tie)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -459,7 +459,7 @@ class StaffTests: XCTestCase {
             XCTAssertNil(firstNote.tie)
             XCTAssertNil(secondNote.tie)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -474,7 +474,7 @@ class StaffTests: XCTestCase {
             XCTAssertEqual(firstNote.tie, .begin)
             XCTAssertEqual(secondNote.tie, .end)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -490,7 +490,7 @@ class StaffTests: XCTestCase {
             XCTAssertNil(firstNote.tie)
             XCTAssertNil(secondNote.tie)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -506,7 +506,7 @@ class StaffTests: XCTestCase {
             XCTAssertNil(firstNote.tie)
             XCTAssertNil(secondNote.tie)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -522,7 +522,7 @@ class StaffTests: XCTestCase {
             XCTAssertNil(firstNote.tie)
             XCTAssertNil(secondNote.tie)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -538,7 +538,7 @@ class StaffTests: XCTestCase {
             XCTAssertNil(firstNote.tie)
             XCTAssertNil(secondNote.tie)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -555,7 +555,7 @@ class StaffTests: XCTestCase {
             XCTAssertNil(firstNote.tie)
             XCTAssertNil(secondNote.tie)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -572,7 +572,7 @@ class StaffTests: XCTestCase {
             XCTAssertNil(firstNote.tie)
             XCTAssertNil(secondNote.tie)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -591,7 +591,7 @@ class StaffTests: XCTestCase {
             XCTAssert(secondNote.tie == .end)
             XCTAssertNil(thirdNote.tie)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -616,7 +616,7 @@ class StaffTests: XCTestCase {
             XCTAssertEqual(indexes.notesHolderIndex, 2)
             XCTAssertNil(indexes.repeatMeasureIndex)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -626,7 +626,7 @@ class StaffTests: XCTestCase {
             XCTAssertEqual(indexes.notesHolderIndex, 6)
             XCTAssertEqual(indexes.repeatMeasureIndex, 1)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -636,7 +636,7 @@ class StaffTests: XCTestCase {
             XCTAssertEqual(indexes.notesHolderIndex, 6)
             XCTAssertEqual(indexes.repeatMeasureIndex, 2)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -646,7 +646,7 @@ class StaffTests: XCTestCase {
             XCTAssertEqual(indexes.notesHolderIndex, 7)
             XCTAssertNil(indexes.repeatMeasureIndex)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -681,7 +681,7 @@ class StaffTests: XCTestCase {
             let expected = staff.notesHolders[5]
             XCTAssertEqual(actual as? MeasureRepeat, expected as? MeasureRepeat)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -691,7 +691,7 @@ class StaffTests: XCTestCase {
             let expected = staff.notesHolders[6]
             XCTAssertEqual(actual as? MeasureRepeat, expected as? MeasureRepeat)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -701,7 +701,7 @@ class StaffTests: XCTestCase {
             let expected = staff.notesHolders[5]
             XCTAssertEqual(actual as? MeasureRepeat, expected as? MeasureRepeat)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -711,7 +711,7 @@ class StaffTests: XCTestCase {
             let expected = staff.notesHolders[6]
             XCTAssertEqual(actual as? MeasureRepeat, expected as? MeasureRepeat)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -721,7 +721,7 @@ class StaffTests: XCTestCase {
             let expected = staff.notesHolders[0]
             XCTAssertEqual(actual as? Measure, expected as? Measure)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 
@@ -755,7 +755,7 @@ class StaffTests: XCTestCase {
             let measure = try staff.measure(at:1)
             XCTAssertEqual(measure as? Measure, staff.notesHolders[1] as? Measure)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
     
@@ -765,7 +765,7 @@ class StaffTests: XCTestCase {
             let measureRepeat = staff.notesHolders[5] as! MeasureRepeat
             XCTAssertEqual(measureThatRepeats as? RepeatedMeasure, measureRepeat.expand()[0] as? RepeatedMeasure)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
     
@@ -777,7 +777,7 @@ class StaffTests: XCTestCase {
             XCTAssertNotNil(expectedMeasure as? RepeatedMeasure)
             XCTAssertEqual(repeatedMeasure as? RepeatedMeasure, expectedMeasure as? RepeatedMeasure)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
     
@@ -809,7 +809,7 @@ class StaffTests: XCTestCase {
             let measureRepeat = try staff.measureRepeat(at:1)
             XCTAssertNil(measureRepeat)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
     
@@ -821,7 +821,7 @@ class StaffTests: XCTestCase {
             let expected = staff.notesHolders[5] as! MeasureRepeat
             XCTAssertEqual(measureRepeat, expected)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
     
@@ -831,7 +831,7 @@ class StaffTests: XCTestCase {
             let expected = staff.notesHolders[6] as! MeasureRepeat
             XCTAssertEqual(measureRepeat, expected)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
     
@@ -841,7 +841,7 @@ class StaffTests: XCTestCase {
             let expected = staff.notesHolders[5] as! MeasureRepeat
             XCTAssertEqual(measureRepeat, expected)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
     
@@ -851,7 +851,7 @@ class StaffTests: XCTestCase {
             let expected = staff.notesHolders[6] as! MeasureRepeat
             XCTAssertEqual(measureRepeat, expected)
         } catch {
-            XCTFail(String(error))
+            XCTFail(String(describing: error))
         }
     }
 }

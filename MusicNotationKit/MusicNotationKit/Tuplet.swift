@@ -119,7 +119,7 @@ extension Tuplet: CustomDebugStringConvertible {
     }
 }
 
-public enum TupletError: ErrorProtocol {
+public enum TupletError: Error {
     case invalidNumberOfNotes
     case groupingFull
     case tooFewNotes

@@ -205,7 +205,7 @@ public struct Staff {
                 throw StaffError.noNextNoteToTie
             }
             secondMeasure = try mutableMeasureFromNotesHolderIndex(secondNotesHolderIndex.notesHolderIndex, repeatMeasureIndex: secondNotesHolderIndex.repeatMeasureIndex)
-            guard secondMeasure?.noteCount > 0 else {
+            guard (secondMeasure?.noteCount)! > 0 else {
                 throw StaffError.noNextNoteToTie
             }
         } else {
@@ -283,7 +283,7 @@ public struct Staff {
     }
 }
 
-public enum StaffError: ErrorProtocol {
+public enum StaffError: Error {
     case noteIndexOutOfRange
     case measureIndexOutOfRange
     case noNextNoteToTie

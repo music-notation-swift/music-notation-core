@@ -505,6 +505,19 @@ class TupletTests: XCTestCase {
         }
     }
 
+    func testReplaceNoteBeginAndEndTieWithTupletSameDuration() {
+        assertThrowsError(TupletError.invalidTieState) {
+            var beginTieNote = quarterNote1!
+            beginTieNote.tie = .begin
+            var beginAndEndTieNote = quarterNote1!
+            beginAndEndTieNote.tie = .beginAndEnd
+
+            let triplet = try Tuplet(3, .eighth, notes: [eighthNote, eighthNote, eighthNote])
+            var tuplet = try Tuplet(3, .quarter, notes: [quarterNote1, beginTieNote, beginAndEndTieNote])
+            try tuplet.replaceNote(at: 2, with: triplet)
+        }
+    }
+
     // MARK: Successes
 
     func testReplaceNoteWithRestOfSameDuration() {
@@ -557,6 +570,56 @@ class TupletTests: XCTestCase {
             XCTAssertEqual(try tuplet.note(at: 3), quarterNote1)
             XCTAssertEqual(try tuplet.note(at: 4), quarterNote2)
             XCTAssertEqual(try tuplet.note(at: 5), quarterNote3)
+        }
+    }
+
+    func testReplaceNoteTieWithNoteOfSameDuration() {
+        assertNoErrorThrown {
+            var beginTieNote = eighthNote!
+            beginTieNote.tie = .begin
+            var beginAndEndTieNote = eighthNote!
+            beginAndEndTieNote.tie = .beginAndEnd
+            var endTieNote = eighthNote!
+            endTieNote.tie = .end
+
+            var tupletBegin = try Tuplet(3, .eighth, notes: [eighthNote, eighthNote, beginTieNote])
+            try tupletBegin.replaceNote(at: 2, with: eighthNote)
+            XCTAssertEqual(try tupletBegin.note(at: 2), beginTieNote)
+
+            var tupletBeginAndEnd = try Tuplet(3, .eighth, notes: [eighthNote, beginTieNote, beginAndEndTieNote])
+            try tupletBeginAndEnd.replaceNote(at: 2, with: eighthNote)
+            XCTAssertEqual(try tupletBeginAndEnd.note(at: 2), beginAndEndTieNote)
+
+            var tupletEnd = try Tuplet(3, .eighth, notes: [endTieNote, eighthNote, eighthNote])
+            try tupletEnd.replaceNote(at: 0, with: eighthNote)
+            XCTAssertEqual(try tupletEnd.note(at: 0), endTieNote)
+        }
+    }
+
+    func testReplaceNoteTieWithTupletSameDuration() {
+        assertNoErrorThrown {
+            var beginTieNote = quarterNote1!
+            beginTieNote.tie = .begin
+            var endTieNote = quarterNote1!
+            endTieNote.tie = .end
+
+            let triplet = try Tuplet(3, .eighth, notes: [eighthNote, eighthNote, eighthNote])
+
+            var tupletBegin = try Tuplet(3, .quarter, notes: [quarterNote2, quarterNote2, beginTieNote])
+            try tupletBegin.replaceNote(at: 2, with: triplet)
+            var eighthNoteTieBegin = eighthNote!
+            eighthNoteTieBegin.tie = .begin
+            XCTAssertEqual(try tupletBegin.note(at: 2), eighthNote)
+            XCTAssertEqual(try tupletBegin.note(at: 3), eighthNote)
+            XCTAssertEqual(try tupletBegin.note(at: 4), eighthNoteTieBegin)
+
+            var tupletEnd = try Tuplet(3, .quarter, notes: [endTieNote, quarterNote2, quarterNote2])
+            try tupletEnd.replaceNote(at: 0, with: triplet)
+            var eighthNoteTieEnd = eighthNote!
+            eighthNoteTieEnd.tie = .end
+            XCTAssertEqual(try tupletEnd.note(at: 0), eighthNoteTieEnd)
+            XCTAssertEqual(try tupletEnd.note(at: 1), eighthNote)
+            XCTAssertEqual(try tupletEnd.note(at: 2), eighthNote)
         }
     }
 
@@ -623,6 +686,18 @@ class TupletTests: XCTestCase {
         }
     }
 
+    func testReplaceNoteBeginAndEndTieWithArrayOfNotes() {
+        assertThrowsError(TupletError.invalidTieState) {
+            var beginAndEndNote = quarterNote1!
+            beginAndEndNote.tie = .beginAndEnd
+            var beginNote = quarterNote2!
+            beginNote.tie = .begin
+
+            var tuplet = try Tuplet(3, .quarter, notes: [quarterNote1, beginNote, beginAndEndNote])
+            try tuplet.replaceNote(at: 2, with: [eighthNote, eighthNote])
+        }
+    }
+
     // MARK: Successes
 
     func testReplaceNoteWithArrayOfNotesSameDuration() {
@@ -684,6 +759,82 @@ class TupletTests: XCTestCase {
             XCTAssertEqual(try tuplet.note(at: 7), quarterNote1)
             XCTAssertEqual(try tuplet.note(at: 8), quarterNote1)
             XCTAssertEqual(try tuplet.note(at: 9), quarterNote1)
+        }
+    }
+
+    func testReplaceNoteBeginTieWithArrayOfNotesSameDuration() {
+        assertNoErrorThrown {
+            var beginNote = quarterNote1!
+            beginNote.tie = .begin
+
+            var tuplet = try Tuplet(3, .quarter, notes: [quarterNote2, quarterNote3, beginNote])
+            try tuplet.replaceNote(at: 2, with: [eighthNote, eighthNote])
+            var eighthBegin = eighthNote!
+            eighthBegin.tie = .begin
+            XCTAssertEqual(try tuplet.note(at: 0), quarterNote2)
+            XCTAssertEqual(try tuplet.note(at: 1), quarterNote3)
+            XCTAssertEqual(try tuplet.note(at: 2), eighthNote)
+            XCTAssertEqual(try tuplet.note(at: 3), eighthBegin)
+        }
+    }
+
+    func testReplaceNoteBeginTieWithArrayOfTupletsSameDuration() {
+        assertNoErrorThrown {
+            var beginNote = quarterNote1!
+            beginNote.tie = .begin
+
+            let triplet = try Tuplet(3, .sixteenth, notes: [sixteenthNote, sixteenthNote, sixteenthNote])
+            var tuplet = try Tuplet(5, .eighth, notes: [eighthNote, eighthNote, eighthNote, beginNote])
+            try tuplet.replaceNote(at: 3, with: [triplet, triplet])
+            var sixteenthBegin = sixteenthNote!
+            sixteenthBegin.tie = .begin
+            XCTAssertEqual(try tuplet.note(at: 0), eighthNote)
+            XCTAssertEqual(try tuplet.note(at: 1), eighthNote)
+            XCTAssertEqual(try tuplet.note(at: 2), eighthNote)
+            XCTAssertEqual(try tuplet.note(at: 3), sixteenthNote)
+            XCTAssertEqual(try tuplet.note(at: 4), sixteenthNote)
+            XCTAssertEqual(try tuplet.note(at: 5), sixteenthNote)
+            XCTAssertEqual(try tuplet.note(at: 6), sixteenthNote)
+            XCTAssertEqual(try tuplet.note(at: 7), sixteenthNote)
+            XCTAssertEqual(try tuplet.note(at: 8), sixteenthBegin)
+        }
+    }
+
+    func testReplaceNoteEndTieWithArrayOfNotesSameDuration() {
+        assertNoErrorThrown {
+            var endNote = quarterNote1!
+            endNote.tie = .end
+
+            var tuplet = try Tuplet(3, .quarter, notes: [endNote, quarterNote2, quarterNote3])
+            try tuplet.replaceNote(at: 0, with: [eighthNote, eighthNote])
+            var eighthEnd = eighthNote!
+            eighthEnd.tie = .end
+            XCTAssertEqual(try tuplet.note(at: 0), eighthEnd)
+            XCTAssertEqual(try tuplet.note(at: 1), eighthNote)
+            XCTAssertEqual(try tuplet.note(at: 2), quarterNote2)
+            XCTAssertEqual(try tuplet.note(at: 3), quarterNote3)
+        }
+    }
+
+    func testReplaceNoteEndTieWithArrayOfTupletsSameDuration() {
+        assertNoErrorThrown {
+            var endNote = quarterNote1!
+            endNote.tie = .end
+
+            let triplet = try Tuplet(3, .sixteenth, notes: [sixteenthNote, sixteenthNote, sixteenthNote])
+            var tuplet = try Tuplet(5, .eighth, notes: [endNote, eighthNote, eighthNote, eighthNote])
+            try tuplet.replaceNote(at: 0, with: [triplet, triplet])
+            var sixteenthEnd = sixteenthNote!
+            sixteenthEnd.tie = .end
+            XCTAssertEqual(try tuplet.note(at: 0), sixteenthEnd)
+            XCTAssertEqual(try tuplet.note(at: 1), sixteenthNote)
+            XCTAssertEqual(try tuplet.note(at: 2), sixteenthNote)
+            XCTAssertEqual(try tuplet.note(at: 3), sixteenthNote)
+            XCTAssertEqual(try tuplet.note(at: 4), sixteenthNote)
+            XCTAssertEqual(try tuplet.note(at: 5), sixteenthNote)
+            XCTAssertEqual(try tuplet.note(at: 6), eighthNote)
+            XCTAssertEqual(try tuplet.note(at: 7), eighthNote)
+            XCTAssertEqual(try tuplet.note(at: 8), eighthNote)
         }
     }
 

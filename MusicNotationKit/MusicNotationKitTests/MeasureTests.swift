@@ -93,7 +93,7 @@ class MeasureTests: XCTestCase {
         measure.addNote(note3)
         assertNoErrorThrown {
             XCTAssertEqual(measure.notes[0].count, 7)
-            try measure.removeNotesInRange(Range<Int>(1...3))
+            try measure.removeNotesInRange(Range<Int>(1...4))
             XCTAssertEqual(measure.notes[0].count, 3)
 
             let resultNote1 = try measure.note(at: 0, inSet: 0)
@@ -113,6 +113,15 @@ class MeasureTests: XCTestCase {
     // TODO: insert tuplet into tuplet index (negative test)
     // TODO: remove tuplet base case
     // TODO: remove tuplet when pointing index at note (negative test)
+
+    func testCreateTuplet() {
+        measure.addNote(Note(noteDuration: .quarter, tone: Tone(noteLetter: .a, octave: .octave1)))
+        measure.addNote(Note(noteDuration: .quarter, tone: Tone(noteLetter: .b, octave: .octave1)))
+        measure.addNote(Note(noteDuration: .quarter, tone: Tone(noteLetter: .c, octave: .octave1)))
+        assertNoErrorThrown {
+            try measure.createTuplet(.quarter, fromNotesInRange: Range<Int>(0...2))
+        }
+    }
 
     // MARK - prepTieForInsertion
 
@@ -140,7 +149,7 @@ class MeasureTests: XCTestCase {
     func testPrepTieForInsertNoteRemoveTie() {
         measure.addNote(Note(noteDuration: .quarter, tone: Tone(noteLetter: .c, octave: .octave1)))
         measure.addNote(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
-        assertNoErrorThrown {
+        assertThrowsError(MeasureError.invalidTieState) {
             try measure.startTie(at: 0, inSet: 0)
             let note = Note(noteDuration: .quarter, tone: Tone(noteLetter: .c, octave: .octave1))
             try measure.insertNote(note, at: 1, inSet: 0)
@@ -160,7 +169,7 @@ class MeasureTests: XCTestCase {
     func testPretTieForRemoveNote() {
         measure.addNote(Note(noteDuration: .quarter, tone: Tone(noteLetter: .c, octave: .octave1)))
         measure.addNote(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
-        assertNoErrorThrown {
+        assertThrowsError(MeasureError.invalidTieState) {
             try measure.startTie(at: 0, inSet: 0)
             try measure.removeNote(at: 0)
 

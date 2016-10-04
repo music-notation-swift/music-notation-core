@@ -96,14 +96,10 @@ public struct Measure: ImmutableMeasure, Equatable {
     public mutating func removeNotesInRange(_ indexRange: Range<Int>, inSet setIndex: Int = 0) throws {
         let start = indexRange.lowerBound
         let end = indexRange.upperBound
-        for index in (start...end).reversed() {
+        // TODO: Check for tie state at boundaries.
+        for index in (start..<end).reversed() {
             let collectionIndex = try noteCollectionIndex(fromNoteIndex: index, inSet: setIndex)
-            try prepTiesForRemoval(at: index, inSet: setIndex)
-            if collectionIndex.tupletIndex != nil {
-                try removeTuplet(at: index, inSet: setIndex)
-            } else {
-                try removeNote(at: index, inSet: setIndex)
-            }
+            notes[setIndex].remove(at: collectionIndex.noteIndex)
         }
     }
 
@@ -112,7 +108,22 @@ public struct Measure: ImmutableMeasure, Equatable {
         noteCount[setIndex] += tuplet.noteCount
     }
 
+    // Create a `Tuplet` from a note range. 
+    // The note count is inferred from `noteRange`, but `baseNoteDuration` needs to be specified.
+    // `inSpaceOf` can be used to specify an non-standard Tuplet ratio. See `Tuplet.init` for
+    // more details.
+    public mutating func createTuplet(_ baseNoteDuration: NoteDuration, inSpaceOf baseCount: Int? = nil, fromNotesInRange noteRange: Range<Int>, inSet setIndex: Int = 0) throws {
+        let tupletNotes = Array(notes[setIndex][noteRange.lowerBound..<noteRange.upperBound])
+        let newTuplet = try Tuplet(noteRange.count, baseNoteDuration, inSpaceOf: baseCount, notes: tupletNotes)
+        try removeNotesInRange(noteRange, inSet: setIndex)
+        try insertTuplet(newTuplet, at: noteRange.lowerBound, inSet: setIndex)
+    }
+
     public mutating func insertTuplet(_ tuplet: Tuplet, at index: Int, inSet setIndex: Int = 0) throws {
+        if index == 0 && notes[setIndex].count == 0 {
+            addTuplet(tuplet, inSet: setIndex)
+            return
+        }
         let collectionIndex = try noteCollectionIndex(fromNoteIndex: index, inSet: setIndex)
 
         guard collectionIndex.tupletIndex == nil else {
@@ -144,24 +155,17 @@ public struct Measure: ImmutableMeasure, Equatable {
     internal mutating func prepTiesForInsertion(at index: Int, inSet setIndex: Int) throws {
         let currIndexTieState = try tieState(for: index, inSet: setIndex)
         if currIndexTieState == .end || currIndexTieState == .beginAndEnd {
-            guard index != 0 else {
-                throw MeasureError.invalidTieState
-            }
-            try removeTie(at: index, inSet: setIndex)
+            throw MeasureError.invalidTieState
         }
     }
 
+    // Check for tie state of note at index before removal. The note must not have
+    // any tie state associated with it, otherwise it will fail.
     internal mutating func prepTiesForRemoval(at index: Int, inSet setIndex: Int) throws {
         let currentIndexTieState = try tieState(for: index, inSet: setIndex)
-        guard currentIndexTieState != nil else {
-            return
+        guard currentIndexTieState == nil else {
+            throw MeasureError.invalidTieState
         }
-        if currentIndexTieState == .end || currentIndexTieState == .beginAndEnd {
-            guard index != 0 else {
-                throw MeasureError.invalidTieState
-            }
-        }
-        try removeTie(at: index, inSet: setIndex)
     }
 
     internal mutating func startTie(at index: Int, inSet setIndex: Int) throws {

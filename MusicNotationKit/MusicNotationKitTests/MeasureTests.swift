@@ -26,7 +26,7 @@ class MeasureTests: XCTestCase {
     func testAddNote() {
         XCTAssertEqual(measure.notes[0].count, 0)
         measure.addNote(Note(noteDuration: .whole, tone: Tone(noteLetter: .c, octave: .octave0)))
-        measure.addNote(Note(noteDuration: .quarter, tone: Tone(accidental: .sharp, noteLetter: .d, octave: .octave0)))
+        measure.addNote(Note(noteDuration: .quarter, tone: Tone(noteLetter: .d, accidental: .sharp, octave: .octave0)))
         measure.addNote(Note(noteDuration: .whole))
         XCTAssertEqual(measure.notes[0].count, 3)
     }
@@ -77,7 +77,7 @@ class MeasureTests: XCTestCase {
         measure.addNote(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
         measure.addNote(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
         let notes = [
-            Note(noteDuration: .eighth, tone: Tone(noteLetter: .a, octave: .octave1)),
+            Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)),
             Note(noteDuration: .eighth, tone: Tone(noteLetter: .a, octave: .octave1)),
             Note(noteDuration: .eighth, tone: Tone(noteLetter: .a, octave: .octave1))
         ]
@@ -101,7 +101,7 @@ class MeasureTests: XCTestCase {
         measure.addNote(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
         measure.addNote(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
         let notes = [
-            Note(noteDuration: .eighth, tone: Tone(noteLetter: .a, octave: .octave1)),
+            Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)),
             Note(noteDuration: .eighth, tone: Tone(noteLetter: .a, octave: .octave1)),
             Note(noteDuration: .eighth, tone: Tone(noteLetter: .a, octave: .octave1))
         ]
@@ -123,8 +123,8 @@ class MeasureTests: XCTestCase {
         measure.addNote(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
         measure.addNote(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
         let notes = [
-            Note(noteDuration: .eighth, tone: Tone(noteLetter: .a, octave: .octave1)),
-            Note(noteDuration: .eighth, tone: Tone(noteLetter: .a, octave: .octave1)),
+            Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)),
+            Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)),
             Note(noteDuration: .eighth, tone: Tone(noteLetter: .a, octave: .octave1))
         ]
         assertNoErrorThrown {
@@ -146,7 +146,7 @@ class MeasureTests: XCTestCase {
         measure.addNote(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
         measure.addNote(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
         let notes = [
-            Note(noteDuration: .eighth, tone: Tone(noteLetter: .a, octave: .octave1)),
+            Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)),
             Note(noteDuration: .eighth, tone: Tone(noteLetter: .a, octave: .octave1)),
             Note(noteDuration: .eighth, tone: Tone(noteLetter: .a, octave: .octave1))
         ]
@@ -176,6 +176,33 @@ class MeasureTests: XCTestCase {
             let note2 = noteFromMeasure(measure, noteIndex: 1, tupletIndex: 0)
             XCTAssert(note1.tie == .begin)
             XCTAssert(note2.tie == .end)
+        }
+    }
+
+    // MARK: - startTie(at:)
+    // MARK: Failures
+
+    func testStartTieNoteHasDiffTone() {
+        measure.addNote(Note(noteDuration: .quarter, tone: Tone(noteLetter: .a, octave: .octave1)))
+        measure.addNote(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
+        assertThrowsError(MeasureError.notesMustHaveSameTonesToTie) {
+            try measure.startTie(at: 0, inSet: 0)
+        }
+    }
+
+    func testStartTieNextNoteInTupletDiffTone() {
+        measure.addNote(Note(noteDuration: .quarter, tone: Tone(noteLetter: .c, octave: .octave1)))
+        measure.addNote(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
+        measure.addNote(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
+        let notes = [
+            Note(noteDuration: .eighth, tone: Tone(noteLetter: .a, octave: .octave1)),
+            Note(noteDuration: .eighth, tone: Tone(noteLetter: .a, octave: .octave1)),
+            Note(noteDuration: .eighth, tone: Tone(noteLetter: .a, octave: .octave1))
+        ]
+        assertThrowsError(MeasureError.notesMustHaveSameTonesToTie) {
+            let tuplet = try Tuplet(3, .eighth, notes: notes)
+            measure.addTuplet(tuplet)
+            try measure.startTie(at: 2, inSet: 0)
         }
     }
 
@@ -348,8 +375,9 @@ class MeasureTests: XCTestCase {
         measure.addNote(Note(noteDuration: .quarter))
         measure.addNote(Note(noteDuration: .quarter))
         measure.addNote(Note(noteDuration: .quarter))
+
         assertNoErrorThrown {
-            let index = try measure.noteCollectionIndexFromNoteIndex(2, inSet: 0)
+            let index = try measure.noteCollectionIndex(fromNoteIndex: 2, inSet: 0)
             XCTAssertEqual(index.noteIndex, 2)
             XCTAssertNil(index.tupletIndex)
         }
@@ -368,14 +396,14 @@ class MeasureTests: XCTestCase {
             let note3 = Note(noteDuration: .eighth,
                              tone: Tone(noteLetter: .c, octave: .octave1))
             measure.addTuplet(try Tuplet(3, .eighth, notes: [note1, note2, note3]))
-            let index = try measure.noteCollectionIndexFromNoteIndex(2, inSet: 0)
+			let index = try measure.noteCollectionIndex(fromNoteIndex: 2, inSet: 0)
             XCTAssertEqual(index.noteIndex, 1)
             XCTAssertNotNil(index.tupletIndex)
             XCTAssertEqual(index.tupletIndex!, 1)
 
             // Properly address regular note coming after a tuplet
             measure.addNote(Note(noteDuration: .eighth))
-            let index2 = try measure.noteCollectionIndexFromNoteIndex(4, inSet: 0)
+			let index2 = try measure.noteCollectionIndex(fromNoteIndex: 4, inSet: 0)
             XCTAssertEqual(index2.noteIndex, 2)
             XCTAssertNil(index2.tupletIndex)
         }
@@ -384,8 +412,8 @@ class MeasureTests: XCTestCase {
     private func setTie(at index: Int, functionName: String = #function, lineNum: Int = #line) {
         assertNoErrorThrown {
             try measure.startTie(at: index, inSet: 0)
-            let (noteIndex1, tupletIndex1) = try measure.noteCollectionIndexFromNoteIndex(index, inSet: 0)
-            let (noteIndex2, tupletIndex2) = try measure.noteCollectionIndexFromNoteIndex(index + 1, inSet: 0)
+			let (noteIndex1, tupletIndex1) = try measure.noteCollectionIndex(fromNoteIndex: index, inSet: 0)
+			let (noteIndex2, tupletIndex2) = try measure.noteCollectionIndex(fromNoteIndex: index + 1, inSet: 0)
             let firstNote = noteFromMeasure(measure, noteIndex: noteIndex1,
                                             tupletIndex: tupletIndex1)
             let secondNote = noteFromMeasure(measure, noteIndex: noteIndex2,

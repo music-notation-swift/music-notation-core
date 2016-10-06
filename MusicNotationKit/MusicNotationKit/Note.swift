@@ -53,6 +53,16 @@ public struct Note: NoteCollection {
         self.tones = tones
     }
 
+    // MARK: - Methods
+    // MARK: Public
+
+    public func note(at index: Int) throws -> Note {
+        guard index == 0 else {
+            throw NoteError.invalidNoteIndex
+        }
+        return self
+    }
+
     internal mutating func modifyTie(_ request: Tie) throws {
         // Nothing to do if it's the same value
         guard tie != request else { return }
@@ -72,7 +82,7 @@ public struct Note: NoteCollection {
      - parameter currentTie: What part of the tie on the note the caller wants to remove. This is important if the
      note is both the beginning and end of a tie
      - throws:
-        - `NoteError.invalidRequestedTieState`
+     - `NoteError.invalidRequestedTieState`
      */
     internal mutating func removeTie(_ currentTie: Tie) throws {
         switch (currentTie, tie) {
@@ -127,4 +137,5 @@ extension Note: CustomDebugStringConvertible {
 
 public enum NoteError: Error {
     case invalidRequestedTieState
+    case invalidNoteIndex
 }

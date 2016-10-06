@@ -27,6 +27,8 @@ public protocol NoteCollection {
 
     var first: Note { get }
     var last: Note { get }
+
+    func note(at index: Int) throws -> Note
 }
 
 public func ==(lhs: NoteCollection, rhs: NoteCollection) -> Bool {

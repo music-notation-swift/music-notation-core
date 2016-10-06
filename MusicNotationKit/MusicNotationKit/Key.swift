@@ -10,9 +10,9 @@ public struct Key {
 	
 	fileprivate let type: KeyType
 	fileprivate let noteLetter: NoteLetter
-	fileprivate let accidental: Accidental?
+	fileprivate let accidental: Accidental
 	
-	public init(noteLetter: NoteLetter, accidental: Accidental? = nil, type: KeyType = .major) {
+	public init(noteLetter: NoteLetter, accidental: Accidental = .natural, type: KeyType = .major) {
 		self.noteLetter = noteLetter
 		self.accidental = accidental
 		self.type = type

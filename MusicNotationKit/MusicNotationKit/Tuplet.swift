@@ -23,6 +23,20 @@ public struct Tuplet: NoteCollection {
     public let noteDuration: NoteDuration
     /// The number of notes that this tuplet fits in the space of
     public let noteTimingCount: Int
+    public var first: Note {
+        do {
+            return try note(at: 0)
+        } catch {
+            fatalError(String(describing: error))
+        }
+    }
+    public var last: Note {
+        do {
+            return try note(at: flatIndexes.count - 1)
+        } catch {
+            fatalError(String(describing: error))
+        }
+    }
     /// A 2-dimensional array that can be used to index into every note in the tuplet within compound tuplets as well.
     internal var flatIndexes: [[Int]] = [[Int]]()
 
@@ -227,82 +241,139 @@ public struct Tuplet: NoteCollection {
 
     private func preserveTieStateForReplacement(in range: CountableClosedRange<Int>,
                                                 with newCollections: [NoteCollection]) throws -> [NoteCollection] {
-        switch (range.count, newCollections.count) {
-        case (1, 1) where newCollections[0].noteCount == 1:
-            // Single note replacing with single note. Just preserve.
-            if var replacingNote = newCollections.first as? Note {
-                replacingNote.tie = try note(at: range.lowerBound).tie
-                return [replacingNote as NoteCollection]
+        var modifiedCollections = newCollections
+        let lastIndex = modifiedCollections.count - 1
+
+        func modifyCollections(at index: Int, with note: Note) throws {
+            if var tuplet = modifiedCollections[lastIndex] as? Tuplet {
+                try tuplet.replaceNote(at: tuplet.flatIndexes.count - 1, with: note)
+                modifiedCollections[index] = tuplet
             } else {
-                assertionFailure("should have been note, but wasn't")
-                throw TupletError.internalError
+                modifiedCollections[index] = note
             }
-        case (1, 1) where newCollections[0].noteCount > 1:
-            // Tuplet replacing single note.
-            if var replacingTuplet = newCollections.first as? Tuplet {
-                let originalTie = try note(at: range.lowerBound).tie
-                switch originalTie {
-                case .end?:
-                    var firstNote = try replacingTuplet.note(at: 0)
-                    firstNote.tie = originalTie
-                    try replacingTuplet.replaceNote(at: flatIndexes[0], with: firstNote)
-                case .begin?:
-                    let lastIndex = replacingTuplet.flatIndexes.count - 1
-                    var lastNote = try replacingTuplet.note(at: lastIndex)
-                    lastNote.tie = originalTie
-                    try replacingTuplet.replaceNote(at: flatIndexes[lastIndex], with: lastNote)
-                case nil?:
-                    break
-                default:
-                    throw TupletError.invalidTieState
-                }
-                return [replacingTuplet as NoteCollection]
-            } else {
-                assertionFailure("should have been tuplet, but wasn't")
-                throw TupletError.internalError
-            }
-        case (1, _):
-            // Single note replaced by an array of NoteCollection with more than one element.
-            // Replace either the first or last note of the array
-            let originalTie = try note(at: range.lowerBound).tie
-            var modifiedCollections = newCollections
+        }
+
+        func modifyState(forTie originalTie: Tie?) throws {
             switch originalTie {
             case .begin?:
-                if var replacingNote = newCollections.last as? Note {
-                    replacingNote.tie = originalTie
-                    modifiedCollections[modifiedCollections.count - 1] = replacingNote
-                } else if var replacingTuplet = newCollections.last as? Tuplet {
-                    let lastIndex = replacingTuplet.flatIndexes.count - 1
-                    var lastNote = try replacingTuplet.note(at: lastIndex)
-                    lastNote.tie = originalTie
-                    try replacingTuplet.replaceNote(at: flatIndexes[lastIndex], with: lastNote)
-                    modifiedCollections[modifiedCollections.count - 1] = replacingTuplet
-                } else {
-                    assertionFailure("should have been either note or tuplet, but wasn't")
-                    throw TupletError.internalError
-                }
+                var lastNote = newCollections[lastIndex].last
+                try lastNote.modifyTie(.begin)
+                try modifyCollections(at: newCollections.count - 1, with: lastNote)
             case .end?:
-                if var replacingNote = newCollections.first as? Note {
-                    replacingNote.tie = originalTie
-                    modifiedCollections[0] = replacingNote
-                } else if var replacingTuplet = newCollections.first as? Tuplet {
-                    var firstNote = try replacingTuplet.note(at: 0)
-                    firstNote.tie = originalTie
-                    try replacingTuplet.replaceNote(at: flatIndexes[0], with: firstNote)
-                    modifiedCollections[0] = replacingTuplet
+                var firstNote = newCollections[0].first
+                try firstNote.modifyTie(.end)
+                try modifyCollections(at: 0, with: firstNote)
+            case .beginAndEnd?:
+                if newCollections.count == 1 && newCollections[0].noteCount == 1 {
+                    var onlyNote = try newCollections[0].note(at: 0)
+                    try onlyNote.modifyTie(.beginAndEnd)
+                    modifiedCollections[0] = onlyNote
                 } else {
-                    assertionFailure("should have been either note or tuplet, but wasn't")
-                    throw TupletError.internalError
+                    var firstNote = newCollections[0].first
+                    try firstNote.modifyTie(.end)
+                    var lastNote = newCollections[lastIndex].last
+                    try lastNote.modifyTie(.begin)
+                    try modifyCollections(at: 0, with: firstNote)
+                    try modifyCollections(at: lastIndex, with: lastNote)
                 }
-            case nil?:
+            case nil:
                 break
-            default:
-                throw TupletError.invalidTieState
             }
-            return modifiedCollections
-        default:
-            throw TupletError.internalError
         }
+
+        if range.count == 1 {
+            let originalTie = try note(at: range.lowerBound).tie
+            try modifyState(forTie: originalTie)
+            return modifiedCollections
+        } else {
+            let firstOriginal = modifiedCollections[0].first
+            let lastOriginal = modifiedCollections[lastIndex].last
+
+            if firstOriginal.tie == .beginAndEnd || lastOriginal.tie == .beginAndEnd {
+                throw TupletError.invalidTieState
+            } else if firstOriginal.tie == .begin || lastOriginal.tie == .end {
+                // Silently ignore, because it will just be replaced
+            } else {
+                try modifyState(forTie: firstOriginal.tie)
+                try modifyState(forTie: lastOriginal.tie)
+            }
+        }
+//        switch (range.count, newCollections.count) {
+//        case (1, 1) where newCollections[0].noteCount == 1:
+//            // Single note replacing with single note. Just preserve.
+//            if var replacingNote = newCollections.first as? Note {
+//                replacingNote.tie = try note(at: range.lowerBound).tie
+//                return [replacingNote as NoteCollection]
+//            } else {
+//                assertionFailure("should have been note, but wasn't")
+//                throw TupletError.internalError
+//            }
+//        case (1, 1) where newCollections[0].noteCount > 1:
+//            // Tuplet replacing single note.
+//            if var replacingTuplet = newCollections.first as? Tuplet {
+//                let originalTie = try note(at: range.lowerBound).tie
+//                switch originalTie {
+//                case .end?:
+//                    var firstNote = try replacingTuplet.note(at: 0)
+//                    firstNote.tie = originalTie
+//                    try replacingTuplet.replaceNote(at: flatIndexes[0], with: firstNote)
+//                case .begin?:
+//                    let lastIndex = replacingTuplet.flatIndexes.count - 1
+//                    var lastNote = try replacingTuplet.note(at: lastIndex)
+//                    lastNote.tie = originalTie
+//                    try replacingTuplet.replaceNote(at: flatIndexes[lastIndex], with: lastNote)
+//                case nil?:
+//                    break
+//                default:
+//                    throw TupletError.invalidTieState
+//                }
+//                return [replacingTuplet as NoteCollection]
+//            } else {
+//                assertionFailure("should have been tuplet, but wasn't")
+//                throw TupletError.internalError
+//            }
+//        case (1, _):
+//            // Single note replaced by an array of NoteCollection with more than one element.
+//            // Replace either the first or last note of the array
+//            let originalTie = try note(at: range.lowerBound).tie
+//            var modifiedCollections = newCollections
+//            switch originalTie {
+//            case .begin?:
+//                if var replacingNote = newCollections.last as? Note {
+//                    replacingNote.tie = originalTie
+//                    modifiedCollections[modifiedCollections.count - 1] = replacingNote
+//                } else if var replacingTuplet = newCollections.last as? Tuplet {
+//                    let lastIndex = replacingTuplet.flatIndexes.count - 1
+//                    var lastNote = try replacingTuplet.note(at: lastIndex)
+//                    lastNote.tie = originalTie
+//                    try replacingTuplet.replaceNote(at: flatIndexes[lastIndex], with: lastNote)
+//                    modifiedCollections[modifiedCollections.count - 1] = replacingTuplet
+//                } else {
+//                    assertionFailure("should have been either note or tuplet, but wasn't")
+//                    throw TupletError.internalError
+//                }
+//            case .end?:
+//                if var replacingNote = newCollections.first as? Note {
+//                    replacingNote.tie = originalTie
+//                    modifiedCollections[0] = replacingNote
+//                } else if var replacingTuplet = newCollections.first as? Tuplet {
+//                    var firstNote = try replacingTuplet.note(at: 0)
+//                    firstNote.tie = originalTie
+//                    try replacingTuplet.replaceNote(at: flatIndexes[0], with: firstNote)
+//                    modifiedCollections[0] = replacingTuplet
+//                } else {
+//                    assertionFailure("should have been either note or tuplet, but wasn't")
+//                    throw TupletError.internalError
+//                }
+//            case nil?:
+//                break
+//            default:
+//                throw TupletError.invalidTieState
+//            }
+//            return modifiedCollections
+//        default:
+//            throw TupletError.internalError
+//        }
     }
 
     private mutating func replaceNote(at flatIndex: [Int], with newCollection: NoteCollection) throws {

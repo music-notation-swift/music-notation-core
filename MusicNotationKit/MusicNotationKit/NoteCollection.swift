@@ -24,6 +24,9 @@ public protocol NoteCollection {
      `NoteCollection`. Combine this with `noteDuration`.
      */
     var noteTimingCount: Int { get }
+
+    var first: Note { get }
+    var last: Note { get }
 }
 
 public func ==(lhs: NoteCollection, rhs: NoteCollection) -> Bool {

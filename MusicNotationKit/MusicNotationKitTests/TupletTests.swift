@@ -1085,6 +1085,13 @@ class TupletTests: XCTestCase {
         }
     }
 
+    func testReplaceNotesInvalidRangeOutOfBounds() {
+        assertThrowsError(TupletError.invalidIndex) {
+            var tuplet = try Tuplet(3, .eighth, notes: [eighthNote, eighthNote, eighthNote])
+            try tuplet.replaceNotes(in: 1...4, with: [eighthNote, eighthNote, eighthNote, eighthNote])
+        }
+    }
+
     // MARK: Successes
 
     func testReplaceNotesInMultiNestedCompoundTupletWithNotesOfSameDuration() {
@@ -1117,7 +1124,39 @@ class TupletTests: XCTestCase {
             let triplet = try Tuplet(3, .eighth, notes: [eighthNote, eighthNote, eighthNote])
             let quintuplet = try Tuplet(5, .eighth, notes: [triplet, triplet, eighthNote])
             var tuplet = try Tuplet(9, .eighth, notes: [triplet, quintuplet, eighthNote, eighthNote, eighthNote])
-            try tuplet.replaceNotes(in: 3...10, with: [quarterNote1, quarterNote1, eighthNote])
+            try tuplet.replaceNotes(in: 3...10, with: [quarterNote1, quarterNote1, eighthRest])
+            XCTAssertEqual(try tuplet.note(at: 0), eighthNote)
+            XCTAssertEqual(try tuplet.note(at: 1), eighthNote)
+            XCTAssertEqual(try tuplet.note(at: 2), eighthNote)
+            XCTAssertEqual(try tuplet.note(at: 3), quarterNote1)
+            XCTAssertEqual(try tuplet.note(at: 4), quarterNote1)
+            XCTAssertEqual(try tuplet.note(at: 5), eighthRest)
+            XCTAssertEqual(try tuplet.note(at: 6), eighthNote)
+            XCTAssertEqual(try tuplet.note(at: 7), eighthNote)
+        }
+    }
+
+    func testReplaceNotesFromFirstToLastInTupletWithNotesOfSameDuration() {
+        assertNoErrorThrown {
+            let triplet = try Tuplet(3, .quarter, notes: [quarterNote1, quarterNote2, quarterNote3])
+            var tuplet = try Tuplet(3, .quarter, notes: [quarterNote1, triplet])
+            try tuplet.replaceNotes(in: 0...3, with: [quarterNote3, quarterNote2, quarterNote1])
+            XCTAssertEqual(try tuplet.note(at: 0), quarterNote3)
+            XCTAssertEqual(try tuplet.note(at: 1), quarterNote2)
+            XCTAssertEqual(try tuplet.note(at: 2), quarterNote1)
+        }
+    }
+
+    func testReplaceNotesFromFirstToSecondToLastInTupletWithNotesOfSameDuration() {
+        assertNoErrorThrown {
+            let triplet = try Tuplet(3, .quarter, notes: [quarterNote1, quarterNote2, quarterNote3])
+            var tuplet = try Tuplet(5, .quarter, notes: [quarterNote1, triplet, quarterNote2, quarterNote3])
+            try tuplet.replaceNotes(in: 0...3, with: [quarterNote3, quarterNote2, quarterNote1])
+            XCTAssertEqual(try tuplet.note(at: 0), quarterNote3)
+            XCTAssertEqual(try tuplet.note(at: 1), quarterNote2)
+            XCTAssertEqual(try tuplet.note(at: 2), quarterNote1)
+            XCTAssertEqual(try tuplet.note(at: 3), quarterNote2)
+            XCTAssertEqual(try tuplet.note(at: 4), quarterNote3)
         }
     }
 

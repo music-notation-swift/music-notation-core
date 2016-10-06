@@ -244,9 +244,10 @@ public struct Tuplet: NoteCollection {
         var modifiedCollections = newCollections
         let lastIndex = modifiedCollections.count - 1
 
-        func modifyCollections(at index: Int, with note: Note) throws {
-            if var tuplet = modifiedCollections[lastIndex] as? Tuplet {
-                try tuplet.replaceNote(at: tuplet.flatIndexes.count - 1, with: note)
+        func modifyCollections(atFirst first: Bool, with note: Note) throws {
+            let index = first ? 0 : lastIndex
+            if var tuplet = modifiedCollections[index] as? Tuplet {
+                try tuplet.replaceNote(at: first ? 0 : tuplet.flatIndexes.count - 1, with: note)
                 modifiedCollections[index] = tuplet
             } else {
                 modifiedCollections[index] = note
@@ -258,11 +259,11 @@ public struct Tuplet: NoteCollection {
             case .begin?:
                 var lastNote = newCollections[lastIndex].last
                 try lastNote.modifyTie(.begin)
-                try modifyCollections(at: newCollections.count - 1, with: lastNote)
+                try modifyCollections(atFirst: false, with: lastNote)
             case .end?:
                 var firstNote = newCollections[0].first
                 try firstNote.modifyTie(.end)
-                try modifyCollections(at: 0, with: firstNote)
+                try modifyCollections(atFirst: true, with: firstNote)
             case .beginAndEnd?:
                 if newCollections.count == 1 && newCollections[0].noteCount == 1 {
                     var onlyNote = try newCollections[0].note(at: 0)
@@ -273,8 +274,8 @@ public struct Tuplet: NoteCollection {
                     try firstNote.modifyTie(.end)
                     var lastNote = newCollections[lastIndex].last
                     try lastNote.modifyTie(.begin)
-                    try modifyCollections(at: 0, with: firstNote)
-                    try modifyCollections(at: lastIndex, with: lastNote)
+                    try modifyCollections(atFirst: true, with: firstNote)
+                    try modifyCollections(atFirst: false, with: lastNote)
                 }
             case nil:
                 break
@@ -284,20 +285,20 @@ public struct Tuplet: NoteCollection {
         if range.count == 1 {
             let originalTie = try note(at: range.lowerBound).tie
             try modifyState(forTie: originalTie)
-            return modifiedCollections
         } else {
-            let firstOriginal = modifiedCollections[0].first
-            let lastOriginal = modifiedCollections[lastIndex].last
+            let firstOriginalTie = try note(at: range.lowerBound).tie
+            let lastOriginalTie = try note(at: range.upperBound).tie
 
-            if firstOriginal.tie == .beginAndEnd || lastOriginal.tie == .beginAndEnd {
+            if firstOriginalTie == .beginAndEnd || lastOriginalTie == .beginAndEnd {
                 throw TupletError.invalidTieState
-            } else if firstOriginal.tie == .begin || lastOriginal.tie == .end {
+            } else if firstOriginalTie == .begin || lastOriginalTie == .end {
                 // Silently ignore, because it will just be replaced
             } else {
-                try modifyState(forTie: firstOriginal.tie)
-                try modifyState(forTie: lastOriginal.tie)
+                try modifyState(forTie: firstOriginalTie)
+                try modifyState(forTie: lastOriginalTie)
             }
         }
+        return modifiedCollections
 //        switch (range.count, newCollections.count) {
 //        case (1, 1) where newCollections[0].noteCount == 1:
 //            // Single note replacing with single note. Just preserve.
@@ -376,7 +377,7 @@ public struct Tuplet: NoteCollection {
 //        }
     }
 
-    private mutating func replaceNote(at flatIndex: [Int], with newCollection: NoteCollection) throws {
+    internal mutating func replaceNote(at flatIndex: [Int], with newCollection: NoteCollection) throws {
         guard flatIndex.count != 1 else {
             notes[flatIndex[0]] = newCollection
             return

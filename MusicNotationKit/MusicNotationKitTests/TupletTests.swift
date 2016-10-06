@@ -505,19 +505,6 @@ class TupletTests: XCTestCase {
         }
     }
 
-    func testReplaceNoteBeginAndEndTieWithTupletSameDuration() {
-        assertThrowsError(TupletError.invalidTieState) {
-            var beginTieNote = quarterNote1!
-            beginTieNote.tie = .begin
-            var beginAndEndTieNote = quarterNote1!
-            beginAndEndTieNote.tie = .beginAndEnd
-
-            let triplet = try Tuplet(3, .eighth, notes: [eighthNote, eighthNote, eighthNote])
-            var tuplet = try Tuplet(3, .quarter, notes: [quarterNote1, beginTieNote, beginAndEndTieNote])
-            try tuplet.replaceNote(at: 2, with: triplet)
-        }
-    }
-
     // MARK: Successes
 
     func testReplaceNoteWithRestOfSameDuration() {
@@ -623,6 +610,19 @@ class TupletTests: XCTestCase {
         }
     }
 
+    func testReplaceNoteBeginAndEndTieWithTupletSameDuration() {
+        assertNoErrorThrown {
+            var beginTieNote = quarterNote1!
+            beginTieNote.tie = .begin
+            var beginAndEndTieNote = quarterNote1!
+            beginAndEndTieNote.tie = .beginAndEnd
+
+            let triplet = try Tuplet(3, .eighth, notes: [eighthNote, eighthNote, eighthNote])
+            var tuplet = try Tuplet(3, .quarter, notes: [quarterNote1, beginTieNote, beginAndEndTieNote])
+            try tuplet.replaceNote(at: 2, with: triplet)
+        }
+    }
+
     // MARK: - replaceNote<T: NoteCollection>(at:with:[T])
     // MARK: Failures
 
@@ -683,18 +683,6 @@ class TupletTests: XCTestCase {
                                     notes: [triplet, dottedQuarterNote, dottedQuarterNote, dottedQuarterNote])
             let newTuplet = try Tuplet(3, .eighth, notes: [eighthNote, eighthNote, eighthNote])
             try tuplet.replaceNote(at: 0, with: [newTuplet])
-        }
-    }
-
-    func testReplaceNoteBeginAndEndTieWithArrayOfNotes() {
-        assertThrowsError(TupletError.invalidTieState) {
-            var beginAndEndNote = quarterNote1!
-            beginAndEndNote.tie = .beginAndEnd
-            var beginNote = quarterNote2!
-            beginNote.tie = .begin
-
-            var tuplet = try Tuplet(3, .quarter, notes: [quarterNote1, beginNote, beginAndEndNote])
-            try tuplet.replaceNote(at: 2, with: [eighthNote, eighthNote])
         }
     }
 
@@ -838,6 +826,26 @@ class TupletTests: XCTestCase {
         }
     }
 
+    func testReplaceNoteBeginAndEndTieWithArrayOfNotes() {
+        assertNoErrorThrown {
+            var beginAndEndNote = quarterNote1!
+            beginAndEndNote.tie = .beginAndEnd
+            var beginNote = quarterNote2!
+            beginNote.tie = .begin
+
+            var tuplet = try Tuplet(3, .quarter, notes: [quarterNote1, beginNote, beginAndEndNote])
+            try tuplet.replaceNote(at: 2, with: [eighthNote, eighthNote])
+            var endEighth = eighthNote!
+            endEighth.tie = .end
+            var beginEighth = eighthNote!
+            beginEighth.tie = .begin
+            XCTAssertEqual(try tuplet.note(at: 0), quarterNote1)
+            XCTAssertEqual(try tuplet.note(at: 1), beginNote)
+            XCTAssertEqual(try tuplet.note(at: 2), endEighth)
+            XCTAssertEqual(try tuplet.note(at: 3), beginEighth)
+        }
+    }
+
     // MARK: - replaceNotes<T: NoteCollection>(in:with:T)
     // MARK: Failures
 
@@ -959,6 +967,28 @@ class TupletTests: XCTestCase {
                 .sixteenth,
                 notes: [sixteenthNote, sixteenthNote, sixteenthNote, sixteenthNote, sixteenthNote])
             try tuplet.replaceNotes(in: 1...5, with: replacementTuplet)
+        }
+    }
+
+    func testReplaceNotesWithFirstNoteBeginAndEndTieWithNoteSameDuration() {
+        assertThrowsError(TupletError.invalidTieState) {
+            var beginAndEnd = eighthNote!
+            beginAndEnd.tie = .beginAndEnd
+            var end = eighthNote!
+            end.tie = .end
+            var tuplet = try Tuplet(3, .eighth, notes: [beginAndEnd, end, eighthNote])
+            try tuplet.replaceNotes(in: 0...1, with: quarterNote1)
+        }
+    }
+
+    func testReplaceNotesWithLastNoteBeginAndEndTieWithNoteSameDuration() {
+        assertThrowsError(TupletError.invalidTieState) {
+            var beginAndEnd = eighthNote!
+            beginAndEnd.tie = .beginAndEnd
+            var begin = eighthNote!
+            begin.tie = .begin
+            var tuplet = try Tuplet(3, .eighth, notes: [eighthNote, begin, beginAndEnd])
+            try tuplet.replaceNotes(in: 1...2, with: quarterNote1)
         }
     }
 

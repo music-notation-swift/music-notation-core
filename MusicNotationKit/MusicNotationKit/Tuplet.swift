@@ -405,7 +405,7 @@ public struct Tuplet: NoteCollection {
     }
 
     private mutating func removeNotes(at flatIndexes: [[Int]]) throws {
-        let counts = Set(flatIndexes.map { $0.count }) // .sorted().reversed()
+        let counts = Set(flatIndexes.map { $0.count })
         let flatIndexCountGroups = counts.map { count in
             flatIndexes.filter { flatIndex in
                 return flatIndex.count == count

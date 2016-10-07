@@ -25,6 +25,7 @@ public struct Tuplet: NoteCollection {
     public let noteTimingCount: Int
     /// A 2-dimensional array that can be used to index into every note in the tuplet within compound tuplets as well.
     public var flatIndexes: [[Int]] = [[Int]]()
+    public var flatCount: Int {return 1}
 
     /**
      This maps the standard number of notes in the tuplet (`noteCount`), to the number of notes the tuplet should fit

@@ -25,10 +25,17 @@ public protocol NoteCollection {
      */
     var noteTimingCount: Int { get }
 
-    var first: Note { get }
-    var last: Note { get }
+    var first: Note? { get }
+    var last: Note? { get }
+
+    var ticks: Int { get }
 
     func note(at index: Int) throws -> Note
+}
+
+extension NoteCollection {
+
+    public var ticks: Int { return noteTimingCount * noteDuration.ticks }
 }
 
 public func ==(lhs: NoteCollection, rhs: NoteCollection) -> Bool {

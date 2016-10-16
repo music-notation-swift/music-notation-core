@@ -53,12 +53,12 @@ public struct Staff {
      the beginning of a repeat. True if you want the measure to be inserted before the repeat. False
      when you want the measure to be inserted into the repeat at the given index.
      - throws:
-     - `StaffError.measureIndexOutOfRange`
-     - `StaffError.noRepeatToInsertInto`
-     - `StaffError.hasToInsertIntoRepeatIfIndexIsNotFirstMeasureOfRepeat`
-     - `StaffError.internalError`
-     - `MeasureRepeatError.indexOutOfRange`
-     - `MeasureRepeatError.cannotModifyRepeatedMeasures`
+         - `StaffError.measureIndexOutOfRange`
+         - `StaffError.noRepeatToInsertInto`
+         - `StaffError.hasToInsertIntoRepeatIfIndexIsNotFirstMeasureOfRepeat`
+         - `StaffError.internalError`
+         - `MeasureRepeatError.indexOutOfRange`
+         - `MeasureRepeatError.cannotModifyRepeatedMeasures`
      */
     public mutating func insertMeasure(_ measure: Measure, at index: Int, beforeRepeat: Bool = true) throws {
         let notesHolderIndex = try notesHolderIndexFromMeasureIndex(index)
@@ -90,8 +90,8 @@ public struct Staff {
      - parameter measureRepeat: The repeat to insert.
      - parameter index: The index where the repeat should be inserted.
      - throws:
-     - `StaffError.measureIndexOutOfRange`
-     - `StaffError.cannotInsertRepeatWhereOneAlreadyExists`
+         - `StaffError.measureIndexOutOfRange`
+         - `StaffError.cannotInsertRepeatWhereOneAlreadyExists`
      */
     public mutating func insertRepeat(_ measureRepeat: MeasureRepeat, at index: Int) throws {
         let notesHolderIndex = try notesHolderIndexFromMeasureIndex(index)
@@ -109,8 +109,8 @@ public struct Staff {
      - parameter measureIndex: The index of the measure to replace.
      - parameter newMeasure: The new measure to replace the old one.
      - throws:
-     - `StaffError.repeatedMeasureCannotBeModified` if the measure is a repeated measure.
-     - `StaffError.internalError` if index translation doesn't work properly.
+         - `StaffError.repeatedMeasureCannotBeModified` if the measure is a repeated measure.
+         - `StaffError.internalError` if index translation doesn't work properly.
      */
     public mutating func replaceMeasure(at measureIndex: Int, with newMeasure: Measure) throws {
         let (notesHolderIndex, repeatMeasureIndex) = try notesHolderIndexFromMeasureIndex(measureIndex)
@@ -139,13 +139,13 @@ public struct Staff {
      - parameter setIndex: The index of the set of notes you want to modify. There can be multiple sets of notes
      that make up a full measure on their own. i.e. bass drum notes and hi-hat notes. See `Measure` for more info.
      - throws:
-     - `StaffError.noteIndexoutOfRange`
-     - `StaffError.noNextNoteToTie` if the note specified is the last note in the staff.
-     - `StaffError.measureIndexOutOfRange`
-     - `StaffError.repeatedMeasureCannotHaveTie` if the index for the measure specified refers to a measure that is
-     a repeat of another measure.
-     - `StaffError.internalError`, `MeasureError.internalError` if the function has an internal implementation error.
-     - `MeasureError.noteIndexOutOfRange`
+         - `StaffError.noteIndexoutOfRange`
+         - `StaffError.noNextNoteToTie` if the note specified is the last note in the staff.
+         - `StaffError.measureIndexOutOfRange`
+         - `StaffError.repeatedMeasureCannotHaveTie` if the index for the measure specified refers to a measure that is
+         a repeat of another measure.
+         - `StaffError.internalError`, `MeasureError.internalError` if the function has an internal implementation error.
+         - `MeasureError.noteIndexOutOfRange`
      */
     public mutating func startTieFromNote(at noteIndex: Int, inMeasureAt measureIndex: Int, inSet setIndex: Int = 0) throws {
         try modifyTieForNote(at: noteIndex, inMeasureAt: measureIndex, removeTie: false, inSet: setIndex)
@@ -159,13 +159,13 @@ public struct Staff {
      - parameter setIndex: The index of the set of notes you want to modify. There can be multiple sets of notes
      that make up a full measure on their own. i.e. bass drum notes and hi-hat notes. See `Measure` for more info.
      - throws:
-     - `StaffError.noteIndexoutOfRange`
-     - `StaffError.noNextNoteToTie` if the note specified is the last note in the staff.
-     - `StaffError.measureIndexOutOfRange`
-     - `StaffError.repeatedMeasureCannotHaveTie` if the index for the measure specified refers to a measure that is
-     a repeat of another measure.
-     - `MeasureError.noteIndexOutOfRange`
-     - `StaffError.internalError`, `MeasureError.internalError` if the function has an internal implementation error.
+         - `StaffError.noteIndexoutOfRange`
+         - `StaffError.noNextNoteToTie` if the note specified is the last note in the staff.
+         - `StaffError.measureIndexOutOfRange`
+         - `StaffError.repeatedMeasureCannotHaveTie` if the index for the measure specified refers to a measure that is
+         a repeat of another measure.
+         - `MeasureError.noteIndexOutOfRange`
+         - `StaffError.internalError`, `MeasureError.internalError` if the function has an internal implementation error.
      */
     public mutating func removeTieFromNote(at noteIndex: Int, inMeasureAt measureIndex: Int, inSet setIndex: Int = 0) throws {
         try modifyTieForNote(at: noteIndex, inMeasureAt: measureIndex, removeTie: true, inSet: setIndex)
@@ -175,8 +175,8 @@ public struct Staff {
      - parameter measureIndex: The index of the measure to return.
      - returns An `ImmutableMeasure` at the given index within the staff.
      - throws:
-     - `StaffError.measureIndexOutOfRange`
-     - `StaffError.internalError` if the function has an internal implementation error.
+         - `StaffError.measureIndexOutOfRange`
+         - `StaffError.internalError` if the function has an internal implementation error.
      */
     public func measure(at measureIndex: Int) throws -> ImmutableMeasure {
         let (notesHolderIndex, repeatMeasureIndex) = try notesHolderIndexFromMeasureIndex(measureIndex)
@@ -194,8 +194,8 @@ public struct Staff {
      - returns A `MeasureRepeat` that contains the measure(s) that are repeated as well as the repeat count. Returns nil
      if the measure at the specified index is not part of repeat.
      - throws:
-     - `StaffError.measureIndexOutOfRange`
-     - `StaffError.internalError` if the function has an internal implementation error.
+         - `StaffError.measureIndexOutOfRange`
+         - `StaffError.internalError` if the function has an internal implementation error.
      */
     public func measureRepeat(at measureIndex: Int) throws -> MeasureRepeat? {
         let (notesHolderIndex, _) = try notesHolderIndexFromMeasureIndex(measureIndex)

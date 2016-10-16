@@ -12,7 +12,7 @@ import MusicNotationKit
 class FunctionalTests: XCTestCase {
 
     // https://www.8notes.com/scores/23608.asp
-    func testGuitarSong() {
+    func testCreateGuitarSong() {
         var staff = Staff(clef: .treble, instrument: .guitar6)
         let timeSignature = TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120)
         let key = Key(noteLetter: .a)
@@ -26,8 +26,8 @@ class FunctionalTests: XCTestCase {
                                 Note(noteDuration: .eighth, tone: Tone(noteLetter: .b, octave: .octave4)),
                                 Note(noteDuration: .eighth, tone: Tone(noteLetter: .a, octave: .octave4)),
                                 Note(noteDuration: .quarter, tone: Tone(noteLetter: .e, octave: .octave5)),
-                                Note(noteDuration: .quarter, tone: Tone(noteLetter: .f, accidental: .sharp, octave: .octave5)),
-                                ],
+                                Note(noteDuration: .quarter, tone: Tone(noteLetter: .f, accidental: .sharp, octave: .octave5))
+                            ],
                             [
                                 Note(noteDuration: .half, tone: Tone(noteLetter: .a, octave: .octave3)),
                                 Note(noteDuration: .quarter, tone: Tone(noteLetter: .c, accidental: .sharp, octave: .octave3)),
@@ -60,20 +60,20 @@ class FunctionalTests: XCTestCase {
                                 Note(noteDuration: .eighth, tone: Tone(noteLetter: .b, octave: .octave4)),
                                 Note(noteDuration: .eighth, tone: Tone(noteLetter: .a, octave: .octave4)),
                                 Note(noteDuration: .quarter, tone: Tone(noteLetter: .e, octave: .octave5)),
-                                Note(noteDuration: .quarter, tone: Tone(noteLetter: .c, accidental: .sharp, octave: .octave5)),
-                                ],
+                                Note(noteDuration: .quarter, tone: Tone(noteLetter: .c, accidental: .sharp, octave: .octave5))
+                            ],
                             [
                                 Note(noteDuration: .half, tone: Tone(noteLetter: .a, octave: .octave3)),
-                                Note(noteDuration: .half, tone: Tone(noteLetter: .f, octave: .octave4)),
-                                ]
+                                Note(noteDuration: .half, tone: Tone(noteLetter: .f, octave: .octave4))
+                            ]
                     ]),
                 Measure(timeSignature: timeSignature, key: key,
                         notes: [
                             [
                                 Note(noteDuration: .half, tone: Tone(noteLetter: .b, octave: .octave4)),
                                 Note(noteDuration: .quarter, tone: Tone(noteLetter: .b, octave: .octave4)),
-                                Note(noteDuration: .quarter, tone: Tone(noteLetter: .c, accidental: .sharp, octave: .octave5)),
-                                ],
+                                Note(noteDuration: .quarter, tone: Tone(noteLetter: .c, accidental: .sharp, octave: .octave5))
+                            ],
                             [
                                 Note(noteDuration: .eighth, tone: Tone(noteLetter: .d, octave: .octave4)),
                                 Note(noteDuration: .eighth, tone: Tone(noteLetter: .f, octave: .octave4)),
@@ -83,6 +83,12 @@ class FunctionalTests: XCTestCase {
                                     Tone(noteLetter: .e, octave: .octave4),
                                     Tone(noteLetter: .g, accidental: .sharp, octave: .octave4)
                                     ])
+                            ]
+                    ]),
+                Measure(timeSignature: timeSignature, key: key,
+                        notes: [
+                            [
+                                Note(noteDuration: .eighth, tone: Tone(noteLetter: .a, octave: .octave4))
                             ]
                     ])
                 ])

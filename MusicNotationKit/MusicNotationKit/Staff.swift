@@ -202,6 +202,26 @@ public struct Staff {
         return notesHolders[notesHolderIndex] as? MeasureRepeat
     }
 
+    public func isValid() -> Bool {
+        for notesHolder in notesHolders {
+            if let measure = notesHolder as? Measure {
+                let completionStates = MeasureDurationValidator.completionState(of: measure)
+                if completionStates.contains(where: { $0 != .full }) {
+                    return false
+                }
+            } else if let measureRepeat = notesHolder as? MeasureRepeat {
+                let completionStates = measureRepeat.measures.map { MeasureDurationValidator.completionState(of: $0) }
+                if completionStates.contains(where: { $0.contains { $0 != .full } }) {
+                    return false
+                }
+            } else {
+                assertionFailure("NotesHolder was not a Measure nor MeasureRepeat")
+                return false
+            }
+        }
+        return true
+    }
+
     internal func notesHolderAtMeasureIndex(_ measureIndex: Int) throws -> NotesHolder {
         let (notesHolderIndex, _) = try notesHolderIndexFromMeasureIndex(measureIndex)
         return notesHolders[notesHolderIndex]

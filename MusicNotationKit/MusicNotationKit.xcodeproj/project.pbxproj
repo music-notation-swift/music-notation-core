@@ -30,6 +30,7 @@
 		27AFEB571D6984CB0064ED27 /* NoteDuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27AFEB561D6984CB0064ED27 /* NoteDuration.swift */; };
 		27AFEB591D6A901F0064ED27 /* NoteDurationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27AFEB581D6A901F0064ED27 /* NoteDurationTests.swift */; };
 		27B670511B9ACDCE00347C4C /* StaffTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27B670501B9ACDCE00347C4C /* StaffTests.swift */; };
+		27BF9F061DB32185005AAD38 /* FunctionalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BF9F051DB32185005AAD38 /* FunctionalTests.swift */; };
 		27D03A5B1D56918F00FF2376 /* MeasureDurationValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D03A5A1D56918F00FF2376 /* MeasureDurationValidator.swift */; };
 		27D03A5D1D5691EE00FF2376 /* MeasureDurationValidatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D03A5C1D5691EE00FF2376 /* MeasureDurationValidatorTests.swift */; };
 		E92BD6031D4FD0A500061BCD /* Interval.swift in Sources */ = {isa = PBXBuildFile; fileRef = E92BD6021D4FD0A500061BCD /* Interval.swift */; };
@@ -76,6 +77,7 @@
 		27AFEB561D6984CB0064ED27 /* NoteDuration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoteDuration.swift; sourceTree = "<group>"; };
 		27AFEB581D6A901F0064ED27 /* NoteDurationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoteDurationTests.swift; sourceTree = "<group>"; };
 		27B670501B9ACDCE00347C4C /* StaffTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StaffTests.swift; sourceTree = "<group>"; };
+		27BF9F051DB32185005AAD38 /* FunctionalTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FunctionalTests.swift; sourceTree = "<group>"; };
 		27D03A5A1D56918F00FF2376 /* MeasureDurationValidator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeasureDurationValidator.swift; sourceTree = "<group>"; };
 		27D03A5C1D5691EE00FF2376 /* MeasureDurationValidatorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeasureDurationValidatorTests.swift; sourceTree = "<group>"; };
 		E92BD6021D4FD0A500061BCD /* Interval.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Interval.swift; sourceTree = "<group>"; };
@@ -170,6 +172,7 @@
 				27A0AA491B524B6400635541 /* TestHelpers.swift */,
 				27D03A5C1D5691EE00FF2376 /* MeasureDurationValidatorTests.swift */,
 				270CC52E1B2C06A200CA1A56 /* Supporting Files */,
+				27BF9F051DB32185005AAD38 /* FunctionalTests.swift */,
 			);
 			path = MusicNotationKitTests;
 			sourceTree = "<group>";
@@ -321,6 +324,7 @@
 				E92BD6051D4FD0FF00061BCD /* IntervalTests.swift in Sources */,
 				27D03A5D1D5691EE00FF2376 /* MeasureDurationValidatorTests.swift in Sources */,
 				27B670511B9ACDCE00347C4C /* StaffTests.swift in Sources */,
+				27BF9F061DB32185005AAD38 /* FunctionalTests.swift in Sources */,
 				E98D30AE1D4BFB7100C6DF5E /* ToneTests.swift in Sources */,
 				27A0AA4A1B524B6400635541 /* TestHelpers.swift in Sources */,
 				270F46B11B353DF400FDF4FF /* TupletTests.swift in Sources */,

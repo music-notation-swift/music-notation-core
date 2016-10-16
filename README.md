@@ -3,6 +3,7 @@ Music Notation Kit (WIP)
 
 [![Build Status](https://travis-ci.org/drumnkyle/music-notation-swift.svg?branch=master)](https://travis-ci.org/drumnkyle/music-notation-swift)
 [![codecov](https://codecov.io/gh/drumnkyle/music-notation-swift/branch/master/graph/badge.svg)](https://codecov.io/gh/drumnkyle/music-notation-swift/)
+![Swift](https://img.shields.io/badge/%20in-swift%203.0-orange.svg)
 
 This is a **work in progress**, Cross-Platform Music Notation API written in Swift. It is written so that it can be used in most any operating system, such as iOS, OS X, Android, Windows, and Linux assuming that Swift is ported to these platforms. This library is being created with the goal of having 0 dependencies; not even Foundation.
 

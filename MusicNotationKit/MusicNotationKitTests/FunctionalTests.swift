@@ -84,12 +84,6 @@ class FunctionalTests: XCTestCase {
                                     Tone(noteLetter: .g, accidental: .sharp, octave: .octave4)
                                     ])
                             ]
-                    ]),
-                Measure(timeSignature: timeSignature, key: key,
-                        notes: [
-                            [
-                                Note(noteDuration: .eighth, tone: Tone(noteLetter: .a, octave: .octave4))
-                            ]
                     ])
                 ])
             staff.appendRepeat(firstRepeat)

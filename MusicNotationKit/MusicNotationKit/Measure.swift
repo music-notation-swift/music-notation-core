@@ -65,7 +65,7 @@ public struct Measure: ImmutableMeasure, Equatable {
             assertionFailure("note collection should be tuplet, but cast failed")
             throw MeasureError.internalError
         }
-        try tuplet.replaceNote(at: tupletIndex, with: note)
+        try tuplet.replaceNote(at: tuplet.flatIndexes[tupletIndex], with: note)
         notes[setIndex][collectionIndex.noteIndex] = tuplet
     }
 

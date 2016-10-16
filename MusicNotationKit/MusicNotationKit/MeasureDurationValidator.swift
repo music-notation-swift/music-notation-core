@@ -29,7 +29,7 @@ public enum MeasureDurationValidator {
     public enum CompletionState: Equatable {
         case notFull(availableNotes: [NoteDuration : Int])
         case full
-        case overfilled(overflowingNotes: Range<Int>)
+        case overfilled(overflowingNotes: CountableRange<Int>)
         case invalid
 
         public static func ==(lhs: CompletionState, rhs: CompletionState) -> Bool {
@@ -67,7 +67,7 @@ public enum MeasureDurationValidator {
             var overFilledStartIndex: Int?
             let filledTicks = noteCollection.enumerated().reduce(0) { prev, indexAndCollection in
                 let (index, currentCollection) = indexAndCollection
-                let newTicks = prev + currentCollection.noteTimingCount * currentCollection.noteDuration.ticks
+                let newTicks = prev + currentCollection.ticks
                 if newTicks > fullMeasureTicksBudget && overFilledStartIndex == nil {
                     overFilledStartIndex = index
                 }
@@ -77,7 +77,7 @@ public enum MeasureDurationValidator {
                 return .full
             } else if let overFilledStartIndex = overFilledStartIndex {
                 return .overfilled(
-                overflowingNotes: Range(
+                overflowingNotes: CountableRange(
                     uncheckedBounds: (overFilledStartIndex, measure.noteCount[setIndex])
                 ))
             } else if filledTicks < fullMeasureTicksBudget {
@@ -106,7 +106,7 @@ public enum MeasureDurationValidator {
         }
         let fullMeasureTicksBudget = measure.timeSignature.topNumber * baseDuration.ticks
         let alreadyFilledTicks = measure.notes[setIndex].reduce(0) { prev, currentCollection in
-            return prev + currentCollection.noteTimingCount * currentCollection.noteDuration.ticks
+            return prev + currentCollection.ticks
         }
         let availableTicks = fullMeasureTicksBudget - alreadyFilledTicks
         guard availableTicks > 0 else {

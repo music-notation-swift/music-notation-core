@@ -26,7 +26,7 @@ class MeasureTests: XCTestCase {
     func testAddNote() {
         XCTAssertEqual(measure.notes[0].count, 0)
         measure.addNote(Note(noteDuration: .whole, tone: Tone(noteLetter: .c, octave: .octave0)))
-        measure.addNote(Note(noteDuration: .quarter, tone: Tone(accidental: .sharp, noteLetter: .d, octave: .octave0)))
+        measure.addNote(Note(noteDuration: .quarter, tone: Tone(noteLetter: .d, accidental: .sharp, octave: .octave0)))
         measure.addNote(Note(noteDuration: .whole))
         XCTAssertEqual(measure.notes[0].count, 3)
     }

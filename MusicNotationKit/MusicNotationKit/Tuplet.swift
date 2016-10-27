@@ -18,11 +18,17 @@ public struct Tuplet: NoteCollection {
         }
     }
     /// The number of notes of the specified duration that this tuplet contains
-    public let noteCount: Int
+    public var noteCount: Int {
+        return flatIndexes.count
+    }
+
     /// The duration of the notes that define this tuplet
     public let noteDuration: NoteDuration
     /// The number of notes that this tuplet fits in the space of
     public let noteTimingCount: Int
+
+    public var groupingOrder: Int
+
     public var first: Note? {
         return try? note(at: 0)
     }
@@ -33,7 +39,7 @@ public struct Tuplet: NoteCollection {
     internal var flatIndexes: [[Int]] = [[Int]]()
 
     /**
-     This maps the standard number of notes in the tuplet (`noteCount`), to the number of notes the tuplet should fit
+     This maps the standard number of notes in the tuplet (`groupingOrder`), to the number of notes the tuplet should fit
      in the space of (`noteTimingCount`).
      */
     public static let standardRatios = [
@@ -66,7 +72,7 @@ public struct Tuplet: NoteCollection {
         guard count > 1 else {
             throw TupletError.countMustBeLargerThan1
         }
-        noteCount = count
+        groupingOrder = count
         let fullTupletTicks = count * baseNoteDuration.ticks
         let notesTicks = notes.reduce(0) { prev, noteCollection in
             return prev + noteCollection.ticks
@@ -419,7 +425,7 @@ public struct Tuplet: NoteCollection {
         // TODO: We should probably figure out note count so that this switch on type isn't needed.
         let accumulateNoteCount: (Int, NoteCollection) -> Int = { prev, currentNoteCollection in
             if let currentTuplet = currentNoteCollection as? Tuplet {
-                return prev + currentTuplet.flatIndexes.count
+                return prev + currentTuplet.noteCount
             } else {
                 return prev + currentNoteCollection.noteCount
             }
@@ -443,7 +449,7 @@ public struct Tuplet: NoteCollection {
     private func validate() -> Bool {
         var isValid = true
         var notesTicks = 0
-        let fullTupletTicks = noteCount * noteDuration.ticks
+        let fullTupletTicks = groupingOrder * noteDuration.ticks
         for noteCollection in notes {
             if let tuplet = noteCollection as? Tuplet {
                 if !isValid {

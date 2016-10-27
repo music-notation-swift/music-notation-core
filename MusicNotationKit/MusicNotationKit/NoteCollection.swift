@@ -25,6 +25,10 @@ public protocol NoteCollection {
      */
     var noteTimingCount: Int { get }
 
+    /// The grouping order defined for this `NoteCollection`
+    var groupingOrder: Int { get }
+
+
     var first: Note? { get }
     var last: Note? { get }
 

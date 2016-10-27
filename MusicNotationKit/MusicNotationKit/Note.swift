@@ -12,6 +12,7 @@ public struct Note: NoteCollection {
     public let noteCount = 1
     public let noteDuration: NoteDuration
     public let noteTimingCount = 1
+    public let groupingOrder = 1
     public var first: Note? { return self }
     public var last: Note? { return self }
 

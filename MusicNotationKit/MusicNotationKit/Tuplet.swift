@@ -27,7 +27,7 @@ public struct Tuplet: NoteCollection {
     /// The number of notes that this tuplet fits in the space of
     public let noteTimingCount: Int
 
-    public var groupingOrder: Int
+    public let groupingOrder: Int
 
     public var first: Note? {
         return try? note(at: 0)

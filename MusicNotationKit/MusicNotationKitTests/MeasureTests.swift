@@ -179,6 +179,22 @@ class MeasureTests: XCTestCase {
         }
     }
 
+    func testStartTieInNestedTuplet() {
+        assertNoErrorThrown {
+            let note = Note(noteDuration: .eighth,
+                            tone: Tone(noteLetter: .c, octave: .octave1))
+            let triplet = try Tuplet(3, .eighth, notes: [note, note, note])
+            let tuplet = try Tuplet(3, .eighth, notes: [triplet, note])
+            measure.addTuplet(tuplet)
+            measure.addNote(note)
+            try measure.startTie(at: 3, inSet: 0)
+            let note1 = try measure.note(at: 3)
+            let note2 = try measure.note(at: 4)
+            XCTAssert(note1.tie == .begin)
+            XCTAssert(note2.tie == .end)
+        }
+    }
+
     // MARK: - startTie(at:)
     // MARK: Failures
 

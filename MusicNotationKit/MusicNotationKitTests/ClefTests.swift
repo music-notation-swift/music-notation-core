@@ -12,38 +12,22 @@ import XCTest
 class ClefTests: XCTestCase {
 
     // MARK: - init(tone:lineNumber)
-    // MARK: Failures
-
-    func testInitFailInvalidLineNumber() {
-        assertThrowsError(ClefError.invalidLineNumber) {
-            _ = try Clef(tone: Tone(noteLetter: .c, octave: .octave3), lineNumber: 1.25)
-        }
-    }
-
     // MARK: Successes
 
     func testInitForCustomOnLine() {
-        assertNoErrorThrown {
-            _ = try Clef(tone: Tone(noteLetter: .c, octave: .octave4), lineNumber: 2.0)
-        }
+        _ = Clef(tone: Tone(noteLetter: .c, octave: .octave4), lineNumber: 1)
     }
 
     func testInitForCustomOnSpace() {
-        assertNoErrorThrown {
-            _ = try Clef(tone: Tone(noteLetter: .g, octave: .octave4), lineNumber: 3.5)
-        }
+        _ = Clef(tone: Tone(noteLetter: .g, octave: .octave4), lineNumber: 2)
     }
 
     func testInitForCustomNegativeLedger() {
-        assertNoErrorThrown {
-            _ = try Clef(tone: Tone(noteLetter: .g, octave: .octave3), lineNumber: -1)
-        }
+        _ = Clef(tone: Tone(noteLetter: .g, octave: .octave3), lineNumber: -2)
     }
 
     func testInitForCustomPositiveLedger() {
-        assertNoErrorThrown {
-            _ = try Clef(tone: Tone(noteLetter: .a, octave: .octave4), lineNumber: 7)
-        }
+        _ = Clef(tone: Tone(noteLetter: .a, octave: .octave4), lineNumber: 7)
     }
 
     // MARK: - ==
@@ -54,19 +38,15 @@ class ClefTests: XCTestCase {
     }
 
     func testEqualityFailDifferentTone() {
-        assertNoErrorThrown {
-            let custom1 = try Clef(tone: Tone(noteLetter: .a, octave: .octave3), lineNumber: 1.0)
-            let custom2 = try Clef(tone: Tone(noteLetter: .a, octave: .octave2), lineNumber: 1.0)
-            XCTAssertFalse(custom1 == custom2)
-        }
+        let custom1 = Clef(tone: Tone(noteLetter: .a, octave: .octave3), lineNumber: 1)
+        let custom2 = Clef(tone: Tone(noteLetter: .a, octave: .octave2), lineNumber: 1)
+        XCTAssertFalse(custom1 == custom2)
     }
 
     func testEqualityFailDifferentLineNumber() {
-        assertNoErrorThrown {
-            let custom1 = try Clef(tone: Tone(noteLetter: .a, octave: .octave2), lineNumber: 1.0)
-            let custom2 = try Clef(tone: Tone(noteLetter: .a, octave: .octave2), lineNumber: 2.0)
-            XCTAssertFalse(custom1 == custom2)
-        }
+        let custom1 = Clef(tone: Tone(noteLetter: .a, octave: .octave2), lineNumber: 1)
+        let custom2 = Clef(tone: Tone(noteLetter: .a, octave: .octave2), lineNumber: 2)
+        XCTAssertFalse(custom1 == custom2)
     }
 
     // MARK: Successes
@@ -76,18 +56,14 @@ class ClefTests: XCTestCase {
     }
 
     func testEqualityCustom() {
-        assertNoErrorThrown {
-            let custom1 = try Clef(tone: Tone(noteLetter: .a, octave: .octave2), lineNumber: 1.0)
-            let custom2 = try Clef(tone: Tone(noteLetter: .a, octave: .octave2), lineNumber: 1.0)
-            XCTAssertTrue(custom1 == custom2)
-        }
+        let custom1 = Clef(tone: Tone(noteLetter: .a, octave: .octave2), lineNumber: 1)
+        let custom2 = Clef(tone: Tone(noteLetter: .a, octave: .octave2), lineNumber: 1)
+        XCTAssertTrue(custom1 == custom2)
     }
 
     func testEqualityCustomWithStandard() {
-        assertNoErrorThrown {
-            let treble = try Clef(tone: Tone(noteLetter: .g, octave: .octave4), lineNumber: 3)
-            XCTAssertTrue(treble == Clef.treble)
-        }
+        let treble = Clef(tone: Tone(noteLetter: .g, octave: .octave4), lineNumber: 3)
+        XCTAssertTrue(treble == Clef.treble)
     }
 
     // MARK: - debugDescription
@@ -108,9 +84,7 @@ class ClefTests: XCTestCase {
     }
 
     func testDescriptionCustom() {
-        assertNoErrorThrown {
-            let custom = try Clef(tone: Tone(noteLetter: .a, octave: .octave3), lineNumber: 2.0)
-            XCTAssertEqual(custom.debugDescription, "a3@2.0")
-        }
+        let custom = Clef(tone: Tone(noteLetter: .a, octave: .octave3), lineNumber: 2)
+        XCTAssertEqual(custom.debugDescription, "a3@2")
     }
 }

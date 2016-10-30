@@ -172,7 +172,7 @@ public struct Tuplet: NoteCollection {
     }
 
     private func nextToLastIndex(from flatIndex: [Int]) -> Int? {
-        return flatIndex.element(at: flatIndex.index(before: flatIndex.lastIndex))
+        return flatIndex[safe: flatIndex.index(before: flatIndex.lastIndex)]
     }
 
     private func isValidReplacementRange(_ range: CountableClosedRange<Int>) throws -> Bool {
@@ -191,8 +191,8 @@ public struct Tuplet: NoteCollection {
         // If first - 1 (tuplet) != first (tuplet) && last + 1 (tuplet) != last (tuplet): return true;
         // OR the count is 1 (not a nested tuplet)
         // else return false
-        let beforeFirstFlatIndex = flatIndexes.element(at: range.lowerBound - 1)
-        let afterLastFlatIndex = flatIndexes.element(at: range.upperBound + 1)
+        let beforeFirstFlatIndex = flatIndexes[safe: range.lowerBound - 1]
+        let afterLastFlatIndex = flatIndexes[safe: range.upperBound + 1]
 
         switch (beforeFirstFlatIndex, afterLastFlatIndex) {
         case (nil, nil):

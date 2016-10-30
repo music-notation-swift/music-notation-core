@@ -1,12 +1,13 @@
 # Indexing Methodology
+Author: Kyle Sherman
 ## Audience
 This design document goes over an implementation detail that is only pertinent to maintainers and developers of this library and not to users of the API.
 ## Introduction
-Throughout multiple implementations in this library, a technique is used to allow for indexing of elements within a container in two different ways at the same time. There is indexing that accesses the structs that are used to implement concepts and then there is indexing used to access the actual data as a user would see it.
+Throughout the implementation of multiple structs in this library, a technique is used to allow for indexing of elements within a container in two different ways at the same time. There is indexing that accesses the structs that store the information and then there is indexing used to access the data as a user would see it (flattened).
 ### Example
-`Staff` holds an array of `NotesHolder`s. `NotesHolder` is a protocol that both `Measure` and `MeasureRepeat` implement. Therefore, the staff holds an array where each element is either a `Measure` or a structure that stores the data for one or `Measure`s that are repeated.
+`Staff` holds an array of `NotesHolder`s. `NotesHolder` is a protocol that both `Measure` and `MeasureRepeat` implement. Therefore, the staff holds an array where each element is either a `Measure` or a structure that stores the data for one or more `Measure`s that are repeated (`MeasureRepeat`).
 
-For a method like `Staff.insertMeasure(at:beforeRepeat)`, the index given to the `at` parameter would take into account the expanded `MeasureRepeat`, including its repeated measures. Therefore, in order to do this indexing, we need to be able to translate between that index and indexing into the array of `NotesHolder`s that the `Staff` stores and into the `MeasureRepeat` if that is what exists at the specified index.
+For a method like `Staff.insertMeasure(at:beforeRepeat)`, the index given to the `at` parameter would take into account the expanded `MeasureRepeat`, including its repeated measures. Therefore, in order to do this indexing, we need to be able to translate from that index to the index in the array of `NotesHolder`s that the `Staff` stores and into the `MeasureRepeat` if that is what exists at the specified index.
 
 ## Implementation
 ### Overview
@@ -19,9 +20,9 @@ We have a method called `recompute<Name>Indexes` that gets called in the `didSet
 `recompute<Name>Indexes` will loop through the array and add a tuple entry to the indexes array. If it encounters a nested structure, it will perform a nested loop and add a tuple entry for every element in that nested structure as well.
 
 ### Efficiency
-Therefore, the worst case efficiency of this algorithm is O(n*m) where n is the number of elements in the main array and m is the number of elements in the nested structure. Of course, a piece of music is not going to have all nested structures.
+Therefore, the worst case efficiency of this algorithm is `O(n*m)` where `n` is the number of elements in the main array and `m` is the number of elements in the nested structure. Of course, a piece of music is not going to have all nested structures.
 
-To limit the hit to performance, this method is performed only when the array is modified. The idea is that the array will be modified less times than the methods will be called. However, this has not been explored or tested fully. The performance has also not been specifically measured.
+To limit the hit to performance, this method is performed only when the array is modified. The idea is that the array will be modified less times than the non-mutating methods will be called. However, this has not been explored or tested fully. The performance has also not been specifically measured.
 
 **Open**: If anyone can think of a more efficient way, please let us know.
 

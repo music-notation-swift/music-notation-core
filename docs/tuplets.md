@@ -1,5 +1,5 @@
 # Tuplet Design
-
+Author: Kyle Sherman
 ## Groupings
 Most of then you see a grouping of 3, 5, 6, 7, or 9. However, You may also see a grouping of 2, 4, or 8 if you are a time signature where the top number is an odd number. Also, most places that go over tuplets list the following groupings:
 - Duplet (2)
@@ -66,11 +66,10 @@ struct Tuplet: NoteCollection {
     
     init(_ count: Int, _ baseNoteDuration: NoteDuration, inSpaceOf baseCount: Int? = nil, notes: [NoteCollection]) throws
     
-    mutating func replaceNote(at index: Int, with note: Note) throws
-    mutating func replaceNote(at index: Int, with notes: [Note]) throws
-    mutating func replaceNote(at index: Int, with tuplet: Tuplet)
-    mutating func replaceNotes(in range: Range<Int>, with notes: [Note])
-    mutating func replaceNotes(in range: Range<Int>, with tuplet: Tuplet) throws
+    mutating func replaceNote<T: NoteCollection>(at index: Int, with noteCollection: T) throws
+    mutating func replaceNote<T: NoteCollection>(at index: Int, with noteCollections: [T]) throws
+    mutating func replaceNotes<T: NoteCollection>(in range: CountableClosedRange<Int>, with noteCollections: [T])
+    mutating func replaceNotes<T: NoteCollection>(in range: CountableClosedRange<Int>, with noteCollection: T) throws
 }
 ```
 ### Secondary duration

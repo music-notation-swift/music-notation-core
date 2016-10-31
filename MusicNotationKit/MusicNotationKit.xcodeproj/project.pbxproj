@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2707CD6D1DC6B96400D3B366 /* SwiftHelpersTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2707CD6C1DC6B96400D3B366 /* SwiftHelpersTests.swift */; };
 		270CC5241B2C06A200CA1A56 /* MusicNotationKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 270CC5231B2C06A200CA1A56 /* MusicNotationKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		270CC52A1B2C06A200CA1A56 /* MusicNotationKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 270CC51E1B2C06A200CA1A56 /* MusicNotationKit.framework */; };
 		270CC53E1B2C06B700CA1A56 /* Measure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 270CC53A1B2C06B700CA1A56 /* Measure.swift */; };
@@ -32,6 +33,7 @@
 		27B670511B9ACDCE00347C4C /* StaffTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27B670501B9ACDCE00347C4C /* StaffTests.swift */; };
 		27BF9F081DB403BE005AAD38 /* Clef.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BF9F071DB403BE005AAD38 /* Clef.swift */; };
 		27BF9F0A1DB409D9005AAD38 /* ClefTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BF9F091DB409D9005AAD38 /* ClefTests.swift */; };
+		27BF9F041DB30F7C005AAD38 /* SwiftHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BF9F031DB30F7C005AAD38 /* SwiftHelpers.swift */; };
 		27D03A5B1D56918F00FF2376 /* MeasureDurationValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D03A5A1D56918F00FF2376 /* MeasureDurationValidator.swift */; };
 		27D03A5D1D5691EE00FF2376 /* MeasureDurationValidatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D03A5C1D5691EE00FF2376 /* MeasureDurationValidatorTests.swift */; };
 		E92BD6031D4FD0A500061BCD /* Interval.swift in Sources */ = {isa = PBXBuildFile; fileRef = E92BD6021D4FD0A500061BCD /* Interval.swift */; };
@@ -51,6 +53,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2707CD6C1DC6B96400D3B366 /* SwiftHelpersTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftHelpersTests.swift; sourceTree = "<group>"; };
 		270CC51E1B2C06A200CA1A56 /* MusicNotationKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MusicNotationKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		270CC5221B2C06A200CA1A56 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		270CC5231B2C06A200CA1A56 /* MusicNotationKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MusicNotationKit.h; sourceTree = "<group>"; };
@@ -80,6 +83,7 @@
 		27B670501B9ACDCE00347C4C /* StaffTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StaffTests.swift; sourceTree = "<group>"; };
 		27BF9F071DB403BE005AAD38 /* Clef.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Clef.swift; sourceTree = "<group>"; };
 		27BF9F091DB409D9005AAD38 /* ClefTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClefTests.swift; sourceTree = "<group>"; };
+		27BF9F031DB30F7C005AAD38 /* SwiftHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftHelpers.swift; sourceTree = "<group>"; };
 		27D03A5A1D56918F00FF2376 /* MeasureDurationValidator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeasureDurationValidator.swift; sourceTree = "<group>"; };
 		27D03A5C1D5691EE00FF2376 /* MeasureDurationValidatorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeasureDurationValidatorTests.swift; sourceTree = "<group>"; };
 		E92BD6021D4FD0A500061BCD /* Interval.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Interval.swift; sourceTree = "<group>"; };
@@ -148,6 +152,7 @@
 				27AFEB561D6984CB0064ED27 /* NoteDuration.swift */,
 				E9D762E01D8C4ECC0005AAB6 /* Enharmonic.swift */,
 				27D03A5A1D56918F00FF2376 /* MeasureDurationValidator.swift */,
+				27BF9F031DB30F7C005AAD38 /* SwiftHelpers.swift */,
 				270CC5211B2C06A200CA1A56 /* Supporting Files */,
 			);
 			path = MusicNotationKit;
@@ -176,6 +181,7 @@
 				27D03A5C1D5691EE00FF2376 /* MeasureDurationValidatorTests.swift */,
 				27BF9F091DB409D9005AAD38 /* ClefTests.swift */,
 				270CC52E1B2C06A200CA1A56 /* Supporting Files */,
+				2707CD6C1DC6B96400D3B366 /* SwiftHelpersTests.swift */,
 			);
 			path = MusicNotationKitTests;
 			sourceTree = "<group>";
@@ -301,6 +307,7 @@
 				278D19501B2EB4E7004ACE99 /* Staff.swift in Sources */,
 				270F46A51B2FE76E00FDF4FF /* MeasureRepeat.swift in Sources */,
 				270CC53E1B2C06B700CA1A56 /* Measure.swift in Sources */,
+				27BF9F041DB30F7C005AAD38 /* SwiftHelpers.swift in Sources */,
 				270F46AB1B2FEA3900FDF4FF /* Tone.swift in Sources */,
 				270CC5401B2C06B700CA1A56 /* TimeSignature.swift in Sources */,
 				27A0AA461B52351400635541 /* Key.swift in Sources */,
@@ -331,6 +338,7 @@
 				27B670511B9ACDCE00347C4C /* StaffTests.swift in Sources */,
 				E98D30AE1D4BFB7100C6DF5E /* ToneTests.swift in Sources */,
 				27A0AA4A1B524B6400635541 /* TestHelpers.swift in Sources */,
+				2707CD6D1DC6B96400D3B366 /* SwiftHelpersTests.swift in Sources */,
 				270F46B11B353DF400FDF4FF /* TupletTests.swift in Sources */,
 				270F46AF1B2FF2A100FDF4FF /* NoteTests.swift in Sources */,
 				27AFEB591D6A901F0064ED27 /* NoteDurationTests.swift in Sources */,

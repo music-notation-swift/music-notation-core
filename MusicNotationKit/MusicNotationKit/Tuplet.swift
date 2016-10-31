@@ -94,7 +94,7 @@ public struct Tuplet: NoteCollection {
     // MARK: Public
 
     public func note(at index: Int) throws -> Note {
-        guard index >= 0 && index < flatIndexes.count else {
+        guard flatIndexes.isValidIndex(index) else {
             throw TupletError.invalidIndex
         }
         let fullIndexes = flatIndexes[index]
@@ -118,7 +118,7 @@ public struct Tuplet: NoteCollection {
         guard fullIndexes.count != 1 else {
             return try note(from: fullIndexes)
         }
-        for tupletIndex in 0..<fullIndexes.count - 1 {
+        for tupletIndex in 0..<fullIndexes.lastIndex {
             finalTuplet = finalTuplet?.notes[fullIndexes[tupletIndex]] as? Tuplet
         }
         return try note(from: fullIndexes)
@@ -172,9 +172,7 @@ public struct Tuplet: NoteCollection {
     }
 
     private func nextToLastIndex(from flatIndex: [Int]) -> Int? {
-        // Array.endIndex == count
-        // Is this the best way to get second to last index?
-        return flatIndex.count > 1 ? flatIndex[flatIndex.endIndex - 2] : nil
+        return flatIndex[safe: flatIndex.index(before: flatIndex.lastIndex)]
     }
 
     private func isValidReplacementRange(_ range: CountableClosedRange<Int>) throws -> Bool {
@@ -190,18 +188,11 @@ public struct Tuplet: NoteCollection {
             return true
         }
 
-        func flatIndex(at index: Int) -> [Int]? {
-            guard index >= 0 && index < flatIndexes.count else {
-                return nil
-            }
-            return flatIndexes[index]
-        }
-
         // If first - 1 (tuplet) != first (tuplet) && last + 1 (tuplet) != last (tuplet): return true;
         // OR the count is 1 (not a nested tuplet)
         // else return false
-        let beforeFirstFlatIndex = flatIndex(at: range.lowerBound - 1)
-        let afterLastFlatIndex = flatIndex(at: range.upperBound + 1)
+        let beforeFirstFlatIndex = flatIndexes[safe: range.lowerBound - 1]
+        let afterLastFlatIndex = flatIndexes[safe: range.upperBound + 1]
 
         switch (beforeFirstFlatIndex, afterLastFlatIndex) {
         case (nil, nil):
@@ -228,12 +219,11 @@ public struct Tuplet: NoteCollection {
     private func preserveTieStateForReplacement(in range: CountableClosedRange<Int>,
                                                 with newCollections: [NoteCollection]) throws -> [NoteCollection] {
         var modifiedCollections = newCollections
-        let lastIndex = modifiedCollections.count - 1
 
         func modifyCollections(atFirst first: Bool, with note: Note) throws {
-            let index = first ? 0 : lastIndex
+            let index = first ? 0 : modifiedCollections.lastIndex
             if var tuplet = modifiedCollections[index] as? Tuplet {
-                try tuplet.replaceNote(at: first ? 0 : tuplet.flatIndexes.count - 1, with: note)
+                try tuplet.replaceNote(at: first ? 0 : tuplet.flatIndexes.lastIndex, with: note)
                 modifiedCollections[index] = tuplet
             } else {
                 modifiedCollections[index] = note
@@ -243,14 +233,14 @@ public struct Tuplet: NoteCollection {
         func modifyState(forTie originalTie: Tie?) throws {
             switch originalTie {
             case .begin?:
-                guard var lastNote = newCollections[lastIndex].last else {
+                guard var lastNote = newCollections.last?.last else {
                     assertionFailure("last note was nil")
                     throw TupletError.internalError
                 }
                 try lastNote.modifyTie(.begin)
                 try modifyCollections(atFirst: false, with: lastNote)
             case .end?:
-                guard var firstNote = newCollections[0].first else {
+                guard var firstNote = newCollections.first?.first else {
                     assertionFailure("first note was nil")
                     throw TupletError.internalError
                 }
@@ -262,12 +252,12 @@ public struct Tuplet: NoteCollection {
                     try onlyNote.modifyTie(.beginAndEnd)
                     modifiedCollections[0] = onlyNote
                 } else {
-                    guard var firstNote = newCollections[0].first else {
+                    guard var firstNote = newCollections.first?.first else {
                         assertionFailure("first note was nil")
                         throw TupletError.internalError
                     }
                     try firstNote.modifyTie(.end)
-                    guard var lastNote = newCollections[lastIndex].last else {
+                    guard var lastNote = newCollections.last?.last else {
                         assertionFailure("last note was nil")
                         throw TupletError.internalError
                     }
@@ -385,7 +375,7 @@ public struct Tuplet: NoteCollection {
                 }
             }
             for tupletGroup in tupletGroups {
-                let removeRange = tupletGroup[0][1]...tupletGroup[tupletGroup.count - 1][1]
+                let removeRange = tupletGroup[0][1]...tupletGroup[tupletGroup.lastIndex][1]
                 guard var tuplet = notes[tupletGroup[0][0]] as? Tuplet else {
                     assertionFailure("all indexes before the last should be tuplets. Must be an error in flatIndexes")
                     throw TupletError.internalError
@@ -396,7 +386,7 @@ public struct Tuplet: NoteCollection {
         } else {
             // They are not compound tuplets
             // Just remove from the notes
-            let removeRange = flatIndexes[0][0]...flatIndexes[flatIndexes.count - 1][0]
+            let removeRange = flatIndexes[0][0]...flatIndexes[flatIndexes.lastIndex][0]
             notes.removeSubrange(removeRange)
         }
     }

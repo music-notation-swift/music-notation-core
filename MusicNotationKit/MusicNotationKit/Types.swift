@@ -87,4 +87,3 @@ public enum KeyType {
     case major
     case minor
 }
-

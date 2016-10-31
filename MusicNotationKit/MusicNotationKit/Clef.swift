@@ -13,46 +13,48 @@ public struct Clef {
      Starts from 0 on the first line (from the bottom). Ledger lines below that are negative.
      Each increase by 1 moves a half step. i.e. 1 is the first space on the staff.
      */
-    public let lineNumber: Int
+    internal var halfSteps: Int {
+        switch staffLocation.locationType {
+        case .space:
+            return staffLocation.number * 2 + 1
+        case .line:
+            return staffLocation.number * 2
+        }
+    }
+
+    public let staffLocation: StaffLocation
 
     /**
      You can create a custom clef by providing a tone and line number.
-     
-     - parameter tone: The tone that the clef represents
-     - parameter lineNumber: The number representing the location on the staff. The `lineNumber`
-        starts at 0 for the first line on the staff (from the bottom). Lower ledger lines are negative 
-        and upper ledger lines are positive. Each addition of 1 increases by a half step. This brings
-        you to either the next space or line.
+
+     - parameter tone: The tone that the clef represents. Tone is optional to support un-pitched (i.e. drums)
+     - parameter location: The location on the staff
      */
-    public init(tone: Tone, lineNumber: Int) {
-        self.init(tone: .some(tone), lineNumber: lineNumber)
-    }
-
-    private init(tone: Tone?, lineNumber: Int) {
+    public init(tone: Tone?, location: StaffLocation) {
         self.tone = tone
-        self.lineNumber = lineNumber
+        self.staffLocation = location
     }
 
-    public static let treble = Clef(tone: Tone(noteLetter: .g, octave: .octave4), lineNumber: 3)
-    public static let bass = Clef(tone: Tone(noteLetter: .f, octave: .octave3), lineNumber: 1)
-    public static let tenor = Clef(tone: Tone(noteLetter: .c, octave: .octave4), lineNumber: 1)
-    public static let alto = Clef(tone: Tone(noteLetter: .c, octave: .octave4), lineNumber: 2)
+    public static let treble = Clef(tone: Tone(noteLetter: .g, octave: .octave4), location: StaffLocation(type: .space, number: 1))
+    public static let bass = Clef(tone: Tone(noteLetter: .f, octave: .octave3), location: StaffLocation(type: .space, number: 0))
+    public static let tenor = Clef(tone: Tone(noteLetter: .c, octave: .octave4), location: StaffLocation(type: .space, number: 0))
+    public static let alto = Clef(tone: Tone(noteLetter: .c, octave: .octave4), location: StaffLocation(type: .line, number: 1))
     /// Un-pitched (drums, percussion, etc.)
-    public static let neutral = Clef(tone: nil, lineNumber: 2)
+    public static let neutral = Clef(tone: nil, location: StaffLocation(type: .line, number: 1))
     /// For tabulature (guitar, etc.)
-    public static let tab = Clef(tone: nil, lineNumber: 2)
+    public static let tab = Clef(tone: nil, location: StaffLocation(type: .line, number: 1))
     // Less common
-    public static let frenchViolin = Clef(tone: Tone(noteLetter: .g, octave: .octave4), lineNumber: 4)
-    public static let soprano = Clef(tone: Tone(noteLetter: .c, octave: .octave4), lineNumber: 4)
-    public static let mezzoSoprano = Clef(tone: Tone(noteLetter: .c, octave: .octave4), lineNumber: 3)
-    public static let baritone = Clef(tone: Tone(noteLetter: .f, octave: .octave3), lineNumber: 2)
+    public static let frenchViolin = Clef(tone: Tone(noteLetter: .g, octave: .octave4), location: StaffLocation(type: .line, number: 2))
+    public static let soprano = Clef(tone: Tone(noteLetter: .c, octave: .octave4), location: StaffLocation(type: .line, number: 2))
+    public static let mezzoSoprano = Clef(tone: Tone(noteLetter: .c, octave: .octave4), location: StaffLocation(type: .space, number: 1))
+    public static let baritone = Clef(tone: Tone(noteLetter: .f, octave: .octave3), location: StaffLocation(type: .line, number: 1))
     // TODO: Is this one correct?
-    public static let suboctaveTreble = Clef(tone: Tone(noteLetter: .g, octave: .octave3), lineNumber: 3)
+    public static let suboctaveTreble = Clef(tone: Tone(noteLetter: .g, octave: .octave3), location: StaffLocation(type: .space, number: 1))
 }
 
 extension Clef: Equatable {
     public static func ==(lhs: Clef, rhs: Clef) -> Bool {
-        return lhs.tone == rhs.tone && lhs.lineNumber == rhs.lineNumber
+        return lhs.tone == rhs.tone && lhs.halfSteps == rhs.halfSteps
     }
 }
 
@@ -70,7 +72,7 @@ extension Clef: CustomDebugStringConvertible {
         case Clef.baritone: return "baritone"
         case Clef.suboctaveTreble: return "suboctaveTreble"
         default:
-            return "\(tone!)@\(lineNumber)"
+            return "\(tone!)@\(staffLocation.locationType)\(staffLocation.number)"
         }
     }
 }

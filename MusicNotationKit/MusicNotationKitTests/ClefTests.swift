@@ -15,19 +15,31 @@ class ClefTests: XCTestCase {
     // MARK: Successes
 
     func testInitForCustomOnLine() {
-        _ = Clef(tone: Tone(noteLetter: .c, octave: .octave4), lineNumber: 1)
+        let clef = Clef(
+            tone: Tone(noteLetter: .c, octave: .octave4),
+            location: StaffLocation(type: .line, number: 0))
+        XCTAssertEqual(clef.halfSteps, 0)
     }
 
     func testInitForCustomOnSpace() {
-        _ = Clef(tone: Tone(noteLetter: .g, octave: .octave4), lineNumber: 2)
+        let clef = Clef(
+            tone: Tone(noteLetter: .g, octave: .octave4),
+            location: StaffLocation(type: .space, number: 1))
+        XCTAssertEqual(clef.halfSteps, 3)
     }
 
     func testInitForCustomNegativeLedger() {
-        _ = Clef(tone: Tone(noteLetter: .g, octave: .octave3), lineNumber: -2)
+        let clef = Clef(
+            tone: Tone(noteLetter: .g, octave: .octave3),
+            location: StaffLocation(type: .line, number: -2))
+        XCTAssertEqual(clef.halfSteps, -4)
     }
 
     func testInitForCustomPositiveLedger() {
-        _ = Clef(tone: Tone(noteLetter: .a, octave: .octave4), lineNumber: 7)
+        let clef = Clef(
+            tone: Tone(noteLetter: .a, octave: .octave4),
+            location: StaffLocation(type: .line, number: 7))
+        XCTAssertEqual(clef.halfSteps, 14)
     }
 
     // MARK: - ==
@@ -38,14 +50,22 @@ class ClefTests: XCTestCase {
     }
 
     func testEqualityFailDifferentTone() {
-        let custom1 = Clef(tone: Tone(noteLetter: .a, octave: .octave3), lineNumber: 1)
-        let custom2 = Clef(tone: Tone(noteLetter: .a, octave: .octave2), lineNumber: 1)
+        let custom1 = Clef(
+            tone: Tone(noteLetter: .a, octave: .octave3),
+            location: StaffLocation(type: .line, number: 1))
+        let custom2 = Clef(
+            tone: Tone(noteLetter: .a, octave: .octave2),
+            location: StaffLocation(type: .line, number: 1))
         XCTAssertFalse(custom1 == custom2)
     }
 
     func testEqualityFailDifferentLineNumber() {
-        let custom1 = Clef(tone: Tone(noteLetter: .a, octave: .octave2), lineNumber: 1)
-        let custom2 = Clef(tone: Tone(noteLetter: .a, octave: .octave2), lineNumber: 2)
+        let custom1 = Clef(
+            tone: Tone(noteLetter: .a, octave: .octave2),
+            location: StaffLocation(type: .space, number: 1))
+        let custom2 = Clef(
+            tone: Tone(noteLetter: .a, octave: .octave2),
+            location: StaffLocation(type: .space, number: 2))
         XCTAssertFalse(custom1 == custom2)
     }
 
@@ -56,13 +76,19 @@ class ClefTests: XCTestCase {
     }
 
     func testEqualityCustom() {
-        let custom1 = Clef(tone: Tone(noteLetter: .a, octave: .octave2), lineNumber: 1)
-        let custom2 = Clef(tone: Tone(noteLetter: .a, octave: .octave2), lineNumber: 1)
+        let custom1 = Clef(
+            tone: Tone(noteLetter: .a, octave: .octave2),
+            location: StaffLocation(type: .line, number: 1))
+        let custom2 = Clef(
+            tone: Tone(noteLetter: .a, octave: .octave2),
+            location: StaffLocation(type: .line, number: 1))
         XCTAssertTrue(custom1 == custom2)
     }
 
     func testEqualityCustomWithStandard() {
-        let treble = Clef(tone: Tone(noteLetter: .g, octave: .octave4), lineNumber: 3)
+        let treble = Clef(
+            tone: Tone(noteLetter: .g, octave: .octave4),
+            location: StaffLocation(type: .space, number: 1))
         XCTAssertTrue(treble == Clef.treble)
     }
 
@@ -84,7 +110,9 @@ class ClefTests: XCTestCase {
     }
 
     func testDescriptionCustom() {
-        let custom = Clef(tone: Tone(noteLetter: .a, octave: .octave3), lineNumber: 2)
-        XCTAssertEqual(custom.debugDescription, "a3@2")
+        let custom = Clef(
+            tone: Tone(noteLetter: .a, octave: .octave3),
+            location: StaffLocation(type: .line, number: 1))
+        XCTAssertEqual(custom.debugDescription, "a3@line1")
     }
 }

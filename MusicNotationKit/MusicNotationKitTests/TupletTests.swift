@@ -1124,7 +1124,8 @@ class TupletTests: XCTestCase {
             let triplet = try Tuplet(3, .eighth, notes: [eighthNote, eighthNote, eighthNote])
             let quintuplet = try Tuplet(5, .eighth, notes: [triplet, triplet, eighthNote])
             var tuplet = try Tuplet(9, .eighth, notes: [triplet, quintuplet, eighthNote, eighthNote, eighthNote])
-            try tuplet.replaceNotes(in: 3...10, with: [quarterNote1, quarterNote1, eighthRest])
+            let notes: [Note] = [quarterNote1, quarterNote1, eighthRest]
+            try tuplet.replaceNotes(in: 3...10, with: notes)
             XCTAssertEqual(try tuplet.note(at: 0), eighthNote)
             XCTAssertEqual(try tuplet.note(at: 1), eighthNote)
             XCTAssertEqual(try tuplet.note(at: 2), eighthNote)

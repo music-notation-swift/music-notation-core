@@ -93,7 +93,7 @@ class MeasureTests: XCTestCase {
         measure.append(note3)
         assertNoErrorThrown {
             XCTAssertEqual(measure.notes[0].count, 7)
-            try measure.removeNotesInRange(Range<Int>(1...4))
+            try measure.removeNotesInRange(1...4)
             XCTAssertEqual(measure.notes[0].count, 3)
 
             let resultNote1 = try measure.note(at: 0, inSet: 0)
@@ -128,7 +128,7 @@ class MeasureTests: XCTestCase {
             try measure.insert(tuplet, at: 4)
 
             XCTAssertEqual(measure.notes[0].count, 8)
-            try measure.removeNotesInRange(Range<Int>(1...7))
+            try measure.removeNotesInRange(1...7)
             XCTAssertEqual(measure.notes[0].count, 3)
 
             let resultNote1 = try measure.note(at: 0, inSet: 0)
@@ -156,7 +156,7 @@ class MeasureTests: XCTestCase {
         assertThrowsError(MeasureError.invalidTieState) {
             try measure.startTie(at: 0, inSet: 0)
             XCTAssertEqual(measure.notes[0].count, 7)
-            try measure.removeNotesInRange(Range<Int>(1...4))
+            try measure.removeNotesInRange(1...4)
             XCTAssertEqual(measure.notes[0].count, 3)
         }
     }
@@ -176,8 +176,7 @@ class MeasureTests: XCTestCase {
         assertThrowsError(MeasureError.invalidTieState) {
             try measure.startTie(at: 4, inSet: 0)
             XCTAssertEqual(measure.notes[0].count, 7)
-            try measure.removeNotesInRange(Range<Int>(1...4))
-            XCTAssertEqual(measure.notes[0].count, 3)
+            try measure.removeNotesInRange(1...5)
         }
     }
 
@@ -226,7 +225,7 @@ class MeasureTests: XCTestCase {
         measure.append(Note(noteDuration: .quarter, tone: Tone(noteLetter: .b, octave: .octave1)))
         measure.append(Note(noteDuration: .quarter, tone: Tone(noteLetter: .c, octave: .octave1)))
         assertNoErrorThrown {
-            try measure.createTuplet(3, .quarter, fromNotesInRange: Range<Int>(0...2))
+            try measure.createTuplet(3, .quarter, fromNotesInRange: 0...2)
             XCTAssert(measure.notes[0].count == 1)
         }
     }

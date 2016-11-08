@@ -17,7 +17,15 @@ public struct Measure: ImmutableMeasure, Equatable {
             recomputeNoteCollectionIndexes()
         }
     }
-    public private(set) var noteCount: [Int]
+
+    public var noteCount: [Int] {
+        return notes.map {
+            $0.reduce(0) { prev, noteCollection in
+                return prev + noteCollection.noteCount
+            }
+        }
+    }
+
     public let measureCount: Int = 1
 
     internal typealias NoteCollectionIndex = (noteIndex: Int, tupletIndex: Int?)
@@ -31,11 +39,6 @@ public struct Measure: ImmutableMeasure, Equatable {
         self.timeSignature = timeSignature
         self.key = key
         self.notes = notes
-        noteCount = notes.map {
-            $0.reduce(0) { prev, noteCollection in
-                return prev + noteCollection.noteCount
-            }
-        }
         recomputeNoteCollectionIndexes()
     }
 
@@ -43,7 +46,6 @@ public struct Measure: ImmutableMeasure, Equatable {
         timeSignature = immutableMeasure.timeSignature
         key = immutableMeasure.key
         notes = immutableMeasure.notes
-        noteCount = immutableMeasure.noteCount
         recomputeNoteCollectionIndexes()
     }
 
@@ -54,31 +56,34 @@ public struct Measure: ImmutableMeasure, Equatable {
     }
 
     public mutating func replaceNote<T: NoteCollection>(at index: Int, with noteCollection: T, inSet setIndex: Int = 0) throws {
+        let noteCollections = try prepTiesForReplacement(in: index...index, with: [noteCollection], inSet: setIndex)
         let collectionIndex = try noteCollectionIndex(fromNoteIndex: index, inSet: setIndex)
-        try prepTiesForReplacement(at: index, with: [noteCollection], inSet: setIndex)
-        try replaceNote(at: collectionIndex, with: noteCollection, inSet: setIndex)
+        try replaceNote(at: collectionIndex, with: noteCollections, inSet: setIndex)
 
     }
 
     public mutating func replaceNote<T: NoteCollection>(at index: Int, with noteCollections: [T], inSet setIndex: Int = 0) throws {
-        for note in noteCollections.reversed() {
-            try replaceNote(at: index, with: note, inSet: setIndex)
-        }
+        let noteCollections = try prepTiesForReplacement(in: index...index, with: noteCollections, inSet: setIndex)
+        let collectionIndex = try noteCollectionIndex(fromNoteIndex: index, inSet: setIndex)
+        try replaceNote(at: collectionIndex, with: noteCollections, inSet: setIndex)
     }
 
     public mutating func replaceNotes<T: NoteCollection>(in range: CountableClosedRange<Int>, with noteCollection: T, inSet setIndex: Int = 0) throws {
+        let noteCollections = try prepTiesForReplacement(in: range, with: [noteCollection], inSet: setIndex)
         try removeNotesInRange(range)
-        try replaceNote(at: range.lowerBound, with: noteCollection, inSet: setIndex)
+        let collectionIndex = try noteCollectionIndex(fromNoteIndex: range.lowerBound, inSet: setIndex)
+        try replaceNote(at: collectionIndex, with: noteCollections, inSet: setIndex)
     }
 
     public mutating func replaceNotes<T: NoteCollection>(in range: CountableClosedRange<Int>, with noteCollections: [T], inSet setIndex: Int = 0) throws {
+        let noteCollections = try prepTiesForReplacement(in: range, with: noteCollections, inSet: setIndex)
         try removeNotesInRange(range)
-        try replaceNote(at: range.lowerBound, with: noteCollections, inSet: setIndex)
+        let collectionIndex = try noteCollectionIndex(fromNoteIndex: range.lowerBound, inSet: setIndex)
+        try replaceNote(at: collectionIndex, with: noteCollections, inSet: setIndex)
     }
 
     public mutating func append<T: NoteCollection>(_ noteCollection: T, inSet setIndex: Int = 0) {
         notes[setIndex].append(noteCollection)
-        noteCount[setIndex] += noteCollection.noteCount
     }
 
     public mutating func insert<T: NoteCollection>(_ noteCollection: T, at index: Int, inSet setIndex: Int = 0) throws {
@@ -94,7 +99,6 @@ public struct Measure: ImmutableMeasure, Equatable {
         }
         try prepTiesForInsertion(at: index, inSet: setIndex)
         notes[setIndex].insert(noteCollection, at: collectionIndex.noteIndex)
-        noteCount[setIndex] += noteCollection.noteCount
     }
 
     public mutating func insert<T: NoteCollection>(_ noteCollections: [T], at index: Int, inSet setIndex: Int = 0) throws {
@@ -171,11 +175,21 @@ public struct Measure: ImmutableMeasure, Equatable {
     }
 
     public mutating func breakdownTuplet(at index: Int, inSet setIndex: Int = 0) throws {
-        // TODO: implement.
+        let collectionIndex = try noteCollectionIndex(fromNoteIndex: index, inSet: setIndex)
+        guard let tupletIndex = collectionIndex.tupletIndex, tupletIndex == 0 else {
+            throw MeasureError.invalidTupletIndex
+        }
+        guard let tuplet = notes[setIndex][collectionIndex.noteIndex] as? Tuplet else {
+            throw MeasureError.internalError
+        }
+        notes[setIndex].remove(at: collectionIndex.noteIndex)
+
+        for note in tuplet.notes.reversed() {
+            notes[setIndex].insert(note, at: collectionIndex.noteIndex)
+        }
     }
 
-    // modify: with noteCollections: [T]
-    internal mutating func replaceNote<T: NoteCollection>(at collectionIndex: NoteCollectionIndex, with noteCollection: T, inSet setIndex: Int) throws {
+    internal mutating func replaceNote(at collectionIndex: NoteCollectionIndex, with noteCollection: NoteCollection, inSet setIndex: Int) throws {
         guard let tupletIndex = collectionIndex.tupletIndex else {
             notes[setIndex][collectionIndex.noteIndex] = noteCollection
             return
@@ -189,8 +203,87 @@ public struct Measure: ImmutableMeasure, Equatable {
         notes[setIndex][collectionIndex.noteIndex] = tuplet
     }
 
-    internal mutating func prepTiesForReplacement<T: NoteCollection>(at index: Int, with noteCollections: [T], inSet setIndex: Int) throws {
-        // TODO: implement.
+    internal mutating func replaceNote(at collectionIndex: NoteCollectionIndex, with noteCollections: [NoteCollection], inSet setIndex: Int) throws {
+        for note in noteCollections.reversed() {
+            try replaceNote(at: collectionIndex, with: note, inSet: setIndex)
+        }
+    }
+
+    internal func prepTiesForReplacement(in range: CountableClosedRange<Int>, with newCollections: [NoteCollection], inSet setIndex: Int) throws -> [NoteCollection] {
+
+        guard newCollections.count > 0 else {
+            throw MeasureError.invalidNoteCollection
+        }
+
+        var modifiedCollections = newCollections
+
+        func modifyCollections(atFirst first: Bool, with note: Note) throws {
+            let index = first ? 0 : modifiedCollections.lastIndex
+            if var tuplet = modifiedCollections[index] as? Tuplet {
+                try tuplet.replaceNote(at: first ? 0 : tuplet.flatIndexes.lastIndex, with: note)
+                modifiedCollections[index] = tuplet
+            } else {
+                modifiedCollections[index] = note
+            }
+        }
+
+        func modifyState(forTie originalTie: Tie?) throws {
+            switch originalTie {
+            case .begin?:
+                guard var lastNote = newCollections.last?.last else {
+                    assertionFailure("last note was nil")
+                    throw TupletError.internalError
+                }
+                try lastNote.modifyTie(.begin)
+                try modifyCollections(atFirst: false, with: lastNote)
+            case .end?:
+                guard var firstNote = newCollections.first?.first else {
+                    assertionFailure("first note was nil")
+                    throw TupletError.internalError
+                }
+                try firstNote.modifyTie(.end)
+                try modifyCollections(atFirst: true, with: firstNote)
+            case .beginAndEnd?:
+                if newCollections.count == 1 && newCollections[0].noteCount == 1 {
+                    var onlyNote = try newCollections[0].note(at: 0)
+                    try onlyNote.modifyTie(.beginAndEnd)
+                    modifiedCollections[0] = onlyNote
+                } else {
+                    guard var firstNote = newCollections.first?.first else {
+                        assertionFailure("first note was nil")
+                        throw TupletError.internalError
+                    }
+                    try firstNote.modifyTie(.end)
+                    guard var lastNote = newCollections.last?.last else {
+                        assertionFailure("last note was nil")
+                        throw TupletError.internalError
+                    }
+                    try lastNote.modifyTie(.begin)
+                    try modifyCollections(atFirst: true, with: firstNote)
+                    try modifyCollections(atFirst: false, with: lastNote)
+                }
+            case nil:
+                break
+            }
+        }
+
+        guard range.count != 1 else {
+            let originalTie = try note(at: range.lowerBound).tie
+            try modifyState(forTie: originalTie)
+            return modifiedCollections
+        }
+
+        let firstOriginalTie = try note(at: range.lowerBound).tie
+        let lastOriginalTie = try note(at: range.upperBound).tie
+
+        guard firstOriginalTie != .beginAndEnd && lastOriginalTie != .beginAndEnd else {
+            throw MeasureError.invalidTieState
+        }
+        if firstOriginalTie != .begin && lastOriginalTie != .end {
+            try modifyState(forTie: firstOriginalTie)
+            try modifyState(forTie: lastOriginalTie)
+        }
+        return modifiedCollections
     }
 
     // Check for tie state of note at index before insert. Since the new note is
@@ -204,23 +297,19 @@ public struct Measure: ImmutableMeasure, Equatable {
         }
     }
 
-    // Check for tie state of note at index before removal. The note must not have
-    // any tie state associated with it, otherwise it will fail.
-    // TODO: remove tie state except for measure crossings.
+    // Check for tie state of note at index before removal. Throws `MeasureError.invalidTieState` 
+    // if the index points to the first or last note of the measure containing a `Tie` 
+    // state other than `nil`.
     internal mutating func prepTiesForRemoval(at index: Int, inSet setIndex: Int) throws {
         let currentIndexTieState = try tieState(for: index, inSet: setIndex)
-        guard currentIndexTieState == nil else {
+        guard currentIndexTieState != nil else {
+            return
+        }
+
+        guard index > 0 && index < noteCount[setIndex] - 1 else {
             throw MeasureError.invalidTieState
         }
-    }
-
-    // TODO: what is this doing? seems incomplete...
-    internal mutating func isTie(at index: Int, inSet setIndex: Int) throws -> Bool {
-        let collectionIndex = try noteCollectionIndex(fromNoteIndex: index, inSet: setIndex)
-        guard collectionIndex.tupletIndex == nil else {
-            return false
-        }
-        return true
+        try removeTie(at: index, inSet: setIndex)
     }
 
     internal mutating func startTie(at index: Int, inSet setIndex: Int) throws {
@@ -364,6 +453,7 @@ public enum MeasureError: Error {
     case invalidRequestedTieState
     case invalidTieState
     case invalidTupletIndex
+    case invalidNoteCollection
     case internalError
     case notesMustHaveSameTonesToTie
     case insertNoteIntoTupletNotAllowed

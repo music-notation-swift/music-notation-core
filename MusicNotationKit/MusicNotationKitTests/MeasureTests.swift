@@ -65,7 +65,7 @@ class MeasureTests: XCTestCase {
         }
     }
 
-    func testReplaceNotesInvalIndex() {
+    func testReplaceNotesInvalidIndex() {
         let note = Note(noteDuration: .quarter, tone: Tone(noteLetter: .a, octave: .octave1))
         let notes = [
             Note(noteDuration: .sixteenth, tone: Tone(noteLetter: .c, octave: .octave1)),
@@ -97,7 +97,7 @@ class MeasureTests: XCTestCase {
         }
     }
 
-    func testReplaceNotesInRangeInvalTie() {
+    func testReplaceNotesInRangeInvalidTie() {
         XCTAssertEqual(measure.notes[0].count, 0)
         var note1 = Note(noteDuration: .whole)
         note1.tie = .beginAndEnd
@@ -110,7 +110,7 @@ class MeasureTests: XCTestCase {
         }
     }
 
-    func testReplaceNotesInRangeInvalIndex() {
+    func testReplaceNotesInRangeInvalidIndex() {
         let note = Note(noteDuration: .quarter, tone: Tone(noteLetter: .a, octave: .octave1))
         let notes = [
             Note(noteDuration: .sixteenth, tone: Tone(noteLetter: .c, octave: .octave1)),
@@ -143,7 +143,7 @@ class MeasureTests: XCTestCase {
         }
     }
 
-    func testReplaceNotesInRangeWithInvalIndexRange() {
+    func testReplaceNotesInRangeWithInvalidIndexRange() {
         let note = Note(noteDuration: .quarter, tone: Tone(noteLetter: .a, octave: .octave1))
         let notes = [
             Note(noteDuration: .sixteenth, tone: Tone(noteLetter: .c, octave: .octave1)),
@@ -205,6 +205,18 @@ class MeasureTests: XCTestCase {
 
             XCTAssertEqual(resultNote1, note1)
             XCTAssertEqual(resultNote2, note3)
+        }
+    }
+
+    func testRemoveNoteFromTuplet() {
+        XCTAssertEqual(measure.notes[0].count, 0)
+        let note1 = Note(noteDuration: .eighth)
+        measure.append(note1)
+        assertThrowsError(MeasureError.removeNoteFromTuplet)  {
+            let tuplet = try Tuplet(3, .eighth, notes: [note1, note1, note1])
+            measure.append(tuplet)
+            try measure.removeNote(at: 1)
+            XCTAssertEqual(measure.notes[0].count, 2)
         }
     }
 
@@ -286,7 +298,6 @@ class MeasureTests: XCTestCase {
             try measure.startTie(at: 0, inSet: 0)
             XCTAssertEqual(measure.notes[0].count, 7)
             try measure.removeNotesInRange(1...4)
-            XCTAssertEqual(measure.notes[0].count, 3)
         }
     }
 
@@ -309,7 +320,7 @@ class MeasureTests: XCTestCase {
         }
     }
 
-    func testRemoveNotesWithInvalRangeStart() {
+    func testRemoveNotesWithInvalidRangeStart() {
         measure.append(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
         let notes = [
             Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)),
@@ -324,7 +335,7 @@ class MeasureTests: XCTestCase {
         }
     }
 
-    func testRemoveNotesWithInvalRangeEnd() {
+    func testRemoveNotesWithInvalidRangeEnd() {
         let notes = [
             Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)),
             Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)),
@@ -410,6 +421,14 @@ class MeasureTests: XCTestCase {
         }
     }
 
+    func testBreakDownTupletInvalidIndex() {
+        measure.append(Note(noteDuration: .eighth, tone: Tone(noteLetter: .a, octave: .octave1)))
+        assertThrowsError(MeasureError.invalidTupletIndex) {
+            XCTAssert(measure.noteCount[0] == 1)
+            try measure.breakdownTuplet(at: 0)
+        }
+    }
+
     // MARK - prepTieForInsertion
 
     func testPrepTieForInsertNote() {
@@ -440,14 +459,6 @@ class MeasureTests: XCTestCase {
             try measure.startTie(at: 0, inSet: 0)
             let note = Note(noteDuration: .quarter, tone: Tone(noteLetter: .c, octave: .octave1))
             try measure.insert(note, at: 1, inSet: 0)
-
-            let note1 = try measure.note(at: 0, inSet: 0)
-            let note2 = try measure.note(at: 1, inSet: 0)
-            let note3 = try measure.note(at: 2, inSet: 0)
-
-            XCTAssertNil(note1.tie)
-            XCTAssertNil(note2.tie)
-            XCTAssertNil(note3.tie)
         }
     }
 
@@ -459,10 +470,6 @@ class MeasureTests: XCTestCase {
         assertThrowsError(MeasureError.invalidTieState) {
             try measure.startTie(at: 0, inSet: 0)
             try measure.removeNote(at: 0)
-
-            let note1 = try measure.note(at: 0, inSet: 0)
-
-            XCTAssertNil(note1.tie)
         }
     }
 

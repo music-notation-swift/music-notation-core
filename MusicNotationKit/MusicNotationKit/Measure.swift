@@ -224,7 +224,10 @@ public struct Measure: ImmutableMeasure, Equatable {
         // the caller wants to replace all the notes inside the measure with
         // a new set of notes.
         if noteCount[setIndex] == 0 && collectionIndex.noteIndex == 0 {
-            notes[setIndex].append(noteCollections.last!)
+            guard let noteCollection = noteCollections.last else {
+                throw MeasureError.internalError
+            }
+            notes[setIndex].append(noteCollection)
         }
         for note in noteCollections.reversed() {
             try replaceNote(at: collectionIndex, with: note, inSet: setIndex)

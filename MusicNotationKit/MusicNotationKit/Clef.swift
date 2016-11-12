@@ -35,21 +35,21 @@ public struct Clef {
         self.staffLocation = location
     }
 
-    public static let treble = Clef(tone: Tone(noteLetter: .g, octave: .octave4), location: StaffLocation(type: .space, number: 1))
-    public static let bass = Clef(tone: Tone(noteLetter: .f, octave: .octave3), location: StaffLocation(type: .space, number: 0))
-    public static let tenor = Clef(tone: Tone(noteLetter: .c, octave: .octave4), location: StaffLocation(type: .space, number: 0))
-    public static let alto = Clef(tone: Tone(noteLetter: .c, octave: .octave4), location: StaffLocation(type: .line, number: 1))
+    public static let treble = Clef(tone: Tone(noteLetter: .g, octave: .octave4), location: StaffLocation(type: .line, number: 1))
+    public static let bass = Clef(tone: Tone(noteLetter: .f, octave: .octave3), location: StaffLocation(type: .line, number: 3))
+    public static let tenor = Clef(tone: Tone(noteLetter: .c, octave: .octave4), location: StaffLocation(type: .line, number: 3))
+    public static let alto = Clef(tone: Tone(noteLetter: .c, octave: .octave4), location: StaffLocation(type: .line, number: 2))
     /// Un-pitched (drums, percussion, etc.)
-    public static let neutral = Clef(tone: nil, location: StaffLocation(type: .line, number: 1))
+    public static let neutral = Clef(tone: nil, location: StaffLocation(type: .line, number: 2))
     /// For tabulature (guitar, etc.)
-    public static let tab = Clef(tone: nil, location: StaffLocation(type: .line, number: 1))
+    public static let tab = Clef(tone: nil, location: StaffLocation(type: .line, number: 2))
     // Less common
-    public static let frenchViolin = Clef(tone: Tone(noteLetter: .g, octave: .octave4), location: StaffLocation(type: .line, number: 2))
-    public static let soprano = Clef(tone: Tone(noteLetter: .c, octave: .octave4), location: StaffLocation(type: .line, number: 2))
-    public static let mezzoSoprano = Clef(tone: Tone(noteLetter: .c, octave: .octave4), location: StaffLocation(type: .space, number: 1))
-    public static let baritone = Clef(tone: Tone(noteLetter: .f, octave: .octave3), location: StaffLocation(type: .line, number: 1))
+    public static let frenchViolin = Clef(tone: Tone(noteLetter: .g, octave: .octave4), location: StaffLocation(type: .line, number: 0))
+    public static let soprano = Clef(tone: Tone(noteLetter: .c, octave: .octave4), location: StaffLocation(type: .line, number: 0))
+    public static let mezzoSoprano = Clef(tone: Tone(noteLetter: .c, octave: .octave4), location: StaffLocation(type: .line, number: 1))
+    public static let baritone = Clef(tone: Tone(noteLetter: .f, octave: .octave3), location: StaffLocation(type: .line, number: 4))
     // TODO: Is this one correct?
-    public static let suboctaveTreble = Clef(tone: Tone(noteLetter: .g, octave: .octave3), location: StaffLocation(type: .space, number: 1))
+    public static let suboctaveTreble = Clef(tone: Tone(noteLetter: .g, octave: .octave3), location: StaffLocation(type: .line, number: 1))
 }
 
 extension Clef: Equatable {

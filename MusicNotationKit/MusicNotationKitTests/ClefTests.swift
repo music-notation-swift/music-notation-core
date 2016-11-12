@@ -88,7 +88,7 @@ class ClefTests: XCTestCase {
     func testEqualityCustomWithStandard() {
         let treble = Clef(
             tone: Tone(noteLetter: .g, octave: .octave4),
-            location: StaffLocation(type: .space, number: 1))
+            location: StaffLocation(type: .line, number: 1))
         XCTAssertTrue(treble == Clef.treble)
     }
 

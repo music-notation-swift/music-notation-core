@@ -8,6 +8,10 @@
 
 public struct Clef {
 
+    /**
+     The tone that defines the clef. This tone is specified to be at a
+     certain `StaffLocation` using the `staffLocation` property.
+     */
     public let tone: Tone?
     /**
      Starts from 0 on the first line (from the bottom). Ledger lines below that are negative.
@@ -22,6 +26,9 @@ public struct Clef {
         }
     }
 
+    /**
+     The location on the staff at which the tone for the clef is located.
+     */
     public let staffLocation: StaffLocation
 
     /**

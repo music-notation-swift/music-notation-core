@@ -81,20 +81,23 @@ public struct Clef {
         let octaveDeltaRaw = Double(newToneRawWithDelta) / Double(largestNoteLetter)
         let octaveDelta: Int = {
             switch octaveDeltaRaw {
-            case 1.0:
+            case let value where value == floor(value):
                 /**
-                 If it has multipled exactly 1.0 times, it was an increase and has not crossed
-                 the threshold of another octave.
+                 If the value is an exact multiple, it has not crossed the octave border yet.
+                 Therefore, subtract one from the value for the octave delta.
                  */
-                return 0
+                return Int(value - 1)
             case 0.0:
                 /**
-                 If it's 0, it could only have crossed 1 or 0 octaves. It will have crossed one octave if
+                 The value can only be 0 if it was decreasing. If it is 0, it will have only crossed
+                 either 1 or 0 octaves. Therefore, if it has crossed an octave, the new value would be larger
+                 than the clef tone value.
                  */
-                return tone.noteLetter == .c ? -1 : 0
-            case let value where value < 0 && value == floor(value):
-                return Int(value - 1)
+                return tone.noteLetter.rawValue < newNoteLetter.rawValue ? -1 : 0
             default:
+                /**
+                 In any other case, just floor the value and that is the delta for the octave.
+                 */
                 return Int(floor(octaveDeltaRaw))
             }
         }()

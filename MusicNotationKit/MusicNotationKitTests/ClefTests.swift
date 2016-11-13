@@ -82,6 +82,8 @@ class ClefTests: XCTestCase {
                            Tone(noteLetter: .g, octave: .octave3))
             XCTAssertEqual(try Clef.alto.tone(at: StaffLocation(type: .line, number: 4)),
                            Tone(noteLetter: .g, octave: .octave4))
+            XCTAssertEqual(try Clef.soprano.tone(at: StaffLocation(type: .space, number: 3)),
+                           Tone(noteLetter: .c, octave: .octave5))
 
             let customBClef = Clef(
                 tone: Tone(noteLetter: .b, octave: .octave3),
@@ -104,7 +106,7 @@ class ClefTests: XCTestCase {
             XCTAssertEqual(try Clef.alto.tone(at: StaffLocation(type: .space, number: 1)),
                            Tone(noteLetter: .b, octave: .octave3))
             XCTAssertEqual(try Clef.bass.tone(at: StaffLocation(type: .line, number: 1)),
-                           Tone(noteLetter: .b, octave: .octave3))
+                           Tone(noteLetter: .b, octave: .octave2))
         }
     }
 

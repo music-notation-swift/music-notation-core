@@ -13,18 +13,6 @@ public struct Clef {
      certain `StaffLocation` using the `staffLocation` property.
      */
     public let tone: Tone?
-    /**
-     Starts from 0 on the first line (from the bottom). Ledger lines below that are negative.
-     Each increase by 1 moves a half step. i.e. 1 is the first space on the staff.
-     */
-    internal var halfSteps: Int {
-        switch staffLocation.locationType {
-        case .space:
-            return staffLocation.number * 2 + 1
-        case .line:
-            return staffLocation.number * 2
-        }
-    }
 
     /**
      The location on the staff at which the tone for the clef is located.
@@ -57,11 +45,46 @@ public struct Clef {
     public static let baritone = Clef(tone: Tone(noteLetter: .f, octave: .octave3), location: StaffLocation(type: .line, number: 4))
     // TODO: Is this one correct?
     public static let suboctaveTreble = Clef(tone: Tone(noteLetter: .g, octave: .octave3), location: StaffLocation(type: .line, number: 1))
+
+    internal func tone(at location: StaffLocation) throws -> Tone? {
+        guard let tone = tone else { return nil }
+        let largestNoteLetter = NoteLetter.b.rawValue
+        let delta = location.halfSteps - staffLocation.halfSteps
+        guard delta != 0 else {
+            return tone
+        }
+        let noteValue = tone.noteLetter.rawValue
+        let newNoteAbsoluteValue = noteValue + delta
+        let startingNoteValue = newNoteAbsoluteValue > 0 ? 0 : largestNoteLetter
+        let newNoteValue = newNoteAbsoluteValue % largestNoteLetter
+        guard let newNoteLetter = NoteLetter(rawValue: newNoteValue == 0 ? largestNoteLetter : startingNoteValue + newNoteValue) else {
+            assertionFailure("modulus failed, because logic is flawed")
+            throw ClefError.internalError
+        }
+        let octaveDeltaRaw = Double(newNoteAbsoluteValue) / Double(largestNoteLetter)
+        let octaveDelta: Int = {
+            switch octaveDeltaRaw {
+            case 1.0: return 0
+            case 0.0: return -1
+            default: return Int(floor(octaveDeltaRaw))
+            }
+        }()
+        let newOctaveValue = tone.octave.rawValue + octaveDelta
+        guard let newOctave = Octave(rawValue: newOctaveValue) else {
+            throw ClefError.octaveOutOfRange
+        }
+        return Tone(noteLetter: newNoteLetter, octave: newOctave)
+    }
+}
+
+public enum ClefError: Error {
+    case octaveOutOfRange
+    case internalError
 }
 
 extension Clef: Equatable {
     public static func ==(lhs: Clef, rhs: Clef) -> Bool {
-        return lhs.tone == rhs.tone && lhs.halfSteps == rhs.halfSteps
+        return lhs.tone == rhs.tone && lhs.staffLocation.halfSteps == rhs.staffLocation.halfSteps
     }
 }
 

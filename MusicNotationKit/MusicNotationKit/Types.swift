@@ -45,14 +45,14 @@ extension Accidental: CustomDebugStringConvertible {
     }
 }
 
-public enum NoteLetter {
-    case a
-    case b
-    case c
+public enum NoteLetter: Int {
+    case c = 1
     case d
     case e
     case f
     case g
+    case a
+    case b
 }
 
 public enum Instrument {

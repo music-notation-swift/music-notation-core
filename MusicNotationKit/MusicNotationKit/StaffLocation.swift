@@ -23,6 +23,18 @@ public struct StaffLocation {
      Negative numbers represent ledger lines/spaces below the first one.
      */
     public let number: Int
+    /**
+     Starts from 0 on the first line (from the bottom). Ledger lines below that are negative.
+     Each increase by 1 moves a half step. i.e. 1 is the first space on the staff.
+     */
+    internal var halfSteps: Int {
+        switch locationType {
+        case .space:
+            return number * 2 + 1
+        case .line:
+            return number * 2
+        }
+    }
 
     public init(type: LocationType, number: Int) {
         locationType = type

@@ -80,6 +80,14 @@ class ClefTests: XCTestCase {
                            Tone(noteLetter: .b, octave: .octave4))
             XCTAssertEqual(try Clef.bass.tone(at: StaffLocation(type: .space, number: 3)),
                            Tone(noteLetter: .g, octave: .octave3))
+            XCTAssertEqual(try Clef.alto.tone(at: StaffLocation(type: .line, number: 4)),
+                           Tone(noteLetter: .g, octave: .octave4))
+
+            let customBClef = Clef(
+                tone: Tone(noteLetter: .b, octave: .octave3),
+                location: StaffLocation(type: .line, number: 2))
+            XCTAssertEqual(try customBClef.tone(at: StaffLocation(type: .space, number: 2)),
+                           Tone(noteLetter: .c, octave: .octave4))
         }
     }
 
@@ -93,11 +101,29 @@ class ClefTests: XCTestCase {
                            Tone(noteLetter: .g, octave: .octave2))
             XCTAssertEqual(try Clef.alto.tone(at: StaffLocation(type: .line, number: -2)),
                            Tone(noteLetter: .b, octave: .octave2))
+            XCTAssertEqual(try Clef.alto.tone(at: StaffLocation(type: .space, number: 1)),
+                           Tone(noteLetter: .b, octave: .octave3))
+            XCTAssertEqual(try Clef.bass.tone(at: StaffLocation(type: .line, number: 1)),
+                           Tone(noteLetter: .b, octave: .octave3))
         }
     }
 
     func testToneAtSameToneAsClef() {
+        assertNoErrorThrown {
+            XCTAssertEqual(try Clef.treble.tone(at: StaffLocation(type: .line, number: 1)),
+                           Tone(noteLetter: .g, octave: .octave4))
+            XCTAssertEqual(try Clef.soprano.tone(at: StaffLocation(type: .line, number: 0)),
+                           Tone(noteLetter: .c, octave: .octave4))
+        }
+    }
 
+    func testToneAtNegativeClefDecrease() {
+        assertNoErrorThrown {
+            let negativeClef = Clef(tone: Tone(noteLetter: .d, octave: .octave3),
+                                    location: StaffLocation(type: .line, number: -1))
+            XCTAssertEqual(try negativeClef.tone(at: StaffLocation(type: .line, number: -2)),
+                           Tone(noteLetter: .b, octave: .octave2))
+        }
     }
 
     // MARK: - ==

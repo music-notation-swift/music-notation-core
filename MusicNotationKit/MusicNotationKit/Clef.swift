@@ -46,6 +46,15 @@ public struct Clef {
     // TODO: Is this one correct?
     public static let suboctaveTreble = Clef(tone: Tone(noteLetter: .g, octave: .octave3), location: StaffLocation(type: .line, number: 1))
 
+    /**
+     Calculates the tone for the given staff location for this Clef.
+     
+     - parameter location: The location on the staff for which you would like to know the tone.
+     - returns: The tone at the given staff location or nil if the `Clef` is un-pitched.
+     - throws:
+        - `ClefError.internal`: Logic error with math
+        - `ClefError.octaveOutOfRange`
+     */
     internal func tone(at location: StaffLocation) throws -> Tone? {
         guard let tone = tone else { return nil }
         let largestNoteLetter = NoteLetter.b.rawValue
@@ -53,20 +62,40 @@ public struct Clef {
         guard delta != 0 else {
             return tone
         }
-        let noteValue = tone.noteLetter.rawValue
-        let newNoteAbsoluteValue = noteValue + delta
-        let startingNoteValue = newNoteAbsoluteValue > 0 ? 0 : largestNoteLetter
-        let newNoteValue = newNoteAbsoluteValue % largestNoteLetter
-        guard let newNoteLetter = NoteLetter(rawValue: newNoteValue == 0 ? largestNoteLetter : startingNoteValue + newNoteValue) else {
+        let clefToneRawValue = tone.noteLetter.rawValue
+        // Add the delta to the clef raw value
+        let newToneRawWithDelta = clefToneRawValue + delta
+        /**
+         If requested location is increase (delta > 0), you are adding onto 0. 
+         If it's a decrease, you are subtracting from the largestNoteLetter.
+         */
+        let startingToneValue = newToneRawWithDelta > 0 ? 0 : largestNoteLetter
+        // Perform modulus to find out which `NoteLetter` it is.
+        let newToneRawValue = newToneRawWithDelta % largestNoteLetter
+        // If modulus is 0, it was the last letter. Otherwise, take the new raw value and add it to the starting value
+        guard let newNoteLetter = NoteLetter(rawValue: newToneRawValue == 0 ? largestNoteLetter : startingToneValue + newToneRawValue) else {
             assertionFailure("modulus failed, because logic is flawed")
             throw ClefError.internalError
         }
-        let octaveDeltaRaw = Double(newNoteAbsoluteValue) / Double(largestNoteLetter)
+        // Figure out the delta by looking at how many times the new tone has multipled the base noteLetter
+        let octaveDeltaRaw = Double(newToneRawWithDelta) / Double(largestNoteLetter)
         let octaveDelta: Int = {
             switch octaveDeltaRaw {
-            case 1.0: return 0
-            case 0.0: return -1
-            default: return Int(floor(octaveDeltaRaw))
+            case 1.0:
+                /**
+                 If it has multipled exactly 1.0 times, it was an increase and has not crossed
+                 the threshold of another octave.
+                 */
+                return 0
+            case 0.0:
+                /**
+                 If it's 0, it could only have crossed 1 or 0 octaves. It will have crossed one octave if
+                 */
+                return tone.noteLetter == .c ? -1 : 0
+            case let value where value < 0 && value == floor(value):
+                return Int(value - 1)
+            default:
+                return Int(floor(octaveDeltaRaw))
             }
         }()
         let newOctaveValue = tone.octave.rawValue + octaveDelta

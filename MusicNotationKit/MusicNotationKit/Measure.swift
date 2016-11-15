@@ -131,6 +131,7 @@ public struct Measure: ImmutableMeasure, Equatable {
             if collectionIndex.tupletIndex != nil {
                 guard let tupletIndex = collectionIndex.tupletIndex,
                     let tuplet = notes[setIndex][collectionIndex.noteIndex]  as? Tuplet else {
+                        assertionFailure("note collection should be tuplet, but cast failed")
                         throw MeasureError.internalError
                 }
                 // Range starts with  an incomplete lower bound
@@ -163,18 +164,33 @@ public struct Measure: ImmutableMeasure, Equatable {
             }
         }
 
-        let endCollectionIndex = try noteCollectionIndex(fromNoteIndex: noteRange.upperBound - 1, inSet: setIndex)
+        let endCollectionIndex = try noteCollectionIndex(fromNoteIndex: noteRange.upperBound, inSet: setIndex)
         if endCollectionIndex.tupletIndex != nil {
             guard let tupletIndex = endCollectionIndex.tupletIndex,
                 let tuplet = notes[setIndex][endCollectionIndex.noteIndex] as? Tuplet else {
+                    assertionFailure("note collection should be tuplet, but cast failed")
                     throw MeasureError.internalError
             }
-            guard tuplet.noteCount > tupletIndex else {
+            guard tuplet.noteCount == tupletIndex + 1 else {
                 throw MeasureError.invalidTupletIndex
             }
         }
 
-        let tupletNotes = Array(notes[setIndex][noteRange])
+        var expectedCount = noteRange.upperBound - noteRange.lowerBound + 1
+
+        guard noteCount[setIndex] >= expectedCount else {
+            throw MeasureError.noteIndexOutOfRange
+        }
+
+        var tupletNotes = [NoteCollection]()
+        var index = startCollectionIndex.noteIndex
+
+        while expectedCount > 0 && notes[setIndex].count > index{
+            tupletNotes.append(notes[setIndex][index])
+            expectedCount -= notes[setIndex][index].noteCount
+            index += 1
+        }
+
         let newTuplet = try Tuplet(count, baseNoteDuration, inSpaceOf: baseCount, notes: tupletNotes)
         try removeNotesInRange(noteRange, inSet: setIndex)
         try insert(newTuplet, at: noteRange.lowerBound, inSet: setIndex)
@@ -186,6 +202,7 @@ public struct Measure: ImmutableMeasure, Equatable {
             throw MeasureError.invalidTupletIndex
         }
         guard let tuplet = notes[setIndex][collectionIndex.noteIndex] as? Tuplet else {
+            assertionFailure("note collection should be tuplet, but cast failed")
             throw MeasureError.internalError
         }
         notes[setIndex].remove(at: collectionIndex.noteIndex)
@@ -225,6 +242,7 @@ public struct Measure: ImmutableMeasure, Equatable {
         // a new set of notes.
         if noteCount[setIndex] == 0 && collectionIndex.noteIndex == 0 {
             guard let noteCollection = noteCollections.last else {
+                assertionFailure("Failed to get last noteCollection from noteCollections.")
                 throw MeasureError.internalError
             }
             notes[setIndex].append(noteCollection)

@@ -240,75 +240,7 @@ public struct Measure: ImmutableMeasure, Equatable {
             throw MeasureError.invalidNoteCollection
         }
 
-        var modifiedCollections = newCollections
-
-        func modifyCollections(atFirst first: Bool, with note: Note) throws {
-            let index = first ? 0 : modifiedCollections.lastIndex
-            if var tuplet = modifiedCollections[index] as? Tuplet {
-                try tuplet.replaceNote(at: first ? 0 : tuplet.flatIndexes.lastIndex, with: note)
-                modifiedCollections[index] = tuplet
-            } else {
-                modifiedCollections[index] = note
-            }
-        }
-
-        func modifyState(forTie originalTie: Tie?) throws {
-            switch originalTie {
-            case .begin?:
-                guard var lastNote = newCollections.last?.last else {
-                    assertionFailure("last note was nil")
-                    throw TupletError.internalError
-                }
-                try lastNote.modifyTie(.begin)
-                try modifyCollections(atFirst: false, with: lastNote)
-            case .end?:
-                guard var firstNote = newCollections.first?.first else {
-                    assertionFailure("first note was nil")
-                    throw TupletError.internalError
-                }
-                try firstNote.modifyTie(.end)
-                try modifyCollections(atFirst: true, with: firstNote)
-            case .beginAndEnd?:
-                if newCollections.count == 1 && newCollections[0].noteCount == 1 {
-                    var onlyNote = try newCollections[0].note(at: 0)
-                    try onlyNote.modifyTie(.beginAndEnd)
-                    modifiedCollections[0] = onlyNote
-                } else {
-                    guard var firstNote = newCollections.first?.first else {
-                        assertionFailure("first note was nil")
-                        throw TupletError.internalError
-                    }
-                    try firstNote.modifyTie(.end)
-                    guard var lastNote = newCollections.last?.last else {
-                        assertionFailure("last note was nil")
-                        throw TupletError.internalError
-                    }
-                    try lastNote.modifyTie(.begin)
-                    try modifyCollections(atFirst: true, with: firstNote)
-                    try modifyCollections(atFirst: false, with: lastNote)
-                }
-            case nil:
-                break
-            }
-        }
-
-        guard range.count != 1 else {
-            let originalTie = try note(at: range.lowerBound, inSet: setIndex).tie
-            try modifyState(forTie: originalTie)
-            return modifiedCollections
-        }
-
-        let firstOriginalTie = try note(at: range.lowerBound, inSet: setIndex).tie
-        let lastOriginalTie = try note(at: range.upperBound, inSet: setIndex).tie
-
-        guard firstOriginalTie != .beginAndEnd && lastOriginalTie != .beginAndEnd else {
-            throw MeasureError.invalidTieState
-        }
-        if firstOriginalTie != .begin && lastOriginalTie != .end {
-            try modifyState(forTie: firstOriginalTie)
-            try modifyState(forTie: lastOriginalTie)
-        }
-        return modifiedCollections
+        return newCollections
     }
 
     // Check for tie state of note at index before insert. Since the new note is

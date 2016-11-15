@@ -33,21 +33,16 @@ class MeasureTests: XCTestCase {
 
     func testReplaceNote() {
         XCTAssertEqual(measure.notes[0].count, 0)
-        var note1 = Note(noteDuration: .whole)
+        let note1 = Note(noteDuration: .whole)
         let note2 = Note(noteDuration: .eighth)
         measure.append(note1)
         measure.append(note2)
         assertNoErrorThrown {
-            try measure.startTie(at: 0, inSet: 0)
             XCTAssertEqual(measure.noteCount[0], 2)
             try measure.replaceNote(at: 1, with: note1)
             let resultNote1 = try measure.note(at: 0, inSet: 0)
             let resultNote2 = try measure.note(at: 1, inSet: 0)
-
-            // expect the tie states to be preserved.
-            note1.tie = .begin
             XCTAssertEqual(resultNote1, note1)
-            note1.tie = .end
             XCTAssertEqual(resultNote2, note1)
         }
     }

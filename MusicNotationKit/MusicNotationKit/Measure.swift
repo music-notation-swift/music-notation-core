@@ -89,6 +89,13 @@ public struct Measure: ImmutableMeasure, Equatable {
             return
         }
 
+        // If the index points to the end of the note collection, then
+        // append entry.
+        guard index != noteCount[setIndex] else {
+            append(noteCollection, inSet: setIndex)
+            return
+        }
+
         let collectionIndex = try noteCollectionIndex(fromNoteIndex: index, inSet: setIndex)
 
         guard collectionIndex.tupletIndex == nil else {
@@ -114,6 +121,9 @@ public struct Measure: ImmutableMeasure, Equatable {
     }
 
     public mutating func removeNotesInRange(_ indexRange: CountableClosedRange<Int>, inSet setIndex: Int = 0) throws {
+        try prepTiesForRemoval(at: indexRange.lowerBound, inSet: setIndex)
+        try prepTiesForRemoval(at: indexRange.upperBound - 1, inSet: setIndex)
+
         let startTie = try tieState(for: indexRange.lowerBound, inSet: setIndex)
         guard startTie == nil || startTie == .begin else {
             throw MeasureError.invalidTieState
@@ -141,7 +151,7 @@ public struct Measure: ImmutableMeasure, Equatable {
                     }
                 }
                 // Error if provided indexRange does not cover the tuple.
-                guard tuplet.noteCount - tupletIndex <= indexRange.upperBound - index else {
+                guard tuplet.noteCount - tupletIndex - 1 <= indexRange.upperBound - index else {
                     throw MeasureError.incompleteTuplet
                 }
                 if tupletIndex > 0 {
@@ -177,11 +187,6 @@ public struct Measure: ImmutableMeasure, Equatable {
         }
 
         var expectedCount = noteRange.upperBound - noteRange.lowerBound + 1
-
-        guard noteCount[setIndex] >= expectedCount else {
-            throw MeasureError.noteIndexOutOfRange
-        }
-
         var tupletNotes = [NoteCollection]()
         var index = startCollectionIndex.noteIndex
 
@@ -227,26 +232,10 @@ public struct Measure: ImmutableMeasure, Equatable {
     }
 
     internal mutating func replaceNote(at collectionIndex: NoteCollectionIndex, with noteCollections: [NoteCollection], inSet setIndex: Int) throws {
-        guard noteCollections.count > 0 else {
-            throw MeasureError.invalidNoteCollection
-        }
-
         guard collectionIndex.tupletIndex == nil || collectionIndex.tupletIndex == 0 else {
             throw MeasureError.invalidTupletIndex
         }
 
-        // If the measure is empty and the start index is 0, then we append
-        // the last note first to make sure that the first replaceNote below
-        // doesn't get and out of index error. This cover the use case where
-        // the caller wants to replace all the notes inside the measure with
-        // a new set of notes.
-        if noteCount[setIndex] == 0 && collectionIndex.noteIndex == 0 {
-            guard let noteCollection = noteCollections.last else {
-                assertionFailure("Failed to get last noteCollection from noteCollections.")
-                throw MeasureError.internalError
-            }
-            notes[setIndex].append(noteCollection)
-        }
         for note in noteCollections.reversed() {
             try replaceNote(at: collectionIndex, with: note, inSet: setIndex)
         }
@@ -349,7 +338,8 @@ public struct Measure: ImmutableMeasure, Equatable {
             return
         }
 
-        guard index > 0 && index < noteCount[setIndex] - 1 else {
+        if (index == 0 && (currentIndexTieState == .end || currentIndexTieState == .beginAndEnd)) ||
+           (index == noteCount[setIndex] - 1 && (currentIndexTieState == .begin)) {
             throw MeasureError.invalidTieState
         }
         try removeTie(at: index, inSet: setIndex)

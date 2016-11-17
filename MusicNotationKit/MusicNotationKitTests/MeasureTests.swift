@@ -80,7 +80,7 @@ class MeasureTests: XCTestCase {
 
     // MARK: Successes
 
-    func testReplaceNoteWithNotes() {
+    func testReplaceNoteWithNotesPreservingTie() {
         XCTAssertEqual(measure.notes[0].count, 0)
         let note1 = Note(noteDuration: .whole)
         let note2 = Note(noteDuration: .eighth)
@@ -88,17 +88,71 @@ class MeasureTests: XCTestCase {
         measure.append(note2)
         assertNoErrorThrown {
             XCTAssertEqual(measure.noteCount[0], 2)
-            try measure.startTie(at: 0, inSet: 0)
+
+            try measure.modifyTie(at: 0, requestedTieState: .begin, inSet: 0)
             try measure.replaceNote(at: 0, with: [note2, note1])
-            let resultNote1 = try measure.note(at: 0, inSet: 0)
-            var resultNote2 = try measure.note(at: 1, inSet: 0)
             XCTAssertEqual(measure.noteCount[0], 3)
+
+            var resultNote1 = try measure.note(at: 0, inSet: 0)
+            var resultNote2 = try measure.note(at: 1, inSet: 0)
+
             XCTAssertEqual(resultNote1, note2)
             XCTAssertEqual(resultNote2.tie, .begin)
 
             // Clear tie result before compare
             resultNote2.tie = nil
             XCTAssertEqual(resultNote2, note1)
+
+            // Note replace the note and index 1, which should
+            // have a .beginAndEnd tie state.
+            try measure.modifyTie(at: 0, requestedTieState: .begin, inSet: 0)
+            try measure.replaceNote(at: 1, with: [note2])
+            XCTAssertEqual(measure.noteCount[0], 3)
+
+            resultNote1 = try measure.note(at: 1, inSet: 0)
+            resultNote2 = try measure.note(at: 2, inSet: 0)
+            XCTAssertEqual(resultNote1.tie, .beginAndEnd)
+            XCTAssertEqual(resultNote2.tie, .end)
+
+            // Now insert a couple of notes at the index containing
+            // the .beginAndEnd tie. This should change the tie.
+            try measure.replaceNote(at: 1, with: [note1, note2])
+            XCTAssertEqual(measure.noteCount[0], 4)
+
+            // Make sure we end up with 2 separate ties now.
+            for i in [0,2] {
+                resultNote1 = try measure.note(at: i, inSet: 0)
+                resultNote2 = try measure.note(at: i + 1, inSet: 0)
+                XCTAssertEqual(resultNote1.tie, .begin)
+                XCTAssertEqual(resultNote2.tie, .end)
+            }
+        }
+    }
+
+    func testReplaceNoteWithTupletPreservingTie() {
+        XCTAssertEqual(measure.notes[0].count, 0)
+        let note = Note(noteDuration: .whole,  tone: Tone(noteLetter: .c, octave: .octave1))
+        let notes = [
+            Note(noteDuration: .sixteenth, tone: Tone(noteLetter: .c, octave: .octave1)),
+            Note(noteDuration: .sixteenth, tone: Tone(noteLetter: .c, octave: .octave1)),
+            Note(noteDuration: .sixteenth, tone: Tone(noteLetter: .a, octave: .octave1))
+        ]
+        measure.append(note)
+        measure.append(note)
+        assertNoErrorThrown {
+            let tuplet = try Tuplet(3, .sixteenth, notes: notes)
+            XCTAssertEqual(measure.noteCount[0], 2)
+            try measure.startTie(at: 0, inSet: 0)
+
+            try measure.replaceNote(at: 1, with: [tuplet])
+            XCTAssertEqual(measure.noteCount[0], 4)
+
+            var resultNote = try measure.note(at: 1, inSet: 0)
+
+            XCTAssertEqual(resultNote.tie, .end)
+            // Clear tie result before compare
+            resultNote.tie = nil
+            XCTAssertEqual(resultNote, notes[0])
         }
     }
 
@@ -352,7 +406,7 @@ class MeasureTests: XCTestCase {
     // MARK:  - removeNotesInRange()
     // MARK: Failures
 
-    func testRemoveNotesInRangeInvalidTieState() {
+    func testRemoveNotesInRangeInvalidTieAtStart() {
         XCTAssertEqual(measure.notes[0].count, 0)
         var note1 = Note(noteDuration: .whole)
         note1.tie = .end
@@ -365,7 +419,7 @@ class MeasureTests: XCTestCase {
         }
     }
 
-    func testRemoveNotesInRangeInvalidTieEnd() {
+    func testRemoveNotesInRangeInvalidTieAtEnd() {
         XCTAssertEqual(measure.notes[0].count, 0)
         let note1 = Note(noteDuration: .whole)
         var note2 = Note(noteDuration: .eighth)
@@ -374,7 +428,7 @@ class MeasureTests: XCTestCase {
         measure.append(note2)
         assertThrowsError(MeasureError.invalidTieState) {
             XCTAssertEqual(measure.noteCount[0], 2)
-            try measure.removeNotesInRange(0...2)
+            try measure.removeNotesInRange(0...1)
         }
     }
 

@@ -37,6 +37,7 @@
 		27BF9F0A1DB409D9005AAD38 /* ClefTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BF9F091DB409D9005AAD38 /* ClefTests.swift */; };
 		27D03A5B1D56918F00FF2376 /* MeasureDurationValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D03A5A1D56918F00FF2376 /* MeasureDurationValidator.swift */; };
 		27D03A5D1D5691EE00FF2376 /* MeasureDurationValidatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D03A5C1D5691EE00FF2376 /* MeasureDurationValidatorTests.swift */; };
+		27FB77E51DEACBA500705C97 /* KeyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FB77E41DEACBA500705C97 /* KeyTests.swift */; };
 		E92BD6031D4FD0A500061BCD /* Interval.swift in Sources */ = {isa = PBXBuildFile; fileRef = E92BD6021D4FD0A500061BCD /* Interval.swift */; };
 		E92BD6051D4FD0FF00061BCD /* IntervalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E92BD6041D4FD0FF00061BCD /* IntervalTests.swift */; };
 		E98D30AE1D4BFB7100C6DF5E /* ToneTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E98D30AD1D4BFB7100C6DF5E /* ToneTests.swift */; };
@@ -88,6 +89,7 @@
 		27BF9F091DB409D9005AAD38 /* ClefTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClefTests.swift; sourceTree = "<group>"; };
 		27D03A5A1D56918F00FF2376 /* MeasureDurationValidator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeasureDurationValidator.swift; sourceTree = "<group>"; };
 		27D03A5C1D5691EE00FF2376 /* MeasureDurationValidatorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeasureDurationValidatorTests.swift; sourceTree = "<group>"; };
+		27FB77E41DEACBA500705C97 /* KeyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyTests.swift; sourceTree = "<group>"; };
 		E92BD6021D4FD0A500061BCD /* Interval.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Interval.swift; sourceTree = "<group>"; };
 		E92BD6041D4FD0FF00061BCD /* IntervalTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntervalTests.swift; sourceTree = "<group>"; };
 		E98D30AD1D4BFB7100C6DF5E /* ToneTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToneTests.swift; sourceTree = "<group>"; };
@@ -185,6 +187,7 @@
 				27BF9F091DB409D9005AAD38 /* ClefTests.swift */,
 				270CC52E1B2C06A200CA1A56 /* Supporting Files */,
 				2707CD6C1DC6B96400D3B366 /* SwiftHelpersTests.swift */,
+				27FB77E41DEACBA500705C97 /* KeyTests.swift */,
 			);
 			path = MusicNotationKitTests;
 			sourceTree = "<group>";
@@ -346,6 +349,7 @@
 				270F46B11B353DF400FDF4FF /* TupletTests.swift in Sources */,
 				270F46AF1B2FF2A100FDF4FF /* NoteTests.swift in Sources */,
 				27AFEB591D6A901F0064ED27 /* NoteDurationTests.swift in Sources */,
+				27FB77E51DEACBA500705C97 /* KeyTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

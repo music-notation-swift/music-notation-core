@@ -80,26 +80,17 @@ public struct Clef {
         // Figure out the delta by looking at how many times the new tone has multipled the base noteLetter
         let octaveDeltaRaw = Double(newToneRawWithDelta) / Double(largestNoteLetter)
         let octaveDelta: Int = {
-            switch octaveDeltaRaw {
-            case let value where value == floor(value):
+            if octaveDeltaRaw == floor(octaveDeltaRaw) {
                 /**
                  If the value is an exact multiple, it has not crossed the octave border yet.
                  Therefore, subtract one from the value for the octave delta.
                  */
-                return Int(value - 1)
-            case 0.0:
-                /**
-                 The value can only be 0 if it was decreasing. If it is 0, it will have only crossed
-                 either 1 or 0 octaves. Therefore, if it has crossed an octave, the new value would be larger
-                 than the clef tone value.
-                 */
-                return tone.noteLetter.rawValue < newNoteLetter.rawValue ? -1 : 0
-            default:
-                /**
-                 In any other case, just floor the value and that is the delta for the octave.
-                 */
-                return Int(floor(octaveDeltaRaw))
+                return Int(octaveDeltaRaw - 1)
             }
+            /**
+             In any other case, just floor the value and that is the delta for the octave.
+             */
+            return Int(floor(octaveDeltaRaw))
         }()
         let newOctaveValue = tone.octave.rawValue + octaveDelta
         guard let newOctave = Octave(rawValue: newOctaveValue) else {

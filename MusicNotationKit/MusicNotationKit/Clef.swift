@@ -124,6 +124,7 @@ extension Clef: CustomDebugStringConvertible {
         case Clef.mezzoSoprano: return "mezzoSoprano"
         case Clef.baritone: return "baritone"
         case Clef.suboctaveTreble: return "suboctaveTreble"
+        case let clef where clef.tone == nil: return "neutral"
         default:
             return "\(tone!)@\(staffLocation.locationType)\(staffLocation.number)"
         }

@@ -200,5 +200,9 @@ class ClefTests: XCTestCase {
             tone: Tone(noteLetter: .a, octave: .octave3),
             location: StaffLocation(type: .line, number: 1))
         XCTAssertEqual(custom.debugDescription, "a3@line1")
+        let customNeutral = Clef(
+            tone: nil,
+            location: StaffLocation(type: .space, number: 3))
+        XCTAssertEqual(customNeutral.debugDescription, "neutral")
     }
 }

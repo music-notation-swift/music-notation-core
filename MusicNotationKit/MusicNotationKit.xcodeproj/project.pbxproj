@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		2707CD6D1DC6B96400D3B366 /* SwiftHelpersTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2707CD6C1DC6B96400D3B366 /* SwiftHelpersTests.swift */; };
+		2707CD6F1DC6FFC700D3B366 /* StaffLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2707CD6E1DC6FFC700D3B366 /* StaffLocation.swift */; };
 		270CC5241B2C06A200CA1A56 /* MusicNotationKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 270CC5231B2C06A200CA1A56 /* MusicNotationKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		270CC52A1B2C06A200CA1A56 /* MusicNotationKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 270CC51E1B2C06A200CA1A56 /* MusicNotationKit.framework */; };
 		270CC53E1B2C06B700CA1A56 /* Measure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 270CC53A1B2C06B700CA1A56 /* Measure.swift */; };
@@ -32,8 +33,11 @@
 		27AFEB591D6A901F0064ED27 /* NoteDurationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27AFEB581D6A901F0064ED27 /* NoteDurationTests.swift */; };
 		27B670511B9ACDCE00347C4C /* StaffTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27B670501B9ACDCE00347C4C /* StaffTests.swift */; };
 		27BF9F041DB30F7C005AAD38 /* SwiftHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BF9F031DB30F7C005AAD38 /* SwiftHelpers.swift */; };
+		27BF9F081DB403BE005AAD38 /* Clef.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BF9F071DB403BE005AAD38 /* Clef.swift */; };
+		27BF9F0A1DB409D9005AAD38 /* ClefTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BF9F091DB409D9005AAD38 /* ClefTests.swift */; };
 		27D03A5B1D56918F00FF2376 /* MeasureDurationValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D03A5A1D56918F00FF2376 /* MeasureDurationValidator.swift */; };
 		27D03A5D1D5691EE00FF2376 /* MeasureDurationValidatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D03A5C1D5691EE00FF2376 /* MeasureDurationValidatorTests.swift */; };
+		27FB77E51DEACBA500705C97 /* KeyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FB77E41DEACBA500705C97 /* KeyTests.swift */; };
 		E92BD6031D4FD0A500061BCD /* Interval.swift in Sources */ = {isa = PBXBuildFile; fileRef = E92BD6021D4FD0A500061BCD /* Interval.swift */; };
 		E92BD6051D4FD0FF00061BCD /* IntervalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E92BD6041D4FD0FF00061BCD /* IntervalTests.swift */; };
 		E98D30AE1D4BFB7100C6DF5E /* ToneTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E98D30AD1D4BFB7100C6DF5E /* ToneTests.swift */; };
@@ -52,6 +56,7 @@
 
 /* Begin PBXFileReference section */
 		2707CD6C1DC6B96400D3B366 /* SwiftHelpersTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftHelpersTests.swift; sourceTree = "<group>"; };
+		2707CD6E1DC6FFC700D3B366 /* StaffLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StaffLocation.swift; sourceTree = "<group>"; };
 		270CC51E1B2C06A200CA1A56 /* MusicNotationKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MusicNotationKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		270CC5221B2C06A200CA1A56 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		270CC5231B2C06A200CA1A56 /* MusicNotationKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MusicNotationKit.h; sourceTree = "<group>"; };
@@ -80,8 +85,11 @@
 		27AFEB581D6A901F0064ED27 /* NoteDurationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoteDurationTests.swift; sourceTree = "<group>"; };
 		27B670501B9ACDCE00347C4C /* StaffTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StaffTests.swift; sourceTree = "<group>"; };
 		27BF9F031DB30F7C005AAD38 /* SwiftHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftHelpers.swift; sourceTree = "<group>"; };
+		27BF9F071DB403BE005AAD38 /* Clef.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Clef.swift; sourceTree = "<group>"; };
+		27BF9F091DB409D9005AAD38 /* ClefTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClefTests.swift; sourceTree = "<group>"; };
 		27D03A5A1D56918F00FF2376 /* MeasureDurationValidator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeasureDurationValidator.swift; sourceTree = "<group>"; };
 		27D03A5C1D5691EE00FF2376 /* MeasureDurationValidatorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeasureDurationValidatorTests.swift; sourceTree = "<group>"; };
+		27FB77E41DEACBA500705C97 /* KeyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyTests.swift; sourceTree = "<group>"; };
 		E92BD6021D4FD0A500061BCD /* Interval.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Interval.swift; sourceTree = "<group>"; };
 		E92BD6041D4FD0FF00061BCD /* IntervalTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntervalTests.swift; sourceTree = "<group>"; };
 		E98D30AD1D4BFB7100C6DF5E /* ToneTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToneTests.swift; sourceTree = "<group>"; };
@@ -142,6 +150,7 @@
 				270F46AA1B2FEA3900FDF4FF /* Tone.swift */,
 				270F46AC1B2FEC5500FDF4FF /* NoteCollection.swift */,
 				27A0AA451B52351400635541 /* Key.swift */,
+				27BF9F071DB403BE005AAD38 /* Clef.swift */,
 				27AA71121C8D1BD900E2BF22 /* ImmutableMeasure.swift */,
 				27AA71141C9140C400E2BF22 /* RepeatedMeasure.swift */,
 				27AFEB561D6984CB0064ED27 /* NoteDuration.swift */,
@@ -149,6 +158,7 @@
 				27D03A5A1D56918F00FF2376 /* MeasureDurationValidator.swift */,
 				27BF9F031DB30F7C005AAD38 /* SwiftHelpers.swift */,
 				270CC5211B2C06A200CA1A56 /* Supporting Files */,
+				2707CD6E1DC6FFC700D3B366 /* StaffLocation.swift */,
 			);
 			path = MusicNotationKit;
 			sourceTree = "<group>";
@@ -174,8 +184,10 @@
 				270F46B01B353DF400FDF4FF /* TupletTests.swift */,
 				27A0AA491B524B6400635541 /* TestHelpers.swift */,
 				27D03A5C1D5691EE00FF2376 /* MeasureDurationValidatorTests.swift */,
+				27BF9F091DB409D9005AAD38 /* ClefTests.swift */,
 				270CC52E1B2C06A200CA1A56 /* Supporting Files */,
 				2707CD6C1DC6B96400D3B366 /* SwiftHelpersTests.swift */,
+				27FB77E41DEACBA500705C97 /* KeyTests.swift */,
 			);
 			path = MusicNotationKitTests;
 			sourceTree = "<group>";
@@ -245,7 +257,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0700;
-				LastUpgradeCheck = 0800;
+				LastUpgradeCheck = 0810;
 				ORGANIZATIONNAME = "Kyle Sherman";
 				TargetAttributes = {
 					270CC51D1B2C06A200CA1A56 = {
@@ -313,9 +325,11 @@
 				270F46AD1B2FEC5500FDF4FF /* NoteCollection.swift in Sources */,
 				27D03A5B1D56918F00FF2376 /* MeasureDurationValidator.swift in Sources */,
 				E92BD6031D4FD0A500061BCD /* Interval.swift in Sources */,
+				2707CD6F1DC6FFC700D3B366 /* StaffLocation.swift in Sources */,
 				270F46A31B2FE4D900FDF4FF /* NoteHolder.swift in Sources */,
 				27AFEB571D6984CB0064ED27 /* NoteDuration.swift in Sources */,
 				E9D762E11D8C4ECC0005AAB6 /* Enharmonic.swift in Sources */,
+				27BF9F081DB403BE005AAD38 /* Clef.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -323,6 +337,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				27BF9F0A1DB409D9005AAD38 /* ClefTests.swift in Sources */,
 				275A58D21B54BD8B0023D5EF /* MeasureTests.swift in Sources */,
 				27AA71171C9146FD00E2BF22 /* MeasureRepeatTests.swift in Sources */,
 				E92BD6051D4FD0FF00061BCD /* IntervalTests.swift in Sources */,
@@ -334,6 +349,7 @@
 				270F46B11B353DF400FDF4FF /* TupletTests.swift in Sources */,
 				270F46AF1B2FF2A100FDF4FF /* NoteTests.swift in Sources */,
 				27AFEB591D6A901F0064ED27 /* NoteDurationTests.swift in Sources */,
+				27FB77E51DEACBA500705C97 /* KeyTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -364,6 +380,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
@@ -414,6 +431,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;

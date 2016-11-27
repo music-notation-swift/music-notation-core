@@ -45,29 +45,14 @@ extension Accidental: CustomDebugStringConvertible {
     }
 }
 
-public enum NoteLetter {
-    case a
-    case b
-    case c
+public enum NoteLetter: Int {
+    case c = 1
     case d
     case e
     case f
     case g
-}
-
-public enum Clef {
-    case treble
-    case bass
-    case tenor
-    case alto
-    case neutral    // Un-pitched (drums, percussion, etc.)
-    case tab        // For tabulature (guitar, etc.)
-    // Less common clefs
-    case frenchViolin
-    case soprano
-    case mezzoSoprano
-    case baritone
-    case suboctaveTreble
+    case a
+    case b
 }
 
 public enum Instrument {
@@ -102,4 +87,3 @@ public enum KeyType {
     case major
     case minor
 }
-

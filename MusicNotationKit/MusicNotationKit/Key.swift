@@ -22,7 +22,7 @@ public struct Key {
 
 extension Key: CustomDebugStringConvertible {
 	public var debugDescription: String {
-		return "\(noteLetter) \(type)"
+		return "\(noteLetter)\(accidental.debugDescription) \(type)"
 	}
 }
 
@@ -32,9 +32,8 @@ extension Key: Equatable {
             lhs.noteLetter == rhs.noteLetter &&
             lhs.accidental == rhs.accidental {
             return true
-        } else {
-            return false
         }
+        return false
     }
 }
 

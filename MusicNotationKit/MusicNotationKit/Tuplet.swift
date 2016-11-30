@@ -310,7 +310,7 @@ public struct Tuplet: NoteCollection {
         notes[flatIndex[0]] = tuplet
     }
 
-    private mutating func replaceNote(at flatIndex: [Int], with noteCollections: [NoteCollection]) throws {
+    internal mutating func replaceNote(at flatIndex: [Int], with noteCollections: [NoteCollection]) throws {
         guard flatIndex.count != 1 else {
             notes.remove(at: flatIndex[0])
             notes.insert(contentsOf: noteCollections, at: flatIndex[0])

@@ -66,8 +66,8 @@ public struct Measure: ImmutableMeasure, Equatable {
     public mutating func replaceNote<T: NoteCollection>(at index: Int, with noteCollections: [T], inSet setIndex: Int = 0) throws {
         var newMeasure = self
         let noteCollections = try newMeasure.prepTiesForReplacement(in: index...index, with: noteCollections, inSet: setIndex)
-        try newMeasure.removeNote(at: index, inSet: setIndex, skipTies: true)
-        try newMeasure.insert(noteCollections, at: index, inSet: setIndex, skipTies: true)
+        let collectionIndex = try newMeasure.noteCollectionIndex(fromNoteIndex: index, inSet: setIndex)
+        try newMeasure.replaceNote(at: collectionIndex, with: noteCollections, inSet: setIndex)
         self = newMeasure
     }
 
@@ -200,9 +200,12 @@ public struct Measure: ImmutableMeasure, Equatable {
         self = newMeasure
     }
 
-    internal mutating func replaceNote(at collectionIndex: NoteCollectionIndex, with noteCollection: NoteCollection, inSet setIndex: Int) throws {
+    internal mutating func replaceNote(at collectionIndex: NoteCollectionIndex, with noteCollections: [NoteCollection], inSet setIndex: Int) throws {
         guard let tupletIndex = collectionIndex.tupletIndex else {
-            notes[setIndex][collectionIndex.noteIndex] = noteCollection
+            notes[setIndex].remove(at:collectionIndex.noteIndex)
+            for noteCollection in noteCollections.reversed() {
+                notes[setIndex].insert(noteCollection, at: collectionIndex.noteIndex)
+            }
             return
         }
 
@@ -210,18 +213,8 @@ public struct Measure: ImmutableMeasure, Equatable {
             assertionFailure("note collection should be tuplet, but cast failed")
             throw MeasureError.internalError
         }
-        try tuplet.replaceNote(at: tuplet.flatIndexes[tupletIndex], with: noteCollection)
+        try tuplet.replaceNote(at: tuplet.flatIndexes[tupletIndex], with: noteCollections)
         notes[setIndex][collectionIndex.noteIndex] = tuplet
-    }
-
-    internal mutating func replaceNote(at collectionIndex: NoteCollectionIndex, with noteCollections: [NoteCollection], inSet setIndex: Int) throws {
-        guard collectionIndex.tupletIndex == nil || collectionIndex.tupletIndex == 0 else {
-            throw MeasureError.invalidTupletIndex
-        }
-
-        for note in noteCollections.reversed() {
-            try replaceNote(at: collectionIndex, with: note, inSet: setIndex)
-        }
     }
 
     internal mutating func removeNote(at index: Int, inSet setIndex: Int, skipTies skipTieConfig: Bool) throws {
@@ -463,13 +456,13 @@ public struct Measure: ImmutableMeasure, Equatable {
 
             try secondaryModificationMethod(&secondNote)(secondaryRequestedTieState)
             let collectionIndex = try noteCollectionIndex(fromNoteIndex: secondaryIndex, inSet: setIndex)
-            try replaceNote(at: collectionIndex, with: secondNote, inSet: setIndex)
+            try replaceNote(at: collectionIndex, with: [secondNote], inSet: setIndex)
         }
 
 
         try requestedModificationMethod(&firstNote)(primaryRequestedTieState)
         let collectionIndex = try noteCollectionIndex(fromNoteIndex: index, inSet: setIndex)
-        try replaceNote(at: collectionIndex, with: firstNote, inSet: setIndex)
+        try replaceNote(at: collectionIndex, with: [firstNote], inSet: setIndex)
     }
 
     internal func noteCollectionIndex(fromNoteIndex index: Int, inSet setIndex: Int) throws -> NoteCollectionIndex {

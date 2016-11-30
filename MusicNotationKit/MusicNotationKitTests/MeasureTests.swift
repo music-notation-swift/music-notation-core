@@ -34,23 +34,24 @@ class MeasureTests: XCTestCase {
     // MARK: - replaceNotereplaceNote<T: NoteCollection>(at:with:T)
     // MARK: Failures
 
-    func testReplaceNotesInvalidIndex() {
+    // MARK: Successes
+
+    func testReplaceNoteInTuplet() {
         let note = Note(noteDuration: .quarter, tone: Tone(noteLetter: .a, octave: .octave1))
         let notes = [
             Note(noteDuration: .sixteenth, tone: Tone(noteLetter: .c, octave: .octave1)),
             Note(noteDuration: .sixteenth, tone: Tone(noteLetter: .c, octave: .octave1)),
             Note(noteDuration: .sixteenth, tone: Tone(noteLetter: .a, octave: .octave1))
         ]
-        assertThrowsError(MeasureError.invalidTupletIndex) {
+        assertNoErrorThrown {
             let tuplet = try Tuplet(3, .sixteenth, notes: notes)
             measure.append(tuplet)
             measure.append(note)
             XCTAssertEqual(measure.noteCount[0], 4)
+            // TODO: confirm that 1/4 actually fits in a 3,.sixteenth Tuplet.
             try measure.replaceNote(at: 1, with: note)
         }
     }
-
-    // MARK: Successes
 
     func testReplaceNote() {
         XCTAssertEqual(measure.notes[0].count, 0)

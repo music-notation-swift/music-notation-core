@@ -344,7 +344,13 @@ public struct Measure: ImmutableMeasure, Equatable {
     }
 
     /**
-     TODO: docstring
+     Replaces note at `collectionIndex`.
+     
+     - parameter collectionIndex: Note collection index.
+     - parameter noteCollection: `NoteCollection` to replace note.
+     - parameter setIndex: Note set index.
+     - throws:
+        - `MeasureError.internalError`
      */
     internal mutating func replaceNote(at collectionIndex: NoteCollectionIndex, with noteCollections: [NoteCollection], inSet setIndex: Int) throws {
         guard let tupletIndex = collectionIndex.tupletIndex else {
@@ -364,7 +370,7 @@ public struct Measure: ImmutableMeasure, Equatable {
     }
 
     /**
-     TODO: docstring
+     Removes note at note `index.
      
      - parameter index: The index of the note in the specified note set.
      - parameter setIndex: The index of the note set holding the note.
@@ -437,7 +443,12 @@ public struct Measure: ImmutableMeasure, Equatable {
     }
 
     /**
-     TODO: docstring
+     Prepare notes for replacement to make sure the tie state of the notes being replaced is
+     preserved in the `newCollections` replacement.
+
+     - parameter range: Note range of notes being replaced.
+     - parameter newCollections: New notes to use in replacement.
+     - parameter setIndex: Note set index.
      - throws:
          - `MeasureError.invalidNoteCollection` If `noteCollections` is empty.
          - `MeasureError.internalError`
@@ -563,30 +574,35 @@ public struct Measure: ImmutableMeasure, Equatable {
     }
 
     /**
-     TODO: docstring
+     Starts a tie at note `index`.
      
-     - parameter index: The index of the note in the specified note set.
-     - parameter setIndex: The index of the note set holding the note.
+     - parameter index: Note index.
+     - parameter setIndex: Note set index.
      */
     internal mutating func startTie(at index: Int, inSet setIndex: Int) throws {
         try modifyTie(at: index, requestedTieState: .begin, inSet: setIndex)
     }
 
     /**
-     TODO: docstring
+     Removes tie state from note at `index`.
      
-     - parameter index: The index of the note in the specified note set.
-     - parameter setIndex: The index of the note set holding the note.
+     - parameter index: Note index.
+     - parameter setIndex: Note set index.
      */
     internal mutating func removeTie(at index: Int, inSet setIndex: Int) throws {
         try modifyTie(at: index, requestedTieState: nil, inSet: setIndex)
     }
 
     /**
-     TODO: docstring
+     Modifies the tie state of the note at `index` with `requestedTieState`. The tie state of adjacent notes
+     may be updated as well to preserve the overall tie state of the measure.
      
-     - parameter index: The index of the note in the specified note set.
-     - parameter setIndex: The index of the note set holding the note.
+     - parameter index: Note index.
+     - parameter requestedTieState: Requested tie state.
+     - parameter setIndex: Note set index.
+     - throws:
+        - `MeasureError.invalidRequestedTieState`
+        - `MeasureError.notesMustHaveSameTonesToTie`
      */
     internal mutating func modifyTie(at index: Int, requestedTieState: Tie?, inSet setIndex: Int) throws {
         guard requestedTieState != .beginAndEnd else {
@@ -677,8 +693,8 @@ public struct Measure: ImmutableMeasure, Equatable {
     /**
      Returns the `NoteCollectionIndex` for the note at the specified note set and index.
      
-     - parameter index: The index of the note in the specified note set.
-     - parameter setIndex: The index of the note set holding the note.
+     - parameter index: Note index.
+     - parameter setIndex: Note set index.
      - throws:
         - `MeasureError.noteIndexOutOfRange`
      */
@@ -692,7 +708,7 @@ public struct Measure: ImmutableMeasure, Equatable {
     }
 
     /**
-     TODO: docstring
+     Calculates the note collection indexes stored in the measure.
      */
     private mutating func recomputeNoteCollectionIndexes() {
         noteCollectionIndexes = [[NoteCollectionIndex]]()
@@ -713,10 +729,10 @@ public struct Measure: ImmutableMeasure, Equatable {
     }
 
     /**
-     TODO: docstring
+     Returns tie state of note at `index`.
      
-     - parameter index: The index of the note in the specified note set.
-     - parameter setIndex: The index of the note set holding the note.
+     - parameter index: Note index.
+     - parameter setIndex: Note set index.
      */
     private func tieState(for index: Int, inSet setIndex: Int) throws -> Tie? {
         return try note(at: index, inSet: setIndex).tie

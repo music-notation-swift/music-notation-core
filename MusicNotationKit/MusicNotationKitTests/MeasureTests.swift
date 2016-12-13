@@ -167,7 +167,7 @@ class MeasureTests: XCTestCase {
             Note(noteDuration: .sixteenth, tone: Tone(noteLetter: .c, octave: .octave1)),
             Note(noteDuration: .sixteenth, tone: Tone(noteLetter: .a, octave: .octave1))
         ]
-        assertThrowsError(MeasureError.incompleteTuplet) {
+        assertThrowsError(MeasureError.tupletNotCompletelyCovered) {
             let tuplet = try Tuplet(3, .sixteenth, notes: notes)
             measure.append(tuplet)
             measure.append(note)
@@ -214,7 +214,7 @@ class MeasureTests: XCTestCase {
             Note(noteDuration: .sixteenth, tone: Tone(noteLetter: .c, octave: .octave1)),
             Note(noteDuration: .sixteenth, tone: Tone(noteLetter: .a, octave: .octave1))
         ]
-        assertThrowsError(MeasureError.incompleteTuplet) {
+        assertThrowsError(MeasureError.tupletNotCompletelyCovered) {
             let tuplet = try Tuplet(3, .sixteenth, notes: notes)
             measure.append(tuplet)
             measure.append(note)
@@ -440,7 +440,7 @@ class MeasureTests: XCTestCase {
             Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)),
             Note(noteDuration: .eighth, tone: Tone(noteLetter: .a, octave: .octave1))
         ]
-        assertThrowsError(MeasureError.incompleteTuplet) {
+        assertThrowsError(MeasureError.tupletNotCompletelyCovered) {
             let tuplet = try Tuplet(3, .eighth, notes: notes)
             measure.append(tuplet)
             XCTAssertEqual(measure.noteCount[0], 4)
@@ -454,7 +454,7 @@ class MeasureTests: XCTestCase {
             Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)),
             Note(noteDuration: .eighth, tone: Tone(noteLetter: .a, octave: .octave1))
         ]
-        assertThrowsError(MeasureError.incompleteTuplet) {
+        assertThrowsError(MeasureError.tupletNotCompletelyCovered) {
             let tuplet = try Tuplet(3, .eighth, notes: notes)
             measure.append(tuplet)
             measure.append(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))

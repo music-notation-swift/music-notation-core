@@ -113,7 +113,7 @@ public struct Measure: ImmutableMeasure, Equatable {
      - parameter setIndex: Note set index.
      - throws:
         - `MeasureError.noteIndexOutOfRange`
-        - `MeasureError.incompleteTuplet1`
+        - `MeasureError.tupletNotCompletelyCovered1`
         - `MeasureError.internalError`
 
      */
@@ -136,8 +136,8 @@ public struct Measure: ImmutableMeasure, Equatable {
     public mutating func replaceNotes(in range: CountableClosedRange<Int>, with noteCollections: [NoteCollection], inSet setIndex: Int = 0) throws {
         var newMeasure = self
         let noteCollections = try newMeasure.prepTiesForReplacement(in: range, with: noteCollections, inSet: setIndex)
-        try newMeasure.removeNotesInRange(range, inSet: setIndex, skipTies: true)
-        try newMeasure.insert(noteCollections, at: range.lowerBound, inSet: setIndex, skipTies: true)
+        try newMeasure.removeNotesInRange(range, inSet: setIndex, shouldIgnoreTieStates: true)
+        try newMeasure.insert(noteCollections, at: range.lowerBound, inSet: setIndex, shouldIgnoreTieStates: true)
         self = newMeasure
     }
 
@@ -163,7 +163,7 @@ public struct Measure: ImmutableMeasure, Equatable {
         - `MeasureError.invalidTieState`
      */
     public mutating func insert(_ noteCollection: NoteCollection, at index: Int, inSet setIndex: Int = 0) throws {
-        try insert(noteCollection, at: index, inSet: setIndex, skipTies: false)
+        try insert(noteCollection, at: index, inSet: setIndex, shouldIgnoreTieStates: false)
     }
 
     /**
@@ -178,7 +178,7 @@ public struct Measure: ImmutableMeasure, Equatable {
         - `MeasureError.invalidTieState`
      */
     internal mutating func insert(_ noteCollections: [NoteCollection], at index: Int, inSet setIndex: Int = 0) throws {
-        try insert(noteCollections, at: index, inSet: setIndex, skipTies: false)
+        try insert(noteCollections, at: index, inSet: setIndex, shouldIgnoreTieStates: false)
     }
 
     /**
@@ -194,7 +194,7 @@ public struct Measure: ImmutableMeasure, Equatable {
         - `TupletError.internalError`
      */
     public mutating func removeNote(at index: Int, inSet setIndex: Int = 0) throws {
-        try removeNote(at: index, inSet: setIndex, skipTies: false)
+        try removeNote(at: index, inSet: setIndex, shouldIgnoreTieStates: false)
     }
 
     /**
@@ -204,12 +204,12 @@ public struct Measure: ImmutableMeasure, Equatable {
      - parameter setIndex: Note set index.
      - throws:
         - `MeasureError.internalError`
-        - `MeasureError.incompleteTuplet`
+        - `MeasureError.tupletNotCompletelyCovered`
         - `MeasureError.invalidTieState`
 
      */
     public mutating func removeNotesInRange(_ indexRange: CountableClosedRange<Int>, inSet setIndex: Int = 0) throws {
-        try removeNotesInRange(indexRange, inSet: setIndex, skipTies: false)
+        try removeNotesInRange(indexRange, inSet: setIndex, shouldIgnoreTieStates: false)
     }
 
     /**
@@ -217,8 +217,9 @@ public struct Measure: ImmutableMeasure, Equatable {
      `noteRange` does not start or end across a `Tuplet` boundary.
 
      - throws:
-        - `MeasureError.incompleteTuplet`
+        - `MeasureError.tupletNotCompletelyCovered`
         - `MeasureError.internalError`
+        - `MeasureError.invalidNoteRange`
         - `MeasureError.invalidTieState`
         - `MeasureError.invalidTupletIndex`
         - `MeasureError.noteIndexOutOfRange`
@@ -226,33 +227,25 @@ public struct Measure: ImmutableMeasure, Equatable {
     public mutating func createTuplet(_ count: Int, _ baseNoteDuration: NoteDuration, inSpaceOf baseCount: Int? = nil, fromNotesInRange noteRange: CountableClosedRange<Int>, inSet setIndex: Int = 0) throws {
         var newMeasure = self
         let startCollectionIndex = try newMeasure.noteCollectionIndex(fromNoteIndex: noteRange.lowerBound, inSet: setIndex)
-        if startCollectionIndex.tupletIndex != nil {
-            guard let tupletIndex = startCollectionIndex.tupletIndex, tupletIndex == 0 else {
-                throw MeasureError.invalidTupletIndex
-            }
+        if let tupletIndex = startCollectionIndex.tupletIndex, tupletIndex != 0 {
+            throw MeasureError.invalidTupletIndex
         }
 
         let endCollectionIndex = try newMeasure.noteCollectionIndex(fromNoteIndex: noteRange.upperBound, inSet: setIndex)
-        if endCollectionIndex.tupletIndex != nil {
-            guard let tupletIndex = endCollectionIndex.tupletIndex,
-                let tuplet = newMeasure.notes[setIndex][endCollectionIndex.noteIndex] as? Tuplet else {
-                    assertionFailure("note collection should be tuplet, but cast failed")
-                    throw MeasureError.internalError
+        if let tupletIndex = endCollectionIndex.tupletIndex {
+            guard let tuplet = newMeasure.notes[setIndex][endCollectionIndex.noteIndex] as? Tuplet else {
+                assertionFailure("note collection should be tuplet, but case failed")
+                throw MeasureError.internalError
             }
             guard tuplet.noteCount == tupletIndex + 1 else {
                 throw MeasureError.invalidTupletIndex
             }
         }
 
-        var expectedCount = noteRange.upperBound - noteRange.lowerBound + 1
-        var tupletNotes = [NoteCollection]()
-        var index = startCollectionIndex.noteIndex
-
-        while expectedCount > 0 && notes[setIndex].count > index{
-            tupletNotes.append(notes[setIndex][index])
-            expectedCount -= notes[setIndex][index].noteCount
-            index += 1
+        guard newMeasure.notes[setIndex].isValidIndexRange(Range(noteRange)) else {
+            throw MeasureError.invalidNoteRange
         }
+        let tupletNotes = Array(newMeasure.notes[setIndex][noteRange])
 
         let newTuplet = try Tuplet(count, baseNoteDuration, inSpaceOf: baseCount, notes: tupletNotes)
         try newMeasure.removeNotesInRange(noteRange, inSet: setIndex)
@@ -273,7 +266,7 @@ public struct Measure: ImmutableMeasure, Equatable {
     public mutating func breakdownTuplet(at index: Int, inSet setIndex: Int = 0) throws {
         var newMeasure = self
         let collectionIndex = try newMeasure.noteCollectionIndex(fromNoteIndex: index, inSet: setIndex)
-        guard let tupletIndex = collectionIndex.tupletIndex, tupletIndex == 0 else {
+        guard collectionIndex.tupletIndex != nil else {
             throw MeasureError.invalidTupletIndex
         }
         guard let tuplet = newMeasure.notes[setIndex][collectionIndex.noteIndex] as? Tuplet else {
@@ -298,8 +291,8 @@ public struct Measure: ImmutableMeasure, Equatable {
         - `MeasureError.noteIndexOutOfRange`
         - `MeasureError.invalidTieState`
      */
-    internal mutating func insert(_ noteCollection: NoteCollection, at index: Int, inSet setIndex: Int = 0, skipTies skipTieConfig: Bool) throws {
-        if index == 0 && notes[setIndex].count == 0 {
+    internal mutating func insert(_ noteCollection: NoteCollection, at index: Int, inSet setIndex: Int = 0, shouldIgnoreTieStates skipTieConfig: Bool) throws {
+        if index == 0 && notes[setIndex].isEmpty {
             append(noteCollection, inSet: setIndex)
             return
         }
@@ -335,10 +328,10 @@ public struct Measure: ImmutableMeasure, Equatable {
         - `MeasureError.noteIndexOutOfRange`
         - `MeasureError.invalidTieState`
      */
-    internal mutating func insert(_ noteCollections: [NoteCollection], at index: Int, inSet setIndex: Int = 0, skipTies skipTieConfig: Bool) throws {
+    internal mutating func insert(_ noteCollections: [NoteCollection], at index: Int, inSet setIndex: Int = 0, shouldIgnoreTieStates skipTieConfig: Bool) throws {
         var newMeasure = self
         for noteCollection in noteCollections.reversed() {
-            try newMeasure.insert(noteCollection, at: index, inSet: setIndex, skipTies: skipTieConfig)
+            try newMeasure.insert(noteCollection, at: index, inSet: setIndex, shouldIgnoreTieStates: skipTieConfig)
         }
         self = newMeasure
     }
@@ -381,7 +374,7 @@ public struct Measure: ImmutableMeasure, Equatable {
         - `TupletError.invalidIndex`
         - `TupletError.internalError`
      */
-    internal mutating func removeNote(at index: Int, inSet setIndex: Int, skipTies skipTieConfig: Bool) throws {
+    internal mutating func removeNote(at index: Int, inSet setIndex: Int, shouldIgnoreTieStates skipTieConfig: Bool) throws {
         var newMeasure = self
 
         if !skipTieConfig {
@@ -404,10 +397,10 @@ public struct Measure: ImmutableMeasure, Equatable {
      - parameter skipTieConfig:
      - throws:
         - `MeasureError.internalError`
-        - `MeasureError.incompleteTuplet`
+        - `MeasureError.tupletNotCompletelyCovered`
         - `MeasureError.invalidTieState`
      */
-    internal mutating func removeNotesInRange(_ indexRange: CountableClosedRange<Int>, inSet setIndex: Int = 0, skipTies skipTieConfig: Bool) throws {
+    internal mutating func removeNotesInRange(_ indexRange: CountableClosedRange<Int>, inSet setIndex: Int = 0, shouldIgnoreTieStates skipTieConfig: Bool) throws {
         var newMeasure = self
 
         if !skipTieConfig {
@@ -426,12 +419,12 @@ public struct Measure: ImmutableMeasure, Equatable {
                 // Range starts with  an incomplete lower bound
                 if index == indexRange.lowerBound {
                     guard tupletIndex == 0 else {
-                        throw MeasureError.incompleteTuplet
+                        throw MeasureError.tupletNotCompletelyCovered
                     }
                 }
                 // Error if provided indexRange does not cover the tuple.
-                guard tuplet.noteCount - tupletIndex - 1 <= indexRange.upperBound - index else {
-                    throw MeasureError.incompleteTuplet
+                guard indexRange.upperBound - index >= tuplet.noteCount - tupletIndex - 1 else {
+                    throw MeasureError.tupletNotCompletelyCovered
                 }
                 if tupletIndex > 0 {
                     continue
@@ -566,6 +559,10 @@ public struct Measure: ImmutableMeasure, Equatable {
             return
         }
 
+        // Don't allow changes for notes with cross-measure ties:
+        // - if the index points to the first note in the measure and the tie state is either 
+        //   .end or .beginAndEnd
+        // - if the index points to the last note in the measure and the tie state is .begin
         if (index == 0 && (currentIndexTieState == .end || currentIndexTieState == .beginAndEnd)) ||
            (index == noteCount[setIndex] - 1 && (currentIndexTieState == .begin)) {
             throw MeasureError.invalidTieState
@@ -733,6 +730,10 @@ public struct Measure: ImmutableMeasure, Equatable {
      
      - parameter index: Note index.
      - parameter setIndex: Note set index.
+     - throws:
+        - `TupletError.invalidIndex`
+        - `TupletError.internalError`
+        - `MeasureError.noteIndexOutOfRange`
      */
     private func tieState(for index: Int, inSet setIndex: Int) throws -> Tie? {
         return try note(at: index, inSet: setIndex).tie
@@ -755,9 +756,10 @@ public enum MeasureError: Error {
     case invalidTieState
     case invalidTupletIndex
     case invalidNoteCollection
+    case invalidNoteRange
     case internalError
     case notesMustHaveSameTonesToTie
     case removeNoteFromTuplet
     case removeTupletFromNote
-    case incompleteTuplet
+    case tupletNotCompletelyCovered
 }

@@ -38,6 +38,7 @@ public struct Tuplet: NoteCollection {
     /// A 2-dimensional array that can be used to index into every note in the tuplet within compound tuplets as well.
     internal var flatIndexes: [[Int]] = [[Int]]()
 
+
     /**
      This maps the standard number of notes in the tuplet (`groupingOrder`), to the number of notes the tuplet should fit
      in the space of (`noteTimingCount`).
@@ -309,7 +310,7 @@ public struct Tuplet: NoteCollection {
         notes[flatIndex[0]] = tuplet
     }
 
-    private mutating func replaceNote(at flatIndex: [Int], with noteCollections: [NoteCollection]) throws {
+    internal mutating func replaceNote(at flatIndex: [Int], with noteCollections: [NoteCollection]) throws {
         guard flatIndex.count != 1 else {
             notes.remove(at: flatIndex[0])
             notes.insert(contentsOf: noteCollections, at: flatIndex[0])

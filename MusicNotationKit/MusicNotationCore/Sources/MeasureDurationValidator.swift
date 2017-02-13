@@ -6,6 +6,12 @@
 //  Copyright © 2016 Kyle Sherman. All rights reserved.
 //
 
+#if os(Linux)
+    import Glibc
+#else
+    import Darwin.C
+#endif
+
 /**
  This is a collection of static functions that will give information about the completeness of the duration of a 
  `Measure`. A measure must have a certain number of notes according to its `TimeSignature` in order to be valid.

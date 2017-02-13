@@ -7,7 +7,7 @@
 //
 
 import XCTest
-import MusicNotationKit
+import MusicNotationCore
 
 class IntervalTests: XCTestCase {
     

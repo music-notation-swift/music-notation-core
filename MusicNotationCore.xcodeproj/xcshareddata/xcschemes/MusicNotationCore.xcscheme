@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "OBJ_47"
+               BlueprintIdentifier = "OBJ_48"
                BuildableName = "MusicNotationCore.framework"
                BlueprintName = "MusicNotationCore"
                ReferencedContainer = "container:MusicNotationCore.xcodeproj">
@@ -33,7 +33,7 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "OBJ_73"
+               BlueprintIdentifier = "OBJ_74"
                BuildableName = "MusicNotationCoreTests.xctest"
                BlueprintName = "MusicNotationCoreTests"
                ReferencedContainer = "container:MusicNotationCore.xcodeproj">
@@ -56,7 +56,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "OBJ_47"
+            BlueprintIdentifier = "OBJ_48"
             BuildableName = "MusicNotationCore.framework"
             BlueprintName = "MusicNotationCore"
             ReferencedContainer = "container:MusicNotationCore.xcodeproj">

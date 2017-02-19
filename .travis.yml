@@ -2,8 +2,8 @@ language: objective-c
 osx_image: xcode8
 script:
   set -o pipefail &&
-  xcodebuild build -project MusicNotationCore/MusicNotationCore.xcodeproj -scheme MusicNotationCore -sdk macosx &&
-  xcodebuild test -project MusicNotationCore/MusicNotationCore.xcodeproj -scheme MusicNotationCore -sdk macosx
+  xcodebuild build -project MusicNotationCore.xcodeproj -scheme MusicNotationCore -sdk macosx &&
+  xcodebuild test -project MusicNotationCore.xcodeproj -scheme MusicNotationCore -sdk macosx
 after_success:
   - bash <(curl -s https://codecov.io/bash)
 notifications:

@@ -7,7 +7,7 @@
 //
 
 import XCTest
-import MusicNotationKit
+import MusicNotationCore
 
 class KeyTests: XCTestCase {
     

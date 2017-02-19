@@ -6,6 +6,12 @@
 //  Copyright © 2016 Kyle Sherman. All rights reserved.
 //
 
+#if os(Linux)
+    import Glibc
+#else
+    import Darwin.C
+#endif
+
 public struct Clef {
 
     /**

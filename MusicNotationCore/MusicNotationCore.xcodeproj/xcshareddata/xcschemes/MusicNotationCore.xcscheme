@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0810"
+   LastUpgradeVersion = "9999"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "270CC51D1B2C06A200CA1A56"
-               BuildableName = "MusicNotationKit.framework"
-               BlueprintName = "MusicNotationKit"
-               ReferencedContainer = "container:MusicNotationKit.xcodeproj">
+               BlueprintIdentifier = "OBJ_47"
+               BuildableName = "MusicNotationCore.framework"
+               BlueprintName = "MusicNotationCore"
+               ReferencedContainer = "container:MusicNotationCore.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,22 +33,13 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "270CC5281B2C06A200CA1A56"
-               BuildableName = "MusicNotationKitTests.xctest"
-               BlueprintName = "MusicNotationKitTests"
-               ReferencedContainer = "container:MusicNotationKit.xcodeproj">
+               BlueprintIdentifier = "OBJ_73"
+               BuildableName = "MusicNotationCoreTests.xctest"
+               BlueprintName = "MusicNotationCoreTests"
+               ReferencedContainer = "container:MusicNotationCore.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "270CC51D1B2C06A200CA1A56"
-            BuildableName = "MusicNotationKit.framework"
-            BlueprintName = "MusicNotationKit"
-            ReferencedContainer = "container:MusicNotationKit.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>
@@ -65,10 +56,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "270CC51D1B2C06A200CA1A56"
-            BuildableName = "MusicNotationKit.framework"
-            BlueprintName = "MusicNotationKit"
-            ReferencedContainer = "container:MusicNotationKit.xcodeproj">
+            BlueprintIdentifier = "OBJ_47"
+            BuildableName = "MusicNotationCore.framework"
+            BlueprintName = "MusicNotationCore"
+            ReferencedContainer = "container:MusicNotationCore.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -80,15 +71,6 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "270CC51D1B2C06A200CA1A56"
-            BuildableName = "MusicNotationKit.framework"
-            BlueprintName = "MusicNotationKit"
-            ReferencedContainer = "container:MusicNotationKit.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

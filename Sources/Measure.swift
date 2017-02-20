@@ -9,7 +9,7 @@
 public struct Measure: ImmutableMeasure, Equatable {
 
     public let timeSignature: TimeSignature
-    public let key: Key
+    public let key: Key?
     public private(set) var notes: [[NoteCollection]] {
         didSet {
             // We call this expensive operation every time you modify the notes, because
@@ -31,11 +31,11 @@ public struct Measure: ImmutableMeasure, Equatable {
     internal typealias NoteCollectionIndex = (noteIndex: Int, tupletIndex: Int?)
     private var noteCollectionIndexes: [[NoteCollectionIndex]] = [[NoteCollectionIndex]]()
 
-    public init(timeSignature: TimeSignature, key: Key) {
+    public init(timeSignature: TimeSignature, key: Key? = nil) {
         self.init(timeSignature: timeSignature, key: key, notes: [[]])
     }
 
-    public init(timeSignature: TimeSignature, key: Key, notes: [[NoteCollection]]) {
+    public init(timeSignature: TimeSignature, key: Key? = nil, notes: [[NoteCollection]]) {
         self.timeSignature = timeSignature
         self.key = key
         self.notes = notes

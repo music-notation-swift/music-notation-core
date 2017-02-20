@@ -23,16 +23,16 @@
 public struct RepeatedMeasure: ImmutableMeasure, Equatable {
 
     public let timeSignature: TimeSignature
-    public let key: Key
+    public let key: Key?
     public private(set) var notes: [[NoteCollection]]
     public let measureCount: Int = 1
     public let noteCount: [Int]
 
-    public init(timeSignature: TimeSignature, key: Key) {
+    public init(timeSignature: TimeSignature, key: Key? = nil) {
         self.init(timeSignature: timeSignature, key: key, notes: [[]])
     }
 
-    public init(timeSignature: TimeSignature, key: Key, notes: [[NoteCollection]]) {
+    public init(timeSignature: TimeSignature, key: Key? = nil, notes: [[NoteCollection]]) {
         self.timeSignature = timeSignature
         self.key = key
         self.notes = notes

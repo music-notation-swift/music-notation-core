@@ -42,7 +42,7 @@ public struct Clef {
     public static let alto = Clef(tone: Tone(noteLetter: .c, octave: .octave4), location: StaffLocation(type: .line, number: 2))
     /// Un-pitched (drums, percussion, etc.)
     public static let neutral = Clef(tone: nil, location: StaffLocation(type: .line, number: 2))
-    /// For tabulature (guitar, etc.)
+    /// For tablature (guitar, etc.)
     public static let tab = Clef(tone: nil, location: StaffLocation(type: .line, number: 2))
     // Less common
     public static let frenchViolin = Clef(tone: Tone(noteLetter: .g, octave: .octave4), location: StaffLocation(type: .line, number: 0))

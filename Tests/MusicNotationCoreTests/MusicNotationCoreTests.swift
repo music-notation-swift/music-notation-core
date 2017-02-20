@@ -23,11 +23,10 @@ class MusicNotationCoreTests: XCTestCase {
 
     func testValidMusic() {
         let timeSignature = TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120)
-        let key = Key(noteLetter: .a) // Just because it's required by the API
         let tone = Tone(noteLetter: .a, octave: .octave3) // Just because it's required by the API
         var staff = Staff(clef: .neutral, instrument: .drums)
         staff.appendMeasure(
-            Measure(timeSignature: timeSignature, key: key, notes: [
+            Measure(timeSignature: timeSignature, notes: [
                 [
                     Note(noteDuration: .eighth, tone: tone),
                     Note(noteDuration: .eighth, tone: tone),
@@ -47,7 +46,7 @@ class MusicNotationCoreTests: XCTestCase {
                 ])
         )
         staff.appendMeasure(
-            Measure(timeSignature: timeSignature, key: key, notes: [
+            Measure(timeSignature: timeSignature, notes: [
                 [
                     Note(noteDuration: .eighth, tone: tone),
                     Note(noteDuration: .eighth, tone: tone),

@@ -1,719 +1,467 @@
 // !$*UTF8*$!
 {
-   archiveVersion = "1";
-   objectVersion = "46";
-   objects = {
-      OBJ_1 = {
-         isa = "PBXProject";
-         attributes = {
-            LastUpgradeCheck = "9999";
-         };
-         buildConfigurationList = OBJ_2;
-         compatibilityVersion = "Xcode 3.2";
-         developmentRegion = "English";
-         hasScannedForEncodings = "0";
-         knownRegions = (
-            "en",
-         );
-         mainGroup = OBJ_5;
-         productRefGroup = OBJ_45;
-         projectDirPath = ".";
-         targets = (
-            OBJ_48,
-            OBJ_74,
-         );
-      };
-      OBJ_10 = {
-         isa = "PBXFileReference";
-         path = "Enharmonic.swift";
-         sourceTree = "<group>";
-      };
-      OBJ_11 = {
-         isa = "PBXFileReference";
-         path = "ImmutableMeasure.swift";
-         sourceTree = "<group>";
-      };
-      OBJ_12 = {
-         isa = "PBXFileReference";
-         path = "Interval.swift";
-         sourceTree = "<group>";
-      };
-      OBJ_13 = {
-         isa = "PBXFileReference";
-         path = "Key.swift";
-         sourceTree = "<group>";
-      };
-      OBJ_14 = {
-         isa = "PBXFileReference";
-         path = "Measure.swift";
-         sourceTree = "<group>";
-      };
-      OBJ_15 = {
-         isa = "PBXFileReference";
-         path = "MeasureDurationValidator.swift";
-         sourceTree = "<group>";
-      };
-      OBJ_16 = {
-         isa = "PBXFileReference";
-         path = "MeasureRepeat.swift";
-         sourceTree = "<group>";
-      };
-      OBJ_17 = {
-         isa = "PBXFileReference";
-         path = "Note.swift";
-         sourceTree = "<group>";
-      };
-      OBJ_18 = {
-         isa = "PBXFileReference";
-         path = "NoteCollection.swift";
-         sourceTree = "<group>";
-      };
-      OBJ_19 = {
-         isa = "PBXFileReference";
-         path = "NoteDuration.swift";
-         sourceTree = "<group>";
-      };
-      OBJ_2 = {
-         isa = "XCConfigurationList";
-         buildConfigurations = (
-            OBJ_3,
-            OBJ_4,
-         );
-         defaultConfigurationIsVisible = "0";
-         defaultConfigurationName = "Debug";
-      };
-      OBJ_20 = {
-         isa = "PBXFileReference";
-         path = "NoteHolder.swift";
-         sourceTree = "<group>";
-      };
-      OBJ_21 = {
-         isa = "PBXFileReference";
-         path = "RepeatedMeasure.swift";
-         sourceTree = "<group>";
-      };
-      OBJ_22 = {
-         isa = "PBXFileReference";
-         path = "Staff.swift";
-         sourceTree = "<group>";
-      };
-      OBJ_23 = {
-         isa = "PBXFileReference";
-         path = "StaffLocation.swift";
-         sourceTree = "<group>";
-      };
-      OBJ_24 = {
-         isa = "PBXFileReference";
-         path = "SwiftHelpers.swift";
-         sourceTree = "<group>";
-      };
-      OBJ_25 = {
-         isa = "PBXFileReference";
-         path = "TimeSignature.swift";
-         sourceTree = "<group>";
-      };
-      OBJ_26 = {
-         isa = "PBXFileReference";
-         path = "Tone.swift";
-         sourceTree = "<group>";
-      };
-      OBJ_27 = {
-         isa = "PBXFileReference";
-         path = "Tuplet.swift";
-         sourceTree = "<group>";
-      };
-      OBJ_28 = {
-         isa = "PBXFileReference";
-         path = "Types.swift";
-         sourceTree = "<group>";
-      };
-      OBJ_29 = {
-         isa = "PBXGroup";
-         children = (
-            OBJ_30,
-         );
-         path = "Tests";
-         sourceTree = "<group>";
-      };
-      OBJ_3 = {
-         isa = "XCBuildConfiguration";
-         buildSettings = {
-            COMBINE_HIDPI_IMAGES = "YES";
-            COPY_PHASE_STRIP = "NO";
-            DEBUG_INFORMATION_FORMAT = "dwarf";
-            DYLIB_INSTALL_NAME_BASE = "@rpath";
-            ENABLE_NS_ASSERTIONS = "YES";
-            GCC_OPTIMIZATION_LEVEL = "0";
-            MACOSX_DEPLOYMENT_TARGET = "10.10";
-            ONLY_ACTIVE_ARCH = "YES";
-            OTHER_SWIFT_FLAGS = (
-               "-DXcode",
-            );
-            PRODUCT_NAME = "$(TARGET_NAME)";
-            SDKROOT = "macosx";
-            SUPPORTED_PLATFORMS = (
-               "macosx",
-               "iphoneos",
-               "iphonesimulator",
-               "appletvos",
-               "appletvsimulator",
-               "watchos",
-               "watchsimulator",
-            );
-            SWIFT_ACTIVE_COMPILATION_CONDITIONS = "SWIFT_PACKAGE";
-            SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-            SWIFT_VERSION = "3.0";
-            USE_HEADERMAP = "NO";
-         };
-         name = "Debug";
-      };
-      OBJ_30 = {
-         isa = "PBXGroup";
-         children = (
-            OBJ_31,
-            OBJ_32,
-            OBJ_33,
-            OBJ_34,
-            OBJ_35,
-            OBJ_36,
-            OBJ_37,
-            OBJ_38,
-            OBJ_39,
-            OBJ_40,
-            OBJ_41,
-            OBJ_42,
-            OBJ_43,
-         );
-         name = "MusicNotationCoreTests";
-         path = "Tests/MusicNotationCoreTests";
-         sourceTree = "SOURCE_ROOT";
-      };
-      OBJ_31 = {
-         isa = "PBXFileReference";
-         path = "ClefTests.swift";
-         sourceTree = "<group>";
-      };
-      OBJ_32 = {
-         isa = "PBXFileReference";
-         path = "IntervalTests.swift";
-         sourceTree = "<group>";
-      };
-      OBJ_33 = {
-         isa = "PBXFileReference";
-         path = "KeyTests.swift";
-         sourceTree = "<group>";
-      };
-      OBJ_34 = {
-         isa = "PBXFileReference";
-         path = "MeasureDurationValidatorTests.swift";
-         sourceTree = "<group>";
-      };
-      OBJ_35 = {
-         isa = "PBXFileReference";
-         path = "MeasureRepeatTests.swift";
-         sourceTree = "<group>";
-      };
-      OBJ_36 = {
-         isa = "PBXFileReference";
-         path = "MeasureTests.swift";
-         sourceTree = "<group>";
-      };
-      OBJ_37 = {
-         isa = "PBXFileReference";
-         path = "NoteDurationTests.swift";
-         sourceTree = "<group>";
-      };
-      OBJ_38 = {
-         isa = "PBXFileReference";
-         path = "NoteTests.swift";
-         sourceTree = "<group>";
-      };
-      OBJ_39 = {
-         isa = "PBXFileReference";
-         path = "StaffTests.swift";
-         sourceTree = "<group>";
-      };
-      OBJ_4 = {
-         isa = "XCBuildConfiguration";
-         buildSettings = {
-            COMBINE_HIDPI_IMAGES = "YES";
-            COPY_PHASE_STRIP = "YES";
-            DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-            DYLIB_INSTALL_NAME_BASE = "@rpath";
-            GCC_OPTIMIZATION_LEVEL = "s";
-            MACOSX_DEPLOYMENT_TARGET = "10.10";
-            OTHER_SWIFT_FLAGS = (
-               "-DXcode",
-            );
-            PRODUCT_NAME = "$(TARGET_NAME)";
-            SDKROOT = "macosx";
-            SUPPORTED_PLATFORMS = (
-               "macosx",
-               "iphoneos",
-               "iphonesimulator",
-               "appletvos",
-               "appletvsimulator",
-               "watchos",
-               "watchsimulator",
-            );
-            SWIFT_ACTIVE_COMPILATION_CONDITIONS = "SWIFT_PACKAGE";
-            SWIFT_OPTIMIZATION_LEVEL = "-O";
-            SWIFT_VERSION = "3.0";
-            USE_HEADERMAP = "NO";
-         };
-         name = "Release";
-      };
-      OBJ_40 = {
-         isa = "PBXFileReference";
-         path = "SwiftHelpersTests.swift";
-         sourceTree = "<group>";
-      };
-      OBJ_41 = {
-         isa = "PBXFileReference";
-         path = "TestHelpers.swift";
-         sourceTree = "<group>";
-      };
-      OBJ_42 = {
-         isa = "PBXFileReference";
-         path = "ToneTests.swift";
-         sourceTree = "<group>";
-      };
-      OBJ_43 = {
-         isa = "PBXFileReference";
-         path = "TupletTests.swift";
-         sourceTree = "<group>";
-      };
-      OBJ_44 = {
-         isa = "PBXFileReference";
-         path = "docs";
-         sourceTree = "SOURCE_ROOT";
-      };
-      OBJ_45 = {
-         isa = "PBXGroup";
-         children = (
-            OBJ_46,
-            OBJ_47,
-         );
-         name = "Products";
-         path = "";
-         sourceTree = "BUILT_PRODUCTS_DIR";
-      };
-      OBJ_46 = {
-         isa = "PBXFileReference";
-         path = "MusicNotationCore.framework";
-         sourceTree = "BUILT_PRODUCTS_DIR";
-      };
-      OBJ_47 = {
-         isa = "PBXFileReference";
-         path = "MusicNotationCoreTests.xctest";
-         sourceTree = "BUILT_PRODUCTS_DIR";
-      };
-      OBJ_48 = {
-         isa = "PBXNativeTarget";
-         buildConfigurationList = OBJ_49;
-         buildPhases = (
-            OBJ_52,
-            OBJ_73,
-         );
-         dependencies = (
-         );
-         name = "MusicNotationCore";
-         productName = "MusicNotationCore";
-         productReference = OBJ_46;
-         productType = "com.apple.product-type.framework";
-      };
-      OBJ_49 = {
-         isa = "XCConfigurationList";
-         buildConfigurations = (
-            OBJ_50,
-            OBJ_51,
-         );
-         defaultConfigurationIsVisible = "0";
-         defaultConfigurationName = "Debug";
-      };
-      OBJ_5 = {
-         isa = "PBXGroup";
-         children = (
-            OBJ_6,
-            OBJ_7,
-            OBJ_29,
-            OBJ_44,
-            OBJ_45,
-         );
-         path = "";
-         sourceTree = "<group>";
-      };
-      OBJ_50 = {
-         isa = "XCBuildConfiguration";
-         buildSettings = {
-            ENABLE_TESTABILITY = "YES";
-            FRAMEWORK_SEARCH_PATHS = (
-               "$(inherited)",
-               "$(PLATFORM_DIR)/Developer/Library/Frameworks",
-            );
-            HEADER_SEARCH_PATHS = (
-               "$(inherited)",
-            );
-            INFOPLIST_FILE = "MusicNotationCore.xcodeproj/MusicNotationCore_Info.plist";
-            LD_RUNPATH_SEARCH_PATHS = (
-               "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx",
-            );
-            OTHER_LDFLAGS = (
-               "$(inherited)",
-            );
-            OTHER_SWIFT_FLAGS = (
-               "$(inherited)",
-            );
-            PRODUCT_BUNDLE_IDENTIFIER = "MusicNotationCore";
-            PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
-            PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-            TARGET_NAME = "MusicNotationCore";
-         };
-         name = "Debug";
-      };
-      OBJ_51 = {
-         isa = "XCBuildConfiguration";
-         buildSettings = {
-            ENABLE_TESTABILITY = "YES";
-            FRAMEWORK_SEARCH_PATHS = (
-               "$(inherited)",
-               "$(PLATFORM_DIR)/Developer/Library/Frameworks",
-            );
-            HEADER_SEARCH_PATHS = (
-               "$(inherited)",
-            );
-            INFOPLIST_FILE = "MusicNotationCore.xcodeproj/MusicNotationCore_Info.plist";
-            LD_RUNPATH_SEARCH_PATHS = (
-               "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx",
-            );
-            OTHER_LDFLAGS = (
-               "$(inherited)",
-            );
-            OTHER_SWIFT_FLAGS = (
-               "$(inherited)",
-            );
-            PRODUCT_BUNDLE_IDENTIFIER = "MusicNotationCore";
-            PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
-            PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-            TARGET_NAME = "MusicNotationCore";
-         };
-         name = "Release";
-      };
-      OBJ_52 = {
-         isa = "PBXSourcesBuildPhase";
-         files = (
-            OBJ_53,
-            OBJ_54,
-            OBJ_55,
-            OBJ_56,
-            OBJ_57,
-            OBJ_58,
-            OBJ_59,
-            OBJ_60,
-            OBJ_61,
-            OBJ_62,
-            OBJ_63,
-            OBJ_64,
-            OBJ_65,
-            OBJ_66,
-            OBJ_67,
-            OBJ_68,
-            OBJ_69,
-            OBJ_70,
-            OBJ_71,
-            OBJ_72,
-         );
-      };
-      OBJ_53 = {
-         isa = "PBXBuildFile";
-         fileRef = OBJ_9;
-      };
-      OBJ_54 = {
-         isa = "PBXBuildFile";
-         fileRef = OBJ_10;
-      };
-      OBJ_55 = {
-         isa = "PBXBuildFile";
-         fileRef = OBJ_11;
-      };
-      OBJ_56 = {
-         isa = "PBXBuildFile";
-         fileRef = OBJ_12;
-      };
-      OBJ_57 = {
-         isa = "PBXBuildFile";
-         fileRef = OBJ_13;
-      };
-      OBJ_58 = {
-         isa = "PBXBuildFile";
-         fileRef = OBJ_14;
-      };
-      OBJ_59 = {
-         isa = "PBXBuildFile";
-         fileRef = OBJ_15;
-      };
-      OBJ_6 = {
-         isa = "PBXFileReference";
-         explicitFileType = "sourcecode.swift";
-         path = "Package.swift";
-         sourceTree = "<group>";
-      };
-      OBJ_60 = {
-         isa = "PBXBuildFile";
-         fileRef = OBJ_16;
-      };
-      OBJ_61 = {
-         isa = "PBXBuildFile";
-         fileRef = OBJ_17;
-      };
-      OBJ_62 = {
-         isa = "PBXBuildFile";
-         fileRef = OBJ_18;
-      };
-      OBJ_63 = {
-         isa = "PBXBuildFile";
-         fileRef = OBJ_19;
-      };
-      OBJ_64 = {
-         isa = "PBXBuildFile";
-         fileRef = OBJ_20;
-      };
-      OBJ_65 = {
-         isa = "PBXBuildFile";
-         fileRef = OBJ_21;
-      };
-      OBJ_66 = {
-         isa = "PBXBuildFile";
-         fileRef = OBJ_22;
-      };
-      OBJ_67 = {
-         isa = "PBXBuildFile";
-         fileRef = OBJ_23;
-      };
-      OBJ_68 = {
-         isa = "PBXBuildFile";
-         fileRef = OBJ_24;
-      };
-      OBJ_69 = {
-         isa = "PBXBuildFile";
-         fileRef = OBJ_25;
-      };
-      OBJ_7 = {
-         isa = "PBXGroup";
-         children = (
-            OBJ_8,
-         );
-         path = "Sources";
-         sourceTree = "<group>";
-      };
-      OBJ_70 = {
-         isa = "PBXBuildFile";
-         fileRef = OBJ_26;
-      };
-      OBJ_71 = {
-         isa = "PBXBuildFile";
-         fileRef = OBJ_27;
-      };
-      OBJ_72 = {
-         isa = "PBXBuildFile";
-         fileRef = OBJ_28;
-      };
-      OBJ_73 = {
-         isa = "PBXFrameworksBuildPhase";
-         files = (
-         );
-      };
-      OBJ_74 = {
-         isa = "PBXNativeTarget";
-         buildConfigurationList = OBJ_75;
-         buildPhases = (
-            OBJ_78,
-            OBJ_92,
-         );
-         dependencies = (
-            OBJ_94,
-         );
-         name = "MusicNotationCoreTests";
-         productName = "MusicNotationCoreTests";
-         productReference = OBJ_47;
-         productType = "com.apple.product-type.bundle.unit-test";
-      };
-      OBJ_75 = {
-         isa = "XCConfigurationList";
-         buildConfigurations = (
-            OBJ_76,
-            OBJ_77,
-         );
-         defaultConfigurationIsVisible = "0";
-         defaultConfigurationName = "Debug";
-      };
-      OBJ_76 = {
-         isa = "XCBuildConfiguration";
-         buildSettings = {
-            EMBEDDED_CONTENT_CONTAINS_SWIFT = "YES";
-            FRAMEWORK_SEARCH_PATHS = (
-               "$(inherited)",
-               "$(PLATFORM_DIR)/Developer/Library/Frameworks",
-            );
-            HEADER_SEARCH_PATHS = (
-               "$(inherited)",
-            );
-            INFOPLIST_FILE = "MusicNotationCore.xcodeproj/MusicNotationCoreTests_Info.plist";
-            LD_RUNPATH_SEARCH_PATHS = (
-               "@loader_path/../Frameworks",
-            );
-            OTHER_LDFLAGS = (
-               "$(inherited)",
-            );
-            OTHER_SWIFT_FLAGS = (
-               "$(inherited)",
-            );
-            TARGET_NAME = "MusicNotationCoreTests";
-         };
-         name = "Debug";
-      };
-      OBJ_77 = {
-         isa = "XCBuildConfiguration";
-         buildSettings = {
-            EMBEDDED_CONTENT_CONTAINS_SWIFT = "YES";
-            FRAMEWORK_SEARCH_PATHS = (
-               "$(inherited)",
-               "$(PLATFORM_DIR)/Developer/Library/Frameworks",
-            );
-            HEADER_SEARCH_PATHS = (
-               "$(inherited)",
-            );
-            INFOPLIST_FILE = "MusicNotationCore.xcodeproj/MusicNotationCoreTests_Info.plist";
-            LD_RUNPATH_SEARCH_PATHS = (
-               "@loader_path/../Frameworks",
-            );
-            OTHER_LDFLAGS = (
-               "$(inherited)",
-            );
-            OTHER_SWIFT_FLAGS = (
-               "$(inherited)",
-            );
-            TARGET_NAME = "MusicNotationCoreTests";
-         };
-         name = "Release";
-      };
-      OBJ_78 = {
-         isa = "PBXSourcesBuildPhase";
-         files = (
-            OBJ_79,
-            OBJ_80,
-            OBJ_81,
-            OBJ_82,
-            OBJ_83,
-            OBJ_84,
-            OBJ_85,
-            OBJ_86,
-            OBJ_87,
-            OBJ_88,
-            OBJ_89,
-            OBJ_90,
-            OBJ_91,
-         );
-      };
-      OBJ_79 = {
-         isa = "PBXBuildFile";
-         fileRef = OBJ_31;
-      };
-      OBJ_8 = {
-         isa = "PBXGroup";
-         children = (
-            OBJ_9,
-            OBJ_10,
-            OBJ_11,
-            OBJ_12,
-            OBJ_13,
-            OBJ_14,
-            OBJ_15,
-            OBJ_16,
-            OBJ_17,
-            OBJ_18,
-            OBJ_19,
-            OBJ_20,
-            OBJ_21,
-            OBJ_22,
-            OBJ_23,
-            OBJ_24,
-            OBJ_25,
-            OBJ_26,
-            OBJ_27,
-            OBJ_28,
-         );
-         name = "MusicNotationCore";
-         path = "Sources";
-         sourceTree = "SOURCE_ROOT";
-      };
-      OBJ_80 = {
-         isa = "PBXBuildFile";
-         fileRef = OBJ_32;
-      };
-      OBJ_81 = {
-         isa = "PBXBuildFile";
-         fileRef = OBJ_33;
-      };
-      OBJ_82 = {
-         isa = "PBXBuildFile";
-         fileRef = OBJ_34;
-      };
-      OBJ_83 = {
-         isa = "PBXBuildFile";
-         fileRef = OBJ_35;
-      };
-      OBJ_84 = {
-         isa = "PBXBuildFile";
-         fileRef = OBJ_36;
-      };
-      OBJ_85 = {
-         isa = "PBXBuildFile";
-         fileRef = OBJ_37;
-      };
-      OBJ_86 = {
-         isa = "PBXBuildFile";
-         fileRef = OBJ_38;
-      };
-      OBJ_87 = {
-         isa = "PBXBuildFile";
-         fileRef = OBJ_39;
-      };
-      OBJ_88 = {
-         isa = "PBXBuildFile";
-         fileRef = OBJ_40;
-      };
-      OBJ_89 = {
-         isa = "PBXBuildFile";
-         fileRef = OBJ_41;
-      };
-      OBJ_9 = {
-         isa = "PBXFileReference";
-         path = "Clef.swift";
-         sourceTree = "<group>";
-      };
-      OBJ_90 = {
-         isa = "PBXBuildFile";
-         fileRef = OBJ_42;
-      };
-      OBJ_91 = {
-         isa = "PBXBuildFile";
-         fileRef = OBJ_43;
-      };
-      OBJ_92 = {
-         isa = "PBXFrameworksBuildPhase";
-         files = (
-            OBJ_93,
-         );
-      };
-      OBJ_93 = {
-         isa = "PBXBuildFile";
-         fileRef = OBJ_46;
-      };
-      OBJ_94 = {
-         isa = "PBXTargetDependency";
-         target = OBJ_48;
-      };
-   };
-   rootObject = OBJ_1;
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		OBJ_53 /* Clef.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_9 /* Clef.swift */; };
+		OBJ_54 /* Enharmonic.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_10 /* Enharmonic.swift */; };
+		OBJ_55 /* ImmutableMeasure.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_11 /* ImmutableMeasure.swift */; };
+		OBJ_56 /* Interval.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_12 /* Interval.swift */; };
+		OBJ_57 /* Key.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_13 /* Key.swift */; };
+		OBJ_58 /* Measure.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_14 /* Measure.swift */; };
+		OBJ_59 /* MeasureDurationValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_15 /* MeasureDurationValidator.swift */; };
+		OBJ_60 /* MeasureRepeat.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_16 /* MeasureRepeat.swift */; };
+		OBJ_61 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_17 /* Note.swift */; };
+		OBJ_62 /* NoteCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_18 /* NoteCollection.swift */; };
+		OBJ_63 /* NoteDuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_19 /* NoteDuration.swift */; };
+		OBJ_64 /* NoteHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_20 /* NoteHolder.swift */; };
+		OBJ_65 /* RepeatedMeasure.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_21 /* RepeatedMeasure.swift */; };
+		OBJ_66 /* Staff.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_22 /* Staff.swift */; };
+		OBJ_67 /* StaffLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_23 /* StaffLocation.swift */; };
+		OBJ_68 /* SwiftHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_24 /* SwiftHelpers.swift */; };
+		OBJ_69 /* TimeSignature.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_25 /* TimeSignature.swift */; };
+		OBJ_70 /* Tone.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_26 /* Tone.swift */; };
+		OBJ_71 /* Tuplet.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_27 /* Tuplet.swift */; };
+		OBJ_72 /* Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_28 /* Types.swift */; };
+		OBJ_79 /* ClefTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_31 /* ClefTests.swift */; };
+		OBJ_80 /* IntervalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_32 /* IntervalTests.swift */; };
+		OBJ_81 /* KeyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_33 /* KeyTests.swift */; };
+		OBJ_82 /* MeasureDurationValidatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_34 /* MeasureDurationValidatorTests.swift */; };
+		OBJ_83 /* MeasureRepeatTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_35 /* MeasureRepeatTests.swift */; };
+		OBJ_84 /* MeasureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_36 /* MeasureTests.swift */; };
+		OBJ_85 /* NoteDurationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_37 /* NoteDurationTests.swift */; };
+		OBJ_86 /* NoteTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_38 /* NoteTests.swift */; };
+		OBJ_87 /* StaffTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_39 /* StaffTests.swift */; };
+		OBJ_88 /* SwiftHelpersTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_40 /* SwiftHelpersTests.swift */; };
+		OBJ_89 /* TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_41 /* TestHelpers.swift */; };
+		OBJ_90 /* ToneTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_42 /* ToneTests.swift */; };
+		OBJ_91 /* TupletTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_43 /* TupletTests.swift */; };
+		OBJ_93 /* MusicNotationCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_46 /* MusicNotationCore.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		277455241E6B74C600D4DF29 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_48;
+			remoteInfo = MusicNotationCore;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		OBJ_10 /* Enharmonic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enharmonic.swift; sourceTree = "<group>"; };
+		OBJ_11 /* ImmutableMeasure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImmutableMeasure.swift; sourceTree = "<group>"; };
+		OBJ_12 /* Interval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Interval.swift; sourceTree = "<group>"; };
+		OBJ_13 /* Key.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Key.swift; sourceTree = "<group>"; };
+		OBJ_14 /* Measure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Measure.swift; sourceTree = "<group>"; };
+		OBJ_15 /* MeasureDurationValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasureDurationValidator.swift; sourceTree = "<group>"; };
+		OBJ_16 /* MeasureRepeat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasureRepeat.swift; sourceTree = "<group>"; };
+		OBJ_17 /* Note.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
+		OBJ_18 /* NoteCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteCollection.swift; sourceTree = "<group>"; };
+		OBJ_19 /* NoteDuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteDuration.swift; sourceTree = "<group>"; };
+		OBJ_20 /* NoteHolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteHolder.swift; sourceTree = "<group>"; };
+		OBJ_21 /* RepeatedMeasure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepeatedMeasure.swift; sourceTree = "<group>"; };
+		OBJ_22 /* Staff.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Staff.swift; sourceTree = "<group>"; };
+		OBJ_23 /* StaffLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaffLocation.swift; sourceTree = "<group>"; };
+		OBJ_24 /* SwiftHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftHelpers.swift; sourceTree = "<group>"; };
+		OBJ_25 /* TimeSignature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeSignature.swift; sourceTree = "<group>"; };
+		OBJ_26 /* Tone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tone.swift; sourceTree = "<group>"; };
+		OBJ_27 /* Tuplet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tuplet.swift; sourceTree = "<group>"; };
+		OBJ_28 /* Types.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Types.swift; sourceTree = "<group>"; };
+		OBJ_31 /* ClefTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClefTests.swift; sourceTree = "<group>"; };
+		OBJ_32 /* IntervalTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntervalTests.swift; sourceTree = "<group>"; };
+		OBJ_33 /* KeyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyTests.swift; sourceTree = "<group>"; };
+		OBJ_34 /* MeasureDurationValidatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasureDurationValidatorTests.swift; sourceTree = "<group>"; };
+		OBJ_35 /* MeasureRepeatTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasureRepeatTests.swift; sourceTree = "<group>"; };
+		OBJ_36 /* MeasureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasureTests.swift; sourceTree = "<group>"; };
+		OBJ_37 /* NoteDurationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteDurationTests.swift; sourceTree = "<group>"; };
+		OBJ_38 /* NoteTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteTests.swift; sourceTree = "<group>"; };
+		OBJ_39 /* StaffTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaffTests.swift; sourceTree = "<group>"; };
+		OBJ_40 /* SwiftHelpersTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftHelpersTests.swift; sourceTree = "<group>"; };
+		OBJ_41 /* TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestHelpers.swift; sourceTree = "<group>"; };
+		OBJ_42 /* ToneTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToneTests.swift; sourceTree = "<group>"; };
+		OBJ_43 /* TupletTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TupletTests.swift; sourceTree = "<group>"; };
+		OBJ_46 /* MusicNotationCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MusicNotationCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		OBJ_47 /* MusicNotationCoreTests.xctest */ = {isa = PBXFileReference; lastKnownFileType = file; path = MusicNotationCoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		OBJ_9 /* Clef.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Clef.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		OBJ_73 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_92 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_93 /* MusicNotationCore.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		OBJ_29 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_30 /* MusicNotationCoreTests */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
+		OBJ_30 /* MusicNotationCoreTests */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_31 /* ClefTests.swift */,
+				OBJ_32 /* IntervalTests.swift */,
+				OBJ_33 /* KeyTests.swift */,
+				OBJ_34 /* MeasureDurationValidatorTests.swift */,
+				OBJ_35 /* MeasureRepeatTests.swift */,
+				OBJ_36 /* MeasureTests.swift */,
+				OBJ_37 /* NoteDurationTests.swift */,
+				OBJ_38 /* NoteTests.swift */,
+				OBJ_39 /* StaffTests.swift */,
+				OBJ_40 /* SwiftHelpersTests.swift */,
+				OBJ_41 /* TestHelpers.swift */,
+				OBJ_42 /* ToneTests.swift */,
+				OBJ_43 /* TupletTests.swift */,
+			);
+			name = MusicNotationCoreTests;
+			path = Tests/MusicNotationCoreTests;
+			sourceTree = SOURCE_ROOT;
+		};
+		OBJ_45 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_46 /* MusicNotationCore.framework */,
+				OBJ_47 /* MusicNotationCoreTests.xctest */,
+			);
+			name = Products;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		OBJ_5 /*  */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_7 /* Sources */,
+				OBJ_29 /* Tests */,
+				OBJ_45 /* Products */,
+			);
+			name = "";
+			sourceTree = "<group>";
+		};
+		OBJ_7 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_8 /* MusicNotationCore */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		OBJ_8 /* MusicNotationCore */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_9 /* Clef.swift */,
+				OBJ_10 /* Enharmonic.swift */,
+				OBJ_11 /* ImmutableMeasure.swift */,
+				OBJ_12 /* Interval.swift */,
+				OBJ_13 /* Key.swift */,
+				OBJ_14 /* Measure.swift */,
+				OBJ_15 /* MeasureDurationValidator.swift */,
+				OBJ_16 /* MeasureRepeat.swift */,
+				OBJ_17 /* Note.swift */,
+				OBJ_18 /* NoteCollection.swift */,
+				OBJ_19 /* NoteDuration.swift */,
+				OBJ_20 /* NoteHolder.swift */,
+				OBJ_21 /* RepeatedMeasure.swift */,
+				OBJ_22 /* Staff.swift */,
+				OBJ_23 /* StaffLocation.swift */,
+				OBJ_24 /* SwiftHelpers.swift */,
+				OBJ_25 /* TimeSignature.swift */,
+				OBJ_26 /* Tone.swift */,
+				OBJ_27 /* Tuplet.swift */,
+				OBJ_28 /* Types.swift */,
+			);
+			name = MusicNotationCore;
+			path = Sources;
+			sourceTree = SOURCE_ROOT;
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		OBJ_48 /* MusicNotationCore */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = OBJ_49 /* Build configuration list for PBXNativeTarget "MusicNotationCore" */;
+			buildPhases = (
+				OBJ_52 /* Sources */,
+				OBJ_73 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MusicNotationCore;
+			productName = MusicNotationCore;
+			productReference = OBJ_46 /* MusicNotationCore.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		OBJ_74 /* MusicNotationCoreTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = OBJ_75 /* Build configuration list for PBXNativeTarget "MusicNotationCoreTests" */;
+			buildPhases = (
+				OBJ_78 /* Sources */,
+				OBJ_92 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				OBJ_94 /* PBXTargetDependency */,
+			);
+			name = MusicNotationCoreTests;
+			productName = MusicNotationCoreTests;
+			productReference = OBJ_47 /* MusicNotationCoreTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		OBJ_1 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 9999;
+			};
+			buildConfigurationList = OBJ_2 /* Build configuration list for PBXProject "MusicNotationCore" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = OBJ_5 /*  */;
+			productRefGroup = OBJ_45 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				OBJ_48 /* MusicNotationCore */,
+				OBJ_74 /* MusicNotationCoreTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		OBJ_52 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_53 /* Clef.swift in Sources */,
+				OBJ_54 /* Enharmonic.swift in Sources */,
+				OBJ_55 /* ImmutableMeasure.swift in Sources */,
+				OBJ_56 /* Interval.swift in Sources */,
+				OBJ_57 /* Key.swift in Sources */,
+				OBJ_58 /* Measure.swift in Sources */,
+				OBJ_59 /* MeasureDurationValidator.swift in Sources */,
+				OBJ_60 /* MeasureRepeat.swift in Sources */,
+				OBJ_61 /* Note.swift in Sources */,
+				OBJ_62 /* NoteCollection.swift in Sources */,
+				OBJ_63 /* NoteDuration.swift in Sources */,
+				OBJ_64 /* NoteHolder.swift in Sources */,
+				OBJ_65 /* RepeatedMeasure.swift in Sources */,
+				OBJ_66 /* Staff.swift in Sources */,
+				OBJ_67 /* StaffLocation.swift in Sources */,
+				OBJ_68 /* SwiftHelpers.swift in Sources */,
+				OBJ_69 /* TimeSignature.swift in Sources */,
+				OBJ_70 /* Tone.swift in Sources */,
+				OBJ_71 /* Tuplet.swift in Sources */,
+				OBJ_72 /* Types.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_78 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_79 /* ClefTests.swift in Sources */,
+				OBJ_80 /* IntervalTests.swift in Sources */,
+				OBJ_81 /* KeyTests.swift in Sources */,
+				OBJ_82 /* MeasureDurationValidatorTests.swift in Sources */,
+				OBJ_83 /* MeasureRepeatTests.swift in Sources */,
+				OBJ_84 /* MeasureTests.swift in Sources */,
+				OBJ_85 /* NoteDurationTests.swift in Sources */,
+				OBJ_86 /* NoteTests.swift in Sources */,
+				OBJ_87 /* StaffTests.swift in Sources */,
+				OBJ_88 /* SwiftHelpersTests.swift in Sources */,
+				OBJ_89 /* TestHelpers.swift in Sources */,
+				OBJ_90 /* ToneTests.swift in Sources */,
+				OBJ_91 /* TupletTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		OBJ_94 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_48 /* MusicNotationCore */;
+			targetProxy = 277455241E6B74C600D4DF29 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		OBJ_3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_NS_ASSERTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_SWIFT_FLAGS = "-DXcode";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator appletvos appletvsimulator watchos watchsimulator";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = SWIFT_PACKAGE;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
+				USE_HEADERMAP = NO;
+			};
+			name = Debug;
+		};
+		OBJ_4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_OPTIMIZATION_LEVEL = s;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				OTHER_SWIFT_FLAGS = "-DXcode";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator appletvos appletvsimulator watchos watchsimulator";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = SWIFT_PACKAGE;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 3.0;
+				USE_HEADERMAP = NO;
+			};
+			name = Release;
+		};
+		OBJ_50 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = MusicNotationCore.xcodeproj/MusicNotationCore_Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = MusicNotationCore;
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				TARGET_NAME = MusicNotationCore;
+			};
+			name = Debug;
+		};
+		OBJ_51 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = MusicNotationCore.xcodeproj/MusicNotationCore_Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = MusicNotationCore;
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				TARGET_NAME = MusicNotationCore;
+			};
+			name = Release;
+		};
+		OBJ_76 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = MusicNotationCore.xcodeproj/MusicNotationCoreTests_Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				TARGET_NAME = MusicNotationCoreTests;
+			};
+			name = Debug;
+		};
+		OBJ_77 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = MusicNotationCore.xcodeproj/MusicNotationCoreTests_Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				TARGET_NAME = MusicNotationCoreTests;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		OBJ_2 /* Build configuration list for PBXProject "MusicNotationCore" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_3 /* Debug */,
+				OBJ_4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		OBJ_49 /* Build configuration list for PBXNativeTarget "MusicNotationCore" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_50 /* Debug */,
+				OBJ_51 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		OBJ_75 /* Build configuration list for PBXNativeTarget "MusicNotationCoreTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_76 /* Debug */,
+				OBJ_77 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = OBJ_1 /* Project object */;
 }

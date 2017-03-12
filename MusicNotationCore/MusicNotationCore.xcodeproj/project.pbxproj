@@ -1,0 +1,1379 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		27CE86B91E750534007AD729 /* MusicNotationCoreMac.h in Headers */ = {isa = PBXBuildFile; fileRef = 27CE86AB1E750534007AD729 /* MusicNotationCoreMac.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		27CE86C91E75054E007AD729 /* MusicNotationCoreTV.h in Headers */ = {isa = PBXBuildFile; fileRef = 27CE86C71E75054E007AD729 /* MusicNotationCoreTV.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		27CE86D61E75055D007AD729 /* MusicNotationCoreWatch.h in Headers */ = {isa = PBXBuildFile; fileRef = 27CE86D41E75055D007AD729 /* MusicNotationCoreWatch.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		27CE86E31E75056F007AD729 /* MusicNotationCoreiOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 27CE86E11E75056F007AD729 /* MusicNotationCoreiOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		27CE86FB1E750599007AD729 /* Clef.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86E71E750599007AD729 /* Clef.swift */; };
+		27CE86FC1E750599007AD729 /* Clef.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86E71E750599007AD729 /* Clef.swift */; };
+		27CE86FD1E750599007AD729 /* Clef.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86E71E750599007AD729 /* Clef.swift */; };
+		27CE86FE1E750599007AD729 /* Clef.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86E71E750599007AD729 /* Clef.swift */; };
+		27CE86FF1E750599007AD729 /* Enharmonic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86E81E750599007AD729 /* Enharmonic.swift */; };
+		27CE87001E750599007AD729 /* Enharmonic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86E81E750599007AD729 /* Enharmonic.swift */; };
+		27CE87011E750599007AD729 /* Enharmonic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86E81E750599007AD729 /* Enharmonic.swift */; };
+		27CE87021E750599007AD729 /* Enharmonic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86E81E750599007AD729 /* Enharmonic.swift */; };
+		27CE87031E750599007AD729 /* ImmutableMeasure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86E91E750599007AD729 /* ImmutableMeasure.swift */; };
+		27CE87041E750599007AD729 /* ImmutableMeasure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86E91E750599007AD729 /* ImmutableMeasure.swift */; };
+		27CE87051E750599007AD729 /* ImmutableMeasure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86E91E750599007AD729 /* ImmutableMeasure.swift */; };
+		27CE87061E750599007AD729 /* ImmutableMeasure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86E91E750599007AD729 /* ImmutableMeasure.swift */; };
+		27CE87071E750599007AD729 /* Interval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86EA1E750599007AD729 /* Interval.swift */; };
+		27CE87081E750599007AD729 /* Interval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86EA1E750599007AD729 /* Interval.swift */; };
+		27CE87091E750599007AD729 /* Interval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86EA1E750599007AD729 /* Interval.swift */; };
+		27CE870A1E750599007AD729 /* Interval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86EA1E750599007AD729 /* Interval.swift */; };
+		27CE870B1E750599007AD729 /* Key.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86EB1E750599007AD729 /* Key.swift */; };
+		27CE870C1E750599007AD729 /* Key.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86EB1E750599007AD729 /* Key.swift */; };
+		27CE870D1E750599007AD729 /* Key.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86EB1E750599007AD729 /* Key.swift */; };
+		27CE870E1E750599007AD729 /* Key.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86EB1E750599007AD729 /* Key.swift */; };
+		27CE870F1E750599007AD729 /* Measure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86EC1E750599007AD729 /* Measure.swift */; };
+		27CE87101E750599007AD729 /* Measure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86EC1E750599007AD729 /* Measure.swift */; };
+		27CE87111E750599007AD729 /* Measure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86EC1E750599007AD729 /* Measure.swift */; };
+		27CE87121E750599007AD729 /* Measure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86EC1E750599007AD729 /* Measure.swift */; };
+		27CE87131E750599007AD729 /* MeasureDurationValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86ED1E750599007AD729 /* MeasureDurationValidator.swift */; };
+		27CE87141E750599007AD729 /* MeasureDurationValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86ED1E750599007AD729 /* MeasureDurationValidator.swift */; };
+		27CE87151E750599007AD729 /* MeasureDurationValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86ED1E750599007AD729 /* MeasureDurationValidator.swift */; };
+		27CE87161E750599007AD729 /* MeasureDurationValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86ED1E750599007AD729 /* MeasureDurationValidator.swift */; };
+		27CE87171E750599007AD729 /* MeasureRepeat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86EE1E750599007AD729 /* MeasureRepeat.swift */; };
+		27CE87181E750599007AD729 /* MeasureRepeat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86EE1E750599007AD729 /* MeasureRepeat.swift */; };
+		27CE87191E750599007AD729 /* MeasureRepeat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86EE1E750599007AD729 /* MeasureRepeat.swift */; };
+		27CE871A1E750599007AD729 /* MeasureRepeat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86EE1E750599007AD729 /* MeasureRepeat.swift */; };
+		27CE871B1E750599007AD729 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86EF1E750599007AD729 /* Note.swift */; };
+		27CE871C1E750599007AD729 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86EF1E750599007AD729 /* Note.swift */; };
+		27CE871D1E750599007AD729 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86EF1E750599007AD729 /* Note.swift */; };
+		27CE871E1E750599007AD729 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86EF1E750599007AD729 /* Note.swift */; };
+		27CE871F1E750599007AD729 /* NoteCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86F01E750599007AD729 /* NoteCollection.swift */; };
+		27CE87201E750599007AD729 /* NoteCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86F01E750599007AD729 /* NoteCollection.swift */; };
+		27CE87211E750599007AD729 /* NoteCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86F01E750599007AD729 /* NoteCollection.swift */; };
+		27CE87221E750599007AD729 /* NoteCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86F01E750599007AD729 /* NoteCollection.swift */; };
+		27CE87231E750599007AD729 /* NoteDuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86F11E750599007AD729 /* NoteDuration.swift */; };
+		27CE87241E750599007AD729 /* NoteDuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86F11E750599007AD729 /* NoteDuration.swift */; };
+		27CE87251E750599007AD729 /* NoteDuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86F11E750599007AD729 /* NoteDuration.swift */; };
+		27CE87261E750599007AD729 /* NoteDuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86F11E750599007AD729 /* NoteDuration.swift */; };
+		27CE87271E750599007AD729 /* NoteHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86F21E750599007AD729 /* NoteHolder.swift */; };
+		27CE87281E750599007AD729 /* NoteHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86F21E750599007AD729 /* NoteHolder.swift */; };
+		27CE87291E750599007AD729 /* NoteHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86F21E750599007AD729 /* NoteHolder.swift */; };
+		27CE872A1E750599007AD729 /* NoteHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86F21E750599007AD729 /* NoteHolder.swift */; };
+		27CE872B1E750599007AD729 /* RepeatedMeasure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86F31E750599007AD729 /* RepeatedMeasure.swift */; };
+		27CE872C1E750599007AD729 /* RepeatedMeasure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86F31E750599007AD729 /* RepeatedMeasure.swift */; };
+		27CE872D1E750599007AD729 /* RepeatedMeasure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86F31E750599007AD729 /* RepeatedMeasure.swift */; };
+		27CE872E1E750599007AD729 /* RepeatedMeasure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86F31E750599007AD729 /* RepeatedMeasure.swift */; };
+		27CE872F1E750599007AD729 /* Staff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86F41E750599007AD729 /* Staff.swift */; };
+		27CE87301E750599007AD729 /* Staff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86F41E750599007AD729 /* Staff.swift */; };
+		27CE87311E750599007AD729 /* Staff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86F41E750599007AD729 /* Staff.swift */; };
+		27CE87321E750599007AD729 /* Staff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86F41E750599007AD729 /* Staff.swift */; };
+		27CE87331E750599007AD729 /* StaffLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86F51E750599007AD729 /* StaffLocation.swift */; };
+		27CE87341E750599007AD729 /* StaffLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86F51E750599007AD729 /* StaffLocation.swift */; };
+		27CE87351E750599007AD729 /* StaffLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86F51E750599007AD729 /* StaffLocation.swift */; };
+		27CE87361E750599007AD729 /* StaffLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86F51E750599007AD729 /* StaffLocation.swift */; };
+		27CE87371E750599007AD729 /* SwiftHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86F61E750599007AD729 /* SwiftHelpers.swift */; };
+		27CE87381E750599007AD729 /* SwiftHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86F61E750599007AD729 /* SwiftHelpers.swift */; };
+		27CE87391E750599007AD729 /* SwiftHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86F61E750599007AD729 /* SwiftHelpers.swift */; };
+		27CE873A1E750599007AD729 /* SwiftHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86F61E750599007AD729 /* SwiftHelpers.swift */; };
+		27CE873B1E750599007AD729 /* TimeSignature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86F71E750599007AD729 /* TimeSignature.swift */; };
+		27CE873C1E750599007AD729 /* TimeSignature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86F71E750599007AD729 /* TimeSignature.swift */; };
+		27CE873D1E750599007AD729 /* TimeSignature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86F71E750599007AD729 /* TimeSignature.swift */; };
+		27CE873E1E750599007AD729 /* TimeSignature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86F71E750599007AD729 /* TimeSignature.swift */; };
+		27CE873F1E750599007AD729 /* Tone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86F81E750599007AD729 /* Tone.swift */; };
+		27CE87401E750599007AD729 /* Tone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86F81E750599007AD729 /* Tone.swift */; };
+		27CE87411E750599007AD729 /* Tone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86F81E750599007AD729 /* Tone.swift */; };
+		27CE87421E750599007AD729 /* Tone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86F81E750599007AD729 /* Tone.swift */; };
+		27CE87431E750599007AD729 /* Tuplet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86F91E750599007AD729 /* Tuplet.swift */; };
+		27CE87441E750599007AD729 /* Tuplet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86F91E750599007AD729 /* Tuplet.swift */; };
+		27CE87451E750599007AD729 /* Tuplet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86F91E750599007AD729 /* Tuplet.swift */; };
+		27CE87461E750599007AD729 /* Tuplet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86F91E750599007AD729 /* Tuplet.swift */; };
+		27CE87471E750599007AD729 /* Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86FA1E750599007AD729 /* Types.swift */; };
+		27CE87481E750599007AD729 /* Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86FA1E750599007AD729 /* Types.swift */; };
+		27CE87491E750599007AD729 /* Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86FA1E750599007AD729 /* Types.swift */; };
+		27CE874A1E750599007AD729 /* Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE86FA1E750599007AD729 /* Types.swift */; };
+		27CE87531E750607007AD729 /* MusicNotationCoreMacTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE87521E750607007AD729 /* MusicNotationCoreMacTests.swift */; };
+		27CE87551E750607007AD729 /* MusicNotationCoreMac.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27CE86A81E750534007AD729 /* MusicNotationCoreMac.framework */; };
+		27CE87681E750623007AD729 /* ClefTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE875B1E750622007AD729 /* ClefTests.swift */; };
+		27CE87691E750623007AD729 /* IntervalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE875C1E750622007AD729 /* IntervalTests.swift */; };
+		27CE876A1E750623007AD729 /* KeyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE875D1E750622007AD729 /* KeyTests.swift */; };
+		27CE876B1E750623007AD729 /* MeasureDurationValidatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE875E1E750622007AD729 /* MeasureDurationValidatorTests.swift */; };
+		27CE876C1E750623007AD729 /* MeasureRepeatTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE875F1E750622007AD729 /* MeasureRepeatTests.swift */; };
+		27CE876D1E750623007AD729 /* MeasureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE87601E750622007AD729 /* MeasureTests.swift */; };
+		27CE876E1E750623007AD729 /* NoteDurationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE87611E750622007AD729 /* NoteDurationTests.swift */; };
+		27CE876F1E750623007AD729 /* NoteTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE87621E750622007AD729 /* NoteTests.swift */; };
+		27CE87701E750623007AD729 /* StaffTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE87631E750622007AD729 /* StaffTests.swift */; };
+		27CE87711E750623007AD729 /* SwiftHelpersTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE87641E750622007AD729 /* SwiftHelpersTests.swift */; };
+		27CE87721E750623007AD729 /* TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE87651E750622007AD729 /* TestHelpers.swift */; };
+		27CE87731E750623007AD729 /* ToneTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE87661E750623007AD729 /* ToneTests.swift */; };
+		27CE87741E750623007AD729 /* TupletTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE87671E750623007AD729 /* TupletTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		27CE87561E750607007AD729 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 27CE869D1E75050A007AD729 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 27CE86A71E750534007AD729;
+			remoteInfo = MusicNotationCoreMac;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		27CE86A81E750534007AD729 /* MusicNotationCoreMac.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MusicNotationCoreMac.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		27CE86AB1E750534007AD729 /* MusicNotationCoreMac.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MusicNotationCoreMac.h; sourceTree = "<group>"; };
+		27CE86AC1E750534007AD729 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		27CE86C51E75054E007AD729 /* MusicNotationCoreTV.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MusicNotationCoreTV.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		27CE86C71E75054E007AD729 /* MusicNotationCoreTV.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MusicNotationCoreTV.h; sourceTree = "<group>"; };
+		27CE86C81E75054E007AD729 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		27CE86D21E75055C007AD729 /* MusicNotationCoreWatch.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MusicNotationCoreWatch.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		27CE86D41E75055D007AD729 /* MusicNotationCoreWatch.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MusicNotationCoreWatch.h; sourceTree = "<group>"; };
+		27CE86D51E75055D007AD729 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		27CE86DF1E75056F007AD729 /* MusicNotationCoreiOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MusicNotationCoreiOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		27CE86E11E75056F007AD729 /* MusicNotationCoreiOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MusicNotationCoreiOS.h; sourceTree = "<group>"; };
+		27CE86E21E75056F007AD729 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		27CE86E71E750599007AD729 /* Clef.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Clef.swift; path = ../Sources/Clef.swift; sourceTree = "<group>"; };
+		27CE86E81E750599007AD729 /* Enharmonic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Enharmonic.swift; path = ../Sources/Enharmonic.swift; sourceTree = "<group>"; };
+		27CE86E91E750599007AD729 /* ImmutableMeasure.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ImmutableMeasure.swift; path = ../Sources/ImmutableMeasure.swift; sourceTree = "<group>"; };
+		27CE86EA1E750599007AD729 /* Interval.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Interval.swift; path = ../Sources/Interval.swift; sourceTree = "<group>"; };
+		27CE86EB1E750599007AD729 /* Key.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Key.swift; path = ../Sources/Key.swift; sourceTree = "<group>"; };
+		27CE86EC1E750599007AD729 /* Measure.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Measure.swift; path = ../Sources/Measure.swift; sourceTree = "<group>"; };
+		27CE86ED1E750599007AD729 /* MeasureDurationValidator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MeasureDurationValidator.swift; path = ../Sources/MeasureDurationValidator.swift; sourceTree = "<group>"; };
+		27CE86EE1E750599007AD729 /* MeasureRepeat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MeasureRepeat.swift; path = ../Sources/MeasureRepeat.swift; sourceTree = "<group>"; };
+		27CE86EF1E750599007AD729 /* Note.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Note.swift; path = ../Sources/Note.swift; sourceTree = "<group>"; };
+		27CE86F01E750599007AD729 /* NoteCollection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NoteCollection.swift; path = ../Sources/NoteCollection.swift; sourceTree = "<group>"; };
+		27CE86F11E750599007AD729 /* NoteDuration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NoteDuration.swift; path = ../Sources/NoteDuration.swift; sourceTree = "<group>"; };
+		27CE86F21E750599007AD729 /* NoteHolder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NoteHolder.swift; path = ../Sources/NoteHolder.swift; sourceTree = "<group>"; };
+		27CE86F31E750599007AD729 /* RepeatedMeasure.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RepeatedMeasure.swift; path = ../Sources/RepeatedMeasure.swift; sourceTree = "<group>"; };
+		27CE86F41E750599007AD729 /* Staff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Staff.swift; path = ../Sources/Staff.swift; sourceTree = "<group>"; };
+		27CE86F51E750599007AD729 /* StaffLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StaffLocation.swift; path = ../Sources/StaffLocation.swift; sourceTree = "<group>"; };
+		27CE86F61E750599007AD729 /* SwiftHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SwiftHelpers.swift; path = ../Sources/SwiftHelpers.swift; sourceTree = "<group>"; };
+		27CE86F71E750599007AD729 /* TimeSignature.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TimeSignature.swift; path = ../Sources/TimeSignature.swift; sourceTree = "<group>"; };
+		27CE86F81E750599007AD729 /* Tone.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Tone.swift; path = ../Sources/Tone.swift; sourceTree = "<group>"; };
+		27CE86F91E750599007AD729 /* Tuplet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Tuplet.swift; path = ../Sources/Tuplet.swift; sourceTree = "<group>"; };
+		27CE86FA1E750599007AD729 /* Types.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Types.swift; path = ../Sources/Types.swift; sourceTree = "<group>"; };
+		27CE87501E750607007AD729 /* MusicNotationCoreMacTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MusicNotationCoreMacTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		27CE87521E750607007AD729 /* MusicNotationCoreMacTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicNotationCoreMacTests.swift; sourceTree = "<group>"; };
+		27CE87541E750607007AD729 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		27CE875B1E750622007AD729 /* ClefTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ClefTests.swift; path = ../Tests/MusicNotationCoreTests/ClefTests.swift; sourceTree = "<group>"; };
+		27CE875C1E750622007AD729 /* IntervalTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IntervalTests.swift; path = ../Tests/MusicNotationCoreTests/IntervalTests.swift; sourceTree = "<group>"; };
+		27CE875D1E750622007AD729 /* KeyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = KeyTests.swift; path = ../Tests/MusicNotationCoreTests/KeyTests.swift; sourceTree = "<group>"; };
+		27CE875E1E750622007AD729 /* MeasureDurationValidatorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MeasureDurationValidatorTests.swift; path = ../Tests/MusicNotationCoreTests/MeasureDurationValidatorTests.swift; sourceTree = "<group>"; };
+		27CE875F1E750622007AD729 /* MeasureRepeatTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MeasureRepeatTests.swift; path = ../Tests/MusicNotationCoreTests/MeasureRepeatTests.swift; sourceTree = "<group>"; };
+		27CE87601E750622007AD729 /* MeasureTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MeasureTests.swift; path = ../Tests/MusicNotationCoreTests/MeasureTests.swift; sourceTree = "<group>"; };
+		27CE87611E750622007AD729 /* NoteDurationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NoteDurationTests.swift; path = ../Tests/MusicNotationCoreTests/NoteDurationTests.swift; sourceTree = "<group>"; };
+		27CE87621E750622007AD729 /* NoteTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NoteTests.swift; path = ../Tests/MusicNotationCoreTests/NoteTests.swift; sourceTree = "<group>"; };
+		27CE87631E750622007AD729 /* StaffTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StaffTests.swift; path = ../Tests/MusicNotationCoreTests/StaffTests.swift; sourceTree = "<group>"; };
+		27CE87641E750622007AD729 /* SwiftHelpersTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SwiftHelpersTests.swift; path = ../Tests/MusicNotationCoreTests/SwiftHelpersTests.swift; sourceTree = "<group>"; };
+		27CE87651E750622007AD729 /* TestHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TestHelpers.swift; path = ../Tests/MusicNotationCoreTests/TestHelpers.swift; sourceTree = "<group>"; };
+		27CE87661E750623007AD729 /* ToneTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ToneTests.swift; path = ../Tests/MusicNotationCoreTests/ToneTests.swift; sourceTree = "<group>"; };
+		27CE87671E750623007AD729 /* TupletTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TupletTests.swift; path = ../Tests/MusicNotationCoreTests/TupletTests.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		27CE86A41E750534007AD729 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		27CE86C11E75054E007AD729 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		27CE86CE1E75055C007AD729 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		27CE86DB1E75056F007AD729 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		27CE874D1E750607007AD729 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				27CE87551E750607007AD729 /* MusicNotationCoreMac.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		27CE869C1E75050A007AD729 = {
+			isa = PBXGroup;
+			children = (
+				27CE874B1E7505B2007AD729 /* Sources */,
+				27CE87761E750633007AD729 /* Tests */,
+				27CE86AA1E750534007AD729 /* MusicNotationCoreMac */,
+				27CE86C61E75054E007AD729 /* MusicNotationCoreTV */,
+				27CE86D31E75055D007AD729 /* MusicNotationCoreWatch */,
+				27CE86E01E75056F007AD729 /* MusicNotationCoreiOS */,
+				27CE87511E750607007AD729 /* MusicNotationCoreMacTests */,
+				27CE86A91E750534007AD729 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		27CE86A91E750534007AD729 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				27CE86A81E750534007AD729 /* MusicNotationCoreMac.framework */,
+				27CE86C51E75054E007AD729 /* MusicNotationCoreTV.framework */,
+				27CE86D21E75055C007AD729 /* MusicNotationCoreWatch.framework */,
+				27CE86DF1E75056F007AD729 /* MusicNotationCoreiOS.framework */,
+				27CE87501E750607007AD729 /* MusicNotationCoreMacTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		27CE86AA1E750534007AD729 /* MusicNotationCoreMac */ = {
+			isa = PBXGroup;
+			children = (
+				27CE86AB1E750534007AD729 /* MusicNotationCoreMac.h */,
+				27CE86AC1E750534007AD729 /* Info.plist */,
+			);
+			path = MusicNotationCoreMac;
+			sourceTree = "<group>";
+		};
+		27CE86C61E75054E007AD729 /* MusicNotationCoreTV */ = {
+			isa = PBXGroup;
+			children = (
+				27CE86C71E75054E007AD729 /* MusicNotationCoreTV.h */,
+				27CE86C81E75054E007AD729 /* Info.plist */,
+			);
+			path = MusicNotationCoreTV;
+			sourceTree = "<group>";
+		};
+		27CE86D31E75055D007AD729 /* MusicNotationCoreWatch */ = {
+			isa = PBXGroup;
+			children = (
+				27CE86D41E75055D007AD729 /* MusicNotationCoreWatch.h */,
+				27CE86D51E75055D007AD729 /* Info.plist */,
+			);
+			path = MusicNotationCoreWatch;
+			sourceTree = "<group>";
+		};
+		27CE86E01E75056F007AD729 /* MusicNotationCoreiOS */ = {
+			isa = PBXGroup;
+			children = (
+				27CE86E11E75056F007AD729 /* MusicNotationCoreiOS.h */,
+				27CE86E21E75056F007AD729 /* Info.plist */,
+			);
+			path = MusicNotationCoreiOS;
+			sourceTree = "<group>";
+		};
+		27CE874B1E7505B2007AD729 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				27CE86E71E750599007AD729 /* Clef.swift */,
+				27CE86E81E750599007AD729 /* Enharmonic.swift */,
+				27CE86E91E750599007AD729 /* ImmutableMeasure.swift */,
+				27CE86EA1E750599007AD729 /* Interval.swift */,
+				27CE86EB1E750599007AD729 /* Key.swift */,
+				27CE86EC1E750599007AD729 /* Measure.swift */,
+				27CE86ED1E750599007AD729 /* MeasureDurationValidator.swift */,
+				27CE86EE1E750599007AD729 /* MeasureRepeat.swift */,
+				27CE86EF1E750599007AD729 /* Note.swift */,
+				27CE86F01E750599007AD729 /* NoteCollection.swift */,
+				27CE86F11E750599007AD729 /* NoteDuration.swift */,
+				27CE86F21E750599007AD729 /* NoteHolder.swift */,
+				27CE86F31E750599007AD729 /* RepeatedMeasure.swift */,
+				27CE86F41E750599007AD729 /* Staff.swift */,
+				27CE86F51E750599007AD729 /* StaffLocation.swift */,
+				27CE86F61E750599007AD729 /* SwiftHelpers.swift */,
+				27CE86F71E750599007AD729 /* TimeSignature.swift */,
+				27CE86F81E750599007AD729 /* Tone.swift */,
+				27CE86F91E750599007AD729 /* Tuplet.swift */,
+				27CE86FA1E750599007AD729 /* Types.swift */,
+			);
+			name = Sources;
+			path = ../Sources;
+			sourceTree = "<group>";
+		};
+		27CE87511E750607007AD729 /* MusicNotationCoreMacTests */ = {
+			isa = PBXGroup;
+			children = (
+				27CE87521E750607007AD729 /* MusicNotationCoreMacTests.swift */,
+				27CE87541E750607007AD729 /* Info.plist */,
+			);
+			path = MusicNotationCoreMacTests;
+			sourceTree = "<group>";
+		};
+		27CE87751E75062B007AD729 /* MusicNotationCoreTests */ = {
+			isa = PBXGroup;
+			children = (
+				27CE875B1E750622007AD729 /* ClefTests.swift */,
+				27CE875C1E750622007AD729 /* IntervalTests.swift */,
+				27CE875D1E750622007AD729 /* KeyTests.swift */,
+				27CE875E1E750622007AD729 /* MeasureDurationValidatorTests.swift */,
+				27CE875F1E750622007AD729 /* MeasureRepeatTests.swift */,
+				27CE87601E750622007AD729 /* MeasureTests.swift */,
+				27CE87611E750622007AD729 /* NoteDurationTests.swift */,
+				27CE87621E750622007AD729 /* NoteTests.swift */,
+				27CE87631E750622007AD729 /* StaffTests.swift */,
+				27CE87641E750622007AD729 /* SwiftHelpersTests.swift */,
+				27CE87651E750622007AD729 /* TestHelpers.swift */,
+				27CE87661E750623007AD729 /* ToneTests.swift */,
+				27CE87671E750623007AD729 /* TupletTests.swift */,
+			);
+			name = MusicNotationCoreTests;
+			sourceTree = "<group>";
+		};
+		27CE87761E750633007AD729 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				27CE87751E75062B007AD729 /* MusicNotationCoreTests */,
+			);
+			name = Tests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		27CE86A51E750534007AD729 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				27CE86B91E750534007AD729 /* MusicNotationCoreMac.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		27CE86C21E75054E007AD729 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				27CE86C91E75054E007AD729 /* MusicNotationCoreTV.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		27CE86CF1E75055C007AD729 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				27CE86D61E75055D007AD729 /* MusicNotationCoreWatch.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		27CE86DC1E75056F007AD729 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				27CE86E31E75056F007AD729 /* MusicNotationCoreiOS.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		27CE86A71E750534007AD729 /* MusicNotationCoreMac */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 27CE86BA1E750534007AD729 /* Build configuration list for PBXNativeTarget "MusicNotationCoreMac" */;
+			buildPhases = (
+				27CE86A31E750534007AD729 /* Sources */,
+				27CE86A41E750534007AD729 /* Frameworks */,
+				27CE86A51E750534007AD729 /* Headers */,
+				27CE86A61E750534007AD729 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MusicNotationCoreMac;
+			productName = MusicNotationCoreMac;
+			productReference = 27CE86A81E750534007AD729 /* MusicNotationCoreMac.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		27CE86C41E75054E007AD729 /* MusicNotationCoreTV */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 27CE86CA1E75054E007AD729 /* Build configuration list for PBXNativeTarget "MusicNotationCoreTV" */;
+			buildPhases = (
+				27CE86C01E75054E007AD729 /* Sources */,
+				27CE86C11E75054E007AD729 /* Frameworks */,
+				27CE86C21E75054E007AD729 /* Headers */,
+				27CE86C31E75054E007AD729 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MusicNotationCoreTV;
+			productName = MusicNotationCoreTV;
+			productReference = 27CE86C51E75054E007AD729 /* MusicNotationCoreTV.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		27CE86D11E75055C007AD729 /* MusicNotationCoreWatch */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 27CE86D71E75055D007AD729 /* Build configuration list for PBXNativeTarget "MusicNotationCoreWatch" */;
+			buildPhases = (
+				27CE86CD1E75055C007AD729 /* Sources */,
+				27CE86CE1E75055C007AD729 /* Frameworks */,
+				27CE86CF1E75055C007AD729 /* Headers */,
+				27CE86D01E75055C007AD729 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MusicNotationCoreWatch;
+			productName = MusicNotationCoreWatch;
+			productReference = 27CE86D21E75055C007AD729 /* MusicNotationCoreWatch.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		27CE86DE1E75056F007AD729 /* MusicNotationCoreiOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 27CE86E41E75056F007AD729 /* Build configuration list for PBXNativeTarget "MusicNotationCoreiOS" */;
+			buildPhases = (
+				27CE86DA1E75056F007AD729 /* Sources */,
+				27CE86DB1E75056F007AD729 /* Frameworks */,
+				27CE86DC1E75056F007AD729 /* Headers */,
+				27CE86DD1E75056F007AD729 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MusicNotationCoreiOS;
+			productName = MusicNotationCoreiOS;
+			productReference = 27CE86DF1E75056F007AD729 /* MusicNotationCoreiOS.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		27CE874F1E750607007AD729 /* MusicNotationCoreMacTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 27CE87581E750607007AD729 /* Build configuration list for PBXNativeTarget "MusicNotationCoreMacTests" */;
+			buildPhases = (
+				27CE874C1E750607007AD729 /* Sources */,
+				27CE874D1E750607007AD729 /* Frameworks */,
+				27CE874E1E750607007AD729 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				27CE87571E750607007AD729 /* PBXTargetDependency */,
+			);
+			name = MusicNotationCoreMacTests;
+			productName = MusicNotationCoreMacTests;
+			productReference = 27CE87501E750607007AD729 /* MusicNotationCoreMacTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		27CE869D1E75050A007AD729 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0820;
+				LastUpgradeCheck = 0820;
+				TargetAttributes = {
+					27CE86A71E750534007AD729 = {
+						CreatedOnToolsVersion = 8.2.1;
+						LastSwiftMigration = 0820;
+						ProvisioningStyle = Automatic;
+					};
+					27CE86C41E75054E007AD729 = {
+						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = MZZ6S2F4BB;
+						LastSwiftMigration = 0820;
+						ProvisioningStyle = Automatic;
+					};
+					27CE86D11E75055C007AD729 = {
+						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = MZZ6S2F4BB;
+						LastSwiftMigration = 0820;
+						ProvisioningStyle = Automatic;
+					};
+					27CE86DE1E75056F007AD729 = {
+						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = MZZ6S2F4BB;
+						LastSwiftMigration = 0820;
+						ProvisioningStyle = Automatic;
+					};
+					27CE874F1E750607007AD729 = {
+						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = MZZ6S2F4BB;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 27CE86A01E75050A007AD729 /* Build configuration list for PBXProject "MusicNotationCore" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 27CE869C1E75050A007AD729;
+			productRefGroup = 27CE86A91E750534007AD729 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				27CE86A71E750534007AD729 /* MusicNotationCoreMac */,
+				27CE86C41E75054E007AD729 /* MusicNotationCoreTV */,
+				27CE86D11E75055C007AD729 /* MusicNotationCoreWatch */,
+				27CE86DE1E75056F007AD729 /* MusicNotationCoreiOS */,
+				27CE874F1E750607007AD729 /* MusicNotationCoreMacTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		27CE86A61E750534007AD729 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		27CE86C31E75054E007AD729 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		27CE86D01E75055C007AD729 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		27CE86DD1E75056F007AD729 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		27CE874E1E750607007AD729 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		27CE86A31E750534007AD729 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				27CE86FB1E750599007AD729 /* Clef.swift in Sources */,
+				27CE87171E750599007AD729 /* MeasureRepeat.swift in Sources */,
+				27CE870B1E750599007AD729 /* Key.swift in Sources */,
+				27CE87471E750599007AD729 /* Types.swift in Sources */,
+				27CE873B1E750599007AD729 /* TimeSignature.swift in Sources */,
+				27CE87271E750599007AD729 /* NoteHolder.swift in Sources */,
+				27CE87131E750599007AD729 /* MeasureDurationValidator.swift in Sources */,
+				27CE870F1E750599007AD729 /* Measure.swift in Sources */,
+				27CE87231E750599007AD729 /* NoteDuration.swift in Sources */,
+				27CE872B1E750599007AD729 /* RepeatedMeasure.swift in Sources */,
+				27CE87431E750599007AD729 /* Tuplet.swift in Sources */,
+				27CE871F1E750599007AD729 /* NoteCollection.swift in Sources */,
+				27CE871B1E750599007AD729 /* Note.swift in Sources */,
+				27CE87331E750599007AD729 /* StaffLocation.swift in Sources */,
+				27CE87031E750599007AD729 /* ImmutableMeasure.swift in Sources */,
+				27CE87071E750599007AD729 /* Interval.swift in Sources */,
+				27CE87371E750599007AD729 /* SwiftHelpers.swift in Sources */,
+				27CE873F1E750599007AD729 /* Tone.swift in Sources */,
+				27CE872F1E750599007AD729 /* Staff.swift in Sources */,
+				27CE86FF1E750599007AD729 /* Enharmonic.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		27CE86C01E75054E007AD729 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				27CE86FC1E750599007AD729 /* Clef.swift in Sources */,
+				27CE87181E750599007AD729 /* MeasureRepeat.swift in Sources */,
+				27CE870C1E750599007AD729 /* Key.swift in Sources */,
+				27CE87481E750599007AD729 /* Types.swift in Sources */,
+				27CE873C1E750599007AD729 /* TimeSignature.swift in Sources */,
+				27CE87281E750599007AD729 /* NoteHolder.swift in Sources */,
+				27CE87141E750599007AD729 /* MeasureDurationValidator.swift in Sources */,
+				27CE87101E750599007AD729 /* Measure.swift in Sources */,
+				27CE87241E750599007AD729 /* NoteDuration.swift in Sources */,
+				27CE872C1E750599007AD729 /* RepeatedMeasure.swift in Sources */,
+				27CE87441E750599007AD729 /* Tuplet.swift in Sources */,
+				27CE87201E750599007AD729 /* NoteCollection.swift in Sources */,
+				27CE871C1E750599007AD729 /* Note.swift in Sources */,
+				27CE87341E750599007AD729 /* StaffLocation.swift in Sources */,
+				27CE87041E750599007AD729 /* ImmutableMeasure.swift in Sources */,
+				27CE87081E750599007AD729 /* Interval.swift in Sources */,
+				27CE87381E750599007AD729 /* SwiftHelpers.swift in Sources */,
+				27CE87401E750599007AD729 /* Tone.swift in Sources */,
+				27CE87301E750599007AD729 /* Staff.swift in Sources */,
+				27CE87001E750599007AD729 /* Enharmonic.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		27CE86CD1E75055C007AD729 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				27CE86FD1E750599007AD729 /* Clef.swift in Sources */,
+				27CE87191E750599007AD729 /* MeasureRepeat.swift in Sources */,
+				27CE870D1E750599007AD729 /* Key.swift in Sources */,
+				27CE87491E750599007AD729 /* Types.swift in Sources */,
+				27CE873D1E750599007AD729 /* TimeSignature.swift in Sources */,
+				27CE87291E750599007AD729 /* NoteHolder.swift in Sources */,
+				27CE87151E750599007AD729 /* MeasureDurationValidator.swift in Sources */,
+				27CE87111E750599007AD729 /* Measure.swift in Sources */,
+				27CE87251E750599007AD729 /* NoteDuration.swift in Sources */,
+				27CE872D1E750599007AD729 /* RepeatedMeasure.swift in Sources */,
+				27CE87451E750599007AD729 /* Tuplet.swift in Sources */,
+				27CE87211E750599007AD729 /* NoteCollection.swift in Sources */,
+				27CE871D1E750599007AD729 /* Note.swift in Sources */,
+				27CE87351E750599007AD729 /* StaffLocation.swift in Sources */,
+				27CE87051E750599007AD729 /* ImmutableMeasure.swift in Sources */,
+				27CE87091E750599007AD729 /* Interval.swift in Sources */,
+				27CE87391E750599007AD729 /* SwiftHelpers.swift in Sources */,
+				27CE87411E750599007AD729 /* Tone.swift in Sources */,
+				27CE87311E750599007AD729 /* Staff.swift in Sources */,
+				27CE87011E750599007AD729 /* Enharmonic.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		27CE86DA1E75056F007AD729 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				27CE86FE1E750599007AD729 /* Clef.swift in Sources */,
+				27CE871A1E750599007AD729 /* MeasureRepeat.swift in Sources */,
+				27CE870E1E750599007AD729 /* Key.swift in Sources */,
+				27CE874A1E750599007AD729 /* Types.swift in Sources */,
+				27CE873E1E750599007AD729 /* TimeSignature.swift in Sources */,
+				27CE872A1E750599007AD729 /* NoteHolder.swift in Sources */,
+				27CE87161E750599007AD729 /* MeasureDurationValidator.swift in Sources */,
+				27CE87121E750599007AD729 /* Measure.swift in Sources */,
+				27CE87261E750599007AD729 /* NoteDuration.swift in Sources */,
+				27CE872E1E750599007AD729 /* RepeatedMeasure.swift in Sources */,
+				27CE87461E750599007AD729 /* Tuplet.swift in Sources */,
+				27CE87221E750599007AD729 /* NoteCollection.swift in Sources */,
+				27CE871E1E750599007AD729 /* Note.swift in Sources */,
+				27CE87361E750599007AD729 /* StaffLocation.swift in Sources */,
+				27CE87061E750599007AD729 /* ImmutableMeasure.swift in Sources */,
+				27CE870A1E750599007AD729 /* Interval.swift in Sources */,
+				27CE873A1E750599007AD729 /* SwiftHelpers.swift in Sources */,
+				27CE87421E750599007AD729 /* Tone.swift in Sources */,
+				27CE87321E750599007AD729 /* Staff.swift in Sources */,
+				27CE87021E750599007AD729 /* Enharmonic.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		27CE874C1E750607007AD729 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				27CE876F1E750623007AD729 /* NoteTests.swift in Sources */,
+				27CE87531E750607007AD729 /* MusicNotationCoreMacTests.swift in Sources */,
+				27CE876E1E750623007AD729 /* NoteDurationTests.swift in Sources */,
+				27CE87741E750623007AD729 /* TupletTests.swift in Sources */,
+				27CE876A1E750623007AD729 /* KeyTests.swift in Sources */,
+				27CE87701E750623007AD729 /* StaffTests.swift in Sources */,
+				27CE876D1E750623007AD729 /* MeasureTests.swift in Sources */,
+				27CE87681E750623007AD729 /* ClefTests.swift in Sources */,
+				27CE87711E750623007AD729 /* SwiftHelpersTests.swift in Sources */,
+				27CE876B1E750623007AD729 /* MeasureDurationValidatorTests.swift in Sources */,
+				27CE87691E750623007AD729 /* IntervalTests.swift in Sources */,
+				27CE876C1E750623007AD729 /* MeasureRepeatTests.swift in Sources */,
+				27CE87731E750623007AD729 /* ToneTests.swift in Sources */,
+				27CE87721E750623007AD729 /* TestHelpers.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		27CE87571E750607007AD729 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 27CE86A71E750534007AD729 /* MusicNotationCoreMac */;
+			targetProxy = 27CE87561E750607007AD729 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		27CE86A11E75050A007AD729 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		27CE86A21E75050A007AD729 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Release;
+		};
+		27CE86BB1E750534007AD729 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_VERSION = A;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = MusicNotationCoreMac/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kylesherman.MusicNotationCoreMac;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		27CE86BC1E750534007AD729 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_VERSION = A;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = MusicNotationCoreMac/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kylesherman.MusicNotationCoreMac;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 3.0;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		27CE86CB1E75054E007AD729 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = MZZ6S2F4BB;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = MusicNotationCoreTV/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kylesherman.MusicNotationCoreTV;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 9.0;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		27CE86CC1E75054E007AD729 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = MZZ6S2F4BB;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = MusicNotationCoreTV/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kylesherman.MusicNotationCoreTV;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 9.0;
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		27CE86D81E75055D007AD729 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = MZZ6S2F4BB;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = MusicNotationCoreWatch/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kylesherman.MusicNotationCoreWatch;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Debug;
+		};
+		27CE86D91E75055D007AD729 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = MZZ6S2F4BB;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = MusicNotationCoreWatch/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kylesherman.MusicNotationCoreWatch;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Release;
+		};
+		27CE86E51E75056F007AD729 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = MZZ6S2F4BB;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = MusicNotationCoreiOS/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kylesherman.MusicNotationCoreiOS;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		27CE86E61E75056F007AD729 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = MZZ6S2F4BB;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = MusicNotationCoreiOS/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kylesherman.MusicNotationCoreiOS;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		27CE87591E750607007AD729 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = MZZ6S2F4BB;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = MusicNotationCoreMacTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kylesherman.MusicNotationCoreMacTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Debug;
+		};
+		27CE875A1E750607007AD729 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = MZZ6S2F4BB;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = MusicNotationCoreMacTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kylesherman.MusicNotationCoreMacTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		27CE86A01E75050A007AD729 /* Build configuration list for PBXProject "MusicNotationCore" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				27CE86A11E75050A007AD729 /* Debug */,
+				27CE86A21E75050A007AD729 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		27CE86BA1E750534007AD729 /* Build configuration list for PBXNativeTarget "MusicNotationCoreMac" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				27CE86BB1E750534007AD729 /* Debug */,
+				27CE86BC1E750534007AD729 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		27CE86CA1E75054E007AD729 /* Build configuration list for PBXNativeTarget "MusicNotationCoreTV" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				27CE86CB1E75054E007AD729 /* Debug */,
+				27CE86CC1E75054E007AD729 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		27CE86D71E75055D007AD729 /* Build configuration list for PBXNativeTarget "MusicNotationCoreWatch" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				27CE86D81E75055D007AD729 /* Debug */,
+				27CE86D91E75055D007AD729 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		27CE86E41E75056F007AD729 /* Build configuration list for PBXNativeTarget "MusicNotationCoreiOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				27CE86E51E75056F007AD729 /* Debug */,
+				27CE86E61E75056F007AD729 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		27CE87581E750607007AD729 /* Build configuration list for PBXNativeTarget "MusicNotationCoreMacTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				27CE87591E750607007AD729 /* Debug */,
+				27CE875A1E750607007AD729 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 27CE869D1E75050A007AD729 /* Project object */;
+}

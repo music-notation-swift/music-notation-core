@@ -8,6 +8,8 @@
 
 #if os(Linux)
     import Glibc
+#elseif os(iOS) || os(watchOS) || os(tvOS) || os(OSX)
+    import Foundation
 #else
     import Darwin.C
 #endif

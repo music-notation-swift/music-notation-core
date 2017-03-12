@@ -2,8 +2,11 @@ language: objective-c
 osx_image: xcode8
 script:
   set -o pipefail &&
-  xcodebuild build -project MusicNotationCore.xcodeproj -scheme MusicNotationCore -sdk macosx &&
-  xcodebuild test -project MusicNotationCore.xcodeproj -scheme MusicNotationCore -sdk macosx
+  xcodebuild build -project MusicNotationCore/MusicNotationCore.xcodeproj -scheme MusicNotationCoreMac -sdk macosx &&
+  xcodebuild test -project MusicNotationCore/MusicNotationCore.xcodeproj -scheme MusicNotationCoreMac -sdk macosx &&
+  xcodebuild build -project MusicNotationCore/MusicNotationCore.xcodeproj -scheme MusicNotationCoreiOS -sdk iphoneos &&
+  xcodebuild build -project MusicNotationCore/MusicNotationCore.xcodeproj -scheme MusicNotationCoreTV -sdk appletvos &&  
+  xcodebuild build -project MusicNotationCore/MusicNotationCore.xcodeproj -scheme MusicNotationCoreWatch -sdk watchos 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
 notifications:

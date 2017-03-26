@@ -836,6 +836,69 @@ class StaffTests: XCTestCase {
             XCTAssertEqual(repeatedMeasure, measure1)
         }
     }
-    
-    
+
+    // MARK: - Collection Conformance
+
+    func testMap() {
+        let mappedNotesHolders: [NotesHolder] = staff.map { $0 }
+        let expectedNotesHolders: [NotesHolder] = [
+            measure1,
+            measure2,
+            measure3,
+            measure4,
+            measure5,
+            repeat1,
+            repeat2,
+            measure6,
+            measure3,
+            measure7,
+            measure8
+        ]
+        mappedNotesHolders.enumerated().forEach { (index, actualNotesHolder) in
+            switch (actualNotesHolder, expectedNotesHolders[index]) {
+            case (let actual as Measure, let expected as Measure):
+                XCTAssertEqual(actual, expected)
+            case (let actual as MeasureRepeat, let expected as MeasureRepeat):
+                XCTAssertEqual(actual, expected)
+            default:
+                XCTFail("NotesHolders not equal")
+            }
+        }
+    }
+
+    func testReversed() {
+        let reversedNotesHolders = staff.reversed()
+        let expectedNotesHolders: [NotesHolder] = [
+            measure1,
+            measure2,
+            measure3,
+            measure4,
+            measure5,
+            repeat1,
+            repeat2,
+            measure6,
+            measure3,
+            measure7,
+            measure8
+        ].reversed()
+        reversedNotesHolders.enumerated().forEach { (index, actualNotesHolder) in
+            switch (actualNotesHolder, expectedNotesHolders[index]) {
+            case (let actual as Measure, let expected as Measure):
+                XCTAssertEqual(actual, expected)
+            case (let actual as MeasureRepeat, let expected as MeasureRepeat):
+                XCTAssertEqual(actual, expected)
+            default:
+                XCTFail("NotesHolders not equal")
+            }
+        }
+    }
+
+    func testIterator() {
+        var iterator = staff.makeIterator()
+        if let actual = iterator.next() as? Measure {
+            XCTAssertEqual(actual, measure1)
+        } else {
+            XCTFail("Iterator didn't return correct value for next()")
+        }
+    }
 }

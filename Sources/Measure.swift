@@ -6,7 +6,67 @@
 //  Copyright (c) 2015 Kyle Sherman. All rights reserved.
 //
 
-public struct Measure: ImmutableMeasure, Equatable {
+public struct Measure: ImmutableMeasure, Equatable, RandomAccessCollection {
+
+    /// One slice of `NoteCollection` from a note set at a particular time
+    public struct NoteSlice: Equatable {
+        public let noteSetIndex: Int
+        public let noteCollection: NoteCollection
+        public static func ==(lhs: NoteSlice, rhs: NoteSlice) -> Bool {
+            return lhs.noteSetIndex == rhs.noteSetIndex &&
+            lhs.noteCollection == rhs.noteCollection
+        }
+    }
+
+    // MARK: - Collection Conformance
+
+    public struct MeasureIterator: IteratorProtocol {
+        var currentIndex: Int = 0
+        let notes: [[NoteCollection]]
+
+        init(_ measure: Measure) {
+            notes = measure.notes
+        }
+
+        public mutating func next() -> [NoteSlice]? {
+            defer { currentIndex += 1 }
+            return Measure.noteSlices(at: currentIndex, in: notes)
+        }
+    }
+    private static func noteSlices(at position: Int, in notes: [[NoteCollection]]) -> [NoteSlice]? {
+        return notes.enumerated().flatMap { noteSetIndex, noteCollections in
+            guard let noteCollection = noteCollections[safe: position] else {
+                return nil
+            }
+            return NoteSlice(noteSetIndex: noteSetIndex, noteCollection: noteCollection)
+        }
+    }
+    public typealias Index = Int
+    public var startIndex: Int {
+        return 0
+    }
+    public var endIndex: Int {
+        return notes.reduce(0) { (prev, noteCollections) in
+            // FIXME: Seems to be Swift bug that this doesn't work. I submitted it: https://bugs.swift.org/browse/SR-4466
+//            return max(prev, noteCollections.endIndex)
+            return prev > noteCollections.endIndex ? prev : noteCollections.endIndex
+        }
+    }
+    public subscript(position: Index) -> Iterator.Element {
+        return Measure.noteSlices(at: position, in: notes)!
+    }
+    public func index(after i: Int) -> Int {
+        return notes.index(after: i)
+    }
+    public func index(before i: Int) -> Int {
+        return notes.index(before: i)
+    }
+    public typealias Iterator = MeasureIterator
+    public func makeIterator() -> Iterator {
+        return MeasureIterator(self)
+    }
+
+    // MARK: - Main Properties
 
     public let timeSignature: TimeSignature
     public let key: Key?
@@ -148,6 +208,10 @@ public struct Measure: ImmutableMeasure, Equatable {
      - parameter setIndex: Note set index.
      */
     public mutating func append(_ noteCollection: NoteCollection, inSet setIndex: Int = 0) {
+        // Fill with empty arrays up to the specified set index
+        while !notes.isValidIndex(setIndex) {
+            notes.append([])
+        }
         notes[setIndex].append(noteCollection)
     }
 

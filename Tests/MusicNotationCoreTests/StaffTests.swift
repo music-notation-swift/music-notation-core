@@ -854,8 +854,9 @@ class StaffTests: XCTestCase {
             measure7,
             measure8
         ]
-        mappedNotesHolders.enumerated().forEach { (index, actualNotesHolder) in
-            switch (actualNotesHolder, expectedNotesHolders[index]) {
+        var count = 0
+        zip(mappedNotesHolders, expectedNotesHolders).forEach { (actualNotesHolder, expectedNotesHolder) in
+            switch (actualNotesHolder, expectedNotesHolder) {
             case (let actual as Measure, let expected as Measure):
                 XCTAssertEqual(actual, expected)
             case (let actual as MeasureRepeat, let expected as MeasureRepeat):
@@ -863,7 +864,9 @@ class StaffTests: XCTestCase {
             default:
                 XCTFail("NotesHolders not equal")
             }
+            count += 1
         }
+        XCTAssertEqual(count, expectedNotesHolders.count)
     }
 
     func testReversed() {
@@ -881,8 +884,9 @@ class StaffTests: XCTestCase {
             measure7,
             measure8
         ].reversed()
-        reversedNotesHolders.enumerated().forEach { (index, actualNotesHolder) in
-            switch (actualNotesHolder, expectedNotesHolders[index]) {
+        var count = 0
+        zip(reversedNotesHolders, expectedNotesHolders).forEach { (actualNotesHolder, expectedNotesHolder) in
+            switch (actualNotesHolder, expectedNotesHolder) {
             case (let actual as Measure, let expected as Measure):
                 XCTAssertEqual(actual, expected)
             case (let actual as MeasureRepeat, let expected as MeasureRepeat):
@@ -890,7 +894,9 @@ class StaffTests: XCTestCase {
             default:
                 XCTFail("NotesHolders not equal")
             }
+            count += 1
         }
+        XCTAssertEqual(count, expectedNotesHolders.count)
     }
 
     func testIterator() {

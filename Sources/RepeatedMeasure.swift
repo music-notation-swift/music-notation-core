@@ -20,7 +20,20 @@
  
  - Note: Look at `MeasureRepeat.expand()` to see how this is used.
  */
-public struct RepeatedMeasure: ImmutableMeasure, Equatable {
+public struct RepeatedMeasure: ImmutableMeasure, Equatable, RandomAccessCollection {
+
+    // MARK: - Collection Conformance
+
+    public typealias Index = Int
+    public subscript(position: Index) -> Iterator.Element {
+        return Measure.noteSlices(at: position, in: notes)!
+    }
+    public typealias Iterator = MeasureIterator
+    public func makeIterator() -> Iterator {
+        return MeasureIterator(self)
+    }
+
+    // MARK: - Main Properties
 
     public let timeSignature: TimeSignature
     public let key: Key?

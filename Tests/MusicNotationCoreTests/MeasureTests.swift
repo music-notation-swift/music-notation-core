@@ -12,18 +12,21 @@ import XCTest
 class MeasureTests: XCTestCase {
 
     var measure: Measure!
+    var timeSignature: TimeSignature!
 
     override func setUp() {
         super.setUp()
         // Put setup code here. This method is called before the invocation of each test method in the class.
+        timeSignature = TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120)
         measure = Measure(
-            timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
+            timeSignature: timeSignature,
             key: Key(noteLetter: .c))
     }
 
     override func tearDown() {
         super.tearDown()
         measure = nil
+        timeSignature = nil
     }
 
     func testAddNote() {
@@ -1046,8 +1049,13 @@ class MeasureTests: XCTestCase {
 
     func testMapEmpty() {
         let mappedNoteSlices = measure.map { $0 }
-        let expectedNoteSlices: [Measure.NoteSlice] = []
+        let expectedNoteSlices: [NoteSlice] = []
         XCTAssertTrue(mappedNoteSlices.isEmpty)
+        XCTAssertTrue(expectedNoteSlices.isEmpty)
+
+        let repeatedMeasure = RepeatedMeasure(timeSignature: timeSignature)
+        let repeatedMappedNoteSlices = repeatedMeasure.map { $0 }
+        XCTAssertTrue(repeatedMappedNoteSlices.isEmpty)
         XCTAssertTrue(expectedNoteSlices.isEmpty)
     }
 
@@ -1058,13 +1066,27 @@ class MeasureTests: XCTestCase {
         measure.append(Note(noteDuration: .eighth))
         measure.append(Note(noteDuration: .quarter))
 
+        let repeatedMeasure = RepeatedMeasure(
+            timeSignature: timeSignature,
+            notes: [
+                [
+                    Note(noteDuration: .quarter),
+                    Note(noteDuration: .quarter),
+                    Note(noteDuration: .eighth),
+                    Note(noteDuration: .eighth),
+                    Note(noteDuration: .quarter)
+                ]
+            ]
+        )
+        let repeatedMappedNoteSlices = repeatedMeasure.map { $0 }
+
         let mappedNoteSlices = measure.map { $0 }
-        let expectedNoteSlices: [[Measure.NoteSlice]] = [
-            [Measure.NoteSlice(noteSetIndex: 0, noteCollection: Note(noteDuration: .quarter))],
-            [Measure.NoteSlice(noteSetIndex: 0, noteCollection: Note(noteDuration: .quarter))],
-            [Measure.NoteSlice(noteSetIndex: 0, noteCollection: Note(noteDuration: .eighth))],
-            [Measure.NoteSlice(noteSetIndex: 0, noteCollection: Note(noteDuration: .eighth))],
-            [Measure.NoteSlice(noteSetIndex: 0, noteCollection: Note(noteDuration: .quarter))],
+        let expectedNoteSlices: [[NoteSlice]] = [
+            [NoteSlice(noteSetIndex: 0, noteCollection: Note(noteDuration: .quarter))],
+            [NoteSlice(noteSetIndex: 0, noteCollection: Note(noteDuration: .quarter))],
+            [NoteSlice(noteSetIndex: 0, noteCollection: Note(noteDuration: .eighth))],
+            [NoteSlice(noteSetIndex: 0, noteCollection: Note(noteDuration: .eighth))],
+            [NoteSlice(noteSetIndex: 0, noteCollection: Note(noteDuration: .quarter))],
         ]
         var count = 0
         zip(mappedNoteSlices, expectedNoteSlices).forEach {
@@ -1072,6 +1094,13 @@ class MeasureTests: XCTestCase {
             count += 1
         }
         XCTAssertEqual(count, expectedNoteSlices.count)
+
+        var repeatedCount = 0
+        zip(repeatedMappedNoteSlices, expectedNoteSlices).forEach {
+            XCTAssertEqual($0, $1)
+            repeatedCount += 1
+        }
+        XCTAssertEqual(repeatedCount, expectedNoteSlices.count)
     }
 
     func testMapMultipleNoteSets() {
@@ -1088,34 +1117,57 @@ class MeasureTests: XCTestCase {
         measure.append(Note(noteDuration: .whole), inSet: 1)
         measure.append(Note(noteDuration: .whole), inSet: 1)
 
+        let repeatedMeasure = RepeatedMeasure(
+            timeSignature: timeSignature,
+            notes: [
+                [
+                    Note(noteDuration: .quarter),
+                    Note(noteDuration: .quarter),
+                    Note(noteDuration: .eighth),
+                    Note(noteDuration: .eighth),
+                    Note(noteDuration: .quarter)
+
+                ],
+                [
+                    Note(noteDuration: .sixteenth),
+                    Note(noteDuration: .thirtySecond),
+                    Note(noteDuration: .quarter),
+                    Note(noteDuration: .quarter),
+                    Note(noteDuration: .quarter),
+                    Note(noteDuration: .whole),
+                    Note(noteDuration: .whole),
+                ]
+            ])
+        let repeatedMappedNoteSlices = repeatedMeasure.map { $0 }
+
         let mappedNoteSlices = measure.map { $0 }
-        let expectedNoteSlices: [[Measure.NoteSlice]] = [
+        let expectedNoteSlices: [[NoteSlice]] = [
             [
-                Measure.NoteSlice(noteSetIndex: 0, noteCollection: Note(noteDuration: .quarter)),
-                Measure.NoteSlice(noteSetIndex: 1, noteCollection: Note(noteDuration: .sixteenth))
+                NoteSlice(noteSetIndex: 0, noteCollection: Note(noteDuration: .quarter)),
+                NoteSlice(noteSetIndex: 1, noteCollection: Note(noteDuration: .sixteenth))
 
             ],
             [
-                Measure.NoteSlice(noteSetIndex: 0, noteCollection: Note(noteDuration: .quarter)),
-                Measure.NoteSlice(noteSetIndex: 1, noteCollection: Note(noteDuration: .thirtySecond))
+                NoteSlice(noteSetIndex: 0, noteCollection: Note(noteDuration: .quarter)),
+                NoteSlice(noteSetIndex: 1, noteCollection: Note(noteDuration: .thirtySecond))
             ],
             [
-                Measure.NoteSlice(noteSetIndex: 0, noteCollection: Note(noteDuration: .eighth)),
-                Measure.NoteSlice(noteSetIndex: 1, noteCollection: Note(noteDuration: .quarter))
+                NoteSlice(noteSetIndex: 0, noteCollection: Note(noteDuration: .eighth)),
+                NoteSlice(noteSetIndex: 1, noteCollection: Note(noteDuration: .quarter))
             ],
             [
-                Measure.NoteSlice(noteSetIndex: 0, noteCollection: Note(noteDuration: .eighth)),
-                Measure.NoteSlice(noteSetIndex: 1, noteCollection: Note(noteDuration: .quarter))
+                NoteSlice(noteSetIndex: 0, noteCollection: Note(noteDuration: .eighth)),
+                NoteSlice(noteSetIndex: 1, noteCollection: Note(noteDuration: .quarter))
             ],
             [
-                Measure.NoteSlice(noteSetIndex: 0, noteCollection: Note(noteDuration: .quarter)),
-                Measure.NoteSlice(noteSetIndex: 1, noteCollection: Note(noteDuration: .quarter))
+                NoteSlice(noteSetIndex: 0, noteCollection: Note(noteDuration: .quarter)),
+                NoteSlice(noteSetIndex: 1, noteCollection: Note(noteDuration: .quarter))
             ],
             [
-                Measure.NoteSlice(noteSetIndex: 1, noteCollection: Note(noteDuration: .whole))
+                NoteSlice(noteSetIndex: 1, noteCollection: Note(noteDuration: .whole))
             ],
             [
-                Measure.NoteSlice(noteSetIndex: 1, noteCollection: Note(noteDuration: .whole))
+                NoteSlice(noteSetIndex: 1, noteCollection: Note(noteDuration: .whole))
             ]
         ]
         var count = 0
@@ -1124,6 +1176,13 @@ class MeasureTests: XCTestCase {
             count += 1
         }
         XCTAssertEqual(count, expectedNoteSlices.count)
+
+        var repeatedCount = 0
+        zip(repeatedMappedNoteSlices, expectedNoteSlices).forEach {
+            XCTAssertEqual($0, $1)
+            repeatedCount += 1
+        }
+        XCTAssertEqual(repeatedCount, expectedNoteSlices.count)
     }
 
     func testReversed() {
@@ -1136,23 +1195,41 @@ class MeasureTests: XCTestCase {
         measure.append(Note(noteDuration: .sixteenth), inSet: 0)
         measure.append(Note(noteDuration: .twoFiftySixth), inSet: 1)
 
+        let repeatedMeasure = RepeatedMeasure(
+            timeSignature: timeSignature,
+            notes: [
+                [
+                    Note(noteDuration: .whole),
+                    Note(noteDuration: .quarter),
+                    Note(noteDuration: .eighth),
+                    Note(noteDuration: .sixteenth)
+                ],
+                [
+                    Note(noteDuration: .thirtySecond),
+                    Note(noteDuration: .sixtyFourth),
+                    Note(noteDuration: .oneTwentyEighth),
+                    Note(noteDuration: .twoFiftySixth)
+                ]
+            ])
+        let repeatedReversedNoteSlices = repeatedMeasure.reversed()
+
         let reversedNoteSlices = measure.reversed()
-        let expectedNoteSlices: [[Measure.NoteSlice]] = [
+        let expectedNoteSlices: [[NoteSlice]] = [
             [
-                Measure.NoteSlice(noteSetIndex: 0, noteCollection: Note(noteDuration: .sixteenth)),
-                Measure.NoteSlice(noteSetIndex: 1, noteCollection: Note(noteDuration: .twoFiftySixth))
+                NoteSlice(noteSetIndex: 0, noteCollection: Note(noteDuration: .sixteenth)),
+                NoteSlice(noteSetIndex: 1, noteCollection: Note(noteDuration: .twoFiftySixth))
             ],
             [
-                Measure.NoteSlice(noteSetIndex: 0, noteCollection: Note(noteDuration: .eighth)),
-                Measure.NoteSlice(noteSetIndex: 1, noteCollection: Note(noteDuration: .oneTwentyEighth))
+                NoteSlice(noteSetIndex: 0, noteCollection: Note(noteDuration: .eighth)),
+                NoteSlice(noteSetIndex: 1, noteCollection: Note(noteDuration: .oneTwentyEighth))
             ],
             [
-                Measure.NoteSlice(noteSetIndex: 0, noteCollection: Note(noteDuration: .quarter)),
-                Measure.NoteSlice(noteSetIndex: 1, noteCollection: Note(noteDuration: .sixtyFourth))
+                NoteSlice(noteSetIndex: 0, noteCollection: Note(noteDuration: .quarter)),
+                NoteSlice(noteSetIndex: 1, noteCollection: Note(noteDuration: .sixtyFourth))
             ],
             [
-                Measure.NoteSlice(noteSetIndex: 0, noteCollection: Note(noteDuration: .whole)),
-                Measure.NoteSlice(noteSetIndex: 1, noteCollection: Note(noteDuration: .thirtySecond))
+                NoteSlice(noteSetIndex: 0, noteCollection: Note(noteDuration: .whole)),
+                NoteSlice(noteSetIndex: 1, noteCollection: Note(noteDuration: .thirtySecond))
             ],
         ]
 
@@ -1162,18 +1239,43 @@ class MeasureTests: XCTestCase {
             count += 1
         }
         XCTAssertEqual(count, expectedNoteSlices.count)
+
+        var repeatedCount = 0
+        zip(repeatedReversedNoteSlices, expectedNoteSlices).forEach {
+            XCTAssertEqual($0, $1)
+            repeatedCount += 1
+        }
+        XCTAssertEqual(repeatedCount, expectedNoteSlices.count)
     }
 
     func testIterator() {
         measure.append(Note(noteDuration: .whole), inSet: 0)
         measure.append(Note(noteDuration: .thirtySecond), inSet: 1)
 
-        let expectedNoteSlices: [Measure.NoteSlice] = [
-            Measure.NoteSlice(noteSetIndex: 0, noteCollection: Note(noteDuration: .whole)),
-            Measure.NoteSlice(noteSetIndex: 1, noteCollection: Note(noteDuration: .thirtySecond))
+        let repeatedMeasure = RepeatedMeasure(
+            timeSignature: timeSignature,
+            notes: [
+                [
+                    Note(noteDuration: .whole)
+                ],
+                [
+                    Note(noteDuration: .thirtySecond)
+                ]
+            ])
+
+        let expectedNoteSlices: [NoteSlice] = [
+            NoteSlice(noteSetIndex: 0, noteCollection: Note(noteDuration: .whole)),
+            NoteSlice(noteSetIndex: 1, noteCollection: Note(noteDuration: .thirtySecond))
         ]
         var iterator = measure.makeIterator()
         if let actual = iterator.next() {
+            XCTAssertEqual(actual, expectedNoteSlices)
+        } else {
+            XCTFail("Iterator didn't return correct value for next()")
+        }
+
+        var repeatedIterator = repeatedMeasure.makeIterator()
+        if let actual = repeatedIterator.next() {
             XCTAssertEqual(actual, expectedNoteSlices)
         } else {
             XCTFail("Iterator didn't return correct value for next()")

@@ -63,11 +63,7 @@ extension ImmutableMeasure {
     }
 
     public var endIndex: Int {
-        return notes.reduce(0) { (prev, noteCollections) in
-            // FIXME: Seems to be Swift bug that this doesn't work. I submitted it: https://bugs.swift.org/browse/SR-4466
-            //            return max(prev, noteCollections.endIndex)
-            return prev > noteCollections.endIndex ? prev : noteCollections.endIndex
-        }
+        return notes.map { $0.endIndex }.max() ?? 0
     }
 
     public func index(after i: Int) -> Int {

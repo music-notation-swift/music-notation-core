@@ -12,7 +12,7 @@ public struct Measure: ImmutableMeasure, Equatable, RandomAccessCollection {
 
     public typealias Index = Int
     public subscript(position: Index) -> Iterator.Element {
-        return Measure.noteSlices(at: position, in: notes)!
+        return Measure.measureSlices(at: position, in: notes)!
     }
     public typealias Iterator = MeasureIterator
     public func makeIterator() -> Iterator {

@@ -47,10 +47,10 @@ public func ==<T: ImmutableMeasure>(lhs: T, rhs: T) -> Bool {
 // MARK: - Collection Conformance Helpers
 
 /// One slice of `NoteCollection` from a note set at a particular time
-public struct NoteSlice: Equatable {
+public struct MeasureSlice: Equatable {
     public let noteSetIndex: Int
     public let noteCollection: NoteCollection
-    public static func ==(lhs: NoteSlice, rhs: NoteSlice) -> Bool {
+    public static func ==(lhs: MeasureSlice, rhs: MeasureSlice) -> Bool {
         return lhs.noteSetIndex == rhs.noteSetIndex &&
             lhs.noteCollection == rhs.noteCollection
     }
@@ -77,12 +77,12 @@ extension ImmutableMeasure {
         return notes.index(before: i)
     }
 
-    internal static func noteSlices(at position: Int, in notes: [[NoteCollection]]) -> [NoteSlice]? {
+    internal static func measureSlices(at position: Int, in notes: [[NoteCollection]]) -> [MeasureSlice]? {
         return notes.enumerated().flatMap { noteSetIndex, noteCollections in
             guard let noteCollection = noteCollections[safe: position] else {
                 return nil
             }
-            return NoteSlice(noteSetIndex: noteSetIndex, noteCollection: noteCollection)
+            return MeasureSlice(noteSetIndex: noteSetIndex, noteCollection: noteCollection)
         }
     }
 }
@@ -95,8 +95,8 @@ public struct MeasureIterator: IteratorProtocol {
         notes = measure.notes
     }
 
-    public mutating func next() -> [NoteSlice]? {
+    public mutating func next() -> [MeasureSlice]? {
         defer { currentIndex += 1 }
-        return Measure.noteSlices(at: currentIndex, in: notes)
+        return Measure.measureSlices(at: currentIndex, in: notes)
     }
 }

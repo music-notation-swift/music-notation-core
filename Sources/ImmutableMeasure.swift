@@ -93,6 +93,9 @@ public struct MeasureIterator: IteratorProtocol {
 
     public mutating func next() -> [MeasureSlice]? {
         defer { currentIndex += 1 }
+        if currentIndex >= notes.count {
+            return nil
+        }
         return Measure.measureSlices(at: currentIndex, in: notes)
     }
 }

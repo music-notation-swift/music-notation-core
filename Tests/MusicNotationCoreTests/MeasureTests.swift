@@ -1268,18 +1268,18 @@ class MeasureTests: XCTestCase {
             MeasureSlice(noteSetIndex: 1, noteCollection: Note(noteDuration: .thirtySecond))
         ]
         var iterator = measure.makeIterator()
-        if let actual = iterator.next() {
-            XCTAssertEqual(actual, expectedMeasureSlices)
-        } else {
-            XCTFail("Iterator didn't return correct value for next()")
+        var iteratorCount = 0
+        while iterator.next() != nil {
+            iteratorCount += 1
         }
+        XCTAssertEqual(iteratorCount, expectedMeasureSlices.count)
 
         var repeatedIterator = repeatedMeasure.makeIterator()
-        if let actual = repeatedIterator.next() {
-            XCTAssertEqual(actual, expectedMeasureSlices)
-        } else {
-            XCTFail("Iterator didn't return correct value for next()")
+        var repeatedIteratorCount = 0
+        while repeatedIterator.next() != nil {
+            repeatedIteratorCount += 1
         }
+        XCTAssertEqual(repeatedIteratorCount, expectedMeasureSlices.count)
     }
 
     // MARK: - Helpers

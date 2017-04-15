@@ -86,14 +86,16 @@ extension ImmutableMeasure {
 public struct MeasureIterator: IteratorProtocol {
     var currentIndex: Int = 0
     let notes: [[NoteCollection]]
+    let endIndex: Int
 
     init<T: ImmutableMeasure>(_ measure: T) {
         notes = measure.notes
+        endIndex = measure.endIndex
     }
 
     public mutating func next() -> [MeasureSlice]? {
         defer { currentIndex += 1 }
-        if currentIndex >= notes.count {
+        if currentIndex >= endIndex {
             return nil
         }
         return Measure.measureSlices(at: currentIndex, in: notes)

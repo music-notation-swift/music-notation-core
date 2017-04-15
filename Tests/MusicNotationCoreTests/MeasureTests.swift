@@ -1251,32 +1251,43 @@ class MeasureTests: XCTestCase {
     func testIterator() {
         measure.append(Note(noteDuration: .whole), inSet: 0)
         measure.append(Note(noteDuration: .thirtySecond), inSet: 1)
+        measure.append(Note(noteDuration: .quarter), inSet: 0)
+        measure.append(Note(noteDuration: .eighth), inSet: 1)
 
         let repeatedMeasure = RepeatedMeasure(
             timeSignature: timeSignature,
             notes: [
                 [
-                    Note(noteDuration: .whole)
+                    Note(noteDuration: .whole),
+                    Note(noteDuration: .quarter)
                 ],
                 [
-                    Note(noteDuration: .thirtySecond)
+                    Note(noteDuration: .thirtySecond),
+                    Note(noteDuration: .eighth)
                 ]
             ])
 
-        let expectedMeasureSlices: [MeasureSlice] = [
+        let expectedMeasureSlice1: [MeasureSlice] = [
             MeasureSlice(noteSetIndex: 0, noteCollection: Note(noteDuration: .whole)),
-            MeasureSlice(noteSetIndex: 1, noteCollection: Note(noteDuration: .thirtySecond))
+            MeasureSlice(noteSetIndex: 1, noteCollection: Note(noteDuration: .thirtySecond)),
         ]
+        let expectedMeasureSlice2: [MeasureSlice] = [
+            MeasureSlice(noteSetIndex: 0, noteCollection: Note(noteDuration: .quarter)),
+            MeasureSlice(noteSetIndex: 1, noteCollection: Note(noteDuration: .eighth))
+        ]
+        let expectedMeasureSlices = [expectedMeasureSlice1, expectedMeasureSlice2]
         var iterator = measure.makeIterator()
         var iteratorCount = 0
-        while iterator.next() != nil {
+        while let next = iterator.next() {
+            XCTAssertEqual(next, expectedMeasureSlices[iteratorCount])
             iteratorCount += 1
         }
         XCTAssertEqual(iteratorCount, expectedMeasureSlices.count)
 
         var repeatedIterator = repeatedMeasure.makeIterator()
         var repeatedIteratorCount = 0
-        while repeatedIterator.next() != nil {
+        while let next = repeatedIterator.next() {
+            XCTAssertEqual(next, expectedMeasureSlices[repeatedIteratorCount])
             repeatedIteratorCount += 1
         }
         XCTAssertEqual(repeatedIteratorCount, expectedMeasureSlices.count)

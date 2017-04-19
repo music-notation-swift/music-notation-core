@@ -8,6 +8,8 @@ script:
   xcodebuild build -project MusicNotationCore/MusicNotationCore.xcodeproj -scheme MusicNotationCoreTV -sdk appletvos &&  
   xcodebuild build -project MusicNotationCore/MusicNotationCore.xcodeproj -scheme MusicNotationCoreWatch -sdk watchos 
 after_success:
+  - ls -al /Users/travis/Library/Developer/Xcode/DerivedData
+  - find "/Users/travis/Library/Developer/Xcode/DerivedData" -name '*.gcda' -exec gcov -pbcu {} +
   - bash <(curl -s https://codecov.io/bash)
 notifications:
   slack: musicnotationswift:GAuOCY6YxRaZHrDvGRXRF9Im

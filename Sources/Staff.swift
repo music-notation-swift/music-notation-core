@@ -6,7 +6,32 @@
 //  Copyright © 2015 Kyle Sherman. All rights reserved.
 //
 
-public struct Staff {
+public struct Staff: RandomAccessCollection {
+
+    // MARK: - Collection Conformance
+
+    public typealias Index = Int
+    public var startIndex: Int {
+        return notesHolders.startIndex
+    }
+    public var endIndex: Int {
+        return notesHolders.endIndex
+    }
+    public subscript(position: Index) -> Iterator.Element {
+        return notesHolders[position]
+    }
+    public func index(after i: Int) -> Int {
+        return notesHolders.index(after: i)
+    }
+    public func index(before i: Int) -> Int {
+        return notesHolders.index(before: i)
+    }
+    public typealias Iterator = IndexingIterator<[NotesHolder]>
+    public func makeIterator() -> Iterator {
+        return notesHolders.makeIterator()
+    }
+
+    // MARK: - Main Properties
 
     public let clef: Clef
     public let instrument: Instrument

@@ -6,7 +6,20 @@
 //  Copyright (c) 2015 Kyle Sherman. All rights reserved.
 //
 
-public struct Measure: ImmutableMeasure, Equatable {
+public struct Measure: ImmutableMeasure, Equatable, RandomAccessCollection {
+
+    // MARK: - Collection Conformance
+
+    public typealias Index = Int
+    public subscript(position: Index) -> Iterator.Element {
+        return Measure.measureSlices(at: position, in: notes)!
+    }
+    public typealias Iterator = MeasureIterator
+    public func makeIterator() -> Iterator {
+        return MeasureIterator(self)
+    }
+
+    // MARK: - Main Properties
 
     public let timeSignature: TimeSignature
     public let key: Key?
@@ -148,6 +161,10 @@ public struct Measure: ImmutableMeasure, Equatable {
      - parameter setIndex: Note set index.
      */
     public mutating func append(_ noteCollection: NoteCollection, inSet setIndex: Int = 0) {
+        // Fill with empty arrays up to the specified set index
+        while !notes.isValidIndex(setIndex) {
+            notes.append([])
+        }
         notes[setIndex].append(noteCollection)
     }
 

@@ -162,6 +162,11 @@ public struct Tuplet: NoteCollection {
         try replaceNotes(at: flatIndexesInRange, with: preservedTieStateCollections, firstNoteIndex: range.lowerBound)
     }
 
+    public mutating func setClef(_ clef: Clef) {
+        let newCollections = notes.map { $0.withClef(clef) }
+        notes = newCollections
+    }
+
     // MARK: Private
 
     private func note<T: NoteCollection>(at index: Int, sameDurationAs noteCollections: [T]) throws -> Bool {

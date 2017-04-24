@@ -37,18 +37,23 @@ public struct RepeatedMeasure: ImmutableMeasure, Equatable, RandomAccessCollecti
 
     public let timeSignature: TimeSignature
     public let key: Key?
-    public private(set) var notes: [[NoteCollection]]
+    public let notes: [[NoteCollection]]
     public let measureCount: Int = 1
     public let noteCount: [Int]
+    public let clefs: [Int: Clef]
+    public let lastClef: Clef
 
-    public init(timeSignature: TimeSignature, key: Key? = nil) {
-        self.init(timeSignature: timeSignature, key: key, notes: [[]])
+
+    public init(timeSignature: TimeSignature, key: Key? = nil, initialClef: Clef) {
+        self.init(timeSignature: timeSignature, key: key, initialClef: initialClef, notes: [[]])
     }
 
-    public init(timeSignature: TimeSignature, key: Key? = nil, notes: [[NoteCollection]]) {
+    public init(timeSignature: TimeSignature, key: Key? = nil, initialClef: Clef, notes: [[NoteCollection]]) {
         self.timeSignature = timeSignature
         self.key = key
         self.notes = notes
+        lastClef = initialClef
+        clefs = [:]
         noteCount = notes.map {
             $0.reduce(0) { prev, noteCollection in
                 return prev + noteCollection.noteCount
@@ -57,8 +62,12 @@ public struct RepeatedMeasure: ImmutableMeasure, Equatable, RandomAccessCollecti
     }
 
     internal init(immutableMeasure: ImmutableMeasure) {
-        self.init(timeSignature: immutableMeasure.timeSignature, key: immutableMeasure.key,
-                  notes: immutableMeasure.notes)
+        timeSignature = immutableMeasure.timeSignature
+        key = immutableMeasure.key
+        notes = immutableMeasure.notes
+        lastClef = immutableMeasure.lastClef
+        clefs = immutableMeasure.clefs
+        noteCount = immutableMeasure.noteCount
     }
 }
 

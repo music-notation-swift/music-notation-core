@@ -61,6 +61,29 @@ public struct Staff: RandomAccessCollection {
     }
 
     /**
+     Changes the Clef at the given location.
+     
+     - parameter clef: The new `Clef` to change to
+     - parameter measureIndex: The index of the measure to change the clef
+     - parameter noteIndex: The index of the note at which you want the clef to change
+     - parameter setIndex: The index of the note set in which the note resides where you want to change the clef
+     - throws:
+        - `StaffError.measureIndexOutOfRange`
+        - `StaffError.repeatedMeasureCannotBeModified` if the measure is a repeated measure.
+        - `StaffError.internalError` if the function has an internal implementation error.
+     */
+    public mutating func changeClef(_ clef: Clef,
+                                    in measureIndex: Int,
+                                    at noteIndex: Int,
+                                    inSet setIndex: Int = 0) throws {
+        guard var measure = try measure(at: measureIndex) as? Measure else {
+            throw StaffError.repeatedMeasureCannotBeModified
+        }
+        try measure.changeClef(clef, at: noteIndex, inSet: setIndex)
+        try replaceMeasure(at: measureIndex, with: measure)
+    }
+
+    /**
      Inserts a measure at the given index.
 
      If the given index falls on a `MeasureRepeat`, there are 3 things that can happen:

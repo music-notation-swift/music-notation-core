@@ -17,6 +17,7 @@ public struct Note: NoteCollection {
     public var last: Note? { return self }
 
     public let tones: [Tone]
+    public internal(set) var clef: Clef? = nil
 
     public let isRest: Bool
 
@@ -62,6 +63,16 @@ public struct Note: NoteCollection {
             throw NoteError.invalidNoteIndex
         }
         return self
+    }
+
+    public mutating func setClef(_ clef: Clef) {
+        self.clef = clef
+    }
+
+    public func withClef(_ clef: Clef) -> NoteCollection {
+        var note = self
+        note.clef = clef
+        return note
     }
 
     internal mutating func modifyTie(_ request: Tie) throws {

@@ -23,7 +23,7 @@ class MeasureDurationValidatorTests: XCTestCase {
     var overfilledWithDotMeasure: Measure!
     // A measure where if you remove the overfilled note, it is not full anymore
     var overfilledWithTooLargeMeasure: Measure!
-    let emptyMeasure = Measure(timeSignature: standardTimeSignature, key: Key(noteLetter: .c))
+    let emptyMeasure = Measure(timeSignature: standardTimeSignature, key: Key(noteLetter: .c), initialClef: .treble)
 
     var fullMeasureOddTimeSignature: Measure!
     var notFullMeasureOddTimeSignature: Measure!
@@ -55,6 +55,7 @@ class MeasureDurationValidatorTests: XCTestCase {
         fullMeasure = Measure(
             timeSignature: MeasureDurationValidatorTests.standardTimeSignature,
             key: key,
+            initialClef: .treble,
             notes: [[quarter, quarter, thirtySecond, thirtySecond, thirtySecond, thirtySecond, quarter, dotted16,
                     thirtySecond]]
         )
@@ -62,18 +63,21 @@ class MeasureDurationValidatorTests: XCTestCase {
         notFullMeasure = Measure(
             timeSignature: MeasureDurationValidatorTests.standardTimeSignature,
             key: key,
+            initialClef: .treble,
             notes: [[quarterTriplet, thirtySecond, thirtySecond]]
         )
         // Missing 1 1/8 beats
         notFullMeasureDotted = Measure(
             timeSignature: MeasureDurationValidatorTests.standardTimeSignature,
             key: key,
+            initialClef: .treble,
             notes: [[halfRest, doubleDottedEighth]]
         )
         // Overfilled by the last 2 quarter notes. Full if they aren't there
         overfilledMeasure = Measure(
             timeSignature: MeasureDurationValidatorTests.standardTimeSignature,
             key: key,
+            initialClef: .treble,
             notes: [[halfRest, quarter, dotted16, thirtySecond, thirtySecond, thirtySecond, thirtySecond, thirtySecond,
                     quarter, quarter]]
         )
@@ -81,6 +85,7 @@ class MeasureDurationValidatorTests: XCTestCase {
         overfilledWithDotMeasure = Measure(
             timeSignature: MeasureDurationValidatorTests.standardTimeSignature,
             key: key,
+            initialClef: .treble,
             notes: [[halfRest, quarter, thirtySecond, thirtySecond, thirtySecond, thirtySecond, thirtySecond,
                     thirtySecond, dotted16]]
         )
@@ -88,40 +93,47 @@ class MeasureDurationValidatorTests: XCTestCase {
         overfilledWithTooLargeMeasure = Measure(
             timeSignature: MeasureDurationValidatorTests.standardTimeSignature,
             key: key,
+            initialClef: .treble,
             notes: [[quarter, quarter, quarter, doubleDottedEighth, quarter]]
         )
         fullMeasureOddTimeSignature = Measure(
             timeSignature: MeasureDurationValidatorTests.oddTimeSignature,
             key: key,
+            initialClef: .treble,
             notes: [[dotted16, thirtySecond, quarter, quarter, thirtySecond, thirtySecond]]
         )
         // Missing a quarter note (4 beats)
         notFullMeasureOddTimeSignature = Measure(
             timeSignature: MeasureDurationValidatorTests.oddTimeSignature,
             key: key,
+            initialClef: .treble,
             notes: [[dotted16, thirtySecond, quarter, thirtySecond, thirtySecond]]
         )
         // Overfilled by the half rest. Full if removed
         overfilledMeasureOddTimeSignature = Measure(
             timeSignature: MeasureDurationValidatorTests.oddTimeSignature,
             key: key,
+            initialClef: .treble,
             notes: [[dotted16, thirtySecond, quarter, thirtySecond, thirtySecond, quarter, halfRest]]
         )
         fullMeasureIrrationalTimeSignature = Measure(
             timeSignature: MeasureDurationValidatorTests.irrationalTimeSignature,
             key: key,
+            initialClef: .treble,
             notes: [[quarter, quarter, quarter]]
         )
         // Missing one quarter note
         notFullMeasureIrrationalTimeSignature = Measure(
             timeSignature: MeasureDurationValidatorTests.irrationalTimeSignature,
             key: key,
+            initialClef: .treble,
             notes: [[quarter, quarter]]
         )
         // Overfilled by one quarter note
         overfilledMeasureIrrationalTimeSignature = Measure(
             timeSignature: MeasureDurationValidatorTests.irrationalTimeSignature,
             key: key,
+            initialClef: .treble,
             notes: [[quarter, quarter, quarter, quarter]]
         )
         // Add all to staff
@@ -329,7 +341,7 @@ class MeasureDurationValidatorTests: XCTestCase {
 
     func testBaseNoteDurationForTooLargeBottomNumber() {
         let timeSignature = TimeSignature(topNumber: 4, bottomNumber: 256, tempo: 120)
-        let measure = Measure(timeSignature: timeSignature, key: Key(noteLetter: .c))
+        let measure = Measure(timeSignature: timeSignature, key: Key(noteLetter: .c), initialClef: .treble)
         assertThrowsError(MeasureDurationValidatorError.invalidBottomNumber) {
             let _ = try MeasureDurationValidator.baseNoteDuration(from: measure)
         }

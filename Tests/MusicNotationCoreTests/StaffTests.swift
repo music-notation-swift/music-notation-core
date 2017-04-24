@@ -39,41 +39,49 @@ class StaffTests: XCTestCase {
         measure1 = Measure(
             timeSignature: timeSignature,
             key: key,
+            initialClef: staff.clef,
             notes: [[note, note, note, note, tuplet]]
         )
         measure2 = Measure(
             timeSignature: timeSignature,
             key: key,
+            initialClef: staff.clef,
             notes: [[tuplet, note, note]]
         )
         measure3 = Measure(
             timeSignature: timeSignature,
             key: key,
+            initialClef: staff.clef,
             notes: [[note, note, note, note, tuplet]]
         )
         measure4 = Measure(
             timeSignature: timeSignature,
             key: key,
+            initialClef: staff.clef,
             notes: [[note, note, note, note]]
         )
         measure5 = Measure(
             timeSignature: timeSignature,
             key: key,
+            initialClef: staff.clef,
             notes: [[tuplet, note, note, note, note]]
         )
         measure6 = Measure(
             timeSignature: timeSignature,
             key: key,
+            initialClef: staff.clef,
             notes: [[tuplet, tuplet, note, note]]
         )
         measure7 = Measure(
             timeSignature: timeSignature,
             key: key,
+            initialClef: staff.clef,
             notes: [[note2, tuplet, tuplet, note]]
         )
         measure8 = Measure(
             timeSignature: timeSignature,
             key: key,
+            initialClef: staff.clef,
             notes: [[tuplet2, note, note]]
         )
         repeat1 = try! MeasureRepeat(measures: [measure4])
@@ -97,8 +105,9 @@ class StaffTests: XCTestCase {
     func testInsertMeasureInvalidIndex() {
         let measure = Measure(
             timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
-            key: Key(noteLetter: .c))
-        
+            key: Key(noteLetter: .c),
+            initialClef: staff.clef)
+
         assertThrowsError(StaffError.measureIndexOutOfRange) {
             try staff.insertMeasure(measure, at: 17)
         }
@@ -107,7 +116,8 @@ class StaffTests: XCTestCase {
     func testInsertMeasureInRepeatedMeasures() {
         let measure = Measure(
             timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
-            key: Key(noteLetter: .c))
+            key: Key(noteLetter: .c),
+            initialClef: staff.clef)
         
         assertThrowsError(MeasureRepeatError.cannotModifyRepeatedMeasures) {
             try staff.insertMeasure(measure, at: 10, beforeRepeat: true)
@@ -123,7 +133,8 @@ class StaffTests: XCTestCase {
     func testInsertMeasureNoRepeat() {
         let measure = Measure(
             timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
-            key: Key(noteLetter: .c))
+            key: Key(noteLetter: .c),
+            initialClef: staff.clef)
         assertNoErrorThrown {
             try staff.insertMeasure(measure, at: 1)
             let addedMeasure = try staff.measure(at: 1)
@@ -138,7 +149,8 @@ class StaffTests: XCTestCase {
 	func testInsertMeasureNoRepeatAtEnd() {
 		let measure = Measure(
 			timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
-			key: Key(noteLetter: .c))
+			key: Key(noteLetter: .c),
+			initialClef: staff.clef)
         assertNoErrorThrown {
 			try staff.insertMeasure(measure, at: 14)
 			let addedMeasure = try staff.measure(at: 14)
@@ -153,7 +165,8 @@ class StaffTests: XCTestCase {
     func testInsertMeasureInRepeat() {
         let measure = Measure(
             timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
-            key: Key(noteLetter: .c))
+            key: Key(noteLetter: .c),
+            initialClef: staff.clef)
         assertNoErrorThrown {
             try staff.insertMeasure(measure, at: 5, beforeRepeat: false)
             let actualRepeat = try staff.measureRepeat(at: 5)
@@ -165,7 +178,8 @@ class StaffTests: XCTestCase {
     func testInsertMeasureInRepeatAtEnd() {
         let measure = Measure(
             timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
-            key: Key(noteLetter: .c))
+            key: Key(noteLetter: .c),
+            initialClef: staff.clef)
         assertNoErrorThrown {
             try staff.insertMeasure(measure, at: 6, beforeRepeat: false)
             let actualRepeat = try staff.measureRepeat(at: 5)
@@ -177,7 +191,8 @@ class StaffTests: XCTestCase {
     func testInsertMeasureBeforeRepeat() {
         let measure = Measure(
             timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
-            key: Key(noteLetter: .c))
+            key: Key(noteLetter: .c),
+            initialClef: staff.clef)
         assertNoErrorThrown {
             try staff.insertMeasure(measure, at: 5, beforeRepeat: true)
             let _ = try staff.measureRepeat(at: 6)
@@ -191,7 +206,8 @@ class StaffTests: XCTestCase {
     func testInsertMeasureNoRepeatWithWrongFlag() {
         let measure = Measure(
             timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
-            key: Key(noteLetter: .c))
+            key: Key(noteLetter: .c),
+            initialClef: staff.clef)
         assertNoErrorThrown {
             // Ignores the flag, since it's not a repeat
             try staff.insertMeasure(measure, at: 1, beforeRepeat: false)
@@ -207,7 +223,8 @@ class StaffTests: XCTestCase {
     func testInsertMeasureInMeasureRepeatWithWrongFlag() {
         let measure = Measure(
             timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
-            key: Key(noteLetter: .c))
+            key: Key(noteLetter: .c),
+            initialClef: staff.clef)
         assertNoErrorThrown {
             // Ignores the flag since you can only insert it into the repeat
             try staff.insertMeasure(measure, at: 6, beforeRepeat: true)

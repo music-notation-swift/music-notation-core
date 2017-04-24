@@ -20,7 +20,8 @@ class MeasureTests: XCTestCase {
         timeSignature = TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120)
         measure = Measure(
             timeSignature: timeSignature,
-            key: Key(noteLetter: .c))
+            key: Key(noteLetter: .c),
+            initialClef: .treble)
     }
 
     override func tearDown() {
@@ -1053,7 +1054,7 @@ class MeasureTests: XCTestCase {
         XCTAssertTrue(mappedMeasureSlices.isEmpty)
         XCTAssertTrue(expectedMeasureSlices.isEmpty)
 
-        let repeatedMeasure = RepeatedMeasure(timeSignature: timeSignature)
+        let repeatedMeasure = RepeatedMeasure(timeSignature: timeSignature, initialClef: .treble)
         let repeatedMappedMeasureSlices = repeatedMeasure.map { $0 }
         XCTAssertTrue(repeatedMappedMeasureSlices.isEmpty)
         XCTAssertTrue(expectedMeasureSlices.isEmpty)
@@ -1068,6 +1069,7 @@ class MeasureTests: XCTestCase {
 
         let repeatedMeasure = RepeatedMeasure(
             timeSignature: timeSignature,
+            initialClef: .treble,
             notes: [
                 [
                     Note(noteDuration: .quarter),
@@ -1119,6 +1121,7 @@ class MeasureTests: XCTestCase {
 
         let repeatedMeasure = RepeatedMeasure(
             timeSignature: timeSignature,
+            initialClef: .treble,
             notes: [
                 [
                     Note(noteDuration: .quarter),
@@ -1197,6 +1200,7 @@ class MeasureTests: XCTestCase {
 
         let repeatedMeasure = RepeatedMeasure(
             timeSignature: timeSignature,
+            initialClef: .treble,
             notes: [
                 [
                     Note(noteDuration: .whole),
@@ -1256,6 +1260,7 @@ class MeasureTests: XCTestCase {
 
         let repeatedMeasure = RepeatedMeasure(
             timeSignature: timeSignature,
+            initialClef: .treble,
             notes: [
                 [
                     Note(noteDuration: .whole),

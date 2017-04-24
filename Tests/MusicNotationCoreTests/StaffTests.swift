@@ -854,6 +854,61 @@ class StaffTests: XCTestCase {
         }
     }
 
+    // MARK: - changeClef(_:, in:, at:, inSet:)
+    // MARK: Failures
+
+    func testChangeClefInvalidMeasureIndex() {
+        assertThrowsError(StaffError.measureIndexOutOfRange) {
+            try staff.changeClef(.bass, in: 17, at: 0, inSet: 0)
+        }
+    }
+
+    func testChangeClefRepeatedMeasure() {
+        assertThrowsError(StaffError.repeatedMeasureCannotBeModified) {
+            try staff.changeClef(.bass, in: 6, at: 0, inSet: 0)
+        }
+    }
+
+    // MARK: Successes
+
+    func testChangeClefAtBeginningOfMeasure() {
+        assertNoErrorThrown {
+            let newClef: Clef = .bass
+            try staff.changeClef(newClef, in: 2, at: 0, inSet: 0)
+            let measure = try staff.measure(at: 2)
+            XCTAssertEqual(measure.clefs, [0: newClef])
+            XCTAssertEqual(measure.lastClef, newClef)
+        }
+    }
+
+    func testChangeClefAtBeginningOfStaff() {
+
+    }
+
+    func testChangeClefAtMiddleOfMeasure() {
+
+    }
+
+    func testChangeClefTwiceInOneMeasure() {
+
+    }
+
+    func testChangeClefTwiceAcross2Measures() {
+
+    }
+
+    func testChangeClefTwiceAcross2NoteSetsIn1Measure() {
+
+    }
+
+    func testChangeClefInMeasureRepeatWith1Repeat() {
+
+    }
+
+    func testChangeClefInMeasureRepeatWithMultipleRepeats() {
+
+    }
+
     // MARK: - Collection Conformance
 
     func testMap() {

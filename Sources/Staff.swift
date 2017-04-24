@@ -80,6 +80,8 @@ public struct Staff: RandomAccessCollection {
             throw StaffError.repeatedMeasureCannotBeModified
         }
         try measure.changeClef(clef, at: noteIndex, inSet: setIndex)
+        // TODO: Change the lastClef property of all following measures
+        // and repeats with an empty clefs property
         try replaceMeasure(at: measureIndex, with: measure)
     }
 

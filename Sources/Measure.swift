@@ -52,6 +52,7 @@ public struct Measure: ImmutableMeasure, Equatable, RandomAccessCollection {
         }
     }
     public private(set) var lastClef: Clef
+    public private(set) var originalClef: Clef
 
     internal typealias NoteCollectionIndex = (noteIndex: Int, tupletIndex: Int?)
     private var noteCollectionIndexes: [[NoteCollectionIndex]] = [[NoteCollectionIndex]]()
@@ -66,7 +67,8 @@ public struct Measure: ImmutableMeasure, Equatable, RandomAccessCollection {
         self.timeSignature = timeSignature
         self.key = key
         self.notes = notes
-        self.lastClef = initialClef
+        lastClef = initialClef
+        originalClef = initialClef
         recomputeNoteCollectionIndexes()
     }
 
@@ -75,6 +77,7 @@ public struct Measure: ImmutableMeasure, Equatable, RandomAccessCollection {
         key = immutableMeasure.key
         notes = immutableMeasure.notes
         lastClef = immutableMeasure.lastClef
+        originalClef = immutableMeasure.originalClef
         clefs = immutableMeasure.clefs
         recomputeNoteCollectionIndexes()
     }
@@ -355,6 +358,24 @@ public struct Measure: ImmutableMeasure, Equatable, RandomAccessCollection {
     }
 
     // MARK: - Internal Methods
+
+    /**
+     This method will set the `originalClef` and `lastClef` properties if
+     there are no clef changes associated with this measure.
+     This is to be used for when a clef change is done to a measure before
+     this one and you need to ripple the change throughout.
+
+     - parameter clef: The new clef to change this measure to.
+     - returns: True if it changed the clef; false if it didn't change the clef.
+     */
+    internal mutating func changeFirstClefIfNeeded(to clef: Clef) -> Bool {
+        guard clefs.isEmpty else {
+            return false
+        }
+        originalClef = clef
+        lastClef = clef
+        return true
+    }
 
     /**
      Inserts `noteCollection` at `index`.
@@ -786,6 +807,17 @@ public struct Measure: ImmutableMeasure, Equatable, RandomAccessCollection {
         // Expand notes and tuplets into indexes
         guard index < noteCollectionIndexes[setIndex].count else { throw MeasureError.noteIndexOutOfRange }
         return noteCollectionIndexes[setIndex][index]
+    }
+
+    internal func hasClefAfterNote(at noteIndex: Int) -> Bool {
+        do {
+            let ticksForRequest = try cumulativeTicks(at: noteIndex)
+            return clefs.contains { (key, value) in
+                return key > ticksForRequest
+            }
+        } catch {
+            return false
+        }
     }
 
     // MARK: - Private Methods

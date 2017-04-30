@@ -874,10 +874,25 @@ class StaffTests: XCTestCase {
     func testChangeClefAtBeginningOfMeasure() {
         assertNoErrorThrown {
             let newClef: Clef = .bass
-            try staff.changeClef(newClef, in: 2, at: 0, inSet: 0)
-            let measure = try staff.measure(at: 2)
+            let measureIndex = 2
+            try staff.changeClef(newClef, in: measureIndex, at: 0, inSet: 0)
+            let notesHolderIndexNext = try! staff.notesHolderIndexFromMeasureIndex(measureIndex + 1)
+            let measure = try staff.measure(at: measureIndex)
             XCTAssertEqual(measure.clefs, [0: newClef])
             XCTAssertEqual(measure.lastClef, newClef)
+            staff[notesHolderIndexNext.notesHolderIndex..<staff.endIndex].forEach { notesHolder in
+                switch notesHolder {
+                case let measure as Measure:
+                    XCTAssertEqual(measure.lastClef, newClef)
+                    XCTAssertEqual(measure.originalClef, newClef)
+                case let measureRepeat as MeasureRepeat:
+                    measureRepeat.expand().forEach {
+                        XCTAssertEqual($0.lastClef, newClef)
+                        XCTAssertEqual($0.originalClef, newClef)
+                    }
+                default: XCTFail("Invalid type. Should be Measure or MeasureRepeat")
+                }
+            }
         }
     }
 

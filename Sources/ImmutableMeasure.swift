@@ -16,6 +16,8 @@ public protocol ImmutableMeasure: NotesHolder {
     var clefs: [Int: Clef] { get }
     /// Stores the last clef used in the measure
     var lastClef: Clef { get }
+    /// Stores the clef used when the measure was created or inserted into the Staff
+    var originalClef: Clef { get }
 
     // Collection Conformance
     var startIndex: Int { get }

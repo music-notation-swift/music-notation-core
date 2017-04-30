@@ -42,6 +42,7 @@ public struct RepeatedMeasure: ImmutableMeasure, Equatable, RandomAccessCollecti
     public let noteCount: [Int]
     public let clefs: [Int: Clef]
     public let lastClef: Clef
+    public let originalClef: Clef
 
 
     public init(timeSignature: TimeSignature, key: Key? = nil, initialClef: Clef) {
@@ -53,6 +54,7 @@ public struct RepeatedMeasure: ImmutableMeasure, Equatable, RandomAccessCollecti
         self.key = key
         self.notes = notes
         lastClef = initialClef
+        originalClef = initialClef
         clefs = [:]
         noteCount = notes.map {
             $0.reduce(0) { prev, noteCollection in
@@ -66,6 +68,7 @@ public struct RepeatedMeasure: ImmutableMeasure, Equatable, RandomAccessCollecti
         key = immutableMeasure.key
         notes = immutableMeasure.notes
         lastClef = immutableMeasure.lastClef
+        originalClef = immutableMeasure.originalClef
         clefs = immutableMeasure.clefs
         noteCount = immutableMeasure.noteCount
     }

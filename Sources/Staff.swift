@@ -80,9 +80,24 @@ public struct Staff: RandomAccessCollection {
             throw StaffError.repeatedMeasureCannotBeModified
         }
         try measure.changeClef(clef, at: noteIndex, inSet: setIndex)
-        // TODO: Change the lastClef property of all following measures
-        // and repeats with an empty clefs property
         try replaceMeasure(at: measureIndex, with: measure)
+        guard !measure.hasClefAfterNote(at: noteIndex) else {
+            return
+        }
+        for index in (measureIndex + 1)..<measureCount {
+            do {
+                guard var measure = try self.measure(at: index) as? Measure else {
+                    continue
+                }
+                let didChangeClef = measure.changeFirstClefIfNeeded(to: clef)
+                if !didChangeClef {
+                    break
+                }
+                try replaceMeasure(at: index, with: measure)
+            } catch {
+                continue
+            }
+        }
     }
 
     /**

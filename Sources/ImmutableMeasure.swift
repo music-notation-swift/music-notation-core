@@ -15,9 +15,9 @@ public protocol ImmutableMeasure: NotesHolder {
     /// Stores all clef changes that took place in this measure
     var clefs: [Int: Clef] { get }
     /// Stores the last clef used in the measure
-    var lastClef: Clef { get }
+    var lastClef: Clef? { get }
     /// Stores the clef used when the measure was created or inserted into the Staff
-    var originalClef: Clef { get }
+    var originalClef: Clef? { get }
 
     // Collection Conformance
     var startIndex: Int { get }
@@ -25,8 +25,8 @@ public protocol ImmutableMeasure: NotesHolder {
     func index(after i: Int) -> Int
     func index(before i: Int) -> Int
 
-    init(timeSignature: TimeSignature, key: Key?, initialClef: Clef)
-    init(timeSignature: TimeSignature, key: Key?, initialClef: Clef, notes: [[NoteCollection]])
+    init(timeSignature: TimeSignature, key: Key?)
+    init(timeSignature: TimeSignature, key: Key?, notes: [[NoteCollection]])
 }
 
 public func ==<T: ImmutableMeasure>(lhs: T, rhs: T) -> Bool {

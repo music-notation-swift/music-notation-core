@@ -51,24 +51,22 @@ public struct Measure: ImmutableMeasure, Equatable, RandomAccessCollection {
             }
         }
     }
-    public private(set) var lastClef: Clef
-    public private(set) var originalClef: Clef
+    public internal(set) var lastClef: Clef?
+    public internal(set) var originalClef: Clef?
 
     internal typealias NoteCollectionIndex = (noteIndex: Int, tupletIndex: Int?)
     private var noteCollectionIndexes: [[NoteCollectionIndex]] = [[NoteCollectionIndex]]()
 
     // MARK: - Initializers
 
-    public init(timeSignature: TimeSignature, key: Key? = nil, initialClef: Clef) {
-        self.init(timeSignature: timeSignature, key: key, initialClef: initialClef, notes: [[]])
+    public init(timeSignature: TimeSignature, key: Key? = nil) {
+        self.init(timeSignature: timeSignature, key: key, notes: [[]])
     }
 
-    public init(timeSignature: TimeSignature, key: Key? = nil, initialClef: Clef, notes: [[NoteCollection]]) {
+    public init(timeSignature: TimeSignature, key: Key? = nil, notes: [[NoteCollection]]) {
         self.timeSignature = timeSignature
         self.key = key
         self.notes = notes
-        lastClef = initialClef
-        originalClef = initialClef
         recomputeNoteCollectionIndexes()
     }
 
@@ -188,7 +186,9 @@ public struct Measure: ImmutableMeasure, Equatable, RandomAccessCollection {
             notes.append([])
         }
         var noteCollectionWithClef = noteCollection
-        noteCollectionWithClef.setClef(lastClef)
+        if let lastClef = lastClef {
+            noteCollectionWithClef.setClef(lastClef)
+        }
         notes[setIndex].append(noteCollectionWithClef)
     }
 
@@ -322,19 +322,13 @@ public struct Measure: ImmutableMeasure, Equatable, RandomAccessCollection {
         self = newMeasure
     }
 
-    public mutating func changeClef(_ clef: Clef, at noteIndex: Int, inSet setIndex: Int = 0) throws {
-        let ticks = try cumulativeTicks(at: noteIndex, inSet: setIndex)
-        clefs[ticks] = clef
-        // Set clef on the note
-        var note = try self.note(at: noteIndex, inSet: setIndex)
-        note.clef = clef
-        let index = try noteCollectionIndex(fromNoteIndex: noteIndex, inSet: setIndex)
-        try replaceNote(at: index, with: [note], inSet: setIndex)
-    }
-
     public func clef(at noteIndex: Int, inSet setIndex: Int) throws -> Clef {
         guard !clefs.isEmpty else {
-            return lastClef
+            if let lastClef = lastClef {
+                return lastClef
+            } else {
+                throw MeasureError.noClefSpecified
+            }
         }
         let ticks = try cumulativeTicks(at: noteIndex, inSet: setIndex)
         return try clef(forTicks: ticks)
@@ -342,7 +336,11 @@ public struct Measure: ImmutableMeasure, Equatable, RandomAccessCollection {
 
     private func clef(at noteCollectionIndex: NoteCollectionIndex, inSet setIndex: Int) throws -> Clef {
         guard !clefs.isEmpty else {
-            return lastClef
+            if let lastClef = lastClef {
+                return lastClef
+            } else {
+                throw MeasureError.noClefSpecified
+            }
         }
         let ticks = try cumulativeTicks(at: noteCollectionIndex, inSet: setIndex)
         return try clef(forTicks: ticks)
@@ -358,6 +356,16 @@ public struct Measure: ImmutableMeasure, Equatable, RandomAccessCollection {
     }
 
     // MARK: - Internal Methods
+
+    internal mutating func changeClef(_ clef: Clef, at noteIndex: Int, inSet setIndex: Int = 0) throws {
+        let ticks = try cumulativeTicks(at: noteIndex, inSet: setIndex)
+        clefs[ticks] = clef
+        // Set clef on the note
+        var note = try self.note(at: noteIndex, inSet: setIndex)
+        note.clef = clef
+        let index = try noteCollectionIndex(fromNoteIndex: noteIndex, inSet: setIndex)
+        try replaceNote(at: index, with: [note], inSet: setIndex)
+    }
 
     /**
      This method will set the `originalClef` and `lastClef` properties if
@@ -389,9 +397,15 @@ public struct Measure: ImmutableMeasure, Equatable, RandomAccessCollection {
      */
     internal mutating func insert(_ noteCollection: NoteCollection, at index: Int, inSet setIndex: Int = 0, shouldIgnoreTieStates skipTieConfig: Bool) throws {
         // Set clef to the last clef at the given note index
-        let newClef = try clef(at: index, inSet: setIndex)
-        var newNoteCollection = noteCollection
-        newNoteCollection.setClef(newClef)
+        let newNoteCollection: NoteCollection
+        do {
+            let newClef = try clef(at: index, inSet: setIndex)
+            var noteCollectionWithClef = noteCollection
+            noteCollectionWithClef.setClef(newClef)
+            newNoteCollection = noteCollectionWithClef
+        } catch {
+            newNoteCollection = noteCollection
+        }
 
         if index == 0 && notes[setIndex].isEmpty {
             append(newNoteCollection, inSet: setIndex)
@@ -448,8 +462,13 @@ public struct Measure: ImmutableMeasure, Equatable, RandomAccessCollection {
      */
     internal mutating func replaceNote(at collectionIndex: NoteCollectionIndex, with noteCollections: [NoteCollection], inSet setIndex: Int) throws {
         // Get the clef for this index
+        let noteCollectionsWithClef: [NoteCollection]
+        do {
         let clefForNote = try clef(at: collectionIndex, inSet: setIndex)
-        let noteCollectionsWithClef = noteCollections.map { $0.withClef(clefForNote) }
+        noteCollectionsWithClef = noteCollections.map { $0.withClef(clefForNote) }
+        } catch {
+            noteCollectionsWithClef = noteCollections
+        }
 
         guard let tupletIndex = collectionIndex.tupletIndex else {
             notes[setIndex].remove(at: collectionIndex.noteIndex)
@@ -916,4 +935,5 @@ public enum MeasureError: Error {
     case removeNoteFromTuplet
     case removeTupletFromNote
     case tupletNotCompletelyCovered
+    case noClefSpecified
 }

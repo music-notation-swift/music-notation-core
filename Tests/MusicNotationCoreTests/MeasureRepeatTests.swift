@@ -15,8 +15,8 @@ class MeasureRepeatTests: XCTestCase {
     static let key = Key(noteLetter: .c)
     static let note1 = Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1))
     static let note2 = Note(noteDuration: .quarter, tone: Tone(noteLetter: .d, octave: .octave1))
-    let measure1 = Measure(timeSignature: timeSignature, key: key, initialClef: .treble, notes: [[note1, note1]])
-    let measure2 = Measure(timeSignature: timeSignature, key: key, initialClef: .treble, notes: [[note2, note2]])
+    let measure1 = Measure(timeSignature: timeSignature, key: key, notes: [[note1, note1]])
+    let measure2 = Measure(timeSignature: timeSignature, key: key, notes: [[note2, note2]])
 
     // MARK: - init(measures:repeateCount:)
     // MARK: Failures

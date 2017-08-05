@@ -11,6 +11,10 @@ import XCTest
 
 class StaffTests: XCTestCase {
 
+    enum Constant {
+        static let standardClef: Clef = .treble
+    }
+
     var staff: Staff!
 
     var measure1: Measure!
@@ -26,7 +30,7 @@ class StaffTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        staff = Staff(clef: .treble, instrument: .guitar6)
+        staff = Staff(clef: Constant.standardClef, instrument: .guitar6)
         let timeSignature = TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120)
         let key = Key(noteLetter: .c)
         let note = Note(noteDuration: .sixteenth,
@@ -39,49 +43,41 @@ class StaffTests: XCTestCase {
         measure1 = Measure(
             timeSignature: timeSignature,
             key: key,
-            initialClef: staff.clef,
             notes: [[note, note, note, note, tuplet]]
         )
         measure2 = Measure(
             timeSignature: timeSignature,
             key: key,
-            initialClef: staff.clef,
             notes: [[tuplet, note, note]]
         )
         measure3 = Measure(
             timeSignature: timeSignature,
             key: key,
-            initialClef: staff.clef,
             notes: [[note, note, note, note, tuplet]]
         )
         measure4 = Measure(
             timeSignature: timeSignature,
             key: key,
-            initialClef: staff.clef,
             notes: [[note, note, note, note]]
         )
         measure5 = Measure(
             timeSignature: timeSignature,
             key: key,
-            initialClef: staff.clef,
             notes: [[tuplet, note, note, note, note]]
         )
         measure6 = Measure(
             timeSignature: timeSignature,
             key: key,
-            initialClef: staff.clef,
             notes: [[tuplet, tuplet, note, note]]
         )
         measure7 = Measure(
             timeSignature: timeSignature,
             key: key,
-            initialClef: staff.clef,
             notes: [[note2, tuplet, tuplet, note]]
         )
         measure8 = Measure(
             timeSignature: timeSignature,
             key: key,
-            initialClef: staff.clef,
             notes: [[tuplet2, note, note]]
         )
         repeat1 = try! MeasureRepeat(measures: [measure4])
@@ -105,8 +101,7 @@ class StaffTests: XCTestCase {
     func testInsertMeasureInvalidIndex() {
         let measure = Measure(
             timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
-            key: Key(noteLetter: .c),
-            initialClef: staff.clef)
+            key: Key(noteLetter: .c))
 
         assertThrowsError(StaffError.measureIndexOutOfRange) {
             try staff.insertMeasure(measure, at: 17)
@@ -116,8 +111,7 @@ class StaffTests: XCTestCase {
     func testInsertMeasureInRepeatedMeasures() {
         let measure = Measure(
             timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
-            key: Key(noteLetter: .c),
-            initialClef: staff.clef)
+            key: Key(noteLetter: .c))
         
         assertThrowsError(MeasureRepeatError.cannotModifyRepeatedMeasures) {
             try staff.insertMeasure(measure, at: 10, beforeRepeat: true)
@@ -133,104 +127,105 @@ class StaffTests: XCTestCase {
     func testInsertMeasureNoRepeat() {
         let measure = Measure(
             timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
-            key: Key(noteLetter: .c),
-            initialClef: staff.clef)
+            key: Key(noteLetter: .c))
         assertNoErrorThrown {
             try staff.insertMeasure(measure, at: 1)
             let addedMeasure = try staff.measure(at: 1)
             let beforeMeasure = try staff.measure(at: 0)
             let afterMeasure = try staff.measure(at: 2)
-            XCTAssertEqual(Measure(addedMeasure), measure)
-            XCTAssertEqual(Measure(beforeMeasure), measure1)
-            XCTAssertEqual(Measure(afterMeasure), measure2)
+            XCTAssertEqual(Measure(addedMeasure), changedClef(of: measure))
+            // Initial measure don't have the clef set before being added to the staff
+            // But then after they are in the staff, they do have the clef set.
+            XCTAssertEqual(Measure(beforeMeasure), changedClef(of: measure1))
+            XCTAssertEqual(Measure(afterMeasure), changedClef(of: measure2))
         }
     }
 
 	func testInsertMeasureNoRepeatAtEnd() {
 		let measure = Measure(
 			timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
-			key: Key(noteLetter: .c),
-			initialClef: staff.clef)
+			key: Key(noteLetter: .c))
         assertNoErrorThrown {
 			try staff.insertMeasure(measure, at: 14)
 			let addedMeasure = try staff.measure(at: 14)
 			let beforeMeasure = try staff.measure(at: 13)
 			let afterMeasure = try staff.measure(at: 15)
-			XCTAssertEqual(Measure(addedMeasure), measure)
-			XCTAssertEqual(Measure(beforeMeasure), measure6)
-			XCTAssertEqual(Measure(afterMeasure), measure3)
+            XCTAssertEqual(Measure(addedMeasure), changedClef(of: measure))
+			XCTAssertEqual(Measure(beforeMeasure), changedClef(of: measure6))
+			XCTAssertEqual(Measure(afterMeasure), changedClef(of: measure3))
 		}
 	}
 	
     func testInsertMeasureInRepeat() {
-        let measure = Measure(
+        var measure = Measure(
             timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
-            key: Key(noteLetter: .c),
-            initialClef: staff.clef)
+            key: Key(noteLetter: .c))
+        measure.lastClef = staff.clef
+        measure.originalClef = staff.clef
         assertNoErrorThrown {
             try staff.insertMeasure(measure, at: 5, beforeRepeat: false)
             let actualRepeat = try staff.measureRepeat(at: 5)
             let expectedRepeat = try MeasureRepeat(measures: [measure, measure4])
-            XCTAssertEqual(actualRepeat, expectedRepeat)
+            XCTAssertEqual(actualRepeat, changedClef(ofAllMeasuresInRepeat: expectedRepeat))
         }
     }
 
     func testInsertMeasureInRepeatAtEnd() {
-        let measure = Measure(
+        var measure = Measure(
             timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
-            key: Key(noteLetter: .c),
-            initialClef: staff.clef)
+            key: Key(noteLetter: .c))
+        measure.lastClef = staff.clef
+        measure.originalClef = staff.clef
         assertNoErrorThrown {
             try staff.insertMeasure(measure, at: 6, beforeRepeat: false)
             let actualRepeat = try staff.measureRepeat(at: 5)
             let expectedRepeat = try MeasureRepeat(measures: [measure4, measure])
-            XCTAssertEqual(actualRepeat, expectedRepeat)
+            XCTAssertEqual(actualRepeat, changedClef(ofAllMeasuresInRepeat: expectedRepeat))
         }
     }
 
     func testInsertMeasureBeforeRepeat() {
         let measure = Measure(
             timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
-            key: Key(noteLetter: .c),
-            initialClef: staff.clef)
+            key: Key(noteLetter: .c))
         assertNoErrorThrown {
             try staff.insertMeasure(measure, at: 5, beforeRepeat: true)
             let _ = try staff.measureRepeat(at: 6)
             let addedMeasure = try staff.measure(at: 5)
             let beforeMeasure = try staff.measure(at: 4)
-            XCTAssertEqual(Measure(addedMeasure), measure)
-            XCTAssertEqual(Measure(beforeMeasure), measure5)
+            XCTAssertEqual(Measure(addedMeasure), changedClef(of: measure))
+            XCTAssertEqual(Measure(beforeMeasure), changedClef(of: measure5))
         }
     }
 
     func testInsertMeasureNoRepeatWithWrongFlag() {
         let measure = Measure(
             timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
-            key: Key(noteLetter: .c),
-            initialClef: staff.clef)
+            key: Key(noteLetter: .c))
         assertNoErrorThrown {
             // Ignores the flag, since it's not a repeat
             try staff.insertMeasure(measure, at: 1, beforeRepeat: false)
             let addedMeasure = try staff.measure(at: 1)
             let beforeMeasure = try staff.measure(at: 0)
             let afterMeasure = try staff.measure(at: 2)
-            XCTAssertEqual(Measure(addedMeasure), measure)
-            XCTAssertEqual(Measure(beforeMeasure), measure1)
-            XCTAssertEqual(Measure(afterMeasure), measure2)
+            XCTAssertEqual(Measure(addedMeasure), changedClef(of: measure))
+            XCTAssertEqual(Measure(beforeMeasure), changedClef(of: measure1))
+            XCTAssertEqual(Measure(afterMeasure), changedClef(of: measure2))
         }
     }
 
     func testInsertMeasureInMeasureRepeatWithWrongFlag() {
-        let measure = Measure(
+        var measure = Measure(
             timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
-            key: Key(noteLetter: .c),
-            initialClef: staff.clef)
+            key: Key(noteLetter: .c))
+        measure.lastClef = staff.clef
+        measure.originalClef = staff.clef
         assertNoErrorThrown {
             // Ignores the flag since you can only insert it into the repeat
             try staff.insertMeasure(measure, at: 6, beforeRepeat: true)
             let actualRepeat = try staff.measureRepeat(at: 5)
             let expectedRepeat = try MeasureRepeat(measures: [measure4, measure])
-            XCTAssertEqual(actualRepeat, expectedRepeat)
+            XCTAssertEqual(actualRepeat, changedClef(ofAllMeasuresInRepeat: expectedRepeat))
         }
     }
 
@@ -260,9 +255,11 @@ class StaffTests: XCTestCase {
             let beforeRepeat = try staff.measure(at: 0)
             let actualRepeat = try staff.measureRepeat(at: 1)
             let afterRepeat = try staff.measure(at: 3)
-            XCTAssertEqual(Measure(beforeRepeat), measure1)
-            XCTAssertEqual(Measure(afterRepeat), measure2)
-            XCTAssertEqual(actualRepeat, measureRepeat)
+            XCTAssertEqual(Measure(beforeRepeat), changedClef(of: measure1))
+            measure2.originalClef = staff.clef
+            measure2.lastClef = staff.clef
+            XCTAssertEqual(Measure(afterRepeat), changedClef(of: measure2))
+            XCTAssertEqual(actualRepeat, changedClef(ofAllMeasuresInRepeat: measureRepeat))
         }
     }
 
@@ -273,9 +270,9 @@ class StaffTests: XCTestCase {
             let beforeRepeat = try staff.measure(at: 4)
             let actualRepeat = try staff.measureRepeat(at: 5)
             let afterRepeat = try staff.measureRepeat(at: 7)
-            XCTAssertEqual(Measure(beforeRepeat), measure5)
-            XCTAssertEqual(afterRepeat, repeat1)
-            XCTAssertEqual(actualRepeat, measureRepeat)
+            XCTAssertEqual(Measure(beforeRepeat), changedClef(of: measure5))
+            XCTAssertEqual(afterRepeat, changedClef(ofAllMeasuresInRepeat: repeat1))
+            XCTAssertEqual(actualRepeat, changedClef(ofAllMeasuresInRepeat: measureRepeat))
         }
     }
 
@@ -840,7 +837,7 @@ class StaffTests: XCTestCase {
         assertNoErrorThrown {
             try staff.replaceMeasure(at: 0, with: measure2)
             let replacedMeasure = Measure(try staff.measure(at: 0))
-            XCTAssertEqual(replacedMeasure, measure2)
+            XCTAssertEqual(replacedMeasure, changedClef(of: measure2))
         }
     }
     
@@ -849,8 +846,8 @@ class StaffTests: XCTestCase {
             try staff.replaceMeasure(at: 5, with: measure1)
             let replacedMeasure = Measure(try staff.measure(at: 5))
             let repeatedMeasure = Measure(try staff.measure(at: 6))
-            XCTAssertEqual(replacedMeasure, measure1)
-            XCTAssertEqual(repeatedMeasure, measure1)
+            XCTAssertEqual(replacedMeasure, changedClef(of: measure1))
+            XCTAssertEqual(repeatedMeasure, changedClef(of: measure1))
         }
     }
 
@@ -859,13 +856,13 @@ class StaffTests: XCTestCase {
 
     func testChangeClefInvalidMeasureIndex() {
         assertThrowsError(StaffError.measureIndexOutOfRange) {
-            try staff.changeClef(.bass, in: 17, at: 0, inSet: 0)
+            try staff.changeClef(.bass, in: 17, atNote: 0, inSet: 0)
         }
     }
 
     func testChangeClefRepeatedMeasure() {
         assertThrowsError(StaffError.repeatedMeasureCannotBeModified) {
-            try staff.changeClef(.bass, in: 6, at: 0, inSet: 0)
+            try staff.changeClef(.bass, in: 6, atNote: 0, inSet: 0)
         }
     }
 
@@ -875,11 +872,25 @@ class StaffTests: XCTestCase {
         assertNoErrorThrown {
             let newClef: Clef = .bass
             let measureIndex = 2
-            try staff.changeClef(newClef, in: measureIndex, at: 0, inSet: 0)
+            try staff.changeClef(newClef, in: measureIndex, atNote: 0, inSet: 0)
+            let notesHolderIndexPrevious = try! staff.notesHolderIndexFromMeasureIndex(measureIndex - 1)
             let notesHolderIndexNext = try! staff.notesHolderIndexFromMeasureIndex(measureIndex + 1)
             let measure = try staff.measure(at: measureIndex)
             XCTAssertEqual(measure.clefs, [0: newClef])
             XCTAssertEqual(measure.lastClef, newClef)
+            staff[0..<notesHolderIndexPrevious.notesHolderIndex].forEach { notesHolder in
+                switch notesHolder {
+                case let measure as Measure:
+                    XCTAssertEqual(measure.lastClef, Constant.standardClef)
+                    XCTAssertEqual(measure.originalClef, Constant.standardClef)
+                case let measureRepeat as MeasureRepeat:
+                    measureRepeat.expand().forEach {
+                        XCTAssertEqual($0.lastClef, Constant.standardClef)
+                        XCTAssertEqual($0.originalClef, Constant.standardClef)
+                    }
+                default: XCTFail("Invalid type. Should be Measure or MeasureRepeat")
+                }
+            }
             staff[notesHolderIndexNext.notesHolderIndex..<staff.endIndex].forEach { notesHolder in
                 switch notesHolder {
                 case let measure as Measure:
@@ -929,17 +940,17 @@ class StaffTests: XCTestCase {
     func testMap() {
         let mappedNotesHolders: [NotesHolder] = staff.map { $0 }
         let expectedNotesHolders: [NotesHolder] = [
-            measure1,
-            measure2,
-            measure3,
-            measure4,
-            measure5,
-            repeat1,
-            repeat2,
-            measure6,
-            measure3,
-            measure7,
-            measure8
+            changedClef(of: measure1),
+            changedClef(of: measure2),
+            changedClef(of: measure3),
+            changedClef(of: measure4),
+            changedClef(of: measure5),
+            changedClef(ofAllMeasuresInRepeat: repeat1),
+            changedClef(ofAllMeasuresInRepeat: repeat2),
+            changedClef(of: measure6),
+            changedClef(of: measure3),
+            changedClef(of: measure7),
+            changedClef(of: measure8),
         ]
         var count = 0
         zip(mappedNotesHolders, expectedNotesHolders).forEach { (actualNotesHolder, expectedNotesHolder) in
@@ -959,17 +970,17 @@ class StaffTests: XCTestCase {
     func testReversed() {
         let reversedNotesHolders = staff.reversed()
         let expectedNotesHolders: [NotesHolder] = [
-            measure1,
-            measure2,
-            measure3,
-            measure4,
-            measure5,
-            repeat1,
-            repeat2,
-            measure6,
-            measure3,
-            measure7,
-            measure8
+            changedClef(of: measure1),
+            changedClef(of: measure2),
+            changedClef(of: measure3),
+            changedClef(of: measure4),
+            changedClef(of: measure5),
+            changedClef(ofAllMeasuresInRepeat: repeat1),
+            changedClef(ofAllMeasuresInRepeat: repeat2),
+            changedClef(of: measure6),
+            changedClef(of: measure3),
+            changedClef(of: measure7),
+            changedClef(of: measure8),
         ].reversed()
         var count = 0
         zip(reversedNotesHolders, expectedNotesHolders).forEach { (actualNotesHolder, expectedNotesHolder) in
@@ -989,9 +1000,27 @@ class StaffTests: XCTestCase {
     func testIterator() {
         var iterator = staff.makeIterator()
         if let actual = iterator.next() as? Measure {
-            XCTAssertEqual(actual, measure1)
+            XCTAssertEqual(actual, changedClef(of: measure1))
         } else {
             XCTFail("Iterator didn't return correct value for next()")
         }
+    }
+
+    private func changedClef(of measure: Measure, toClef clef: Clef = Constant.standardClef) -> Measure {
+        var mutatingMeasure = measure
+        _ = mutatingMeasure.changeFirstClefIfNeeded(to: clef)
+        return mutatingMeasure
+    }
+
+    private func changedClef(ofAllMeasuresInRepeat measureRepeat: MeasureRepeat,
+                             toClef clef: Clef = Constant.standardClef) -> MeasureRepeat {
+        let newMeasures = measureRepeat.measures.map { (measure: Measure) -> Measure in
+            var measureCopy = measure
+            _ = measureCopy.changeFirstClefIfNeeded(to: clef)
+            return measureCopy
+        }
+        var newRepeat = measureRepeat
+        newRepeat.measures = newMeasures
+        return newRepeat
     }
 }

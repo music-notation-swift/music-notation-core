@@ -880,7 +880,7 @@ public struct Measure: ImmutableMeasure, Equatable, RandomAccessCollection {
      Returns the number of ticks that exist in the measure up to, but not including
      the given note index.
      */
-    private func cumulativeTicks(at noteIndex: Int, inSet setIndex: Int = 0) throws -> Int {
+    internal func cumulativeTicks(at noteIndex: Int, inSet setIndex: Int = 0) throws -> Int {
         // Total # of ticks up to, but not including the given noteIndex
         let index = try noteCollectionIndex(fromNoteIndex: noteIndex, inSet: setIndex)
         return try cumulativeTicks(at: index, inSet: setIndex)
@@ -898,7 +898,8 @@ public struct Measure: ImmutableMeasure, Equatable, RandomAccessCollection {
         } else {
             let noteCollections = notes[setIndex]
             // Total up ticks before the last one
-            let ticksBeforeLast = noteCollections[0..<noteCollectionIndex.noteIndex - 1].reduce(0) { prev, currentCollection in
+            let lastCollectionIndex = Swift.max(noteCollectionIndex.noteIndex - 1, 0)
+            let ticksBeforeLast = noteCollections[0..<lastCollectionIndex].reduce(0) { prev, currentCollection in
                 return prev + currentCollection.ticks
             }
             guard let lastNoteCollection = noteCollections[noteCollectionIndex.noteIndex] as? Tuplet, let tupletIndex = noteCollectionIndex.tupletIndex else {

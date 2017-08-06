@@ -870,53 +870,33 @@ class StaffTests: XCTestCase {
 
     func testChangeClefAtBeginningOfMeasure() {
         assertNoErrorThrown {
-            let newClef: Clef = .bass
-            let measureIndex = 2
-            try staff.changeClef(newClef, in: measureIndex, atNote: 0, inSet: 0)
-            let notesHolderIndexPrevious = try! staff.notesHolderIndexFromMeasureIndex(measureIndex - 1)
-            let notesHolderIndexNext = try! staff.notesHolderIndexFromMeasureIndex(measureIndex + 1)
-            let measure = try staff.measure(at: measureIndex)
-            XCTAssertEqual(measure.clefs, [0: newClef])
-            XCTAssertEqual(measure.lastClef, newClef)
-            staff[0..<notesHolderIndexPrevious.notesHolderIndex].forEach { notesHolder in
-                switch notesHolder {
-                case let measure as Measure:
-                    XCTAssertEqual(measure.lastClef, Constant.standardClef)
-                    XCTAssertEqual(measure.originalClef, Constant.standardClef)
-                case let measureRepeat as MeasureRepeat:
-                    measureRepeat.expand().forEach {
-                        XCTAssertEqual($0.lastClef, Constant.standardClef)
-                        XCTAssertEqual($0.originalClef, Constant.standardClef)
-                    }
-                default: XCTFail("Invalid type. Should be Measure or MeasureRepeat")
-                }
-            }
-            staff[notesHolderIndexNext.notesHolderIndex..<staff.endIndex].forEach { notesHolder in
-                switch notesHolder {
-                case let measure as Measure:
-                    XCTAssertEqual(measure.lastClef, newClef)
-                    XCTAssertEqual(measure.originalClef, newClef)
-                case let measureRepeat as MeasureRepeat:
-                    measureRepeat.expand().forEach {
-                        XCTAssertEqual($0.lastClef, newClef)
-                        XCTAssertEqual($0.originalClef, newClef)
-                    }
-                default: XCTFail("Invalid type. Should be Measure or MeasureRepeat")
-                }
-            }
+            try verifyAndChangeClef(to: .bass, in: 2, atNote: 0)
         }
     }
 
     func testChangeClefAtBeginningOfStaff() {
-
+        assertNoErrorThrown {
+            try verifyAndChangeClef(to: .alto, in: 0, atNote: 0)
+        }
     }
 
     func testChangeClefAtMiddleOfMeasure() {
-
+        assertNoErrorThrown {
+            try verifyAndChangeClef(to: .baritone, in: 3, atNote: 2)
+        }
     }
 
     func testChangeClefTwiceInOneMeasure() {
+        assertNoErrorThrown {
+            let newClef1: Clef = .bass
+            let newClef2: Clef = .alto
 
+            try staff.changeClef(newClef1, in: 1, atNote: 1)
+            try staff.changeClef(newClef2, in: 1, atNote: 2)
+
+            try verifyClefsUnchanged(before: 1)
+            try verifyClefsChanged(to: newClef2, after: 1)
+        }
     }
 
     func testChangeClefTwiceAcross2Measures() {
@@ -934,6 +914,67 @@ class StaffTests: XCTestCase {
     func testChangeClefInMeasureRepeatWithMultipleRepeats() {
 
     }
+
+    private func verifyAndChangeClef(to clef: Clef,
+                            in measureIndex: Int,
+                            atNote noteIndex: Int,
+                            inSet setIndex: Int = 0,
+                            inFile file: StaticString = #file,
+                            atLine line: UInt = #line) throws {
+        let newClef: Clef = .bass
+        try staff.changeClef(newClef, in: measureIndex, atNote: noteIndex, inSet: setIndex)
+        try verifyClefsUnchanged(before: measureIndex)
+        try verifyClefsChanged(to: newClef, after: measureIndex)
+    }
+
+    private func verifyClefsUnchanged(before measureIndex: Int,
+                                      file: StaticString = #file,
+                                      line: UInt = #line) throws {
+        let notesHolderIndexPrevious = try? staff.notesHolderIndexFromMeasureIndex(measureIndex - 1)
+        if let notesHolderIndexPrevious = notesHolderIndexPrevious {
+            staff[0..<notesHolderIndexPrevious.notesHolderIndex].forEach { notesHolder in
+                switch notesHolder {
+                case let measure as Measure:
+                    XCTAssertEqual(measure.lastClef, Constant.standardClef, file: file, line: line)
+                    XCTAssertEqual(measure.originalClef, Constant.standardClef, file: file, line: line)
+                case let measureRepeat as MeasureRepeat:
+                    measureRepeat.expand().forEach {
+                        XCTAssertEqual($0.lastClef, Constant.standardClef, file: file, line: line)
+                        XCTAssertEqual($0.originalClef, Constant.standardClef, file: file, line: line)
+                    }
+                default: XCTFail("Invalid type. Should be Measure or MeasureRepeat")
+                }
+            }
+        }
+    }
+
+    /**
+     - parameter endingIndex: if it is not specified, it will check to the end.
+         Otherwise, it will check everything up to, but not including the measure at this index.
+     */
+    private func verifyClefsChanged(to newClef: Clef,
+                                    after measureIndex: Int,
+                                    until endingIndex: Int? = nil,
+                                    file: StaticString = #file,
+                                    line: UInt = #line) throws {
+        let notesHolderIndexNext = try? staff.notesHolderIndexFromMeasureIndex(measureIndex + 1)
+        if let notesHolderIndexNext = notesHolderIndexNext {
+            staff[notesHolderIndexNext.notesHolderIndex..<(endingIndex ?? staff.endIndex)].forEach { notesHolder in
+                switch notesHolder {
+                case let measure as Measure:
+                    XCTAssertEqual(measure.lastClef, newClef, file: file, line: line)
+                    XCTAssertEqual(measure.originalClef, newClef, file: file, line: line)
+                case let measureRepeat as MeasureRepeat:
+                    measureRepeat.expand().forEach {
+                        XCTAssertEqual($0.lastClef, newClef, file: file, line: line)
+                        XCTAssertEqual($0.originalClef, newClef, file: file, line: line)
+                    }
+                default: XCTFail("Invalid type. Should be Measure or MeasureRepeat")
+                }
+            }
+        }
+    }
+
 
     // MARK: - Collection Conformance
 

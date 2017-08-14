@@ -1045,6 +1045,232 @@ class MeasureTests: XCTestCase {
         }
     }
 
+    // MARK: - clef(at:inSet:)
+    // MARK: Successes
+
+    func test1ClefAtBeginningNoOriginal() {
+        let note = Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1))
+        var testMeasure = Measure(timeSignature: timeSignature, notes: [
+            [
+                note, note, note, note
+            ]
+            ])
+        assertNoErrorThrown {
+            let newClef: Clef = .bass
+            try testMeasure.changeClef(newClef, at: 0)
+            XCTAssertEqual(try testMeasure.clef(at: 0, inSet: 0), newClef)
+            try (1..<testMeasure.noteCount[0]).forEach {
+                XCTAssertEqual(try testMeasure.clef(at: $0, inSet: 0), newClef)
+            }
+        }
+    }
+
+    func test1ClefAtBeginningWithOriginal() {
+        let note = Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1))
+        var testMeasure = Measure(timeSignature: timeSignature, notes: [
+            [
+                note, note, note, note
+            ]
+            ])
+        let originalClef: Clef = .treble
+        testMeasure.originalClef = originalClef
+        assertNoErrorThrown {
+            let newClef: Clef = .bass
+            try testMeasure.changeClef(newClef, at: 0)
+            XCTAssertEqual(try testMeasure.clef(at: 0, inSet: 0), newClef)
+            try (1..<testMeasure.noteCount[0]).forEach {
+                XCTAssertEqual(try testMeasure.clef(at: $0, inSet: 0), newClef)
+            }
+        }
+    }
+
+    func test1ClefAtBeginningAnd1Other() {
+        let note = Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1))
+        var testMeasure = Measure(timeSignature: timeSignature, notes: [
+            [
+                note, note, note, note
+            ]
+            ])
+        assertNoErrorThrown {
+            let newClef1: Clef = .bass
+            let newClef2: Clef = .alto
+            try testMeasure.changeClef(newClef1, at: 0)
+            try testMeasure.changeClef(newClef2, at: 2)
+            try (0..<2).forEach {
+                XCTAssertEqual(try testMeasure.clef(at: $0, inSet: 0), newClef1)
+            }
+            try (2..<testMeasure.noteCount[0]).forEach {
+                XCTAssertEqual(try testMeasure.clef(at: $0, inSet: 0), newClef2)
+            }
+        }
+    }
+
+    func test1ClefAtEndWithOriginal() {
+        let note = Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1))
+        var testMeasure = Measure(timeSignature: timeSignature, notes: [
+            [
+                note, note, note, note
+            ]
+            ])
+        let originalClef: Clef = .treble
+        testMeasure.originalClef = originalClef
+        assertNoErrorThrown {
+            let newClef: Clef = .bass
+            try testMeasure.changeClef(newClef, at: 3)
+            try (0..<3).forEach {
+                XCTAssertEqual(try testMeasure.clef(at: $0, inSet: 0), originalClef)
+            }
+            try (3..<testMeasure.noteCount[0]).forEach {
+                XCTAssertEqual(try testMeasure.clef(at: $0, inSet: 0), newClef)
+            }
+        }
+    }
+
+    func test2ClefsInDifferentSetsWithOriginal() {
+        let eighth = Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1))
+        let sixteenth = Note(noteDuration: .sixteenth, tone: Tone(noteLetter: .c, octave: .octave1))
+
+        var testMeasure = Measure(timeSignature: timeSignature, notes: [
+            [
+                sixteenth, sixteenth, sixteenth, sixteenth, sixteenth, sixteenth, sixteenth, sixteenth
+            ],
+            [
+                eighth, eighth, eighth, eighth
+            ]
+            ])
+        let originalClef: Clef = .treble
+        testMeasure.originalClef = originalClef
+        assertNoErrorThrown {
+            let newClef1: Clef = .bass
+            let newClef2: Clef = .alto
+            try testMeasure.changeClef(newClef1, at: 2, inSet: 1) // Set 0: 5th note changes. Set 1: 3rd note changes.
+            try testMeasure.changeClef(newClef2, at: 7, inSet: 0) // Set 0: 8th note changes. Set 1: No change.
+
+            // set 0
+            try (0..<4).forEach {
+                XCTAssertEqual(try testMeasure.clef(at: $0, inSet: 0), originalClef)
+            }
+            try (4..<7).forEach {
+                XCTAssertEqual(try testMeasure.clef(at: $0, inSet: 0), newClef1)
+            }
+            try (7..<testMeasure.noteCount[0]).forEach {
+                XCTAssertEqual(try testMeasure.clef(at: $0, inSet: 0), newClef2)
+            }
+            // set 1
+            try (0..<2).forEach {
+                XCTAssertEqual(try testMeasure.clef(at: $0, inSet: 1), originalClef)
+            }
+            try (2..<testMeasure.noteCount[1]).forEach {
+                XCTAssertEqual(try testMeasure.clef(at: $0, inSet: 1), newClef1)
+            }
+        }
+    }
+
+    func test2ClefsInDifferentSetsNoOriginal() {
+        let eighth = Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1))
+        let sixteenth = Note(noteDuration: .sixteenth, tone: Tone(noteLetter: .c, octave: .octave1))
+
+        var testMeasure = Measure(timeSignature: timeSignature, notes: [
+            [
+                sixteenth, sixteenth, sixteenth, sixteenth, sixteenth, sixteenth, sixteenth, sixteenth
+            ],
+            [
+                eighth, eighth, eighth, eighth
+            ]
+            ])
+        assertNoErrorThrown {
+            let newClef1: Clef = .bass
+            let newClef2: Clef = .alto
+            try testMeasure.changeClef(newClef1, at: 2, inSet: 1) // Set 0: 5th note changes. Set 1: 3rd note changes.
+            try testMeasure.changeClef(newClef2, at: 7, inSet: 0) // Set 0: 8th note changes. Set 1: No change.
+
+            // set 0
+            (0..<4).forEach { index in
+                assertThrowsError(MeasureError.noClefSpecified) {
+                    _ = try testMeasure.clef(at: index, inSet: 0)
+                }
+            }
+            try (4..<7).forEach {
+                XCTAssertEqual(try testMeasure.clef(at: $0, inSet: 0), newClef1)
+            }
+            try (7..<testMeasure.noteCount[0]).forEach {
+                XCTAssertEqual(try testMeasure.clef(at: $0, inSet: 0), newClef2)
+            }
+            // set 1
+            (0..<2).forEach { index in
+                assertThrowsError(MeasureError.noClefSpecified) {
+                    _ = try testMeasure.clef(at: index, inSet: 1)
+                }
+            }
+            try (2..<testMeasure.noteCount[1]).forEach {
+                XCTAssertEqual(try testMeasure.clef(at: $0, inSet: 1), newClef1)
+            }
+        }
+    }
+
+    // MARK: Failures
+
+    func testNoClefsNoOriginal() {
+        let note = Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1))
+        let testMeasure = Measure(timeSignature: timeSignature, notes: [
+            [
+                note, note, note, note
+            ]
+            ])
+        (0..<testMeasure.noteCount[0]).forEach { index in
+            assertThrowsError(MeasureError.noClefSpecified) {
+                _ = try testMeasure.clef(at: index, inSet: 0)
+            }
+        }
+    }
+
+    func test1ClefNotAtBeginningNoOriginal() {
+        let note = Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1))
+        var testMeasure = Measure(timeSignature: timeSignature, notes: [
+            [
+                note, note, note, note
+            ]
+            ])
+        let newClef: Clef = .alto
+        assertNoErrorThrown {
+            try testMeasure.changeClef(.alto, at: 2)
+        }
+        (0..<2).forEach { index in
+            assertThrowsError(MeasureError.noClefSpecified) {
+                _ = try testMeasure.clef(at: index, inSet: 0)
+            }
+        }
+        assertNoErrorThrown {
+            try (2..<testMeasure.noteCount[0]).forEach {
+                XCTAssertEqual(try testMeasure.clef(at: $0, inSet: 0), newClef)
+            }
+        }
+    }
+
+    func testClefsInvalidNoteIndex() {
+        let note = Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1))
+        let testMeasure = Measure(timeSignature: timeSignature, notes: [
+            [
+                note, note, note, note
+            ]
+            ])
+        assertThrowsError(MeasureError.noteIndexOutOfRange) {
+            _ = try testMeasure.clef(at: 17, inSet: 0)
+        }
+    }
+
+    func testClefsInvalidSetIndex() {
+        let note = Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1))
+        let testMeasure = Measure(timeSignature: timeSignature, notes: [
+            [
+                note, note, note, note
+            ]
+            ])
+        assertThrowsError(MeasureError.noteIndexOutOfRange) {
+            _ = try testMeasure.clef(at: 0, inSet: 3)
+        }
+    }
+
     // MARK: - Collection Conformance
 
     func testMapEmpty() {

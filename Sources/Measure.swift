@@ -43,6 +43,10 @@ public struct Measure: ImmutableMeasure, Equatable, RandomAccessCollection {
     public private(set) var clefs: [Int: Clef] = [:] {
         didSet {
             // Recompute lastClef
+            guard !clefs.isEmpty else {
+                lastClef = originalClef
+                return
+            }
             let maxClef = clefs.max { (element1, element2) in
                 return element1.key < element2.key
             }
@@ -322,8 +326,23 @@ public struct Measure: ImmutableMeasure, Equatable, RandomAccessCollection {
         self = newMeasure
     }
 
+    /**
+     Returns the Clef at the given index values.
+
+     - parameter noteIndex: The index of the note for which you want the clef.
+     - parmaeter setIndex: The index of the set that contains the note.
+     - returns: The clef at the given `noteIndex` in the given `setIndex`.
+     - throws:
+         - `MeasureError.noClefSpecified`
+         - `MeasureError.internalError`
+         - `MeasureError.noteIndexOutOfRange`
+     */
     public func clef(at noteIndex: Int, inSet setIndex: Int) throws -> Clef {
         guard !clefs.isEmpty else {
+            // Check for invalid index
+            guard let _ = noteCollectionIndexes[safe: setIndex]?[safe: noteIndex] else {
+                throw MeasureError.noteIndexOutOfRange
+            }
             if let lastClef = lastClef {
                 return lastClef
             } else {

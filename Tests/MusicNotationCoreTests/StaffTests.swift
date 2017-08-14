@@ -900,19 +900,105 @@ class StaffTests: XCTestCase {
     }
 
     func testChangeClefTwiceAcross2Measures() {
+        assertNoErrorThrown {
+            let newClef1: Clef = .tenor
+            let newClef2: Clef = .bass
 
+            try staff.changeClef(newClef1, in: 2, atNote: 0)
+            try staff.changeClef(newClef2, in: 4, atNote: 0)
+
+            try verifyClefsUnchanged(before: 2)
+            try verifyClefsChanged(to: newClef1, after: 2, until: 4)
+            try verifyClefsChanged(to: newClef2, after: 4)
+        }
     }
 
     func testChangeClefTwiceAcross2NoteSetsIn1Measure() {
+        assertNoErrorThrown {
+            let sixteenth = Note(noteDuration: .sixteenth,
+                            tone: Tone(noteLetter: .c, octave: .octave1))
+            let quarter = Note(noteDuration: .quarter,
+                               tone: Tone(noteLetter: .c, octave: .octave1))
+            staff.appendMeasure(
+                Measure(timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
+                        notes: [
+                            [
+                                sixteenth, sixteenth, sixteenth, sixteenth, sixteenth, sixteenth, sixteenth, sixteenth
+                            ],
+                            [
+                                quarter, quarter, quarter, quarter
+                            ]
+                    ])
+            )
 
+            let newLastMeasureIndex = 17
+            let newClef1: Clef = .bass
+            let newClef2 = Clef(
+                tone: Tone(noteLetter: .c, accidental: .sharp, octave: .octave3),
+                location: StaffLocation(type: .space, number: 3))
+            try staff.changeClef(newClef1, in: newLastMeasureIndex, atNote: 1, inSet: 0)
+            try staff.changeClef(newClef2, in: newLastMeasureIndex, atNote: 2, inSet: 1)
+            let measure = Measure(try staff.measure(at: newLastMeasureIndex))
+            try verifyClefsUnchanged(before: newLastMeasureIndex)
+            XCTAssertNotNil(measure.lastClef)
+            XCTAssertEqual(measure.lastClef, newClef2)
+            let firstChangeTicks = try measure.cumulativeTicks(at: 1, inSet: 0)
+            let secondChangeTicks = try measure.cumulativeTicks(at: 2, inSet: 1)
+            XCTAssertEqual(measure.clefs, [firstChangeTicks: newClef1, secondChangeTicks: newClef2])
+        }
     }
 
-    func testChangeClefInMeasureRepeatWith1Repeat() {
-
+    func testChangeClefAtBeginningOfFirstMeasureWithinRepeat() {
+        assertNoErrorThrown {
+            let newClef: Clef = .bass
+            try staff.changeClef(newClef, in: 5, atNote: 0, inSet: 0)
+            try verifyClefsUnchanged(before: 5)
+            try verifyClefsChanged(to: newClef, after: 6)
+            let immutableMeasure1 = try staff.measure(at: 5)
+            let immutableMeasure2 = try staff.measure(at: 6)
+            XCTAssertEqual(immutableMeasure1.lastClef, .bass)
+            XCTAssertEqual(immutableMeasure2.lastClef, .bass)
+            XCTAssertEqual(immutableMeasure1.clefs, [0: .bass])
+            XCTAssertEqual(immutableMeasure2.clefs, [0: .bass])
+        }
     }
 
-    func testChangeClefInMeasureRepeatWithMultipleRepeats() {
+    func testChangeClefInMeasureRepeatWith1Measure() {
+        assertNoErrorThrown {
+            let newClef: Clef = .bass
+            try staff.changeClef(newClef, in: 5, atNote: 1, inSet: 0)
+            try verifyClefsUnchanged(before: 5)
+            try verifyClefsChanged(to: newClef, after: 6)
+            let immutableMeasure1 = try staff.measure(at: 5)
+            let immutableMeasure2 = try staff.measure(at: 6)
+            let ticks = try Measure(immutableMeasure1).cumulativeTicks(at: 1)
+            XCTAssertEqual(immutableMeasure1.lastClef, newClef)
+            XCTAssertEqual(immutableMeasure2.lastClef, newClef)
+            XCTAssertEqual(immutableMeasure1.clefs, [ticks: newClef])
+            XCTAssertEqual(immutableMeasure2.clefs, [ticks: newClef])
+        }
+    }
 
+    func testChangeClefInEachMeasureInRepeat() {
+        assertNoErrorThrown {
+            let newClef1: Clef = .bass
+            let newClef2: Clef = .alto
+            try staff.changeClef(newClef1, in: 7, atNote: 0, inSet: 0)
+            try staff.changeClef(newClef2, in: 8, atNote: 1, inSet: 0)
+            try verifyClefsUnchanged(before: 7)
+            try verifyClefsChanged(to: newClef2, after: 12)
+            let firstChangeMeasures = [try staff.measure(at: 7), try staff.measure(at: 9), try staff.measure(at: 11)]
+            let secondChangeMeasures = [try staff.measure(at: 8), try staff.measure(at: 10), try staff.measure(at: 12)]
+            let secondChangeTicks = try Measure(secondChangeMeasures[0]).cumulativeTicks(at: 1)
+            firstChangeMeasures.forEach {
+                XCTAssertEqual($0.lastClef, newClef1)
+                XCTAssertEqual($0.clefs, [0: newClef1])
+            }
+            secondChangeMeasures.forEach {
+                XCTAssertEqual($0.lastClef, newClef2)
+                XCTAssertEqual($0.clefs, [secondChangeTicks: newClef2])
+            }
+        }
     }
 
     private func verifyAndChangeClef(to clef: Clef,

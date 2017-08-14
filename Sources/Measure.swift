@@ -44,7 +44,7 @@ public struct Measure: ImmutableMeasure, Equatable, RandomAccessCollection {
         didSet {
             // Recompute lastClef
             let maxClef = clefs.max { (element1, element2) in
-                return element1.key > element2.key
+                return element1.key < element2.key
             }
             if let maxClef = maxClef {
                 lastClef = maxClef.value
@@ -350,7 +350,11 @@ public struct Measure: ImmutableMeasure, Equatable, RandomAccessCollection {
         let sortedClefs = clefs.sorted { $0.key < $1.key }
         let prefixedClefs = sortedClefs.prefix { $0.key <= ticks }
         guard let lastClef = prefixedClefs.last?.value else {
-            throw MeasureError.internalError
+            if let originalClef = originalClef {
+                return originalClef
+            } else {
+                throw MeasureError.noClefSpecified
+            }
         }
         return lastClef
     }
@@ -822,10 +826,10 @@ public struct Measure: ImmutableMeasure, Equatable, RandomAccessCollection {
     internal func noteCollectionIndex(fromNoteIndex index: Int, inSet setIndex: Int) throws -> NoteCollectionIndex {
         // Gets the index of the given element in the notes array by translating the index of the
         // single note within the NoteCollection array.
-        guard index >= 0 && notes[setIndex].count > 0 else { throw MeasureError.noteIndexOutOfRange }
-        // Expand notes and tuplets into indexes
-        guard index < noteCollectionIndexes[setIndex].count else { throw MeasureError.noteIndexOutOfRange }
-        return noteCollectionIndexes[setIndex][index]
+        guard let value = noteCollectionIndexes[safe: setIndex]?[safe: index] else {
+            throw MeasureError.noteIndexOutOfRange
+        }
+        return value
     }
 
     internal func hasClefAfterNote(at noteIndex: Int) -> Bool {

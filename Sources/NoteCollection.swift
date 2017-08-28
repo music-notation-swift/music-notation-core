@@ -33,6 +33,7 @@ public protocol NoteCollection {
 
     var ticks: Int { get }
 
+    /// - returns: The note at the given index.
     func note(at index: Int) throws -> Note
     mutating func setClef(_ clef: Clef)
     func withClef(_ clef: Clef) -> NoteCollection

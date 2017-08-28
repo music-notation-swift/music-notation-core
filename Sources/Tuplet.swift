@@ -38,7 +38,6 @@ public struct Tuplet: NoteCollection {
     /// A 2-dimensional array that can be used to index into every note in the tuplet within compound tuplets as well.
     internal var flatIndexes: [[Int]] = [[Int]]()
 
-
     /**
      This maps the standard number of notes in the tuplet (`groupingOrder`), to the number of notes the tuplet should fit
      in the space of (`noteTimingCount`).

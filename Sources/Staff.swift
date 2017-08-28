@@ -409,8 +409,6 @@ public struct Staff: RandomAccessCollection {
                     break
                 }
                 try replaceMeasure(at: index, with: measure, shouldChangeClef: false)
-                // FIXME: I don't think you can do this since it's recursive
-//                try replaceMeasure(at: index, with: measure)
             } catch {
                 continue
             }

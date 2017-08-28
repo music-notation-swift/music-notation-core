@@ -852,14 +852,30 @@ public struct Measure: ImmutableMeasure, Equatable, RandomAccessCollection {
     }
 
     internal func hasClefAfterNote(at noteIndex: Int) -> Bool {
-        do {
+        func checkClefs(at noteIndex: Int) throws -> Bool {
             let ticksForRequest = try cumulativeTicks(at: noteIndex)
             return clefs.contains { (key, value) in
                 return key > ticksForRequest
             }
+        }
+        do {
+            return try checkClefs(at: noteIndex)
+        } catch MeasureError.cannotCalculateTicksWithinCompoundTuplet {
+            var currentNoteIndex = noteIndex - 1
+            while currentNoteIndex >= 0 {
+                do {
+                    return try checkClefs(at: currentNoteIndex)
+                } catch MeasureError.cannotCalculateTicksWithinCompoundTuplet {
+                    currentNoteIndex -= 1
+                    continue
+                } catch {
+                    return false
+                }
+            }
         } catch {
             return false
         }
+        return false
     }
 
     // MARK: - Private Methods
@@ -960,4 +976,5 @@ public enum MeasureError: Error {
     case removeTupletFromNote
     case tupletNotCompletelyCovered
     case noClefSpecified
+    case cannotCalculateTicksWithinCompoundTuplet
 }

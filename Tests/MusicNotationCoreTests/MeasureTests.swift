@@ -1045,6 +1045,161 @@ class MeasureTests: XCTestCase {
         }
     }
 
+    // MARK: - hasClefAfterNote(at:) -> Bool
+    // MARK: False
+
+    func testHasClefAfterNoteInvalidIndex() {
+        // TODO: Write the test
+    }
+
+    func testHasClefAfterNoteNoClefsFirstIndex() {
+        // TODO: Write the test
+    }
+
+    func testHasClefAfterNoteNoClefsMiddleIndex() {
+        // TODO: Write the test
+    }
+
+    func testHasClefAfterNoteMiddleOfTuplet() {
+        // TODO: Write the test
+    }
+
+    func testHasClefAfterNoteMiddleOfCompoundTuplet() {
+        // TODO: Write the test
+    }
+
+    func testHasClefAfterNoteNoteOfClefChange() {
+        // TODO: Write the test
+    }
+
+    func testHasClefAfterNoteNoteAfterClefChange() {
+        // TODO: Write the test
+    }
+
+    // MARK: True
+
+    func testHasClefAfterNoteOneClefNoteBefore() {
+        // TODO: Write the test
+    }
+
+    func testHasClefAfterNoteMultipleClefsNoteBefore() {
+        // TODO: Write the test
+    }
+
+    func testHasClefAfterNoteMultipleClefsNoteInMiddle() {
+        // TODO: Write the test
+    }
+
+    // MARK: - cumulativeTicks(at:inSet:) throws -> Int
+    // MARK: Failures
+
+    func testCumulativeTicksInvalidNoteIndex() {
+        let note = Note(noteDuration: .quarter)
+        measure.append(note)
+        assertThrowsError(MeasureError.noteIndexOutOfRange) {
+            _ = try measure.cumulativeTicks(at: 2, inSet: 0)
+        }
+        // FIXME: Write the asserts
+    }
+
+    func testCumulativeTicksInvalidSetIndex() {
+        let note = Note(noteDuration: .quarter)
+        measure.append(note)
+        assertThrowsError(MeasureError.noteIndexOutOfRange) {
+            _ = try measure.cumulativeTicks(at: 0, inSet: 1)
+        }
+        // FIXME: Write the asserts
+    }
+
+    func testCumulativeTicksInMiddleOfCompundTuplet() {
+        // TODO: Write the test
+    }
+
+    // MARK: Successes
+
+    func testCumulativeTicksBeginning() {
+        let note = Note(noteDuration: .quarter)
+        measure.append(note)
+        measure.append(note)
+        measure.append(note)
+        measure.append(note, inSet: 1)
+        assertNoErrorThrown {
+            XCTAssertEqual(try measure.cumulativeTicks(at: 0, inSet: 0), 0)
+            XCTAssertEqual(try measure.cumulativeTicks(at: 0, inSet: 1), 0)
+        }
+    }
+
+    func testCumulativeTicksAllNotes() {
+        let quarter = Note(noteDuration: .quarter)
+        let eighth = Note(noteDuration: .eighth)
+        measure.append(quarter)
+        measure.append(quarter)
+        measure.append(eighth)
+        measure.append(eighth)
+        measure.append(eighth)
+        measure.append(quarter)
+        measure.append(quarter)
+        measure.append(quarter, inSet: 1)
+        measure.append(quarter, inSet: 1)
+        measure.append(quarter, inSet: 1)
+        let quarterTicks = NoteDuration.quarter.ticks
+        let eighthTicks = NoteDuration.eighth.ticks
+        assertNoErrorThrown {
+            var currentValue = quarterTicks
+            XCTAssertEqual(try measure.cumulativeTicks(at: 1, inSet: 0), currentValue)
+            currentValue += quarterTicks
+            XCTAssertEqual(try measure.cumulativeTicks(at: 2, inSet: 0), currentValue)
+            currentValue += eighthTicks
+            XCTAssertEqual(try measure.cumulativeTicks(at: 3, inSet: 0), currentValue)
+            currentValue += eighthTicks
+            XCTAssertEqual(try measure.cumulativeTicks(at: 4, inSet: 0), currentValue)
+            currentValue += eighthTicks
+            XCTAssertEqual(try measure.cumulativeTicks(at: 5, inSet: 0), currentValue)
+            currentValue += quarterTicks
+            XCTAssertEqual(try measure.cumulativeTicks(at: 6, inSet: 0), currentValue)
+            var currentSet1Value = quarterTicks
+            XCTAssertEqual(try measure.cumulativeTicks(at: 1, inSet: 0), currentSet1Value)
+            currentSet1Value += quarterTicks
+            XCTAssertEqual(try measure.cumulativeTicks(at: 2, inSet: 0), currentSet1Value)
+        }
+    }
+
+    func testCumulativeTicksBeginningOfTuplet() {
+        let quarter = Note(noteDuration: .quarter)
+        let eighth = Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1))
+        assertNoErrorThrown {
+            let tuplet = try Tuplet(3, .eighth, notes: [eighth, eighth, eighth])
+            measure.append(quarter)
+            measure.append(quarter)
+            measure.append(tuplet)
+            measure.append(eighth)
+            measure.append(eighth)
+            let eachTupletNoteTicks = tuplet.ticks / tuplet.groupingOrder
+            let quarterTicks = NoteDuration.quarter.ticks
+            let eighthTicks = NoteDuration.eighth.ticks
+            var currentTicks = quarterTicks
+            XCTAssertEqual(try measure.cumulativeTicks(at: 1, inSet: 0), currentTicks)
+            currentTicks += quarterTicks
+            XCTAssertEqual(try measure.cumulativeTicks(at: 2, inSet: 0), currentTicks)
+            currentTicks += eachTupletNoteTicks
+            XCTAssertEqual(try measure.cumulativeTicks(at: 3, inSet: 0), currentTicks)
+            currentTicks += eachTupletNoteTicks
+            XCTAssertEqual(try measure.cumulativeTicks(at: 4, inSet: 0), currentTicks)
+            currentTicks += eachTupletNoteTicks
+            XCTAssertEqual(try measure.cumulativeTicks(at: 5, inSet: 0), currentTicks)
+            currentTicks += eighthTicks
+            XCTAssertEqual(try measure.cumulativeTicks(at: 6, inSet: 0), currentTicks)
+        }
+    }
+
+    func testCumulativeTicksMiddleOfTuplet() {
+        // TODO: Write the test
+    }
+
+    func testCumulativeTicksAtBeginningOfCompoundTuplet() {
+        // TODO: Write the test
+    }
+
     // MARK: - clef(at:inSet:)
     // MARK: Successes
 
@@ -1222,6 +1377,7 @@ class MeasureTests: XCTestCase {
                 _ = try testMeasure.clef(at: index, inSet: 0)
             }
         }
+        // FIXME: Write asserts
     }
 
     func test1ClefNotAtBeginningNoOriginal() {
@@ -1245,6 +1401,7 @@ class MeasureTests: XCTestCase {
                 XCTAssertEqual(try testMeasure.clef(at: $0, inSet: 0), newClef)
             }
         }
+        // FIXME: Write asserts
     }
 
     func testClefsInvalidNoteIndex() {
@@ -1257,6 +1414,7 @@ class MeasureTests: XCTestCase {
         assertThrowsError(MeasureError.noteIndexOutOfRange) {
             _ = try testMeasure.clef(at: 17, inSet: 0)
         }
+        // FIXME: Write asserts
     }
 
     func testClefsInvalidSetIndex() {
@@ -1269,6 +1427,147 @@ class MeasureTests: XCTestCase {
         assertThrowsError(MeasureError.noteIndexOutOfRange) {
             _ = try testMeasure.clef(at: 0, inSet: 3)
         }
+        // FIXME: Write asserts
+    }
+
+    // MARK: - changeClef(_:at:inSet:) throws
+    // MARK: Failures
+
+    func testChangeClefInvalidNoteIndex() {
+        let note = Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1))
+        var measure = Measure(timeSignature: timeSignature, notes: [
+            [
+                note, note, note, note
+            ]
+            ])
+        assertThrowsError(MeasureError.noteIndexOutOfRange) {
+            try measure.changeClef(.bass, at: 5)
+            // FIXME: Write asserts
+        }
+    }
+
+    func testChangeClefInvalidSetIndex() {
+        let note = Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1))
+        var measure = Measure(timeSignature: timeSignature, notes: [
+            [
+                note, note, note, note
+            ]
+            ])
+        assertThrowsError(MeasureError.noteIndexOutOfRange) {
+            try measure.changeClef(.bass, at: 3, inSet: 1)
+            // FIXME: Write asserts
+        }
+    }
+
+    // MARK: Successes
+
+    func testChangeClefAtBeginningNoOthers() {
+        let eighth = Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1))
+        let quarter = Note(noteDuration: .sixteenth, tone: Tone(noteLetter: .c, octave: .octave1))
+        var measure = Measure(timeSignature: timeSignature, notes: [
+            [
+                quarter, quarter, quarter, quarter
+            ],
+            [
+                eighth, eighth, eighth, eighth, eighth, eighth, eighth, eighth
+            ]
+            ])
+        assertNoErrorThrown {
+            try measure.changeClef(.bass, at: 0, inSet: 0)
+            XCTAssertEqual(measure.clefs, [0: .bass])
+            XCTAssertEqual(measure.lastClef, .bass)
+            XCTAssertEqual(measure.originalClef, nil)
+        }
+    }
+
+    func testChangeClefAtBeginningNoOthersSecondSet() {
+        let eighth = Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1))
+        let quarter = Note(noteDuration: .sixteenth, tone: Tone(noteLetter: .c, octave: .octave1))
+        var measure = Measure(timeSignature: timeSignature, notes: [
+            [
+                quarter, quarter, quarter, quarter
+            ],
+            [
+                eighth, eighth, eighth, eighth, eighth, eighth, eighth, eighth
+            ]
+            ])
+        assertNoErrorThrown {
+            try measure.changeClef(.bass, at: 0, inSet: 1)
+            XCTAssertEqual(measure.clefs, [0: .bass])
+            XCTAssertEqual(measure.lastClef, .bass)
+            XCTAssertEqual(measure.originalClef, nil)
+        }
+    }
+
+    func testChangeClefAtBeginningAlreadyThere() {
+        // TODO: Write the test
+    }
+
+    func testChangeClefInMiddleNoOthers() {
+        // TODO: Write the test
+    }
+
+    func testChangeClefInMiddleHasBeginning() {
+        // TODO: Write the test
+    }
+
+    func testChangeClefInMiddleHasEnd() {
+        // TODO: Write the test
+    }
+
+    func testChangeClefInMiddleHasBeginningAndEnd() {
+        // TODO: Write the test
+    }
+
+    func testChangeClefWithinTuplet() {
+        // TODO: Write the test
+    }
+
+    // MARK: - changeFirstClefIfNeeded(to:) -> Bool
+    // MARK: Return False
+
+    func testChangeFirstClefIfNeededWhenNotEmpty() {
+        // Setup
+        let eighth = Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1))
+        let quarter = Note(noteDuration: .sixteenth, tone: Tone(noteLetter: .c, octave: .octave1))
+        var measure = Measure(timeSignature: timeSignature, notes: [
+            [
+                quarter, quarter, quarter, quarter
+            ],
+            [
+                eighth, eighth, eighth, eighth, eighth, eighth, eighth, eighth
+            ]
+            ])
+        assertNoErrorThrown {
+            try measure.changeClef(.bass, at: 0)
+        }
+
+        // Test
+        XCTAssertEqual(measure.changeFirstClefIfNeeded(to: .treble), false)
+        XCTAssertEqual(measure.lastClef, .bass)
+        XCTAssertEqual(measure.originalClef, nil)
+        XCTAssertEqual(measure.clefs, [0: .bass])
+    }
+
+    // MARK: Return True
+
+    func testChangeFirstClefIfNeededWhenEmtpy() {
+        // Setup
+        let eighth = Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1))
+        let quarter = Note(noteDuration: .sixteenth, tone: Tone(noteLetter: .c, octave: .octave1))
+        var measure = Measure(timeSignature: timeSignature, notes: [
+            [
+                quarter, quarter, quarter, quarter
+            ],
+            [
+                eighth, eighth, eighth, eighth, eighth, eighth, eighth, eighth
+            ]
+            ])
+        // Test
+        XCTAssertEqual(measure.changeFirstClefIfNeeded(to: .treble), true)
+        XCTAssertEqual(measure.lastClef, .treble)
+        XCTAssertEqual(measure.originalClef, .treble)
+        XCTAssertTrue(measure.clefs.isEmpty)
     }
 
     // MARK: - Collection Conformance

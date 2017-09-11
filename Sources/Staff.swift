@@ -92,7 +92,7 @@ public struct Staff: RandomAccessCollection {
         try replaceMeasure(at: measureIndex, with: measure)
         // If there is already another clef specified after the new clef, then
         // there is no need to propagate to the following measures.
-        guard !measure.hasClefAfterNote(at: noteIndex) else {
+        guard !measure.hasClefAfterNote(at: noteIndex, inSet: setIndex) else {
             return
         }
         try propagateClefChange(clef, fromMeasureIndex: measureIndex)

@@ -1099,7 +1099,6 @@ class MeasureTests: XCTestCase {
         assertThrowsError(MeasureError.noteIndexOutOfRange) {
             _ = try measure.cumulativeTicks(at: 2, inSet: 0)
         }
-        // FIXME: Write the asserts
     }
 
     func testCumulativeTicksInvalidSetIndex() {
@@ -1108,11 +1107,19 @@ class MeasureTests: XCTestCase {
         assertThrowsError(MeasureError.noteIndexOutOfRange) {
             _ = try measure.cumulativeTicks(at: 0, inSet: 1)
         }
-        // FIXME: Write the asserts
     }
 
     func testCumulativeTicksInMiddleOfCompundTuplet() {
-        // TODO: Write the test
+        let note = Note(noteDuration: .eighth)
+        measure.append(note)
+        assertNoErrorThrown {
+            let triplet = try Tuplet(3, .eighth, notes: [note, note, note])
+            let compoundTuplet = try Tuplet(5, .eighth, notes: [note, note, triplet, note])
+            measure.append(compoundTuplet)
+        }
+        assertThrowsError(MeasureError.cannotCalculateTicksWithinCompoundTuplet) {
+            _ = try measure.cumulativeTicks(at: 4)
+        }
     }
 
     // MARK: Successes
@@ -1174,6 +1181,7 @@ class MeasureTests: XCTestCase {
             measure.append(tuplet)
             measure.append(eighth)
             measure.append(eighth)
+            // FIXME: Not paying attention to decimals
             let eachTupletNoteTicks = tuplet.ticks / tuplet.groupingOrder
             let quarterTicks = NoteDuration.quarter.ticks
             let eighthTicks = NoteDuration.eighth.ticks
@@ -1193,7 +1201,17 @@ class MeasureTests: XCTestCase {
     }
 
     func testCumulativeTicksMiddleOfTuplet() {
-        // TODO: Write the test
+        let note = Note(noteDuration: .eighth)
+        measure.append(note)
+        assertNoErrorThrown {
+            let triplet = try Tuplet(3, .eighth, notes: [note, note, note])
+            measure.append(triplet)
+        }
+        assertNoErrorThrown {
+            let ticks = try measure.cumulativeTicks(at: 2)
+            // FIXME: I don't know about this. Also, why isn't this failing?
+            XCTAssertEqual(ticks, note.ticks + Int(floor(Double(note.ticks) * Double(2 / 3))))
+        }
     }
 
     func testCumulativeTicksAtBeginningOfCompoundTuplet() {
@@ -1377,7 +1395,6 @@ class MeasureTests: XCTestCase {
                 _ = try testMeasure.clef(at: index, inSet: 0)
             }
         }
-        // FIXME: Write asserts
     }
 
     func test1ClefNotAtBeginningNoOriginal() {
@@ -1401,7 +1418,6 @@ class MeasureTests: XCTestCase {
                 XCTAssertEqual(try testMeasure.clef(at: $0, inSet: 0), newClef)
             }
         }
-        // FIXME: Write asserts
     }
 
     func testClefsInvalidNoteIndex() {
@@ -1414,7 +1430,6 @@ class MeasureTests: XCTestCase {
         assertThrowsError(MeasureError.noteIndexOutOfRange) {
             _ = try testMeasure.clef(at: 17, inSet: 0)
         }
-        // FIXME: Write asserts
     }
 
     func testClefsInvalidSetIndex() {
@@ -1427,7 +1442,6 @@ class MeasureTests: XCTestCase {
         assertThrowsError(MeasureError.noteIndexOutOfRange) {
             _ = try testMeasure.clef(at: 0, inSet: 3)
         }
-        // FIXME: Write asserts
     }
 
     // MARK: - changeClef(_:at:inSet:) throws
@@ -1442,8 +1456,10 @@ class MeasureTests: XCTestCase {
             ])
         assertThrowsError(MeasureError.noteIndexOutOfRange) {
             try measure.changeClef(.bass, at: 5)
-            // FIXME: Write asserts
         }
+        XCTAssertNil(measure.originalClef)
+        XCTAssertNil(measure.lastClef)
+        XCTAssertEqual(measure.clefs, [:])
     }
 
     func testChangeClefInvalidSetIndex() {
@@ -1455,8 +1471,10 @@ class MeasureTests: XCTestCase {
             ])
         assertThrowsError(MeasureError.noteIndexOutOfRange) {
             try measure.changeClef(.bass, at: 3, inSet: 1)
-            // FIXME: Write asserts
         }
+        XCTAssertNil(measure.originalClef)
+        XCTAssertNil(measure.lastClef)
+        XCTAssertEqual(measure.clefs, [:])
     }
 
     // MARK: Successes

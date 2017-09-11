@@ -851,20 +851,33 @@ public struct Measure: ImmutableMeasure, Equatable, RandomAccessCollection {
         return value
     }
 
-    internal func hasClefAfterNote(at noteIndex: Int) -> Bool {
-        func checkClefs(at noteIndex: Int) throws -> Bool {
-            let ticksForRequest = try cumulativeTicks(at: noteIndex)
+    /**
+     Checks to see if there is a clef change that occurs after the note at the given index.
+     After means it occurs at any tick amount greater than the note before the given index.
+
+     This method is used for the purposes of figuring out whether a clef change should be propagated
+     to following measures or not by `Staff`.
+
+     - parameter noteIndex: The index of the note to get the cumulative ticks. The clefs dictionary
+         will be checked against this value.
+     - parameter setIndex: The set index of the note.
+     - returns: True if there is a clef change occuring after the given note; false if there are no clef
+         changes after the given index.
+     */
+    internal func hasClefAfterNote(at noteIndex: Int, inSet setIndex: Int) -> Bool {
+        func checkClefs(at noteIndex: Int, inSet setIndex: Int) throws -> Bool {
+            let ticksForRequest = try cumulativeTicks(at: noteIndex, inSet: setIndex)
             return clefs.contains { (key, value) in
                 return key > ticksForRequest
             }
         }
         do {
-            return try checkClefs(at: noteIndex)
+            return try checkClefs(at: noteIndex, inSet: setIndex)
         } catch MeasureError.cannotCalculateTicksWithinCompoundTuplet {
             var currentNoteIndex = noteIndex - 1
             while currentNoteIndex >= 0 {
                 do {
-                    return try checkClefs(at: currentNoteIndex)
+                    return try checkClefs(at: currentNoteIndex, inSet: setIndex)
                 } catch MeasureError.cannotCalculateTicksWithinCompoundTuplet {
                     currentNoteIndex -= 1
                     continue

@@ -1,5 +1,5 @@
 # Indexing Methodology
-Author: Kyle Sherman
+**Author**: [Kyle Sherman](http://github.com/drumnkyle)
 ## Audience
 This design document goes over an implementation detail that is only pertinent to maintainers and developers of this library and not to users of the API.
 ## Introduction

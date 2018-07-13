@@ -1,4 +1,5 @@
 # Duration Calculator
+**Authors**: [Kyle Sherman](http://github.com/drumnkyle), [Miguel Osorio](http://github.com/modix)
 
 The number of beats in a measure depend on the time signature. The top number 
 of the time signature determines the number of beats per measure, while the 

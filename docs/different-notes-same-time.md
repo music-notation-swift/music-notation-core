@@ -1,4 +1,5 @@
 # Different Notes at Same Time
+Authors: [Kyle Sherman](http://github.com/drumnkyle), [Miguel Osorio](http://github.com/modix)
 ## Introduction
 In music, you can have a note with 2 different tones played at the same time. You see this with one stem and 2 note heads coming off of it on different staff lines/spaces. This has already been accomplished by making every `Note` have an array of `Tone`s. However, at the same time, you may also have a note of a different duration be played at the same time. Throughout this document I will refer to this as a second *set* of notes in the measure.
 ### Terminology

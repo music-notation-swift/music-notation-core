@@ -1,5 +1,5 @@
 # Tuplet Design
-Author: Kyle Sherman
+**Author**: [Kyle Sherman](http://github.com/drumnkyle)
 ## Groupings
 Most of then you see a grouping of 3, 5, 6, 7, or 9. However, You may also see a grouping of 2, 4, or 8 if you are a time signature where the top number is an odd number. Also, most places that go over tuplets list the following groupings:
 - Duplet (2)

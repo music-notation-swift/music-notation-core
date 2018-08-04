@@ -13,8 +13,8 @@ class MeasureRepeatTests: XCTestCase {
 
     static let timeSignature = TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120)
     static let key = Key(noteLetter: .c)
-    static let note1 = Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1))
-    static let note2 = Note(noteDuration: .quarter, tone: Tone(noteLetter: .d, octave: .octave1))
+    static let note1 = Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1))
+    static let note2 = Note(noteDuration: .quarter, pitch: Pitch(noteLetter: .d, octave: .octave1))
     let measure1 = Measure(timeSignature: timeSignature, key: key, notes: [[note1, note1]])
     let measure2 = Measure(timeSignature: timeSignature, key: key, notes: [[note2, note2]])
 

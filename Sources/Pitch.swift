@@ -1,12 +1,12 @@
 //
-//  Tone.swift
+//  Pitch.swift
 //  MusicNotationCore
 //
 //  Created by Kyle Sherman on 6/15/15.
 //  Copyright © 2015 Kyle Sherman. All rights reserved.
 //
 
-public struct Tone {
+public struct Pitch {
     
     public let noteLetter: NoteLetter
     public let accidental: Accidental
@@ -19,7 +19,7 @@ public struct Tone {
     }
 }
 
-extension Tone: CustomDebugStringConvertible {
+extension Pitch: CustomDebugStringConvertible {
     public var debugDescription: String {
         switch accidental {
         case .natural:
@@ -30,8 +30,8 @@ extension Tone: CustomDebugStringConvertible {
     }
 }
 
-extension Tone: Equatable {
-    public static func ==(lhs: Tone, rhs: Tone) -> Bool {
+extension Pitch: Equatable {
+    public static func ==(lhs: Pitch, rhs: Pitch) -> Bool {
         if lhs.accidental == rhs.accidental &&
             lhs.noteLetter == rhs.noteLetter &&
             lhs.octave == rhs.octave {
@@ -42,7 +42,7 @@ extension Tone: Equatable {
     }
 }
 
-extension Tone {
+extension Pitch {
     public var midiNoteNumber: Int {
         var result = (octave.rawValue + 1) * 12
         
@@ -73,8 +73,8 @@ extension Tone {
     }
 }
 
-extension Tone: Enharmonic {
-    public func isEnharmonic(with other: Tone) -> Bool {
+extension Pitch: Enharmonic {
+    public func isEnharmonic(with other: Pitch) -> Bool {
         return self.midiNoteNumber == other.midiNoteNumber
     }
 }

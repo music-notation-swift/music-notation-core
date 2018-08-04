@@ -11,120 +11,120 @@ import XCTest
 
 class ClefTests: XCTestCase {
 
-    // MARK: - init(tone:lineNumber)
+    // MARK: - init(pitch:lineNumber)
     // MARK: Successes
 
     func testInitForCustomOnLine() {
         let clef = Clef(
-            tone: Tone(noteLetter: .c, octave: .octave4),
+            pitch: Pitch(noteLetter: .c, octave: .octave4),
             location: StaffLocation(type: .line, number: 0))
         XCTAssertEqual(clef.staffLocation.halfSteps, 0)
     }
 
     func testInitForCustomOnSpace() {
         let clef = Clef(
-            tone: Tone(noteLetter: .g, octave: .octave4),
+            pitch: Pitch(noteLetter: .g, octave: .octave4),
             location: StaffLocation(type: .space, number: 1))
         XCTAssertEqual(clef.staffLocation.halfSteps, 3)
     }
 
     func testInitForCustomNegativeLedger() {
         let clef = Clef(
-            tone: Tone(noteLetter: .g, octave: .octave3),
+            pitch: Pitch(noteLetter: .g, octave: .octave3),
             location: StaffLocation(type: .line, number: -2))
         XCTAssertEqual(clef.staffLocation.halfSteps, -4)
     }
 
     func testInitForCustomPositiveLedger() {
         let clef = Clef(
-            tone: Tone(noteLetter: .a, octave: .octave4),
+            pitch: Pitch(noteLetter: .a, octave: .octave4),
             location: StaffLocation(type: .line, number: 7))
         XCTAssertEqual(clef.staffLocation.halfSteps, 14)
     }
 
-    // MARK: - tone(at:)
+    // MARK: - pitch(at:)
     // MARK: Failures
 
-    func testToneAtOctaveOutOfRange() {
+    func testPitchAtOctaveOutOfRange() {
         assertThrowsError(ClefError.octaveOutOfRange) {
-            _ = try Clef.treble.tone(at: StaffLocation(type: .space, number: 300))
+            _ = try Clef.treble.pitch(at: StaffLocation(type: .space, number: 300))
         }
 
         assertThrowsError(ClefError.octaveOutOfRange) {
-            _ = try Clef.treble.tone(at: StaffLocation(type: .line, number: 300))
+            _ = try Clef.treble.pitch(at: StaffLocation(type: .line, number: 300))
         }
 
         assertThrowsError(ClefError.octaveOutOfRange) {
-            _ = try Clef.treble.tone(at: StaffLocation(type: .space, number: -300))
+            _ = try Clef.treble.pitch(at: StaffLocation(type: .space, number: -300))
         }
 
         assertThrowsError(ClefError.octaveOutOfRange) {
-            _ = try Clef.treble.tone(at: StaffLocation(type: .line, number: -300))
+            _ = try Clef.treble.pitch(at: StaffLocation(type: .line, number: -300))
         }
     }
 
     // MARK: Successes
 
-    func testToneAtUnpitched() {
+    func testPitchAtUnpitched() {
         assertNoErrorThrown {
-            XCTAssertNil(try Clef.neutral.tone(at: StaffLocation(type: .space, number: 1)))
-            XCTAssertNil(try Clef.tab.tone(at: StaffLocation(type: .space, number: 1)))
+            XCTAssertNil(try Clef.neutral.pitch(at: StaffLocation(type: .space, number: 1)))
+            XCTAssertNil(try Clef.tab.pitch(at: StaffLocation(type: .space, number: 1)))
         }
     }
 
-    func testToneAtLocationWithinStaffIncrease() {
+    func testPitchAtLocationWithinStaffIncrease() {
         assertNoErrorThrown {
-            XCTAssertEqual(try Clef.treble.tone(at: StaffLocation(type: .space, number: 2)),
-                           Tone(noteLetter: .c, octave: .octave5))
-            XCTAssertEqual(try Clef.treble.tone(at: StaffLocation(type: .line, number: 2)),
-                           Tone(noteLetter: .b, octave: .octave4))
-            XCTAssertEqual(try Clef.bass.tone(at: StaffLocation(type: .space, number: 3)),
-                           Tone(noteLetter: .g, octave: .octave3))
-            XCTAssertEqual(try Clef.alto.tone(at: StaffLocation(type: .line, number: 4)),
-                           Tone(noteLetter: .g, octave: .octave4))
-            XCTAssertEqual(try Clef.soprano.tone(at: StaffLocation(type: .space, number: 3)),
-                           Tone(noteLetter: .c, octave: .octave5))
+            XCTAssertEqual(try Clef.treble.pitch(at: StaffLocation(type: .space, number: 2)),
+                           Pitch(noteLetter: .c, octave: .octave5))
+            XCTAssertEqual(try Clef.treble.pitch(at: StaffLocation(type: .line, number: 2)),
+                           Pitch(noteLetter: .b, octave: .octave4))
+            XCTAssertEqual(try Clef.bass.pitch(at: StaffLocation(type: .space, number: 3)),
+                           Pitch(noteLetter: .g, octave: .octave3))
+            XCTAssertEqual(try Clef.alto.pitch(at: StaffLocation(type: .line, number: 4)),
+                           Pitch(noteLetter: .g, octave: .octave4))
+            XCTAssertEqual(try Clef.soprano.pitch(at: StaffLocation(type: .space, number: 3)),
+                           Pitch(noteLetter: .c, octave: .octave5))
 
             let customBClef = Clef(
-                tone: Tone(noteLetter: .b, octave: .octave3),
+                pitch: Pitch(noteLetter: .b, octave: .octave3),
                 location: StaffLocation(type: .line, number: 2))
-            XCTAssertEqual(try customBClef.tone(at: StaffLocation(type: .space, number: 2)),
-                           Tone(noteLetter: .c, octave: .octave4))
+            XCTAssertEqual(try customBClef.pitch(at: StaffLocation(type: .space, number: 2)),
+                           Pitch(noteLetter: .c, octave: .octave4))
         }
     }
 
-    func testToneAtLocationDecrease() {
+    func testPitchAtLocationDecrease() {
         assertNoErrorThrown {
-            XCTAssertEqual(try Clef.treble.tone(at: StaffLocation(type: .line, number: 0)),
-                           Tone(noteLetter: .e, octave: .octave4))
-            XCTAssertEqual(try Clef.treble.tone(at: StaffLocation(type: .space, number: -1)),
-                           Tone(noteLetter: .d, octave: .octave4))
-            XCTAssertEqual(try Clef.alto.tone(at: StaffLocation(type: .line, number: -3)),
-                           Tone(noteLetter: .g, octave: .octave2))
-            XCTAssertEqual(try Clef.alto.tone(at: StaffLocation(type: .line, number: -2)),
-                           Tone(noteLetter: .b, octave: .octave2))
-            XCTAssertEqual(try Clef.alto.tone(at: StaffLocation(type: .space, number: 1)),
-                           Tone(noteLetter: .b, octave: .octave3))
-            XCTAssertEqual(try Clef.bass.tone(at: StaffLocation(type: .line, number: 1)),
-                           Tone(noteLetter: .b, octave: .octave2))
+            XCTAssertEqual(try Clef.treble.pitch(at: StaffLocation(type: .line, number: 0)),
+                           Pitch(noteLetter: .e, octave: .octave4))
+            XCTAssertEqual(try Clef.treble.pitch(at: StaffLocation(type: .space, number: -1)),
+                           Pitch(noteLetter: .d, octave: .octave4))
+            XCTAssertEqual(try Clef.alto.pitch(at: StaffLocation(type: .line, number: -3)),
+                           Pitch(noteLetter: .g, octave: .octave2))
+            XCTAssertEqual(try Clef.alto.pitch(at: StaffLocation(type: .line, number: -2)),
+                           Pitch(noteLetter: .b, octave: .octave2))
+            XCTAssertEqual(try Clef.alto.pitch(at: StaffLocation(type: .space, number: 1)),
+                           Pitch(noteLetter: .b, octave: .octave3))
+            XCTAssertEqual(try Clef.bass.pitch(at: StaffLocation(type: .line, number: 1)),
+                           Pitch(noteLetter: .b, octave: .octave2))
         }
     }
 
-    func testToneAtSameToneAsClef() {
+    func testPitchAtSamePitchAsClef() {
         assertNoErrorThrown {
-            XCTAssertEqual(try Clef.treble.tone(at: StaffLocation(type: .line, number: 1)),
-                           Tone(noteLetter: .g, octave: .octave4))
-            XCTAssertEqual(try Clef.soprano.tone(at: StaffLocation(type: .line, number: 0)),
-                           Tone(noteLetter: .c, octave: .octave4))
+            XCTAssertEqual(try Clef.treble.pitch(at: StaffLocation(type: .line, number: 1)),
+                           Pitch(noteLetter: .g, octave: .octave4))
+            XCTAssertEqual(try Clef.soprano.pitch(at: StaffLocation(type: .line, number: 0)),
+                           Pitch(noteLetter: .c, octave: .octave4))
         }
     }
 
-    func testToneAtNegativeClefDecrease() {
+    func testPitchAtNegativeClefDecrease() {
         assertNoErrorThrown {
-            let negativeClef = Clef(tone: Tone(noteLetter: .d, octave: .octave3),
+            let negativeClef = Clef(pitch: Pitch(noteLetter: .d, octave: .octave3),
                                     location: StaffLocation(type: .line, number: -1))
-            XCTAssertEqual(try negativeClef.tone(at: StaffLocation(type: .line, number: -2)),
-                           Tone(noteLetter: .b, octave: .octave2))
+            XCTAssertEqual(try negativeClef.pitch(at: StaffLocation(type: .line, number: -2)),
+                           Pitch(noteLetter: .b, octave: .octave2))
         }
     }
 
@@ -135,22 +135,22 @@ class ClefTests: XCTestCase {
         XCTAssertFalse(Clef.treble == Clef.bass)
     }
 
-    func testEqualityFailDifferentTone() {
+    func testEqualityFailDifferentPitch() {
         let custom1 = Clef(
-            tone: Tone(noteLetter: .a, octave: .octave3),
+            pitch: Pitch(noteLetter: .a, octave: .octave3),
             location: StaffLocation(type: .line, number: 1))
         let custom2 = Clef(
-            tone: Tone(noteLetter: .a, octave: .octave2),
+            pitch: Pitch(noteLetter: .a, octave: .octave2),
             location: StaffLocation(type: .line, number: 1))
         XCTAssertFalse(custom1 == custom2)
     }
 
     func testEqualityFailDifferentLineNumber() {
         let custom1 = Clef(
-            tone: Tone(noteLetter: .a, octave: .octave2),
+            pitch: Pitch(noteLetter: .a, octave: .octave2),
             location: StaffLocation(type: .space, number: 1))
         let custom2 = Clef(
-            tone: Tone(noteLetter: .a, octave: .octave2),
+            pitch: Pitch(noteLetter: .a, octave: .octave2),
             location: StaffLocation(type: .space, number: 2))
         XCTAssertFalse(custom1 == custom2)
     }
@@ -163,17 +163,17 @@ class ClefTests: XCTestCase {
 
     func testEqualityCustom() {
         let custom1 = Clef(
-            tone: Tone(noteLetter: .a, octave: .octave2),
+            pitch: Pitch(noteLetter: .a, octave: .octave2),
             location: StaffLocation(type: .line, number: 1))
         let custom2 = Clef(
-            tone: Tone(noteLetter: .a, octave: .octave2),
+            pitch: Pitch(noteLetter: .a, octave: .octave2),
             location: StaffLocation(type: .line, number: 1))
         XCTAssertTrue(custom1 == custom2)
     }
 
     func testEqualityCustomWithStandard() {
         let treble = Clef(
-            tone: Tone(noteLetter: .g, octave: .octave4),
+            pitch: Pitch(noteLetter: .g, octave: .octave4),
             location: StaffLocation(type: .line, number: 1))
         XCTAssertTrue(treble == Clef.treble)
     }
@@ -197,11 +197,11 @@ class ClefTests: XCTestCase {
 
     func testDescriptionCustom() {
         let custom = Clef(
-            tone: Tone(noteLetter: .a, octave: .octave3),
+            pitch: Pitch(noteLetter: .a, octave: .octave3),
             location: StaffLocation(type: .line, number: 1))
         XCTAssertEqual(custom.debugDescription, "a3@line1")
         let customNeutral = Clef(
-            tone: nil,
+            pitch: nil,
             location: StaffLocation(type: .space, number: 3))
         XCTAssertEqual(customNeutral.debugDescription, "neutral")
     }

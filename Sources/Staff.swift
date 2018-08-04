@@ -259,8 +259,8 @@ public struct Staff: RandomAccessCollection {
             if !removeTie {
                 let firstNote = try firstMeasure.note(at: noteIndex, inSet: setIndex)
                 let secondNote = try secondMeasure.note(at: 0, inSet: setIndex)
-                if firstNote.tones != secondNote.tones {
-                    throw StaffError.notesMustHaveSameTonesToTie
+                if firstNote.pitches != secondNote.pitches {
+                    throw StaffError.notesMustHaveSamePitchesToTie
                 }
             }
 
@@ -338,7 +338,7 @@ public enum StaffError: Error {
     case noNextNote
     case notBeginningOfTie
     case repeatedMeasureCannotHaveTie
-    case notesMustHaveSameTonesToTie
+    case notesMustHaveSamePitchesToTie
     case measureNotPartOfRepeat
     case repeatedMeasureCannotBeModified
     case cannotInsertRepeatWhereOneAlreadyExists

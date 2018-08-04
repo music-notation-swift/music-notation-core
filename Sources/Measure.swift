@@ -616,7 +616,7 @@ public struct Measure: ImmutableMeasure, Equatable, RandomAccessCollection {
      - parameter setIndex: Note set index.
      - throws:
         - `MeasureError.invalidRequestedTieState`
-        - `MeasureError.notesMustHaveSameTonesToTie`
+        - `MeasureError.notesMustHaveSamePitchesToTie`
      */
     internal mutating func modifyTie(at index: Int, requestedTieState: Tie?, inSet setIndex: Int) throws {
         guard requestedTieState != .beginAndEnd else {
@@ -678,8 +678,8 @@ public struct Measure: ImmutableMeasure, Equatable, RandomAccessCollection {
         let requestedModificationMethod = requestedTieState == nil ? Note.removeTie : Note.modifyTie
         let secondaryModificationMethod = removal ? Note.removeTie : Note.modifyTie
 
-        // Get first note here so that we can compare the tone against second
-        // note later. The tone comparison must be done before modifying the state of
+        // Get first note here so that we can compare the pitch against second
+        // note later. The pitch comparison must be done before modifying the state of
         // the notes.
         var firstNote = try note(at: index, inSet: setIndex)
 
@@ -688,9 +688,9 @@ public struct Measure: ImmutableMeasure, Equatable, RandomAccessCollection {
             var secondNote = try note(at: secondaryIndex, inSet: setIndex)
 
             // Before we modify the tie state for the notes, we make sure that both have
-            // the same tone. Ignore check if the removal flag is set.
-            guard removal || firstNote.tones == secondNote.tones else {
-                throw MeasureError.notesMustHaveSameTonesToTie
+            // the same pitch. Ignore check if the removal flag is set.
+            guard removal || firstNote.pitches == secondNote.pitches else {
+                throw MeasureError.notesMustHaveSamePitchesToTie
             }
 
             try secondaryModificationMethod(&secondNote)(secondaryRequestedTieState)
@@ -775,7 +775,7 @@ public enum MeasureError: Error {
     case invalidNoteCollection
     case invalidNoteRange
     case internalError
-    case notesMustHaveSameTonesToTie
+    case notesMustHaveSamePitchesToTie
     case removeNoteFromTuplet
     case removeTupletFromNote
     case tupletNotCompletelyCovered

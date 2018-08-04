@@ -11,13 +11,13 @@ import XCTest
 
 class TupletTests: XCTestCase {
 
-	let tone1 = Tone(noteLetter: .a, octave: .octave1)
-	let tone2 = Tone(noteLetter: .b, accidental: .sharp, octave: .octave1)
-	let tone3 = Tone(noteLetter: .d, accidental: .natural, octave: .octave1)
+	let pitch1 = Pitch(noteLetter: .a, octave: .octave1)
+	let pitch2 = Pitch(noteLetter: .b, accidental: .sharp, octave: .octave1)
+	let pitch3 = Pitch(noteLetter: .d, accidental: .natural, octave: .octave1)
 	let quarterRest = Note(noteDuration: .quarter)
 	let eighthRest = Note(noteDuration: .eighth)
     let dottedQuarterNote = Note(noteDuration: try! NoteDuration(value: .quarter, dotCount: 1),
-                                 tone: Tone(noteLetter: .c, octave: .octave3))
+                                 pitch: Pitch(noteLetter: .c, octave: .octave3))
     var quarterNote1: Note!
     var quarterNote2: Note!
     var quarterNote3: Note!
@@ -28,13 +28,13 @@ class TupletTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        quarterNote1 = Note(noteDuration: .quarter, tone: tone1)
-        quarterNote2 = Note(noteDuration: .quarter, tone: tone1)
-        quarterNote3 = Note(noteDuration: .quarter, tone: tone2)
-        eighthNote = Note(noteDuration: .eighth, tone: tone1)
-        quarterChord = Note(noteDuration: .quarter, tones: [tone1, tone2, tone3])
-        eighthChord = Note(noteDuration: .eighth, tones: [tone1, tone2, tone3])
-        sixteenthNote = Note(noteDuration: .sixteenth, tone: tone1)
+        quarterNote1 = Note(noteDuration: .quarter, pitch: pitch1)
+        quarterNote2 = Note(noteDuration: .quarter, pitch: pitch1)
+        quarterNote3 = Note(noteDuration: .quarter, pitch: pitch2)
+        eighthNote = Note(noteDuration: .eighth, pitch: pitch1)
+        quarterChord = Note(noteDuration: .quarter, pitches: [pitch1, pitch2, pitch3])
+        eighthChord = Note(noteDuration: .eighth, pitches: [pitch1, pitch2, pitch3])
+        sixteenthNote = Note(noteDuration: .sixteenth, pitch: pitch1)
     }
 
     override func tearDown() {

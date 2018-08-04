@@ -31,8 +31,8 @@ class MeasureTests: XCTestCase {
 
     func testAddNote() {
         XCTAssertEqual(measure.notes[0].count, 0)
-        measure.append(Note(noteDuration: .whole, tone: Tone(noteLetter: .c, octave: .octave0)))
-        measure.append(Note(noteDuration: .quarter, tone: Tone(noteLetter: .d, accidental: .sharp, octave: .octave0)))
+        measure.append(Note(noteDuration: .whole, pitch: Pitch(noteLetter: .c, octave: .octave0)))
+        measure.append(Note(noteDuration: .quarter, pitch: Pitch(noteLetter: .d, accidental: .sharp, octave: .octave0)))
         measure.append(Note(noteDuration: .whole))
         XCTAssertEqual(measure.notes[0].count, 3)
     }
@@ -43,11 +43,11 @@ class MeasureTests: XCTestCase {
     // MARK: Successes
 
     func testReplaceNoteInTuplet() {
-        let note = Note(noteDuration: .quarter, tone: Tone(noteLetter: .a, octave: .octave1))
+        let note = Note(noteDuration: .quarter, pitch: Pitch(noteLetter: .a, octave: .octave1))
         let notes = [
-            Note(noteDuration: .sixteenth, tone: Tone(noteLetter: .c, octave: .octave1)),
-            Note(noteDuration: .sixteenth, tone: Tone(noteLetter: .c, octave: .octave1)),
-            Note(noteDuration: .sixteenth, tone: Tone(noteLetter: .a, octave: .octave1))
+            Note(noteDuration: .sixteenth, pitch: Pitch(noteLetter: .c, octave: .octave1)),
+            Note(noteDuration: .sixteenth, pitch: Pitch(noteLetter: .c, octave: .octave1)),
+            Note(noteDuration: .sixteenth, pitch: Pitch(noteLetter: .a, octave: .octave1))
         ]
         assertNoErrorThrown {
             let tuplet = try Tuplet(3, .sixteenth, notes: notes)
@@ -138,11 +138,11 @@ class MeasureTests: XCTestCase {
 
     func testReplaceNoteWithTupletPreservingTie() {
         XCTAssertEqual(measure.notes[0].count, 0)
-        let note = Note(noteDuration: .whole,  tone: Tone(noteLetter: .c, octave: .octave1))
+        let note = Note(noteDuration: .whole,  pitch: Pitch(noteLetter: .c, octave: .octave1))
         let notes = [
-            Note(noteDuration: .sixteenth, tone: Tone(noteLetter: .c, octave: .octave1)),
-            Note(noteDuration: .sixteenth, tone: Tone(noteLetter: .c, octave: .octave1)),
-            Note(noteDuration: .sixteenth, tone: Tone(noteLetter: .a, octave: .octave1))
+            Note(noteDuration: .sixteenth, pitch: Pitch(noteLetter: .c, octave: .octave1)),
+            Note(noteDuration: .sixteenth, pitch: Pitch(noteLetter: .c, octave: .octave1)),
+            Note(noteDuration: .sixteenth, pitch: Pitch(noteLetter: .a, octave: .octave1))
         ]
         measure.append(note)
         measure.append(note)
@@ -167,11 +167,11 @@ class MeasureTests: XCTestCase {
     // MARK: Failures
 
     func testReplaceNotesInRangeInvalidIndex() {
-        let note = Note(noteDuration: .quarter, tone: Tone(noteLetter: .a, octave: .octave1))
+        let note = Note(noteDuration: .quarter, pitch: Pitch(noteLetter: .a, octave: .octave1))
         let notes = [
-            Note(noteDuration: .sixteenth, tone: Tone(noteLetter: .c, octave: .octave1)),
-            Note(noteDuration: .sixteenth, tone: Tone(noteLetter: .c, octave: .octave1)),
-            Note(noteDuration: .sixteenth, tone: Tone(noteLetter: .a, octave: .octave1))
+            Note(noteDuration: .sixteenth, pitch: Pitch(noteLetter: .c, octave: .octave1)),
+            Note(noteDuration: .sixteenth, pitch: Pitch(noteLetter: .c, octave: .octave1)),
+            Note(noteDuration: .sixteenth, pitch: Pitch(noteLetter: .a, octave: .octave1))
         ]
         assertThrowsError(MeasureError.tupletNotCompletelyCovered) {
             let tuplet = try Tuplet(3, .sixteenth, notes: notes)
@@ -214,11 +214,11 @@ class MeasureTests: XCTestCase {
     }
 
     func testReplaceNotesInRangeWithInvalidIndexRange() {
-        let note = Note(noteDuration: .quarter, tone: Tone(noteLetter: .a, octave: .octave1))
+        let note = Note(noteDuration: .quarter, pitch: Pitch(noteLetter: .a, octave: .octave1))
         let notes = [
-            Note(noteDuration: .sixteenth, tone: Tone(noteLetter: .c, octave: .octave1)),
-            Note(noteDuration: .sixteenth, tone: Tone(noteLetter: .c, octave: .octave1)),
-            Note(noteDuration: .sixteenth, tone: Tone(noteLetter: .a, octave: .octave1))
+            Note(noteDuration: .sixteenth, pitch: Pitch(noteLetter: .c, octave: .octave1)),
+            Note(noteDuration: .sixteenth, pitch: Pitch(noteLetter: .c, octave: .octave1)),
+            Note(noteDuration: .sixteenth, pitch: Pitch(noteLetter: .a, octave: .octave1))
         ]
         assertThrowsError(MeasureError.tupletNotCompletelyCovered) {
             let tuplet = try Tuplet(3, .sixteenth, notes: notes)
@@ -250,9 +250,9 @@ class MeasureTests: XCTestCase {
 
     func testReplaceTupletInRangeWithNotes() {
         XCTAssertEqual(measure.notes[0].count, 0)
-        let note1 = Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1))
-        let note2 = Note(noteDuration: .eighth, tone: Tone(noteLetter: .a, octave: .octave1))
-        let note3 = Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1))
+        let note1 = Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1))
+        let note2 = Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .a, octave: .octave1))
+        let note3 = Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1))
         assertNoErrorThrown {
             let tuplet = try Tuplet(3, .eighth, notes: [note1, note2, note3])
             measure.append(note3)
@@ -281,14 +281,14 @@ class MeasureTests: XCTestCase {
     }
 
     func testInsertInvalidTupletIndex() {
-        let note1 = Note(noteDuration: .quarter, tone: Tone(noteLetter: .a, octave: .octave1))
-        let note2 = Note(noteDuration: .quarter, tone: Tone(noteLetter: .b, octave: .octave1))
+        let note1 = Note(noteDuration: .quarter, pitch: Pitch(noteLetter: .a, octave: .octave1))
+        let note2 = Note(noteDuration: .quarter, pitch: Pitch(noteLetter: .b, octave: .octave1))
         measure.append(note1)
         measure.append(note2)
         let notes = [
-            Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)),
-            Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)),
-            Note(noteDuration: .eighth, tone: Tone(noteLetter: .a, octave: .octave1))
+            Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1)),
+            Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1)),
+            Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .a, octave: .octave1))
         ]
         assertThrowsError(MeasureError.invalidTupletIndex) {
             let tuplet = try Tuplet(3, .eighth, notes: notes)
@@ -321,14 +321,14 @@ class MeasureTests: XCTestCase {
     }
 
     func testInsertTuplet() {
-        let note1 = Note(noteDuration: .quarter, tone: Tone(noteLetter: .a, octave: .octave1))
-        let note2 = Note(noteDuration: .quarter, tone: Tone(noteLetter: .b, octave: .octave1))
+        let note1 = Note(noteDuration: .quarter, pitch: Pitch(noteLetter: .a, octave: .octave1))
+        let note2 = Note(noteDuration: .quarter, pitch: Pitch(noteLetter: .b, octave: .octave1))
         measure.append(note1)
         measure.append(note2)
         let notes = [
-            Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)),
-            Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)),
-            Note(noteDuration: .eighth, tone: Tone(noteLetter: .a, octave: .octave1))
+            Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1)),
+            Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1)),
+            Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .a, octave: .octave1))
         ]
         assertNoErrorThrown {
             let tuplet = try Tuplet(3, .eighth, notes: notes)
@@ -358,19 +358,19 @@ class MeasureTests: XCTestCase {
     }
 
     func testRemoveNoteInvalidTieStateStart() {
-        var note = Note(noteDuration: .quarter, tone: Tone(noteLetter: .c, octave: .octave1))
+        var note = Note(noteDuration: .quarter, pitch: Pitch(noteLetter: .c, octave: .octave1))
         note.tie = .end
         measure.append(note)
-        measure.append(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
+        measure.append(Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1)))
         assertThrowsError(MeasureError.invalidTieState) {
             try measure.removeNote(at: 0)
         }
     }
 
     func testRemoveNoteInvalidTieStateEnd() {
-        var note = Note(noteDuration: .quarter, tone: Tone(noteLetter: .c, octave: .octave1))
+        var note = Note(noteDuration: .quarter, pitch: Pitch(noteLetter: .c, octave: .octave1))
         note.tie = .begin
-        measure.append(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
+        measure.append(Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1)))
         measure.append(note)
         assertThrowsError(MeasureError.invalidTieState) {
             XCTAssertEqual(measure.noteCount[0], 2)
@@ -401,8 +401,8 @@ class MeasureTests: XCTestCase {
     }
 
     func testRemoveNoteWithEndTie() {
-        measure.append(Note(noteDuration: .quarter, tone: Tone(noteLetter: .c, octave: .octave1)))
-        measure.append(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
+        measure.append(Note(noteDuration: .quarter, pitch: Pitch(noteLetter: .c, octave: .octave1)))
+        measure.append(Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1)))
         assertNoErrorThrown {
             try measure.startTie(at: 0, inSet: 0)
             try measure.removeNote(at: 1)
@@ -440,11 +440,11 @@ class MeasureTests: XCTestCase {
     }
 
     func testRemoveNotesWithInvalidRangeStart() {
-        measure.append(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
+        measure.append(Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1)))
         let notes = [
-            Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)),
-            Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)),
-            Note(noteDuration: .eighth, tone: Tone(noteLetter: .a, octave: .octave1))
+            Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1)),
+            Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1)),
+            Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .a, octave: .octave1))
         ]
         assertThrowsError(MeasureError.tupletNotCompletelyCovered) {
             let tuplet = try Tuplet(3, .eighth, notes: notes)
@@ -456,14 +456,14 @@ class MeasureTests: XCTestCase {
 
     func testRemoveNotesWithInvalidRangeEnd() {
         let notes = [
-            Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)),
-            Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)),
-            Note(noteDuration: .eighth, tone: Tone(noteLetter: .a, octave: .octave1))
+            Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1)),
+            Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1)),
+            Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .a, octave: .octave1))
         ]
         assertThrowsError(MeasureError.tupletNotCompletelyCovered) {
             let tuplet = try Tuplet(3, .eighth, notes: notes)
             measure.append(tuplet)
-            measure.append(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
+            measure.append(Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1)))
             XCTAssertEqual(measure.noteCount[0], 4)
             try measure.removeNotesInRange(2...3)
         }
@@ -511,9 +511,9 @@ class MeasureTests: XCTestCase {
         measure.append(note2)
         measure.append(note3)
         let notes = [
-            Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)),
-            Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)),
-            Note(noteDuration: .eighth, tone: Tone(noteLetter: .a, octave: .octave1))
+            Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1)),
+            Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1)),
+            Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .a, octave: .octave1))
         ]
         assertNoErrorThrown {
             let tuplet = try Tuplet(3, .eighth, notes: notes)
@@ -537,21 +537,21 @@ class MeasureTests: XCTestCase {
     // MARK: Failures
 
     func testCreateTupletInvalidTupletIndexStart() {
-        let note1 = Note(noteDuration: .eighth, tone: Tone(noteLetter: .a, octave: .octave1))
-        let note2 = Note(noteDuration: .eighth, tone: Tone(noteLetter: .b, octave: .octave1))
-        let note3 = Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1))
+        let note1 = Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .a, octave: .octave1))
+        let note2 = Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .b, octave: .octave1))
+        let note3 = Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1))
         assertThrowsError(MeasureError.invalidTupletIndex)  {
             let tuplet = try Tuplet(3, .eighth, notes: [note1, note2, note3])
             measure.append(tuplet)
-            measure.append(Note(noteDuration: .quarter, tone: Tone(noteLetter: .c, octave: .octave1)))
+            measure.append(Note(noteDuration: .quarter, pitch: Pitch(noteLetter: .c, octave: .octave1)))
             try measure.createTuplet(3, .quarter, fromNotesInRange: 1...3)
         }
     }
 
     func testCreateTupletInvalidTupletIndexEnd() {
-        let note1 = Note(noteDuration: .eighth, tone: Tone(noteLetter: .a, octave: .octave1))
-        let note2 = Note(noteDuration: .eighth, tone: Tone(noteLetter: .b, octave: .octave1))
-        let note3 = Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1))
+        let note1 = Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .a, octave: .octave1))
+        let note2 = Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .b, octave: .octave1))
+        let note3 = Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1))
         measure.append(note1)
         assertThrowsError(MeasureError.invalidTupletIndex)  {
             let tuplet = try Tuplet(3, .eighth, notes: [note1, note2, note3])
@@ -561,9 +561,9 @@ class MeasureTests: XCTestCase {
     }
 
     func testCreateTupletNoteIndexOutOfRange() {
-        measure.append(Note(noteDuration: .quarter, tone: Tone(noteLetter: .a, octave: .octave1)))
-        measure.append(Note(noteDuration: .quarter, tone: Tone(noteLetter: .b, octave: .octave1)))
-        measure.append(Note(noteDuration: .quarter, tone: Tone(noteLetter: .c, octave: .octave1)))
+        measure.append(Note(noteDuration: .quarter, pitch: Pitch(noteLetter: .a, octave: .octave1)))
+        measure.append(Note(noteDuration: .quarter, pitch: Pitch(noteLetter: .b, octave: .octave1)))
+        measure.append(Note(noteDuration: .quarter, pitch: Pitch(noteLetter: .c, octave: .octave1)))
         assertThrowsError(MeasureError.noteIndexOutOfRange)  {
             try measure.createTuplet(3, .quarter, fromNotesInRange: 0...3)
         }
@@ -572,9 +572,9 @@ class MeasureTests: XCTestCase {
     // MARK: Successes
 
     func testCreateTuplet() {
-        measure.append(Note(noteDuration: .quarter, tone: Tone(noteLetter: .a, octave: .octave1)))
-        measure.append(Note(noteDuration: .quarter, tone: Tone(noteLetter: .b, octave: .octave1)))
-        measure.append(Note(noteDuration: .quarter, tone: Tone(noteLetter: .c, octave: .octave1)))
+        measure.append(Note(noteDuration: .quarter, pitch: Pitch(noteLetter: .a, octave: .octave1)))
+        measure.append(Note(noteDuration: .quarter, pitch: Pitch(noteLetter: .b, octave: .octave1)))
+        measure.append(Note(noteDuration: .quarter, pitch: Pitch(noteLetter: .c, octave: .octave1)))
         assertNoErrorThrown {
             try measure.createTuplet(3, .quarter, fromNotesInRange: 0...2)
             XCTAssert(measure.notes[0].count == 1)
@@ -585,7 +585,7 @@ class MeasureTests: XCTestCase {
     // MARK: Failures
 
     func testBreakDownTupletInvalidIndex() {
-        measure.append(Note(noteDuration: .eighth, tone: Tone(noteLetter: .a, octave: .octave1)))
+        measure.append(Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .a, octave: .octave1)))
         assertThrowsError(MeasureError.invalidTupletIndex) {
             XCTAssert(measure.noteCount[0] == 1)
             try measure.breakdownTuplet(at: 0)
@@ -595,9 +595,9 @@ class MeasureTests: XCTestCase {
     // MARK: Successes
 
     func testBreakDownTuplet() {
-        let note1 = Note(noteDuration: .eighth, tone: Tone(noteLetter: .a, octave: .octave1))
-        let note2 = Note(noteDuration: .eighth, tone: Tone(noteLetter: .b, octave: .octave1))
-        let note3 = Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1))
+        let note1 = Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .a, octave: .octave1))
+        let note2 = Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .b, octave: .octave1))
+        let note3 = Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1))
         assertNoErrorThrown {
             let tuplet = try Tuplet(3, .eighth, notes: [note1, note2, note3])
             measure.append(tuplet)
@@ -619,11 +619,11 @@ class MeasureTests: XCTestCase {
     // MARK: Failures
 
     func testPrepTieForInsertNoteRemoveTie() {
-        measure.append(Note(noteDuration: .quarter, tone: Tone(noteLetter: .c, octave: .octave1)))
-        measure.append(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
+        measure.append(Note(noteDuration: .quarter, pitch: Pitch(noteLetter: .c, octave: .octave1)))
+        measure.append(Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1)))
         assertThrowsError(MeasureError.invalidTieState) {
             try measure.startTie(at: 0, inSet: 0)
-            let note = Note(noteDuration: .quarter, tone: Tone(noteLetter: .c, octave: .octave1))
+            let note = Note(noteDuration: .quarter, pitch: Pitch(noteLetter: .c, octave: .octave1))
             try measure.insert(note, at: 1, inSet: 0)
         }
     }
@@ -631,12 +631,12 @@ class MeasureTests: XCTestCase {
     // MARK: Successes
 
     func testPrepTieForInsertNote() {
-        measure.append(Note(noteDuration: .quarter, tone: Tone(noteLetter: .c, octave: .octave1)))
-        measure.append(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
-        measure.append(Note(noteDuration: .quarter, tone: Tone(noteLetter: .c, octave: .octave1)))
+        measure.append(Note(noteDuration: .quarter, pitch: Pitch(noteLetter: .c, octave: .octave1)))
+        measure.append(Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1)))
+        measure.append(Note(noteDuration: .quarter, pitch: Pitch(noteLetter: .c, octave: .octave1)))
         assertNoErrorThrown {
             try measure.startTie(at: 1, inSet: 0)
-            let note = Note(noteDuration: .quarter, tone: Tone(noteLetter: .a, octave: .octave1))
+            let note = Note(noteDuration: .quarter, pitch: Pitch(noteLetter: .a, octave: .octave1))
             try measure.insert(note, at: 1, inSet: 0)
 
             let note1 = try measure.note(at: 1, inSet: 0)
@@ -655,7 +655,7 @@ class MeasureTests: XCTestCase {
     // MARK: Successes
 
     func testStartTieNoNextNote() {
-        measure.append(Note(noteDuration: .quarter, tone: Tone(noteLetter: .c, octave: .octave1)))
+        measure.append(Note(noteDuration: .quarter, pitch: Pitch(noteLetter: .c, octave: .octave1)))
         // Only change note to .begin
         assertNoErrorThrown {
             try measure.startTie(at: 0, inSet: 0)
@@ -666,8 +666,8 @@ class MeasureTests: XCTestCase {
     }
 
     func testStartTieHasNextNote() {
-        measure.append(Note(noteDuration: .quarter, tone: Tone(noteLetter: .c, octave: .octave1)))
-        measure.append(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
+        measure.append(Note(noteDuration: .quarter, pitch: Pitch(noteLetter: .c, octave: .octave1)))
+        measure.append(Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1)))
         assertNoErrorThrown {
             try measure.startTie(at: 0, inSet: 0)
             let note1 = measure.notes[0][0] as! Note
@@ -680,8 +680,8 @@ class MeasureTests: XCTestCase {
     }
 
     func testStartTieNoteAlreadyBeginningOfTie() {
-        measure.append(Note(noteDuration: .quarter, tone: Tone(noteLetter: .c, octave: .octave1)))
-        measure.append(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
+        measure.append(Note(noteDuration: .quarter, pitch: Pitch(noteLetter: .c, octave: .octave1)))
+        measure.append(Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1)))
         assertNoErrorThrown {
             try measure.startTie(at: 0, inSet: 0)
             try measure.startTie(at: 0, inSet: 0)
@@ -693,13 +693,13 @@ class MeasureTests: XCTestCase {
     }
 
     func testStartTieNextNoteInTuplet() {
-        measure.append(Note(noteDuration: .quarter, tone: Tone(noteLetter: .c, octave: .octave1)))
-        measure.append(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
-        measure.append(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
+        measure.append(Note(noteDuration: .quarter, pitch: Pitch(noteLetter: .c, octave: .octave1)))
+        measure.append(Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1)))
+        measure.append(Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1)))
         let notes = [
-            Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)),
-            Note(noteDuration: .eighth, tone: Tone(noteLetter: .a, octave: .octave1)),
-            Note(noteDuration: .eighth, tone: Tone(noteLetter: .a, octave: .octave1))
+            Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1)),
+            Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .a, octave: .octave1)),
+            Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .a, octave: .octave1))
         ]
         assertNoErrorThrown {
             // setup
@@ -717,13 +717,13 @@ class MeasureTests: XCTestCase {
 
     func testStartTieLastNoteOfTupletNoNextNote() {
         // Just change to .begin
-        measure.append(Note(noteDuration: .quarter, tone: Tone(noteLetter: .c, octave: .octave1)))
-        measure.append(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
-        measure.append(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
+        measure.append(Note(noteDuration: .quarter, pitch: Pitch(noteLetter: .c, octave: .octave1)))
+        measure.append(Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1)))
+        measure.append(Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1)))
         let notes = [
-            Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)),
-            Note(noteDuration: .eighth, tone: Tone(noteLetter: .a, octave: .octave1)),
-            Note(noteDuration: .eighth, tone: Tone(noteLetter: .a, octave: .octave1))
+            Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1)),
+            Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .a, octave: .octave1)),
+            Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .a, octave: .octave1))
         ]
         assertNoErrorThrown {
             // setup
@@ -739,13 +739,13 @@ class MeasureTests: XCTestCase {
     }
 
     func testStartTieNoteIsEndOfAnotherTie() {
-        measure.append(Note(noteDuration: .quarter, tone: Tone(noteLetter: .c, octave: .octave1)))
-        measure.append(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
-        measure.append(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
+        measure.append(Note(noteDuration: .quarter, pitch: Pitch(noteLetter: .c, octave: .octave1)))
+        measure.append(Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1)))
+        measure.append(Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1)))
         let notes = [
-            Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)),
-            Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)),
-            Note(noteDuration: .eighth, tone: Tone(noteLetter: .a, octave: .octave1))
+            Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1)),
+            Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1)),
+            Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .a, octave: .octave1))
         ]
         assertNoErrorThrown {
             // setup
@@ -762,13 +762,13 @@ class MeasureTests: XCTestCase {
     }
 
     func testStartTieLastNoteOfTupletHasNextNote() {
-        measure.append(Note(noteDuration: .quarter, tone: Tone(noteLetter: .c, octave: .octave1)))
-        measure.append(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
-        measure.append(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
+        measure.append(Note(noteDuration: .quarter, pitch: Pitch(noteLetter: .c, octave: .octave1)))
+        measure.append(Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1)))
+        measure.append(Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1)))
         let notes = [
-            Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)),
-            Note(noteDuration: .eighth, tone: Tone(noteLetter: .a, octave: .octave1)),
-            Note(noteDuration: .eighth, tone: Tone(noteLetter: .a, octave: .octave1))
+            Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1)),
+            Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .a, octave: .octave1)),
+            Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .a, octave: .octave1))
         ]
         assertNoErrorThrown {
             // setup
@@ -786,7 +786,7 @@ class MeasureTests: XCTestCase {
     func testStartTieLastNoteOfTupletNextNoteTuplet() {
         assertNoErrorThrown {
             let note = Note(noteDuration: .sixteenth,
-                            tone: Tone(noteLetter: .c, octave: .octave1))
+                            pitch: Pitch(noteLetter: .c, octave: .octave1))
             let tuplet1 = try Tuplet(3, .sixteenth, notes: [note, note, note])
             let tuplet2 = try Tuplet(5, .sixteenth, notes: [note, note, note, note, note])
             measure.append(tuplet1)
@@ -802,7 +802,7 @@ class MeasureTests: XCTestCase {
     func testStartTieInNestedTuplet() {
         assertNoErrorThrown {
             let note = Note(noteDuration: .eighth,
-                            tone: Tone(noteLetter: .c, octave: .octave1))
+                            pitch: Pitch(noteLetter: .c, octave: .octave1))
             let triplet = try Tuplet(3, .eighth, notes: [note, note, note])
             let tuplet = try Tuplet(3, .eighth, notes: [triplet, note])
             measure.append(tuplet)
@@ -818,24 +818,24 @@ class MeasureTests: XCTestCase {
     // MARK: - startTie(at:)
     // MARK: Failures
 
-    func testStartTieNoteHasDiffTone() {
-        measure.append(Note(noteDuration: .quarter, tone: Tone(noteLetter: .a, octave: .octave1)))
-        measure.append(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
-        assertThrowsError(MeasureError.notesMustHaveSameTonesToTie) {
+    func testStartTieNoteHasDiffPitch() {
+        measure.append(Note(noteDuration: .quarter, pitch: Pitch(noteLetter: .a, octave: .octave1)))
+        measure.append(Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1)))
+        assertThrowsError(MeasureError.notesMustHaveSamePitchesToTie) {
             try measure.startTie(at: 0, inSet: 0)
         }
     }
 
-    func testStartTieNextNoteInTupletDiffTone() {
-        measure.append(Note(noteDuration: .quarter, tone: Tone(noteLetter: .c, octave: .octave1)))
-        measure.append(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
-        measure.append(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
+    func testStartTieNextNoteInTupletDiffPitch() {
+        measure.append(Note(noteDuration: .quarter, pitch: Pitch(noteLetter: .c, octave: .octave1)))
+        measure.append(Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1)))
+        measure.append(Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1)))
         let notes = [
-            Note(noteDuration: .eighth, tone: Tone(noteLetter: .a, octave: .octave1)),
-            Note(noteDuration: .eighth, tone: Tone(noteLetter: .a, octave: .octave1)),
-            Note(noteDuration: .eighth, tone: Tone(noteLetter: .a, octave: .octave1))
+            Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .a, octave: .octave1)),
+            Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .a, octave: .octave1)),
+            Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .a, octave: .octave1))
         ]
-        assertThrowsError(MeasureError.notesMustHaveSameTonesToTie) {
+        assertThrowsError(MeasureError.notesMustHaveSamePitchesToTie) {
             let tuplet = try Tuplet(3, .eighth, notes: notes)
             measure.append(tuplet)
             try measure.startTie(at: 2, inSet: 0)
@@ -846,10 +846,10 @@ class MeasureTests: XCTestCase {
     // MARK: Failures
 
     func testRemoveTieNoNoteAtIndex() {
-        measure.append(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
-        measure.append(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
-        measure.append(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
-        measure.append(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
+        measure.append(Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1)))
+        measure.append(Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1)))
+        measure.append(Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1)))
+        measure.append(Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1)))
 
         assertThrowsError(MeasureError.noteIndexOutOfRange) {
             try measure.removeTie(at: 4, inSet: 0)
@@ -859,10 +859,10 @@ class MeasureTests: XCTestCase {
     // MARK: Successes
 
     func testRemoveTieNoTie() {
-        measure.append(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
-        measure.append(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
-        measure.append(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
-        measure.append(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
+        measure.append(Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1)))
+        measure.append(Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1)))
+        measure.append(Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1)))
+        measure.append(Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1)))
 
         assertNoErrorThrown {
             try measure.removeTie(at: 0, inSet: 0)
@@ -874,10 +874,10 @@ class MeasureTests: XCTestCase {
     }
 
     func testRemoveTieBeginOfTie() {
-        measure.append(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
-        measure.append(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
-        measure.append(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
-        measure.append(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
+        measure.append(Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1)))
+        measure.append(Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1)))
+        measure.append(Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1)))
+        measure.append(Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1)))
 
         assertNoErrorThrown {
             setTie(at: 0)
@@ -890,10 +890,10 @@ class MeasureTests: XCTestCase {
     }
 
     func testRemoveTieFromBeginAndEnd() {
-        measure.append(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
-        measure.append(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
-        measure.append(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
-        measure.append(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
+        measure.append(Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1)))
+        measure.append(Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1)))
+        measure.append(Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1)))
+        measure.append(Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1)))
 
         assertNoErrorThrown {
             setTie(at: 0)
@@ -907,13 +907,13 @@ class MeasureTests: XCTestCase {
     }
 
     func testRemoveTieBeginsInTuplet() {
-        measure.append(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
-        measure.append(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
-        measure.append(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
-        measure.append(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
+        measure.append(Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1)))
+        measure.append(Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1)))
+        measure.append(Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1)))
+        measure.append(Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1)))
 
         let note = Note(noteDuration: .sixteenth,
-                        tone: Tone(noteLetter: .c, octave: .octave1))
+                        pitch: Pitch(noteLetter: .c, octave: .octave1))
         assertNoErrorThrown {
             let tuplet = try Tuplet(3, .sixteenth, notes: [note, note, note])
             measure.append(tuplet)
@@ -931,12 +931,12 @@ class MeasureTests: XCTestCase {
     }
 
     func testRemoveTieBeginAndEndInOneTuplet() {
-        measure.append(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
-        measure.append(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
-        measure.append(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
-        measure.append(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
+        measure.append(Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1)))
+        measure.append(Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1)))
+        measure.append(Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1)))
+        measure.append(Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1)))
 
-        let note = Note(noteDuration: .sixteenth, tone: Tone(noteLetter: .c, octave: .octave1))
+        let note = Note(noteDuration: .sixteenth, pitch: Pitch(noteLetter: .c, octave: .octave1))
         assertNoErrorThrown {
             let tuplet = try Tuplet(3, .sixteenth, notes: [note, note, note])
             measure.append(tuplet)
@@ -954,12 +954,12 @@ class MeasureTests: XCTestCase {
     }
 
     func testRemoveTieEndsInTuplet() {
-        measure.append(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
-        measure.append(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
-        measure.append(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
-        measure.append(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
+        measure.append(Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1)))
+        measure.append(Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1)))
+        measure.append(Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1)))
+        measure.append(Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1)))
 
-        let note = Note(noteDuration: .sixteenth, tone: Tone(noteLetter: .c, octave: .octave1))
+        let note = Note(noteDuration: .sixteenth, pitch: Pitch(noteLetter: .c, octave: .octave1))
         assertNoErrorThrown {
             let tuplet = try Tuplet(3, .sixteenth, notes: [note, note, note])
             measure.append(tuplet)
@@ -977,12 +977,12 @@ class MeasureTests: XCTestCase {
     }
 
     func testRemoveTieTupletToOtherTuplet() {
-        measure.append(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
-        measure.append(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
-        measure.append(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
-        measure.append(Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1)))
+        measure.append(Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1)))
+        measure.append(Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1)))
+        measure.append(Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1)))
+        measure.append(Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1)))
 
-        let note = Note(noteDuration: .sixteenth, tone: Tone(noteLetter: .c, octave: .octave1))
+        let note = Note(noteDuration: .sixteenth, pitch: Pitch(noteLetter: .c, octave: .octave1))
         assertNoErrorThrown {
             let tuplet = try Tuplet(3, .sixteenth, notes: [note, note, note])
             measure.append(tuplet)
@@ -1026,11 +1026,11 @@ class MeasureTests: XCTestCase {
         measure.append(Note(noteDuration: .quarter))
         assertNoErrorThrown {
             let note1 = Note(noteDuration: .eighth,
-                             tone: Tone(noteLetter: .a, octave: .octave1))
+                             pitch: Pitch(noteLetter: .a, octave: .octave1))
             let note2 = Note(noteDuration: .eighth,
-                             tone: Tone(noteLetter: .b, octave: .octave1))
+                             pitch: Pitch(noteLetter: .b, octave: .octave1))
             let note3 = Note(noteDuration: .eighth,
-                             tone: Tone(noteLetter: .c, octave: .octave1))
+                             pitch: Pitch(noteLetter: .c, octave: .octave1))
             measure.append(try Tuplet(3, .eighth, notes: [note1, note2, note3]))
             let index = try measure.noteCollectionIndex(fromNoteIndex: 2, inSet: 0)
             XCTAssertEqual(index.noteIndex, 1)

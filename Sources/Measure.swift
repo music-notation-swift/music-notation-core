@@ -41,7 +41,10 @@ public struct Measure: ImmutableMeasure, Equatable, RandomAccessCollection {
 
     public let measureCount: Int = 1
 
-    internal typealias NoteCollectionIndex = (noteIndex: Int, tupletIndex: Int?)
+    internal struct NoteCollectionIndex {
+        let noteIndex: Int
+        let tupletIndex: Int?
+    }
     private var noteCollectionIndexes: [[NoteCollectionIndex]] = [[NoteCollectionIndex]]()
 
     public init(timeSignature: TimeSignature, key: Key? = nil) {
@@ -731,10 +734,10 @@ public struct Measure: ImmutableMeasure, Equatable, RandomAccessCollection {
             for (i, noteCollection) in noteSet.enumerated() {
                 switch noteCollection.noteCount {
                 case 1:
-                    noteSetIndexes.append((noteIndex: i, tupletIndex: nil))
+                    noteSetIndexes.append(NoteCollectionIndex(noteIndex: i, tupletIndex: nil))
                 case let count:
                     for j in 0..<count {
-                        noteSetIndexes.append((noteIndex: i, tupletIndex: j))
+                        noteSetIndexes.append(NoteCollectionIndex(noteIndex: i, tupletIndex: j))
                     }
                 }
             }

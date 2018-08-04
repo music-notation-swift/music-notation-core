@@ -1,6 +1,6 @@
 //
 //  StaffLocation.swift
-//  MusicNotationKit
+//  MusicNotationCore
 //
 //  Created by Kyle Sherman on 10/30/16.
 //  Copyright © 2016 Kyle Sherman. All rights reserved.

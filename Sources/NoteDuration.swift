@@ -1,6 +1,6 @@
 //
 //  NoteDuration.swift
-//  MusicNotationKit
+//  MusicNotationCore
 //
 //  Created by Kyle Sherman on 8/20/16.
 //  Copyright © 2016 Kyle Sherman. All rights reserved.

@@ -1,6 +1,6 @@
 //
 //  StaffTests.swift
-//  MusicNotationKit
+//  MusicNotationCore
 //
 //  Created by Kyle Sherman on 9/5/15.
 //  Copyright © 2015 Kyle Sherman. All rights reserved.

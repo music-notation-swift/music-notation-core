@@ -1,6 +1,6 @@
 //
 //  ClefTests.swift
-//  MusicNotationKit
+//  MusicNotationCore
 //
 //  Created by Kyle Sherman on 10/16/16.
 //  Copyright © 2016 Kyle Sherman. All rights reserved.

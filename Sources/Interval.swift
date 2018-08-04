@@ -1,6 +1,6 @@
 //
 //  Interval.swift
-//  MusicNotationKit
+//  MusicNotationCore
 //
 //  Created by Rob Hudson on 8/1/16.
 //  Copyright © 2016 Kyle Sherman. All rights reserved.

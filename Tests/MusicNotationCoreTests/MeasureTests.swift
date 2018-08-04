@@ -1298,12 +1298,12 @@ class MeasureTests: XCTestCase {
     private func setTie(at index: Int, functionName: String = #function, lineNum: Int = #line) {
         assertNoErrorThrown {
             try measure.startTie(at: index, inSet: 0)
-            let (noteIndex1, tupletIndex1) = try measure.noteCollectionIndex(fromNoteIndex: index, inSet: 0)
-            let (noteIndex2, tupletIndex2) = try measure.noteCollectionIndex(fromNoteIndex: index + 1, inSet: 0)
-            let firstNote = noteFromMeasure(measure, noteIndex: noteIndex1,
-                                            tupletIndex: tupletIndex1)
-            let secondNote = noteFromMeasure(measure, noteIndex: noteIndex2,
-                                             tupletIndex: tupletIndex2)
+            let noteCollectionIndex1 = try measure.noteCollectionIndex(fromNoteIndex: index, inSet: 0)
+            let noteCollectionIndex2 = try measure.noteCollectionIndex(fromNoteIndex: index + 1, inSet: 0)
+            let firstNote = noteFromMeasure(measure, noteIndex: noteCollectionIndex1.noteIndex,
+                                            tupletIndex: noteCollectionIndex1.tupletIndex)
+            let secondNote = noteFromMeasure(measure, noteIndex: noteCollectionIndex2.noteIndex,
+                                             tupletIndex: noteCollectionIndex2.tupletIndex)
             XCTAssert(firstNote.tie == .begin || firstNote.tie == .beginAndEnd,
                       "\(functionName): \(lineNum)")
             XCTAssert(secondNote.tie == .end || secondNote.tie == .beginAndEnd,

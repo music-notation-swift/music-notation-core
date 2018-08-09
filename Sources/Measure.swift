@@ -40,9 +40,28 @@ public struct Measure: ImmutableMeasure, Equatable, RandomAccessCollection {
     }
 
     public let measureCount: Int = 1
+    public private(set) var clefs: [Int: Clef] = [:] {
+        didSet {
+            // Recompute lastClef
+            guard !clefs.isEmpty else {
+                lastClef = originalClef
+                return
+            }
+            let maxClef = clefs.max { (element1, element2) in
+                return element1.key < element2.key
+            }
+            if let maxClef = maxClef {
+                lastClef = maxClef.value
+            }
+        }
+    }
+    public internal(set) var lastClef: Clef?
+    public internal(set) var originalClef: Clef?
 
     internal typealias NoteCollectionIndex = (noteIndex: Int, tupletIndex: Int?)
     private var noteCollectionIndexes: [[NoteCollectionIndex]] = [[NoteCollectionIndex]]()
+
+    // MARK: - Initializers
 
     public init(timeSignature: TimeSignature, key: Key? = nil) {
         self.init(timeSignature: timeSignature, key: key, notes: [[]])
@@ -59,8 +78,13 @@ public struct Measure: ImmutableMeasure, Equatable, RandomAccessCollection {
         timeSignature = immutableMeasure.timeSignature
         key = immutableMeasure.key
         notes = immutableMeasure.notes
+        lastClef = immutableMeasure.lastClef
+        originalClef = immutableMeasure.originalClef
+        clefs = immutableMeasure.clefs
         recomputeNoteCollectionIndexes()
     }
+
+    // MARK: - Public Methods
 
     /**
      Gets note stored at `index`.
@@ -110,9 +134,9 @@ public struct Measure: ImmutableMeasure, Equatable, RandomAccessCollection {
      */
     public mutating func replaceNote(at index: Int, with noteCollections: [NoteCollection], inSet setIndex: Int = 0) throws {
         var newMeasure = self
-        let noteCollections = try newMeasure.prepTiesForReplacement(in: index...index, with: noteCollections, inSet: setIndex)
+        let newNoteCollections = try newMeasure.prepTiesForReplacement(in: index...index, with: noteCollections, inSet: setIndex)
         let collectionIndex = try newMeasure.noteCollectionIndex(fromNoteIndex: index, inSet: setIndex)
-        try newMeasure.replaceNote(at: collectionIndex, with: noteCollections, inSet: setIndex)
+        try newMeasure.replaceNote(at: collectionIndex, with: newNoteCollections, inSet: setIndex)
         self = newMeasure
     }
 
@@ -148,9 +172,9 @@ public struct Measure: ImmutableMeasure, Equatable, RandomAccessCollection {
      */
     public mutating func replaceNotes(in range: CountableClosedRange<Int>, with noteCollections: [NoteCollection], inSet setIndex: Int = 0) throws {
         var newMeasure = self
-        let noteCollections = try newMeasure.prepTiesForReplacement(in: range, with: noteCollections, inSet: setIndex)
+        let newNoteCollections = try newMeasure.prepTiesForReplacement(in: range, with: noteCollections, inSet: setIndex)
         try newMeasure.removeNotesInRange(range, inSet: setIndex, shouldIgnoreTieStates: true)
-        try newMeasure.insert(noteCollections, at: range.lowerBound, inSet: setIndex, shouldIgnoreTieStates: true)
+        try newMeasure.insert(newNoteCollections, at: range.lowerBound, inSet: setIndex, shouldIgnoreTieStates: true)
         self = newMeasure
     }
 
@@ -165,7 +189,11 @@ public struct Measure: ImmutableMeasure, Equatable, RandomAccessCollection {
         while !notes.isValidIndex(setIndex) {
             notes.append([])
         }
-        notes[setIndex].append(noteCollection)
+        var noteCollectionWithClef = noteCollection
+        if let lastClef = lastClef {
+            noteCollectionWithClef.setClef(lastClef)
+        }
+        notes[setIndex].append(noteCollectionWithClef)
     }
 
     /**
@@ -299,6 +327,88 @@ public struct Measure: ImmutableMeasure, Equatable, RandomAccessCollection {
     }
 
     /**
+     Returns the Clef at the given index values.
+
+     - parameter noteIndex: The index of the note for which you want the clef.
+     - parmaeter setIndex: The index of the set that contains the note.
+     - returns: The clef at the given `noteIndex` in the given `setIndex`.
+     - throws:
+         - `MeasureError.noClefSpecified`
+         - `MeasureError.internalError`
+         - `MeasureError.noteIndexOutOfRange`
+     */
+    public func clef(at noteIndex: Int, inSet setIndex: Int) throws -> Clef {
+        guard !clefs.isEmpty else {
+            // Check for invalid index
+            guard let _ = noteCollectionIndexes[safe: setIndex]?[safe: noteIndex] else {
+                throw MeasureError.noteIndexOutOfRange
+            }
+            if let lastClef = lastClef {
+                return lastClef
+            } else {
+                throw MeasureError.noClefSpecified
+            }
+        }
+        let ticks = try cumulativeTicks(at: noteIndex, inSet: setIndex)
+        return try clef(forTicks: ticks)
+    }
+
+    private func clef(at noteCollectionIndex: NoteCollectionIndex, inSet setIndex: Int) throws -> Clef {
+        guard !clefs.isEmpty else {
+            if let lastClef = lastClef {
+                return lastClef
+            } else {
+                throw MeasureError.noClefSpecified
+            }
+        }
+        let ticks = try cumulativeTicks(at: noteCollectionIndex, inSet: setIndex)
+        return try clef(forTicks: ticks)
+    }
+
+    private func clef(forTicks ticks: Int) throws -> Clef {
+        let sortedClefs = clefs.sorted { $0.key < $1.key }
+        let prefixedClefs = sortedClefs.prefix { $0.key <= ticks }
+        guard let lastClef = prefixedClefs.last?.value else {
+            if let originalClef = originalClef {
+                return originalClef
+            } else {
+                throw MeasureError.noClefSpecified
+            }
+        }
+        return lastClef
+    }
+
+    // MARK: - Internal Methods
+
+    internal mutating func changeClef(_ clef: Clef, at noteIndex: Int, inSet setIndex: Int = 0) throws {
+        let ticks = try cumulativeTicks(at: noteIndex, inSet: setIndex)
+        clefs[ticks] = clef
+        // Set clef on the note
+        var note = try self.note(at: noteIndex, inSet: setIndex)
+        note.clef = clef
+        let index = try noteCollectionIndex(fromNoteIndex: noteIndex, inSet: setIndex)
+        try replaceNote(at: index, with: [note], inSet: setIndex)
+    }
+
+    /**
+     This method will set the `originalClef` and `lastClef` properties if
+     there are no clef changes associated with this measure.
+     This is to be used for when a clef change is done to a measure before
+     this one and you need to ripple the change throughout.
+
+     - parameter clef: The new clef to change this measure to.
+     - returns: True if it changed the clef; false if it didn't change the clef.
+     */
+    internal mutating func changeFirstClefIfNeeded(to clef: Clef) -> Bool {
+        guard clefs.isEmpty else {
+            return false
+        }
+        originalClef = clef
+        lastClef = clef
+        return true
+    }
+
+    /**
      Inserts `noteCollection` at `index`.
      
      - parameter index: Note index.
@@ -309,15 +419,26 @@ public struct Measure: ImmutableMeasure, Equatable, RandomAccessCollection {
         - `MeasureError.invalidTieState`
      */
     internal mutating func insert(_ noteCollection: NoteCollection, at index: Int, inSet setIndex: Int = 0, shouldIgnoreTieStates skipTieConfig: Bool) throws {
+        // Set clef to the last clef at the given note index
+        let newNoteCollection: NoteCollection
+        do {
+            let newClef = try clef(at: index, inSet: setIndex)
+            var noteCollectionWithClef = noteCollection
+            noteCollectionWithClef.setClef(newClef)
+            newNoteCollection = noteCollectionWithClef
+        } catch {
+            newNoteCollection = noteCollection
+        }
+
         if index == 0 && notes[setIndex].isEmpty {
-            append(noteCollection, inSet: setIndex)
+            append(newNoteCollection, inSet: setIndex)
             return
         }
 
         // If the index points to the end of the note collection, then
         // append entry.
         guard index != noteCount[setIndex] else {
-            append(noteCollection, inSet: setIndex)
+            append(newNoteCollection, inSet: setIndex)
             return
         }
 
@@ -331,7 +452,7 @@ public struct Measure: ImmutableMeasure, Equatable, RandomAccessCollection {
         if !skipTieConfig {
             try newMeasure.prepTiesForInsertion(at: index, inSet: setIndex)
         }
-        newMeasure.notes[setIndex].insert(noteCollection, at: collectionIndex.noteIndex)
+        newMeasure.notes[setIndex].insert(newNoteCollection, at: collectionIndex.noteIndex)
         self = newMeasure
     }
 
@@ -363,9 +484,18 @@ public struct Measure: ImmutableMeasure, Equatable, RandomAccessCollection {
         - `MeasureError.internalError`
      */
     internal mutating func replaceNote(at collectionIndex: NoteCollectionIndex, with noteCollections: [NoteCollection], inSet setIndex: Int) throws {
+        // Get the clef for this index
+        let noteCollectionsWithClef: [NoteCollection]
+        do {
+        let clefForNote = try clef(at: collectionIndex, inSet: setIndex)
+        noteCollectionsWithClef = noteCollections.map { $0.withClef(clefForNote) }
+        } catch {
+            noteCollectionsWithClef = noteCollections
+        }
+
         guard let tupletIndex = collectionIndex.tupletIndex else {
-            notes[setIndex].remove(at:collectionIndex.noteIndex)
-            for noteCollection in noteCollections.reversed() {
+            notes[setIndex].remove(at: collectionIndex.noteIndex)
+            for noteCollection in noteCollectionsWithClef.reversed() {
                 notes[setIndex].insert(noteCollection, at: collectionIndex.noteIndex)
             }
             return
@@ -375,7 +505,7 @@ public struct Measure: ImmutableMeasure, Equatable, RandomAccessCollection {
             assertionFailure("note collection should be tuplet, but cast failed")
             throw MeasureError.internalError
         }
-        try tuplet.replaceNote(at: tuplet.flatIndexes[tupletIndex], with: noteCollections)
+        try tuplet.replaceNote(at: tuplet.flatIndexes[tupletIndex], with: noteCollectionsWithClef)
         notes[setIndex][collectionIndex.noteIndex] = tuplet
     }
 
@@ -715,11 +845,53 @@ public struct Measure: ImmutableMeasure, Equatable, RandomAccessCollection {
     internal func noteCollectionIndex(fromNoteIndex index: Int, inSet setIndex: Int) throws -> NoteCollectionIndex {
         // Gets the index of the given element in the notes array by translating the index of the
         // single note within the NoteCollection array.
-        guard index >= 0 && notes[setIndex].count > 0 else { throw MeasureError.noteIndexOutOfRange }
-        // Expand notes and tuplets into indexes
-        guard index < noteCollectionIndexes[setIndex].count else { throw MeasureError.noteIndexOutOfRange }
-        return noteCollectionIndexes[setIndex][index]
+        guard let value = noteCollectionIndexes[safe: setIndex]?[safe: index] else {
+            throw MeasureError.noteIndexOutOfRange
+        }
+        return value
     }
+
+    /**
+     Checks to see if there is a clef change that occurs after the note at the given index.
+     After means it occurs at any tick amount greater than the note before the given index.
+
+     This method is used for the purposes of figuring out whether a clef change should be propagated
+     to following measures or not by `Staff`.
+
+     - parameter noteIndex: The index of the note to get the cumulative ticks. The clefs dictionary
+         will be checked against this value.
+     - parameter setIndex: The set index of the note.
+     - returns: True if there is a clef change occuring after the given note; false if there are no clef
+         changes after the given index.
+     */
+    internal func hasClefAfterNote(at noteIndex: Int, inSet setIndex: Int) -> Bool {
+        func checkClefs(at noteIndex: Int, inSet setIndex: Int) throws -> Bool {
+            let ticksForRequest = try cumulativeTicks(at: noteIndex, inSet: setIndex)
+            return clefs.contains { (key, value) in
+                return key > ticksForRequest
+            }
+        }
+        do {
+            return try checkClefs(at: noteIndex, inSet: setIndex)
+        } catch MeasureError.cannotCalculateTicksWithinCompoundTuplet {
+            var currentNoteIndex = noteIndex - 1
+            while currentNoteIndex >= 0 {
+                do {
+                    return try checkClefs(at: currentNoteIndex, inSet: setIndex)
+                } catch MeasureError.cannotCalculateTicksWithinCompoundTuplet {
+                    currentNoteIndex -= 1
+                    continue
+                } catch {
+                    return false
+                }
+            }
+        } catch {
+            return false
+        }
+        return false
+    }
+
+    // MARK: - Private Methods
 
     /**
      Calculates the note collection indexes stored in the measure.
@@ -755,6 +927,43 @@ public struct Measure: ImmutableMeasure, Equatable, RandomAccessCollection {
     private func tieState(for index: Int, inSet setIndex: Int) throws -> Tie? {
         return try note(at: index, inSet: setIndex).tie
     }
+
+    /**
+     Returns the number of ticks that exist in the measure up to, but not including
+     the given note index.
+     */
+    internal func cumulativeTicks(at noteIndex: Int, inSet setIndex: Int = 0) throws -> Int {
+        // Total # of ticks up to, but not including the given noteIndex
+        let index = try noteCollectionIndex(fromNoteIndex: noteIndex, inSet: setIndex)
+        return try cumulativeTicks(at: index, inSet: setIndex)
+    }
+
+    private func cumulativeTicks(at noteCollectionIndex: NoteCollectionIndex, inSet setIndex: Int = 0) throws -> Int {
+        // If tupletIndex is nil or < 1, we can just get a total of all before
+        let ticks: Int
+        if noteCollectionIndex.tupletIndex ?? 0 < 1 {
+            let noteCollections = notes[setIndex]
+            // Go up to index before
+            ticks = noteCollections[0..<noteCollectionIndex.noteIndex].reduce(0) { prev, currentCollection in
+                return prev + currentCollection.ticks
+            }
+        } else {
+            let noteCollections = notes[setIndex]
+            // Total up ticks before the last one
+            let lastCollectionIndex = Swift.max(noteCollectionIndex.noteIndex - 1, 0)
+            let ticksBeforeLast = noteCollections[0..<lastCollectionIndex].reduce(0) { prev, currentCollection in
+                return prev + currentCollection.ticks
+            }
+            guard let lastNoteCollection = noteCollections[noteCollectionIndex.noteIndex] as? Tuplet, let tupletIndex = noteCollectionIndex.tupletIndex else {
+                assertionFailure("note collection should be tuplet, but cast failed")
+                throw MeasureError.internalError
+            }
+            ticks = ticksBeforeLast + lastNoteCollection.notes[0..<tupletIndex].reduce(0) { prev, currentCollection in
+                return prev + currentCollection.ticks
+            }
+        }
+        return ticks
+    }
 }
 
 // Debug extensions
@@ -779,4 +988,6 @@ public enum MeasureError: Error {
     case removeNoteFromTuplet
     case removeTupletFromNote
     case tupletNotCompletelyCovered
+    case noClefSpecified
+    case cannotCalculateTicksWithinCompoundTuplet
 }

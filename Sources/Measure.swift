@@ -189,11 +189,7 @@ public struct Measure: ImmutableMeasure, Equatable, RandomAccessCollection {
         while !notes.isValidIndex(setIndex) {
             notes.append([])
         }
-        var noteCollectionWithClef = noteCollection
-        if let lastClef = lastClef {
-            noteCollectionWithClef.setClef(lastClef)
-        }
-        notes[setIndex].append(noteCollectionWithClef)
+        notes[setIndex].append(noteCollection)
     }
 
     /**
@@ -384,8 +380,7 @@ public struct Measure: ImmutableMeasure, Equatable, RandomAccessCollection {
         let ticks = try cumulativeTicks(at: noteIndex, inSet: setIndex)
         clefs[ticks] = clef
         // Set clef on the note
-        var note = try self.note(at: noteIndex, inSet: setIndex)
-        note.clef = clef
+        let note = try self.note(at: noteIndex, inSet: setIndex)
         let index = try noteCollectionIndex(fromNoteIndex: noteIndex, inSet: setIndex)
         try replaceNote(at: index, with: [note], inSet: setIndex)
     }
@@ -419,26 +414,16 @@ public struct Measure: ImmutableMeasure, Equatable, RandomAccessCollection {
         - `MeasureError.invalidTieState`
      */
     internal mutating func insert(_ noteCollection: NoteCollection, at index: Int, inSet setIndex: Int = 0, shouldIgnoreTieStates skipTieConfig: Bool) throws {
-        // Set clef to the last clef at the given note index
-        let newNoteCollection: NoteCollection
-        do {
-            let newClef = try clef(at: index, inSet: setIndex)
-            var noteCollectionWithClef = noteCollection
-            noteCollectionWithClef.setClef(newClef)
-            newNoteCollection = noteCollectionWithClef
-        } catch {
-            newNoteCollection = noteCollection
-        }
 
         if index == 0 && notes[setIndex].isEmpty {
-            append(newNoteCollection, inSet: setIndex)
+            append(noteCollection, inSet: setIndex)
             return
         }
 
         // If the index points to the end of the note collection, then
         // append entry.
         guard index != noteCount[setIndex] else {
-            append(newNoteCollection, inSet: setIndex)
+            append(noteCollection, inSet: setIndex)
             return
         }
 
@@ -452,7 +437,7 @@ public struct Measure: ImmutableMeasure, Equatable, RandomAccessCollection {
         if !skipTieConfig {
             try newMeasure.prepTiesForInsertion(at: index, inSet: setIndex)
         }
-        newMeasure.notes[setIndex].insert(newNoteCollection, at: collectionIndex.noteIndex)
+        newMeasure.notes[setIndex].insert(noteCollection, at: collectionIndex.noteIndex)
         self = newMeasure
     }
 
@@ -484,18 +469,10 @@ public struct Measure: ImmutableMeasure, Equatable, RandomAccessCollection {
         - `MeasureError.internalError`
      */
     internal mutating func replaceNote(at collectionIndex: NoteCollectionIndex, with noteCollections: [NoteCollection], inSet setIndex: Int) throws {
-        // Get the clef for this index
-        let noteCollectionsWithClef: [NoteCollection]
-        do {
-        let clefForNote = try clef(at: collectionIndex, inSet: setIndex)
-        noteCollectionsWithClef = noteCollections.map { $0.withClef(clefForNote) }
-        } catch {
-            noteCollectionsWithClef = noteCollections
-        }
 
         guard let tupletIndex = collectionIndex.tupletIndex else {
             notes[setIndex].remove(at: collectionIndex.noteIndex)
-            for noteCollection in noteCollectionsWithClef.reversed() {
+            for noteCollection in noteCollections.reversed() {
                 notes[setIndex].insert(noteCollection, at: collectionIndex.noteIndex)
             }
             return
@@ -505,7 +482,7 @@ public struct Measure: ImmutableMeasure, Equatable, RandomAccessCollection {
             assertionFailure("note collection should be tuplet, but cast failed")
             throw MeasureError.internalError
         }
-        try tuplet.replaceNote(at: tuplet.flatIndexes[tupletIndex], with: noteCollectionsWithClef)
+        try tuplet.replaceNote(at: tuplet.flatIndexes[tupletIndex], with: noteCollections)
         notes[setIndex][collectionIndex.noteIndex] = tuplet
     }
 

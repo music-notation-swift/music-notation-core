@@ -162,11 +162,6 @@ public struct Tuplet: NoteCollection {
         try replaceNotes(at: flatIndexesInRange, with: preservedTieStateCollections, firstNoteIndex: range.lowerBound)
     }
 
-    public mutating func setClef(_ clef: Clef) {
-        let newCollections = notes.map { $0.withClef(clef) }
-        notes = newCollections
-    }
-
     // MARK: - Private Methods
 
     private func isNote<T: NoteCollection>(at index: Int, sameDurationAs noteCollections: [T]) throws -> Bool {
@@ -324,10 +319,9 @@ public struct Tuplet: NoteCollection {
 
     // MARK: Mutating
 
-    internal mutating func replaceNote(at flatIndex: [Int], with newCollection: NoteCollection) throws {
-        let newCollectionsWithClef = try self.noteCollections([newCollection], withClefFromFlatIndexes: [flatIndex])
+    internal mutating func replaceNote(at flatIndex: [Int], with noteCollection: NoteCollection) throws {
         guard flatIndex.count != 1 else {
-            notes[flatIndex[0]] = newCollectionsWithClef[0]
+            notes[flatIndex[0]] = noteCollection
             return
         }
         guard var tuplet = notes[flatIndex[0]] as? Tuplet else {
@@ -335,15 +329,14 @@ public struct Tuplet: NoteCollection {
             throw TupletError.internalError
         }
         let slice = Array(flatIndex.dropFirst())
-        try tuplet.replaceNote(at: slice, with: newCollectionsWithClef[0])
+        try tuplet.replaceNote(at: slice, with: noteCollection)
         notes[flatIndex[0]] = tuplet
     }
 
     internal mutating func replaceNote(at flatIndex: [Int], with noteCollections: [NoteCollection]) throws {
         guard flatIndex.count != 1 else {
-            let newCollectionsWithClef = try self.noteCollections(noteCollections, withClefFromFlatIndexes: [flatIndex])
             notes.remove(at: flatIndex[0])
-            notes.insert(contentsOf: newCollectionsWithClef, at: flatIndex[0])
+            notes.insert(contentsOf: noteCollections, at: flatIndex[0])
             return
         }
         guard var tuplet = notes[flatIndex[0]] as? Tuplet else {
@@ -358,16 +351,15 @@ public struct Tuplet: NoteCollection {
     private mutating func replaceNotes(at flatIndexes: [[Int]], with noteCollections: [NoteCollection],
                                        firstNoteIndex: Int) throws {
         var toModify = self
-        let newCollectionsWithClef = try self.noteCollections(noteCollections, withClefFromFlatIndexes: flatIndexes)
 
         try toModify.removeNotes(at: flatIndexes)
         // Insert at the first index
         // Need to translate the index now that notes have been removed
         if toModify.flatIndexes.count > firstNoteIndex {
-            try toModify.insert(newCollectionsWithClef, at: toModify.flatIndexes[firstNoteIndex])
+            try toModify.insert(noteCollections, at: toModify.flatIndexes[firstNoteIndex])
         } else {
             // Just append
-            toModify.notes.append(contentsOf: newCollectionsWithClef)
+            toModify.notes.append(contentsOf: noteCollections)
         }
         guard toModify.validate() else {
             throw TupletError.replacementNotSameDuration
@@ -376,10 +368,8 @@ public struct Tuplet: NoteCollection {
     }
 
     private mutating func insert(_ noteCollections: [NoteCollection], at flatIndex: [Int]) throws {
-        // Set clef to first note in replacement if it has one
-        let newCollectionsWithClef = try self.noteCollections(noteCollections, withClefFromFlatIndexes: [flatIndex])
         guard flatIndex.count != 1 else {
-            notes.insert(contentsOf: newCollectionsWithClef, at: flatIndex[0])
+            notes.insert(contentsOf: noteCollections, at: flatIndex[0])
             return
         }
         // recurse to get to actual tuplet
@@ -388,7 +378,7 @@ public struct Tuplet: NoteCollection {
             assertionFailure("all indexes before the last should be tuplets. Must be an error in flatIndexes")
             throw TupletError.internalError
         }
-        try tuplet.insert(newCollectionsWithClef, at: sliced)
+        try tuplet.insert(noteCollections, at: sliced)
         notes[flatIndex[0]] = tuplet
     }
 
@@ -469,17 +459,6 @@ public struct Tuplet: NoteCollection {
             notes.remove(at: index - alreadyRemoved)
             alreadyRemoved += 1
         }
-    }
-
-    private func noteCollections(_ noteCollections: [NoteCollection],
-                                 withClefFromFlatIndexes flatIndexes: [[Int]]) throws -> [NoteCollection] {
-        // Set clef to first note in replacement if it has one
-        var newCollectionsWithClef = noteCollections
-        let firstNote = try notes[flatIndexes[0][0]].note(at: 0)
-        if let clef = firstNote.clef {
-            newCollectionsWithClef = newCollectionsWithClef.map { $0.withClef(clef) }
-        }
-        return newCollectionsWithClef
     }
 
     internal mutating func recomputeFlatIndexes(parentIndexes: [Int] = [Int]()) -> [[Int]] {

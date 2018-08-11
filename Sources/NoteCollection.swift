@@ -35,19 +35,12 @@ public protocol NoteCollection {
 
     /// - returns: The note at the given index.
     func note(at index: Int) throws -> Note
-    mutating func setClef(_ clef: Clef)
-    func withClef(_ clef: Clef) -> NoteCollection
 }
 
 extension NoteCollection {
 
     public var ticks: Int { return noteTimingCount * noteDuration.ticks }
 
-    public func withClef(_ clef: Clef) -> NoteCollection {
-        var noteCollection = self
-        noteCollection.setClef(clef)
-        return noteCollection
-    }
 }
 
 public func ==(lhs: NoteCollection, rhs: NoteCollection) -> Bool {

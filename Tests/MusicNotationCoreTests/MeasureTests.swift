@@ -1049,45 +1049,47 @@ class MeasureTests: XCTestCase {
     // MARK: False
 
     func testHasClefAfterNoteInvalidIndex() {
-        // TODO: Write the test
+        measure.append(Note(noteDuration: .quarter))
+        measure.append(Note(noteDuration: .quarter))
+        XCTAssertFalse(measure.hasClefAfterNote(at: 3, inSet: 0))
     }
 
     func testHasClefAfterNoteNoClefsFirstIndex() {
-        // TODO: Write the test
+        XCTFail() // TODO: Write the test
     }
 
     func testHasClefAfterNoteNoClefsMiddleIndex() {
-        // TODO: Write the test
+        XCTFail() // TODO: Write the test
     }
 
     func testHasClefAfterNoteMiddleOfTuplet() {
-        // TODO: Write the test
+        XCTFail() // TODO: Write the test
     }
 
     func testHasClefAfterNoteMiddleOfCompoundTuplet() {
-        // TODO: Write the test
+        XCTFail() // TODO: Write the test
     }
 
     func testHasClefAfterNoteNoteOfClefChange() {
-        // TODO: Write the test
+        XCTFail() // TODO: Write the test
     }
 
     func testHasClefAfterNoteNoteAfterClefChange() {
-        // TODO: Write the test
+        XCTFail() // TODO: Write the test
     }
 
     // MARK: True
 
     func testHasClefAfterNoteOneClefNoteBefore() {
-        // TODO: Write the test
+        XCTFail() // TODO: Write the test
     }
 
     func testHasClefAfterNoteMultipleClefsNoteBefore() {
-        // TODO: Write the test
+        XCTFail() // TODO: Write the test
     }
 
     func testHasClefAfterNoteMultipleClefsNoteInMiddle() {
-        // TODO: Write the test
+        XCTFail() // TODO: Write the test
     }
 
     // MARK: - cumulativeTicks(at:inSet:) throws -> Int

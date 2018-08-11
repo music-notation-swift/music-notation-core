@@ -1217,7 +1217,7 @@ class MeasureTests: XCTestCase {
     }
 
     func testCumulativeTicksAtBeginningOfCompoundTuplet() {
-        // TODO: Write the test
+        XCTFail() // TODO: Write the test
     }
 
     // MARK: - clef(at:inSet:)
@@ -1520,27 +1520,27 @@ class MeasureTests: XCTestCase {
     }
 
     func testChangeClefAtBeginningAlreadyThere() {
-        // TODO: Write the test
+        XCTFail() // TODO: Write the test
     }
 
     func testChangeClefInMiddleNoOthers() {
-        // TODO: Write the test
+        XCTFail() // TODO: Write the test
     }
 
     func testChangeClefInMiddleHasBeginning() {
-        // TODO: Write the test
+        XCTFail() // TODO: Write the test
     }
 
     func testChangeClefInMiddleHasEnd() {
-        // TODO: Write the test
+        XCTFail() // TODO: Write the test
     }
 
     func testChangeClefInMiddleHasBeginningAndEnd() {
-        // TODO: Write the test
+        XCTFail() // TODO: Write the test
     }
 
     func testChangeClefWithinTuplet() {
-        // TODO: Write the test
+        XCTFail() // TODO: Write the test
     }
 
     // MARK: - changeFirstClefIfNeeded(to:) -> Bool

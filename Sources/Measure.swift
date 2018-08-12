@@ -924,16 +924,15 @@ public struct Measure: ImmutableMeasure, Equatable, RandomAccessCollection {
             let noteCollections = notes[setIndex]
             // Total up ticks before the last one
             let lastCollectionIndex = Swift.max(noteCollectionIndex.noteIndex - 1, 0)
-            let ticksBeforeLast = noteCollections[0..<lastCollectionIndex].reduce(0) { prev, currentCollection in
+            let ticksBeforeLast = noteCollections[0...lastCollectionIndex].reduce(0) { prev, currentCollection in
                 return prev + currentCollection.ticks
             }
             guard let lastNoteCollection = noteCollections[noteCollectionIndex.noteIndex] as? Tuplet, let tupletIndex = noteCollectionIndex.tupletIndex else {
                 assertionFailure("note collection should be tuplet, but cast failed")
                 throw MeasureError.internalError
             }
-            ticks = ticksBeforeLast + lastNoteCollection.notes[0..<tupletIndex].reduce(0) { prev, currentCollection in
-                return prev + currentCollection.ticks
-            }
+            let tupletTicks = lastNoteCollection.ticks / lastNoteCollection.groupingOrder * tupletIndex
+            ticks = ticksBeforeLast + tupletTicks
         }
         return ticks
     }

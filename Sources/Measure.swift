@@ -379,10 +379,6 @@ public struct Measure: ImmutableMeasure, Equatable, RandomAccessCollection {
     internal mutating func changeClef(_ clef: Clef, at noteIndex: Int, inSet setIndex: Int = 0) throws {
         let ticks = try cumulativeTicks(at: noteIndex, inSet: setIndex)
         clefs[ticks] = clef
-        // Set clef on the note
-        let note = try self.note(at: noteIndex, inSet: setIndex)
-        let index = try noteCollectionIndex(fromNoteIndex: noteIndex, inSet: setIndex)
-        try replaceNote(at: index, with: [note], inSet: setIndex)
     }
 
     /**

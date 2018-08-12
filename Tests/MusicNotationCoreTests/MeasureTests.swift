@@ -1580,27 +1580,107 @@ class MeasureTests: XCTestCase {
     }
 
     func testChangeClefAtBeginningAlreadyThere() {
+        // What do you mean by "AlreadyThere"? Are we applying a clef change in a measure and the new clef is the same as the original clef? I think we should allow clef changes even if they are to the same current clef. In a notation app if you want to change the clef for a portion you could hypotetically change the clef at the end of the desired section, then change the clef at the beginning of the section so that the reflow applies only to the desired section.
+        
         XCTFail() // TODO: Write the test
     }
 
     func testChangeClefInMiddleNoOthers() {
-        XCTFail() // TODO: Write the test
+        let eighth = Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1))
+        let quarter = Note(noteDuration: .sixteenth, tone: Tone(noteLetter: .c, octave: .octave1))
+        var measure = Measure(timeSignature: timeSignature, notes: [
+            [
+                quarter, quarter, quarter, quarter
+            ],
+            [
+                eighth, eighth, eighth, eighth, eighth, eighth, eighth, eighth
+            ]
+            ])
+        assertNoErrorThrown {
+            try measure.changeClef(.bass, at: 3, inSet: 1)
+            XCTAssertEqual(measure.clefs, [3072: .bass])
+            XCTAssertEqual(measure.lastClef, .bass)
+            XCTAssertEqual(measure.originalClef, nil)
+        }
     }
 
     func testChangeClefInMiddleHasBeginning() {
-        XCTFail() // TODO: Write the test
+        let eighth = Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1))
+        let quarter = Note(noteDuration: .sixteenth, tone: Tone(noteLetter: .c, octave: .octave1))
+        var measure = Measure(timeSignature: timeSignature, notes: [
+            [
+                quarter, quarter, quarter, quarter
+            ],
+            [
+                eighth, eighth, eighth, eighth, eighth, eighth, eighth, eighth
+            ]
+            ])
+        assertNoErrorThrown {
+            try measure.changeClef(.treble, at: 0, inSet: 1)
+            try measure.changeClef(.bass, at: 3, inSet: 1)
+            XCTAssertEqual(measure.clefs, [0: .treble, 3072: .bass])
+            XCTAssertEqual(measure.lastClef, .bass)
+            XCTAssertEqual(measure.originalClef, nil)
+        }
     }
 
     func testChangeClefInMiddleHasEnd() {
-        XCTFail() // TODO: Write the test
+        let eighth = Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1))
+        let quarter = Note(noteDuration: .sixteenth, tone: Tone(noteLetter: .c, octave: .octave1))
+        var measure = Measure(timeSignature: timeSignature, notes: [
+            [
+                quarter, quarter, quarter, quarter
+            ],
+            [
+                eighth, eighth, eighth, eighth, eighth, eighth, eighth, eighth
+            ]
+            ])
+        print(measure.debugDescription)
+        assertNoErrorThrown {
+            try measure.changeClef(.bass, at: 3, inSet: 1)
+            try measure.changeClef(.treble, at: 7, inSet: 1)
+            XCTAssertEqual(measure.clefs, [3072: .bass, 7168: .treble])
+            XCTAssertEqual(measure.lastClef, .treble)
+            XCTAssertEqual(measure.originalClef, nil)
+        }
     }
 
     func testChangeClefInMiddleHasBeginningAndEnd() {
-        XCTFail() // TODO: Write the test
+        let eighth = Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1))
+        let quarter = Note(noteDuration: .sixteenth, tone: Tone(noteLetter: .c, octave: .octave1))
+        var measure = Measure(timeSignature: timeSignature, notes: [
+            [
+                quarter, quarter, quarter, quarter
+            ],
+            [
+                eighth, eighth, eighth, eighth, eighth, eighth, eighth, eighth
+            ]
+            ])
+        assertNoErrorThrown {
+            try measure.changeClef(.treble, at: 0, inSet: 1)
+            try measure.changeClef(.bass, at: 3, inSet: 1)
+            try measure.changeClef(.treble, at: 7, inSet: 1)
+            XCTAssertEqual(measure.clefs, [0: .treble, 3072: .bass, 7168: .treble])
+            XCTAssertEqual(measure.lastClef, .treble)
+            XCTAssertEqual(measure.originalClef, nil)
+        }
     }
 
     func testChangeClefWithinTuplet() {
-        XCTFail() // TODO: Write the test
+        let quarter = Note(noteDuration: .quarter)
+        let eighth = Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1))
+        assertNoErrorThrown {
+            let tuplet = try Tuplet(3, .eighth, notes: [eighth, eighth, eighth])
+            measure.append(quarter)
+            measure.append(quarter)
+            measure.append(tuplet)
+            measure.append(eighth)
+            measure.append(eighth)
+            try measure.changeClef(.bass, at: 5, inSet: 0)
+            XCTAssertEqual(measure.clefs, [6144: .bass])
+            XCTAssertEqual(measure.lastClef, .bass)
+            XCTAssertEqual(measure.originalClef, nil)
+      }
     }
 
     // MARK: - changeFirstClefIfNeeded(to:) -> Bool

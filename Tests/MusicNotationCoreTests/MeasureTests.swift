@@ -1179,6 +1179,7 @@ class MeasureTests: XCTestCase {
             measure.append(compoundTuplet)
         }
         print(measure.debugDescription)
+        // FIXME: there is no implementation of throw MeasureError.cannotCalculateTicksWithinCompoundTuplet in cumulativeTicks
         assertThrowsError(MeasureError.cannotCalculateTicksWithinCompoundTuplet) {
             _ = try measure.cumulativeTicks(at: 4)
         }
@@ -1243,7 +1244,6 @@ class MeasureTests: XCTestCase {
             measure.append(tuplet)
             measure.append(eighth)
             measure.append(eighth)
-            print(measure.debugDescription)
             let eachTupletNoteTicks = tuplet.ticks / tuplet.groupingOrder
             let quarterTicks = NoteDuration.quarter.ticks
             let eighthTicks = NoteDuration.eighth.ticks
@@ -1278,7 +1278,31 @@ class MeasureTests: XCTestCase {
     }
 
     func testCumulativeTicksAtBeginningOfCompoundTuplet() {
-        XCTFail() // TODO: Write the test
+        let note = Note(noteDuration: .eighth)
+        measure.append(note)
+        assertNoErrorThrown {
+            let triplet = try Tuplet(3, .eighth, notes: [note, note, note])
+            let compoundTuplet = try Tuplet(5, .eighth, notes: [note, note, triplet, note])
+            measure.append(compoundTuplet)
+            print(measure.debugDescription) // |4/4: [1/8R, 6[1/8R, 1/8R, 3[1/8R, 1/8R, 1/8R], 1/8R]]|
+            let eighthTicks = NoteDuration.eighth.ticks
+            let eachTripletTicks = triplet.ticks / triplet.groupingOrder
+            let eachCompoundTicks = compoundTuplet.ticks / compoundTuplet.groupingOrder
+            var currentTicks = eighthTicks
+            XCTAssertEqual(try measure.cumulativeTicks(at: 1, inSet: 0), currentTicks)
+            currentTicks += eachTripletTicks
+            XCTAssertEqual(try measure.cumulativeTicks(at: 2, inSet: 0), currentTicks)
+            currentTicks += eachTripletTicks
+            XCTAssertEqual(try measure.cumulativeTicks(at: 3, inSet: 0), currentTicks)
+            currentTicks += eachCompoundTicks
+            XCTAssertEqual(try measure.cumulativeTicks(at: 4, inSet: 0), currentTicks)
+            currentTicks += eachCompoundTicks
+            // FIXME: Not paying attention to decimals
+            XCTAssertEqual(try measure.cumulativeTicks(at: 5, inSet: 0), currentTicks)
+            currentTicks += eachCompoundTicks
+            XCTAssertEqual(try measure.cumulativeTicks(at: 6, inSet: 0), currentTicks)
+
+        }
     }
 
     // MARK: - clef(at:inSet:)

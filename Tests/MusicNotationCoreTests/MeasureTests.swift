@@ -1055,41 +1055,100 @@ class MeasureTests: XCTestCase {
     }
 
     func testHasClefAfterNoteNoClefsFirstIndex() {
-        XCTFail() // TODO: Write the test
+        measure.append(Note(noteDuration: .quarter))
+        measure.append(Note(noteDuration: .quarter))
+        XCTAssertFalse(measure.hasClefAfterNote(at: 1, inSet: 0))
     }
 
     func testHasClefAfterNoteNoClefsMiddleIndex() {
-        XCTFail() // TODO: Write the test
+        measure.append(Note(noteDuration: .quarter))
+        measure.append(Note(noteDuration: .quarter))
+        assertNoErrorThrown {
+            try measure.changeClef(Clef.treble, at: 0, inSet: 0)
+        }
+        XCTAssertFalse(measure.hasClefAfterNote(at: 1, inSet: 0))
     }
 
     func testHasClefAfterNoteMiddleOfTuplet() {
-        XCTFail() // TODO: Write the test
+        let quarter = Note(noteDuration: .quarter)
+        let eighth = Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1))
+        assertNoErrorThrown {
+            let tuplet = try Tuplet(3, .eighth, notes: [eighth, eighth, eighth])
+            measure.append(quarter)
+            measure.append(quarter)
+            measure.append(tuplet)
+            measure.append(eighth)
+            measure.append(eighth)
+            try measure.changeClef(Clef.treble, at: 3, inSet: 0)
+        }
+        XCTAssertFalse(measure.hasClefAfterNote(at: 3, inSet: 0))
     }
 
     func testHasClefAfterNoteMiddleOfCompoundTuplet() {
-        XCTFail() // TODO: Write the test
+        let note = Note(noteDuration: .eighth)
+        measure.append(note)
+        assertNoErrorThrown {
+            let triplet = try Tuplet(3, .eighth, notes: [note, note, note])
+            let compoundTuplet = try Tuplet(5, .eighth, notes: [note, note, triplet, note])
+            measure.append(compoundTuplet)
+            try measure.changeClef(Clef.treble, at: 3, inSet: 0)
+        }
+        XCTAssertFalse(measure.hasClefAfterNote(at: 4, inSet: 0))
     }
 
     func testHasClefAfterNoteNoteOfClefChange() {
-        XCTFail() // TODO: Write the test
+        measure.append(Note(noteDuration: .quarter))
+        measure.append(Note(noteDuration: .quarter))
+        assertNoErrorThrown {
+            try measure.changeClef(Clef.treble, at: 1, inSet: 0)
+        }
+        XCTAssertFalse(measure.hasClefAfterNote(at: 1, inSet: 0))
     }
 
     func testHasClefAfterNoteNoteAfterClefChange() {
-        XCTFail() // TODO: Write the test
+        measure.append(Note(noteDuration: .quarter))
+        measure.append(Note(noteDuration: .quarter))
+        measure.append(Note(noteDuration: .quarter))
+        assertNoErrorThrown {
+            try measure.changeClef(Clef.treble, at: 1, inSet: 0)
+        }
+        XCTAssertFalse(measure.hasClefAfterNote(at: 2, inSet: 0))
     }
 
     // MARK: True
 
     func testHasClefAfterNoteOneClefNoteBefore() {
-        XCTFail() // TODO: Write the test
+        measure.append(Note(noteDuration: .quarter))
+        measure.append(Note(noteDuration: .quarter))
+        measure.append(Note(noteDuration: .quarter))
+        assertNoErrorThrown {
+            try measure.changeClef(Clef.treble, at: 2, inSet: 0)
+        }
+        XCTAssertTrue(measure.hasClefAfterNote(at: 1, inSet: 0))
     }
 
     func testHasClefAfterNoteMultipleClefsNoteBefore() {
-        XCTFail() // TODO: Write the test
+        measure.append(Note(noteDuration: .quarter))
+        measure.append(Note(noteDuration: .quarter))
+        measure.append(Note(noteDuration: .quarter))
+        measure.append(Note(noteDuration: .quarter))
+        assertNoErrorThrown {
+            try measure.changeClef(Clef.treble, at: 2, inSet: 0)
+            try measure.changeClef(Clef.treble, at: 3, inSet: 0)
+        }
+        XCTAssertTrue(measure.hasClefAfterNote(at: 1, inSet: 0))
     }
 
     func testHasClefAfterNoteMultipleClefsNoteInMiddle() {
-        XCTFail() // TODO: Write the test
+        measure.append(Note(noteDuration: .quarter))
+        measure.append(Note(noteDuration: .quarter))
+        measure.append(Note(noteDuration: .quarter))
+        measure.append(Note(noteDuration: .quarter))
+        assertNoErrorThrown {
+            try measure.changeClef(Clef.treble, at: 1, inSet: 0)
+            try measure.changeClef(Clef.treble, at: 3, inSet: 0)
+        }
+        XCTAssertTrue(measure.hasClefAfterNote(at: 2, inSet: 0))
     }
 
     // MARK: - cumulativeTicks(at:inSet:) throws -> Int
@@ -1119,6 +1178,7 @@ class MeasureTests: XCTestCase {
             let compoundTuplet = try Tuplet(5, .eighth, notes: [note, note, triplet, note])
             measure.append(compoundTuplet)
         }
+        print(measure.debugDescription)
         assertThrowsError(MeasureError.cannotCalculateTicksWithinCompoundTuplet) {
             _ = try measure.cumulativeTicks(at: 4)
         }

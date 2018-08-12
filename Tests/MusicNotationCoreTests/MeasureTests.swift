@@ -1664,6 +1664,7 @@ class MeasureTests: XCTestCase {
             XCTAssertEqual(measure.lastClef, .treble)
             XCTAssertEqual(measure.originalClef, nil)
         }
+        print(measure.debugDescription)
     }
 
     func testChangeClefWithinTuplet() {

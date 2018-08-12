@@ -943,7 +943,7 @@ public struct Measure: ImmutableMeasure, Equatable, RandomAccessCollection {
 extension Measure: CustomDebugStringConvertible {
     public var debugDescription: String {
         let notesString = notes.map { "\($0)" }.joined(separator: ",")
-        return "|\(timeSignature): \(notesString)|"
+        return "|\(timeSignature): \(notesString)|\((clefs.count > 0 ? " \(clefs)" : ""))"
     }
 }
 

@@ -38,7 +38,6 @@ public struct Tuplet: NoteCollection {
     /// A 2-dimensional array that can be used to index into every note in the tuplet within compound tuplets as well.
     internal var flatIndexes: [[Int]] = [[Int]]()
 
-
     /**
      This maps the standard number of notes in the tuplet (`groupingOrder`), to the number of notes the tuplet should fit
      in the space of (`noteTimingCount`).
@@ -97,8 +96,7 @@ public struct Tuplet: NoteCollection {
         flatIndexes = recomputeFlatIndexes()
     }
 
-    // MARK: - Methods
-    // MARK: Public
+    // MARK: - Public Methods
 
     public func note(at index: Int) throws -> Note {
         guard flatIndexes.isValidIndex(index) else {
@@ -131,8 +129,10 @@ public struct Tuplet: NoteCollection {
         return try note(from: fullIndexes)
     }
 
+    // MARK: Mutating
+
     public mutating func replaceNote<T: NoteCollection>(at index: Int, with noteCollection: T) throws {
-        guard try note(at: index, sameDurationAs: [noteCollection]) else {
+        guard try isNote(at: index, sameDurationAs: [noteCollection]) else {
             throw TupletError.replacementNotSameDuration
         }
         let flatIndex = flatIndexes[index]
@@ -141,7 +141,7 @@ public struct Tuplet: NoteCollection {
     }
 
     public mutating func replaceNote<T: NoteCollection>(at index: Int, with noteCollections: [T]) throws {
-        guard try note(at: index, sameDurationAs: noteCollections) else {
+        guard try isNote(at: index, sameDurationAs: noteCollections) else {
             throw TupletError.replacementNotSameDuration
         }
         let flatIndex = flatIndexes[index]
@@ -162,9 +162,9 @@ public struct Tuplet: NoteCollection {
         try replaceNotes(at: flatIndexesInRange, with: preservedTieStateCollections, firstNoteIndex: range.lowerBound)
     }
 
-    // MARK: Private
+    // MARK: - Private Methods
 
-    private func note<T: NoteCollection>(at index: Int, sameDurationAs noteCollections: [T]) throws -> Bool {
+    private func isNote<T: NoteCollection>(at index: Int, sameDurationAs noteCollections: [T]) throws -> Bool {
         let replacingTicks = noteCollections.reduce(0) { prev, currentCollection in
             return prev + currentCollection.ticks
         }
@@ -296,9 +296,32 @@ public struct Tuplet: NoteCollection {
         return modifiedCollections
     }
 
-    internal mutating func replaceNote(at flatIndex: [Int], with newCollection: NoteCollection) throws {
+    private func validate() -> Bool {
+        var isValid = true
+        var notesTicks = 0
+        let fullTupletTicks = groupingOrder * noteDuration.ticks
+        for noteCollection in notes {
+            if let tuplet = noteCollection as? Tuplet {
+                if !isValid {
+                    break
+                }
+                isValid = tuplet.validate()
+            }
+            notesTicks += noteCollection.ticks
+        }
+        if !isValid {
+            return isValid
+        } else if fullTupletTicks != notesTicks {
+            return false
+        }
+        return true
+    }
+
+    // MARK: Mutating
+
+    internal mutating func replaceNote(at flatIndex: [Int], with noteCollection: NoteCollection) throws {
         guard flatIndex.count != 1 else {
-            notes[flatIndex[0]] = newCollection
+            notes[flatIndex[0]] = noteCollection
             return
         }
         guard var tuplet = notes[flatIndex[0]] as? Tuplet else {
@@ -306,7 +329,7 @@ public struct Tuplet: NoteCollection {
             throw TupletError.internalError
         }
         let slice = Array(flatIndex.dropFirst())
-        try tuplet.replaceNote(at: slice, with: newCollection)
+        try tuplet.replaceNote(at: slice, with: noteCollection)
         notes[flatIndex[0]] = tuplet
     }
 
@@ -328,6 +351,7 @@ public struct Tuplet: NoteCollection {
     private mutating func replaceNotes(at flatIndexes: [[Int]], with noteCollections: [NoteCollection],
                                        firstNoteIndex: Int) throws {
         var toModify = self
+
         try toModify.removeNotes(at: flatIndexes)
         // Insert at the first index
         // Need to translate the index now that notes have been removed
@@ -437,27 +461,6 @@ public struct Tuplet: NoteCollection {
         }
     }
 
-    private func validate() -> Bool {
-        var isValid = true
-        var notesTicks = 0
-        let fullTupletTicks = groupingOrder * noteDuration.ticks
-        for noteCollection in notes {
-            if let tuplet = noteCollection as? Tuplet {
-                if !isValid {
-                    break
-                }
-                isValid = tuplet.validate()
-            }
-            notesTicks += noteCollection.ticks
-        }
-        if !isValid {
-            return isValid
-        } else if fullTupletTicks != notesTicks {
-            return false
-        }
-        return true
-    }
-    
     internal mutating func recomputeFlatIndexes(parentIndexes: [Int] = [Int]()) -> [[Int]] {
         flatIndexes = [[Int]]()
         for (index, noteCollection) in notes.enumerated() {

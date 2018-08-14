@@ -570,9 +570,9 @@ class MeasureTests: XCTestCase {
     }
     
     func testCreateTupletNoteInvalidNoteRange() {
-        measure.append(Note(noteDuration: .quarter, tone: Tone(noteLetter: .a, octave: .octave1)))
-        measure.append(Note(noteDuration: .quarter, tone: Tone(noteLetter: .b, octave: .octave1)))
-        measure.append(Note(noteDuration: .quarter, tone: Tone(noteLetter: .c, octave: .octave1)))
+        measure.append(Note(noteDuration: .quarter, pitch: Pitch(noteLetter: .a, octave: .octave1)))
+        measure.append(Note(noteDuration: .quarter, pitch: Pitch(noteLetter: .b, octave: .octave1)))
+        measure.append(Note(noteDuration: .quarter, pitch: Pitch(noteLetter: .c, octave: .octave1)))
         assertThrowsError(MeasureError.invalidNoteRange)  {
             // FIXME: Find a way to reach the MeasureError.invalidNoteRange code path
             try measure.createTuplet(3, .quarter, fromNotesInRange: 0...3)
@@ -1081,7 +1081,7 @@ class MeasureTests: XCTestCase {
 
     func testHasClefAfterNoteMiddleOfTuplet() {
         let quarter = Note(noteDuration: .quarter)
-        let eighth = Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1))
+        let eighth = Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1))
         assertNoErrorThrown {
             let tuplet = try Tuplet(3, .eighth, notes: [eighth, eighth, eighth])
             measure.append(quarter)
@@ -1246,7 +1246,7 @@ class MeasureTests: XCTestCase {
 
     func testCumulativeTicksBeginningOfTuplet() {
         let quarter = Note(noteDuration: .quarter)
-        let eighth = Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1))
+        let eighth = Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1))
         assertNoErrorThrown {
             let tuplet = try Tuplet(3, .eighth, notes: [eighth, eighth, eighth])
             measure.append(quarter)
@@ -1319,7 +1319,7 @@ class MeasureTests: XCTestCase {
     // MARK: Successes
 
     func test1ClefAtBeginningNoOriginal() {
-        let note = Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1))
+        let note = Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1))
         var testMeasure = Measure(timeSignature: timeSignature, notes: [
             [
                 note, note, note, note
@@ -1336,7 +1336,7 @@ class MeasureTests: XCTestCase {
     }
 
     func test1ClefAtBeginningWithOriginal() {
-        let note = Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1))
+        let note = Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1))
         var testMeasure = Measure(timeSignature: timeSignature, notes: [
             [
                 note, note, note, note
@@ -1355,7 +1355,7 @@ class MeasureTests: XCTestCase {
     }
 
     func test1ClefAtBeginningAnd1Other() {
-        let note = Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1))
+        let note = Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1))
         var testMeasure = Measure(timeSignature: timeSignature, notes: [
             [
                 note, note, note, note
@@ -1376,7 +1376,7 @@ class MeasureTests: XCTestCase {
     }
 
     func test1ClefAtEndWithOriginal() {
-        let note = Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1))
+        let note = Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1))
         var testMeasure = Measure(timeSignature: timeSignature, notes: [
             [
                 note, note, note, note
@@ -1397,8 +1397,8 @@ class MeasureTests: XCTestCase {
     }
 
     func test2ClefsInDifferentSetsWithOriginal() {
-        let eighth = Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1))
-        let sixteenth = Note(noteDuration: .sixteenth, tone: Tone(noteLetter: .c, octave: .octave1))
+        let eighth = Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1))
+        let sixteenth = Note(noteDuration: .sixteenth, pitch: Pitch(noteLetter: .c, octave: .octave1))
 
         var testMeasure = Measure(timeSignature: timeSignature, notes: [
             [
@@ -1437,8 +1437,8 @@ class MeasureTests: XCTestCase {
     }
 
     func test2ClefsInDifferentSetsNoOriginal() {
-        let eighth = Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1))
-        let sixteenth = Note(noteDuration: .sixteenth, tone: Tone(noteLetter: .c, octave: .octave1))
+        let eighth = Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1))
+        let sixteenth = Note(noteDuration: .sixteenth, pitch: Pitch(noteLetter: .c, octave: .octave1))
 
         var testMeasure = Measure(timeSignature: timeSignature, notes: [
             [
@@ -1481,7 +1481,7 @@ class MeasureTests: XCTestCase {
     // MARK: Failures
 
     func testNoClefsNoOriginal() {
-        let note = Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1))
+        let note = Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1))
         let testMeasure = Measure(timeSignature: timeSignature, notes: [
             [
                 note, note, note, note
@@ -1495,7 +1495,7 @@ class MeasureTests: XCTestCase {
     }
 
     func test1ClefNotAtBeginningNoOriginal() {
-        let note = Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1))
+        let note = Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1))
         var testMeasure = Measure(timeSignature: timeSignature, notes: [
             [
                 note, note, note, note
@@ -1518,7 +1518,7 @@ class MeasureTests: XCTestCase {
     }
 
     func testClefsInvalidNoteIndex() {
-        let note = Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1))
+        let note = Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1))
         let testMeasure = Measure(timeSignature: timeSignature, notes: [
             [
                 note, note, note, note
@@ -1530,7 +1530,7 @@ class MeasureTests: XCTestCase {
     }
 
     func testClefsInvalidSetIndex() {
-        let note = Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1))
+        let note = Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1))
         let testMeasure = Measure(timeSignature: timeSignature, notes: [
             [
                 note, note, note, note
@@ -1545,7 +1545,7 @@ class MeasureTests: XCTestCase {
     // MARK: Failures
 
     func testChangeClefInvalidNoteIndex() {
-        let note = Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1))
+        let note = Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1))
         var measure = Measure(timeSignature: timeSignature, notes: [
             [
                 note, note, note, note
@@ -1560,7 +1560,7 @@ class MeasureTests: XCTestCase {
     }
 
     func testChangeClefInvalidSetIndex() {
-        let note = Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1))
+        let note = Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1))
         var measure = Measure(timeSignature: timeSignature, notes: [
             [
                 note, note, note, note
@@ -1577,8 +1577,8 @@ class MeasureTests: XCTestCase {
     // MARK: Successes
 
     func testChangeClefAtBeginningNoOthers() {
-        let eighth = Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1))
-        let quarter = Note(noteDuration: .sixteenth, tone: Tone(noteLetter: .c, octave: .octave1))
+        let eighth = Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1))
+        let quarter = Note(noteDuration: .sixteenth, pitch: Pitch(noteLetter: .c, octave: .octave1))
         var measure = Measure(timeSignature: timeSignature, notes: [
             [
                 quarter, quarter, quarter, quarter
@@ -1596,8 +1596,8 @@ class MeasureTests: XCTestCase {
     }
 
     func testChangeClefAtBeginningNoOthersSecondSet() {
-        let eighth = Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1))
-        let quarter = Note(noteDuration: .sixteenth, tone: Tone(noteLetter: .c, octave: .octave1))
+        let eighth = Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1))
+        let quarter = Note(noteDuration: .sixteenth, pitch: Pitch(noteLetter: .c, octave: .octave1))
         var measure = Measure(timeSignature: timeSignature, notes: [
             [
                 quarter, quarter, quarter, quarter
@@ -1615,8 +1615,8 @@ class MeasureTests: XCTestCase {
     }
 
     func testChangeClefAtBeginningAlreadyThere() {
-        let eighth = Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1))
-        let quarter = Note(noteDuration: .sixteenth, tone: Tone(noteLetter: .c, octave: .octave1))
+        let eighth = Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1))
+        let quarter = Note(noteDuration: .sixteenth, pitch: Pitch(noteLetter: .c, octave: .octave1))
         var measure = Measure(timeSignature: timeSignature, notes: [
             [
                 quarter, quarter, quarter, quarter
@@ -1635,8 +1635,8 @@ class MeasureTests: XCTestCase {
     }
 
     func testChangeClefInMiddleNoOthers() {
-        let eighth = Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1))
-        let quarter = Note(noteDuration: .sixteenth, tone: Tone(noteLetter: .c, octave: .octave1))
+        let eighth = Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1))
+        let quarter = Note(noteDuration: .sixteenth, pitch: Pitch(noteLetter: .c, octave: .octave1))
         var measure = Measure(timeSignature: timeSignature, notes: [
             [
                 quarter, quarter, quarter, quarter
@@ -1654,8 +1654,8 @@ class MeasureTests: XCTestCase {
     }
 
     func testChangeClefInMiddleHasBeginning() {
-        let eighth = Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1))
-        let quarter = Note(noteDuration: .sixteenth, tone: Tone(noteLetter: .c, octave: .octave1))
+        let eighth = Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1))
+        let quarter = Note(noteDuration: .sixteenth, pitch: Pitch(noteLetter: .c, octave: .octave1))
         var measure = Measure(timeSignature: timeSignature, notes: [
             [
                 quarter, quarter, quarter, quarter
@@ -1674,8 +1674,8 @@ class MeasureTests: XCTestCase {
     }
 
     func testChangeClefInMiddleHasEnd() {
-        let eighth = Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1))
-        let quarter = Note(noteDuration: .sixteenth, tone: Tone(noteLetter: .c, octave: .octave1))
+        let eighth = Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1))
+        let quarter = Note(noteDuration: .sixteenth, pitch: Pitch(noteLetter: .c, octave: .octave1))
         var measure = Measure(timeSignature: timeSignature, notes: [
             [
                 quarter, quarter, quarter, quarter
@@ -1695,8 +1695,8 @@ class MeasureTests: XCTestCase {
     }
 
     func testChangeClefInMiddleHasBeginningAndEnd() {
-        let eighth = Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1))
-        let quarter = Note(noteDuration: .sixteenth, tone: Tone(noteLetter: .c, octave: .octave1))
+        let eighth = Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1))
+        let quarter = Note(noteDuration: .sixteenth, pitch: Pitch(noteLetter: .c, octave: .octave1))
         var measure = Measure(timeSignature: timeSignature, notes: [
             [
                 quarter, quarter, quarter, quarter
@@ -1718,7 +1718,7 @@ class MeasureTests: XCTestCase {
 
     func testChangeClefWithinTuplet() {
         let quarter = Note(noteDuration: .quarter)
-        let eighth = Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1))
+        let eighth = Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1))
         assertNoErrorThrown {
             let tuplet = try Tuplet(3, .eighth, notes: [eighth, eighth, eighth])
             measure.append(quarter)
@@ -1738,8 +1738,8 @@ class MeasureTests: XCTestCase {
 
     func testChangeFirstClefIfNeededWhenNotEmpty() {
         // Setup
-        let eighth = Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1))
-        let quarter = Note(noteDuration: .sixteenth, tone: Tone(noteLetter: .c, octave: .octave1))
+        let eighth = Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1))
+        let quarter = Note(noteDuration: .sixteenth, pitch: Pitch(noteLetter: .c, octave: .octave1))
         var measure = Measure(timeSignature: timeSignature, notes: [
             [
                 quarter, quarter, quarter, quarter
@@ -1763,8 +1763,8 @@ class MeasureTests: XCTestCase {
 
     func testChangeFirstClefIfNeededWhenEmtpy() {
         // Setup
-        let eighth = Note(noteDuration: .eighth, tone: Tone(noteLetter: .c, octave: .octave1))
-        let quarter = Note(noteDuration: .sixteenth, tone: Tone(noteLetter: .c, octave: .octave1))
+        let eighth = Note(noteDuration: .eighth, pitch: Pitch(noteLetter: .c, octave: .octave1))
+        let quarter = Note(noteDuration: .sixteenth, pitch: Pitch(noteLetter: .c, octave: .octave1))
         var measure = Measure(timeSignature: timeSignature, notes: [
             [
                 quarter, quarter, quarter, quarter

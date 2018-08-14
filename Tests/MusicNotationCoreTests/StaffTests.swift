@@ -141,21 +141,21 @@ class StaffTests: XCTestCase {
         }
     }
 
-	func testInsertMeasureNoRepeatAtEnd() {
-		let measure = Measure(
-			timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
-			key: Key(noteLetter: .c))
+    func testInsertMeasureNoRepeatAtEnd() {
+        let measure = Measure(
+            timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
+            key: Key(noteLetter: .c))
         assertNoErrorThrown {
-			try staff.insertMeasure(measure, at: 14)
-			let addedMeasure = try staff.measure(at: 14)
-			let beforeMeasure = try staff.measure(at: 13)
-			let afterMeasure = try staff.measure(at: 15)
+            try staff.insertMeasure(measure, at: 14)
+            let addedMeasure = try staff.measure(at: 14)
+            let beforeMeasure = try staff.measure(at: 13)
+            let afterMeasure = try staff.measure(at: 15)
             XCTAssertEqual(Measure(addedMeasure), changedClef(of: measure))
-			XCTAssertEqual(Measure(beforeMeasure), changedClef(of: measure6))
-			XCTAssertEqual(Measure(afterMeasure), changedClef(of: measure3))
-		}
-	}
-	
+            XCTAssertEqual(Measure(beforeMeasure), changedClef(of: measure6))
+            XCTAssertEqual(Measure(afterMeasure), changedClef(of: measure3))
+        }
+    }
+
     func testInsertMeasureInRepeat() {
         var measure = Measure(
             timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),

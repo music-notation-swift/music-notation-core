@@ -410,7 +410,6 @@ public struct Measure: ImmutableMeasure, Equatable, RandomAccessCollection {
         - `MeasureError.invalidTieState`
      */
     internal mutating func insert(_ noteCollection: NoteCollection, at index: Int, inSet setIndex: Int = 0, shouldIgnoreTieStates skipTieConfig: Bool) throws {
-
         if index == 0 && notes[setIndex].isEmpty {
             append(noteCollection, inSet: setIndex)
             return
@@ -906,7 +905,6 @@ public struct Measure: ImmutableMeasure, Equatable, RandomAccessCollection {
      the given note index.
      */
     internal func cumulativeTicks(at noteIndex: Int, inSet setIndex: Int = 0) throws -> Int {
-        // Total # of ticks up to, but not including the given noteIndex
         let index = try noteCollectionIndex(fromNoteIndex: noteIndex, inSet: setIndex)
         return try cumulativeTicks(at: index, inSet: setIndex)
     }

@@ -568,7 +568,17 @@ class MeasureTests: XCTestCase {
             try measure.createTuplet(3, .quarter, fromNotesInRange: 0...3)
         }
     }
-
+    
+    func testCreateTupletNoteInvalidNoteRange() {
+        measure.append(Note(noteDuration: .quarter, tone: Tone(noteLetter: .a, octave: .octave1)))
+        measure.append(Note(noteDuration: .quarter, tone: Tone(noteLetter: .b, octave: .octave1)))
+        measure.append(Note(noteDuration: .quarter, tone: Tone(noteLetter: .c, octave: .octave1)))
+        assertThrowsError(MeasureError.invalidNoteRange)  {
+            // FIXME: Find a way to reach the MeasureError.invalidNoteRange code path
+            try measure.createTuplet(3, .quarter, fromNotesInRange: 0...3)
+        }
+    }
+    
     // MARK: Successes
 
     func testCreateTuplet() {

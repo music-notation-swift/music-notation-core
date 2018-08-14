@@ -28,18 +28,19 @@ public protocol NoteCollection {
     /// The grouping order defined for this `NoteCollection`
     var groupingOrder: Int { get }
 
-
     var first: Note? { get }
     var last: Note? { get }
 
     var ticks: Int { get }
 
+    /// - returns: The note at the given index.
     func note(at index: Int) throws -> Note
 }
 
 extension NoteCollection {
 
     public var ticks: Int { return noteTimingCount * noteDuration.ticks }
+
 }
 
 public func ==(lhs: NoteCollection, rhs: NoteCollection) -> Bool {

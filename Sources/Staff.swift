@@ -51,13 +51,51 @@ public struct Staff: RandomAccessCollection {
     }
 
     public mutating func appendMeasure(_ measure: Measure) {
+        let measureBefore = try? self.measure(at: lastIndex)
+        let clefChange = measureBefore?.lastClef ?? clef
+        var measure = measure
+        _ = measure.changeFirstClefIfNeeded(to: clefChange)
         notesHolders.append(measure)
         measureCount += measure.measureCount
     }
 
-    public mutating func appendRepeat(_ repeatedMeasures: MeasureRepeat) {
-        notesHolders.append(repeatedMeasures)
-        measureCount += repeatedMeasures.measureCount
+    public mutating func appendRepeat(_ measureRepeat: MeasureRepeat) {
+        var measureRepeat = measureRepeat
+        let measureBefore = try? self.measure(at: lastIndex)
+        for index in measureRepeat.measures.indices {
+            _ = measureRepeat.measures[index].changeFirstClefIfNeeded(to: measureBefore?.lastClef ?? clef)
+        }
+        notesHolders.append(measureRepeat)
+        measureCount += measureRepeat.measureCount
+    }
+
+    /**
+     Changes the Clef at the given location.
+     
+     - parameter clef: The new `Clef` to change to
+     - parameter measureIndex: The index of the measure to change the clef
+     - parameter noteIndex: The index of the note at which you want the clef to change
+     - parameter setIndex: The index of the note set in which the note resides where you want to change the clef
+     - throws:
+        - `StaffError.measureIndexOutOfRange`
+        - `StaffError.repeatedMeasureCannotBeModified` if the measure is a repeated measure.
+        - `StaffError.internalError` if the function has an internal implementation error.
+     */
+    public mutating func changeClef(_ clef: Clef,
+                                    in measureIndex: Int,
+                                    atNote noteIndex: Int,
+                                    inSet setIndex: Int = 0) throws {
+        guard var measure = try measure(at: measureIndex) as? Measure else {
+            throw StaffError.repeatedMeasureCannotBeModified
+        }
+        try measure.changeClef(clef, at: noteIndex, inSet: setIndex)
+        try replaceMeasure(at: measureIndex, with: measure)
+        // If there is already another clef specified after the new clef, then
+        // there is no need to propagate to the following measures.
+        guard !measure.hasClefAfterNote(at: noteIndex, inSet: setIndex) else {
+            return
+        }
+        try propagateClefChange(clef, fromMeasureIndex: measureIndex)
     }
 
     /**
@@ -86,6 +124,14 @@ public struct Staff: RandomAccessCollection {
          - `MeasureRepeatError.cannotModifyRepeatedMeasures`
      */
     public mutating func insertMeasure(_ measure: Measure, at index: Int, beforeRepeat: Bool = true) throws {
+        var measure = measure
+        let measureBefore = try? self.measure(at: index - 1)
+        let clefChange = measureBefore?.lastClef ?? clef
+        let didChangeClef = measure.changeFirstClefIfNeeded(to: clefChange)
+        // Need to propagate lastClef if there are clef changes already in the measure
+        if let newClef = measure.lastClef, !didChangeClef {
+            try propagateClefChange(newClef, fromMeasureIndex: index)
+        }
         let notesHolderIndex = try notesHolderIndexFromMeasureIndex(index)
         // Not a repeat, just insert
         if notesHolderIndex.repeatMeasureIndex == nil {
@@ -119,6 +165,15 @@ public struct Staff: RandomAccessCollection {
          - `StaffError.cannotInsertRepeatWhereOneAlreadyExists`
      */
     public mutating func insertRepeat(_ measureRepeat: MeasureRepeat, at index: Int) throws {
+        var measureRepeat = measureRepeat
+        let measureBefore = try? self.measure(at: index - 1)
+        var didChangeClef: Bool = true
+        for index in measureRepeat.measures.indices {
+            didChangeClef = measureRepeat.measures[index].changeFirstClefIfNeeded(to: measureBefore?.lastClef ?? clef)
+        }
+        if let newClef = measureRepeat.measures.last?.lastClef, !didChangeClef {
+            try propagateClefChange(newClef, fromMeasureIndex: index + measureRepeat.measureCount)
+        }
         let notesHolderIndex = try notesHolderIndexFromMeasureIndex(index)
         guard notesHolderIndex.repeatMeasureIndex == nil || notesHolderIndex.repeatMeasureIndex == 0 else {
             throw StaffError.cannotInsertRepeatWhereOneAlreadyExists
@@ -138,22 +193,7 @@ public struct Staff: RandomAccessCollection {
          - `StaffError.internalError` if index translation doesn't work properly.
      */
     public mutating func replaceMeasure(at measureIndex: Int, with newMeasure: Measure) throws {
-        let (notesHolderIndex, repeatMeasureIndex) = try notesHolderIndexFromMeasureIndex(measureIndex)
-        let newNotesHolder: NotesHolder
-        if let repeatMeasureIndex = repeatMeasureIndex {
-            guard (try? mutableMeasureFromNotesHolderIndex(notesHolderIndex, repeatMeasureIndex: repeatMeasureIndex)) != nil else {
-                throw StaffError.repeatedMeasureCannotBeModified
-            }
-            guard var measureRepeat = notesHolders[notesHolderIndex] as? MeasureRepeat else {
-                assertionFailure("Index translation showed should be a repeat, but it's not")
-                throw StaffError.internalError
-            }
-            measureRepeat.measures[repeatMeasureIndex] = newMeasure
-            newNotesHolder = measureRepeat
-        } else {
-            newNotesHolder = newMeasure
-        }
-        notesHolders[notesHolderIndex] = newNotesHolder
+        try replaceMeasure(at: measureIndex, with: newMeasure, shouldChangeClef: true)
     }
 
     /**
@@ -284,6 +324,33 @@ public struct Staff: RandomAccessCollection {
         return measureIndexes[index]
     }
 
+    internal mutating func replaceMeasure(at measureIndex: Index, with newMeasure: Measure, shouldChangeClef: Bool) throws {
+        var newMeasure = newMeasure
+        let oldMeasure = try? self.measure(at: measureIndex)
+        if shouldChangeClef {
+            let didChangeClef = newMeasure.changeFirstClefIfNeeded(to: oldMeasure?.originalClef ?? clef)
+            if let newClef = newMeasure.lastClef, !didChangeClef {
+                try propagateClefChange(newClef, fromMeasureIndex: measureIndex)
+            }
+        }
+        let (notesHolderIndex, repeatMeasureIndex) = try notesHolderIndexFromMeasureIndex(measureIndex)
+        let newNotesHolder: NotesHolder
+        if let repeatMeasureIndex = repeatMeasureIndex {
+            guard (try? mutableMeasureFromNotesHolderIndex(notesHolderIndex, repeatMeasureIndex: repeatMeasureIndex)) != nil else {
+                throw StaffError.repeatedMeasureCannotBeModified
+            }
+            guard var measureRepeat = notesHolders[notesHolderIndex] as? MeasureRepeat else {
+                assertionFailure("Index translation showed should be a repeat, but it's not")
+                throw StaffError.internalError
+            }
+            measureRepeat.measures[repeatMeasureIndex] = newMeasure
+            newNotesHolder = measureRepeat
+        } else {
+            newNotesHolder = newMeasure
+        }
+        notesHolders[notesHolderIndex] = newNotesHolder
+    }
+
     private mutating func recomputeMeasureIndexes() {
         measureIndexes = []
         for (i, notesHolder) in notesHolders.enumerated() {
@@ -326,6 +393,24 @@ public struct Staff: RandomAccessCollection {
             } else {
                 assertionFailure("If not a repeated measure, should be a mutable measure")
                 throw StaffError.internalError
+            }
+        }
+    }
+
+    private mutating func propagateClefChange(_ clef: Clef, fromMeasureIndex measureIndex: Int) throws {
+        // Modify every `originalClef` and `lastClef` that follows the measure until not needed
+        for index in (measureIndex + 1)..<measureCount {
+            do {
+                guard var measure = try self.measure(at: index) as? Measure else {
+                    continue
+                }
+                let didChangeClef = measure.changeFirstClefIfNeeded(to: clef)
+                if !didChangeClef {
+                    break
+                }
+                try replaceMeasure(at: index, with: measure, shouldChangeClef: false)
+            } catch {
+                continue
             }
         }
     }

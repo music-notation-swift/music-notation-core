@@ -1,20 +1,20 @@
 # Different Notes at Same Time
 Authors: [Kyle Sherman](http://github.com/drumnkyle), [Miguel Osorio](http://github.com/modix)
 ## Introduction
-In music, you can have a note with 2 different tones played at the same time. You see this with one stem and 2 note heads coming off of it on different staff lines/spaces. This has already been accomplished by making every `Note` have an array of `Tone`s. However, at the same time, you may also have a note of a different duration be played at the same time. Throughout this document I will refer to this as a second *set* of notes in the measure.
+In music, you can have a note with 2 different pitches played at the same time. You see this with one stem and 2 note heads coming off of it on different staff lines/spaces. This has already been accomplished by making every `Note` have an array of `SpelledPitch`es. However, at the same time, you may also have a note of a different duration be played at the same time. Throughout this document I will refer to this as a second *set* of notes in the measure.
 ### Terminology
 - **Set** of notes is one set of notes that need to equal a full measure (like the bass drum part of a drumset score).
 - **Time slice** is the vertical slice of a measure where a note would be laid out. If 2 notes occur at the same exact time, they would be rendered in the same *time slice*.
 
 ### Example
-This happens quite often in drumset music. With a standard rock beat in 4/4, you have the hi-hat playing eighth notes throughout the whole measure. The snare drum plays eighth notes on beats 2 and 4, which can be represented as 2 tones on the notes that have the snare drum and hi-hat at once. Then, you have the bass drum on beats 1 and 3 as quarter notes with quarter note rests in between.
+This happens quite often in drumset music. With a standard rock beat in 4/4, you have the hi-hat playing eighth notes throughout the whole measure. The snare drum plays eighth notes on beats 2 and 4, which can be represented as 2 pitches on the notes that have the snare drum and hi-hat at once. Then, you have the bass drum on beats 1 and 3 as quarter notes with quarter note rests in between.
 ## All Cases
 This second set of notes in the measure can occur:
 - at the same time as another note in a different set
 - in between two notes in a different set
 ## Requirements
 - Each set of notes must constitute a full measure (i.e. 4 beats in 4/4; no more, no less)
-- You cannot have the same tone represented by 2 sets at the same exact time. **Open**: Can you?
+- You cannot have the same pitch represented by 2 sets at the same exact time. **Open**: Can you?
     - **Open**: How do we enforce this? Seems like it needs to be some type of measure validation.
 - Need to support the ability for a rendering library to be able to draw the measure easily
     - time slice by time slice

@@ -16,7 +16,7 @@ public struct Note: NoteCollection {
     public var first: Note? { return self }
     public var last: Note? { return self }
 
-    public let tones: [Tone]
+    public let pitches: [SpelledPitch]
 
     public let isRest: Bool
 
@@ -32,26 +32,26 @@ public struct Note: NoteCollection {
      */
     public init(noteDuration: NoteDuration) {
         self.noteDuration = noteDuration
-        self.tones = []
+        self.pitches = []
         self.isRest = true
     }
 
     /**
-     Initialize a note with a single tone.
+     Initialize a note with a single pitch.
      */
-    public init(noteDuration: NoteDuration, tone: Tone) {
+    public init(noteDuration: NoteDuration, pitch: SpelledPitch) {
         self.noteDuration = noteDuration
-        self.tones = [tone]
+        self.pitches = [pitch]
         self.isRest = false
     }
 
     /**
-     Initialize a note with multiple tones (chord).
+     Initialize a note with multiple pitches (chord).
      */
-    public init(noteDuration: NoteDuration, tones: [Tone]) {
+    public init(noteDuration: NoteDuration, pitches: [SpelledPitch]) {
         isRest = false
         self.noteDuration = noteDuration
-        self.tones = tones
+        self.pitches = pitches
     }
 
     // MARK: - Methods
@@ -106,7 +106,7 @@ public struct Note: NoteCollection {
 extension Note: Equatable {
     public static func ==(lhs: Note, rhs: Note) -> Bool {
         if lhs.noteDuration == rhs.noteDuration &&
-            lhs.tones == rhs.tones &&
+            lhs.pitches == rhs.pitches &&
             lhs.isRest == rhs.isRest &&
             lhs.accent == rhs.accent &&
             lhs.isStaccato == rhs.isStaccato &&
@@ -122,17 +122,17 @@ extension Note: Equatable {
 
 extension Note: CustomDebugStringConvertible {
     public var debugDescription: String {
-        let tonesString: String
-        if tones.count > 1 {
-            tonesString = "\(tones)"
+        let pitchesString: String
+        if pitches.count > 1 {
+            pitchesString = "\(pitches)"
         } else {
-            if let tone = tones.first {
-                tonesString = "\(tone)"
+            if let pitch = pitches.first {
+                pitchesString = "\(pitch)"
             } else {
-                tonesString = ""
+                pitchesString = ""
             }
         }
-        return "\(tie == .end || tie == .beginAndEnd ? "_" : "")\(noteDuration)\(tonesString)\(isRest ? "R" : "")\(tie == .begin || tie == .beginAndEnd ? "_" : "")"
+        return "\(tie == .end || tie == .beginAndEnd ? "_" : "")\(noteDuration)\(pitchesString)\(isRest ? "R" : "")\(tie == .begin || tie == .beginAndEnd ? "_" : "")"
     }
 }
 

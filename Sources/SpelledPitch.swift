@@ -1,12 +1,19 @@
 //
-//  Tone.swift
+//  SpelledPitch.swift
 //  MusicNotationCore
 //
 //  Created by Kyle Sherman on 6/15/15.
 //  Copyright © 2015 Kyle Sherman. All rights reserved.
 //
 
-public struct Tone {
+/**
+ A pitch indicates the note letter (a-g), octave, and accidental.
+ Since certain pitches are the same, but can be shown differently (like a sharp and b flat),
+ the "spelling" of the pitch is important.
+ This struct represents a pitch that is already in the desired spelling.
+ So, this assumes the user of this struct knows which spelling to pick.
+ */
+public struct SpelledPitch {
     
     public let noteLetter: NoteLetter
     public let accidental: Accidental
@@ -19,7 +26,7 @@ public struct Tone {
     }
 }
 
-extension Tone: CustomDebugStringConvertible {
+extension SpelledPitch: CustomDebugStringConvertible {
     public var debugDescription: String {
         switch accidental {
         case .natural:
@@ -30,8 +37,8 @@ extension Tone: CustomDebugStringConvertible {
     }
 }
 
-extension Tone: Equatable {
-    public static func ==(lhs: Tone, rhs: Tone) -> Bool {
+extension SpelledPitch: Equatable {
+    public static func ==(lhs: SpelledPitch, rhs: SpelledPitch) -> Bool {
         if lhs.accidental == rhs.accidental &&
             lhs.noteLetter == rhs.noteLetter &&
             lhs.octave == rhs.octave {
@@ -42,7 +49,7 @@ extension Tone: Equatable {
     }
 }
 
-extension Tone {
+extension SpelledPitch {
     public var midiNoteNumber: Int {
         var result = (octave.rawValue + 1) * 12
         
@@ -73,8 +80,8 @@ extension Tone {
     }
 }
 
-extension Tone: Enharmonic {
-    public func isEnharmonic(with other: Tone) -> Bool {
+extension SpelledPitch: Enharmonic {
+    public func isEnharmonic(with other: SpelledPitch) -> Bool {
         return self.midiNoteNumber == other.midiNoteNumber
     }
 }

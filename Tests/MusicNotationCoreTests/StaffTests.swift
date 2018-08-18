@@ -34,9 +34,9 @@ class StaffTests: XCTestCase {
         let timeSignature = TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120)
         let key = Key(noteLetter: .c)
         let note = Note(noteDuration: .sixteenth,
-                        tone: Tone(noteLetter: .c, octave: .octave1))
+                        pitch: SpelledPitch(noteLetter: .c, octave: .octave1))
         let note2 = Note(noteDuration: .sixteenth,
-                         tone: Tone(noteLetter: .a, octave: .octave1))
+                         pitch: SpelledPitch(noteLetter: .a, octave: .octave1))
         let tuplet = try! Tuplet(3, .sixteenth, notes: [note, note, note])
         let tuplet2 = try! Tuplet(3, .sixteenth, notes: [note2, note, note])
 
@@ -316,14 +316,14 @@ class StaffTests: XCTestCase {
         }
     }
 
-    func testStartTieAcrossMeasuresTupletToNoteDiffTone() {
-        assertThrowsError(StaffError.notesMustHaveSameTonesToTie) {
+    func testStartTieAcrossMeasuresTupletToNoteDiffPitch() {
+        assertThrowsError(StaffError.notesMustHaveSamePitchesToTie) {
             try staff.startTieFromNote(at: 6, inMeasureAt: 14)
         }
     }
 
-    func testStartTieAcrossMeasuresNoteToTupletDiffTone() {
-        assertThrowsError(StaffError.notesMustHaveSameTonesToTie) {
+    func testStartTieAcrossMeasuresNoteToTupletDiffPitch() {
+        assertThrowsError(StaffError.notesMustHaveSamePitchesToTie) {
             try staff.startTieFromNote(at: 7, inMeasureAt: 15)
         }
     }
@@ -916,9 +916,9 @@ class StaffTests: XCTestCase {
     func testChangeClefTwiceAcross2NoteSetsIn1Measure() {
         assertNoErrorThrown {
             let sixteenth = Note(noteDuration: .sixteenth,
-                            tone: Tone(noteLetter: .c, octave: .octave1))
+                            pitch: SpelledPitch(noteLetter: .c, octave: .octave1))
             let quarter = Note(noteDuration: .quarter,
-                               tone: Tone(noteLetter: .c, octave: .octave1))
+                               pitch: SpelledPitch(noteLetter: .c, octave: .octave1))
             staff.appendMeasure(
                 Measure(timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
                         notes: [
@@ -934,7 +934,7 @@ class StaffTests: XCTestCase {
             let newLastMeasureIndex = 17
             let newClef1: Clef = .bass
             let newClef2 = Clef(
-                tone: Tone(noteLetter: .c, accidental: .sharp, octave: .octave3),
+                pitch: SpelledPitch(noteLetter: .c, accidental: .sharp, octave: .octave3),
                 location: StaffLocation(type: .space, number: 3))
             try staff.changeClef(newClef1, in: newLastMeasureIndex, atNote: 1, inSet: 0)
             try staff.changeClef(newClef2, in: newLastMeasureIndex, atNote: 2, inSet: 1)

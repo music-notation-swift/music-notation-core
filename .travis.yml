@@ -1,10 +1,9 @@
 language: objective-c
 osx_image: xcode9.4
-os: osx
-xcode_project: MusicNotationCore.xcodeproj 
-xcode_scheme: MusicNotationCoreTests
-xcode_destination: platform=macOS
-script:
+script:  
+
+  - set -o pipefail
+
   - xcodebuild clean build build-for-testing -project MusicNotationCore/MusicNotationCore.xcodeproj -scheme MusicNotationCoreMac -sdk macosx | xcpretty
   - xcodebuild test-without-building -project MusicNotationCore/MusicNotationCore.xcodeproj -scheme MusicNotationCoreMac -sdk macosx | xcpretty
   - xcodebuild build -project MusicNotationCore/MusicNotationCore.xcodeproj -scheme MusicNotationCoreiOS -sdk iphoneos | xcpretty

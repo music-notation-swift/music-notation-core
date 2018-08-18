@@ -465,7 +465,7 @@ public struct Tuplet: NoteCollection {
         flatIndexes = [[Int]]()
         for (index, noteCollection) in notes.enumerated() {
             if noteCollection is Note {
-                let newIndexes = [parentIndexes.flatMap { $0 }, [index]].flatMap { $0 }
+                let newIndexes = [parentIndexes.compactMap { $0 }, [index]].flatMap { $0 }
                 flatIndexes.append(newIndexes)
             } else if var tuplet = noteCollection as? Tuplet {
                 let parents = [parentIndexes, [index]].flatMap { $0 }

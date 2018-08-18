@@ -16,13 +16,13 @@ extension XCTestCase {
             try expression()
             recordFailure(withDescription: "Expected error \(expectedError), but got no error.",
                 inFile: file,
-                atLine: line,
+                atLine: Int(line),
                 expected: false)
         } catch {
             if error as? T != expectedError {
                 recordFailure(withDescription: "Expected error \(expectedError), but got: \(error).",
                     inFile: file,
-                    atLine: line,
+                    atLine: Int(line),
                     expected: false)
             }
         }
@@ -32,7 +32,7 @@ extension XCTestCase {
         do {
             try expression()
         } catch {
-            recordFailure(withDescription: "Expected no error, but got: \(error)", inFile: file, atLine: line, expected: false)
+            recordFailure(withDescription: "Expected no error, but got: \(error)", inFile: file, atLine: Int(line), expected: false)
         }
     }
 }

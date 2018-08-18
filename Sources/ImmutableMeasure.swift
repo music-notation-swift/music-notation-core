@@ -82,7 +82,7 @@ extension ImmutableMeasure {
     }
 
     internal static func measureSlices(at position: Int, in notes: [[NoteCollection]]) -> [MeasureSlice]? {
-        return notes.enumerated().flatMap { noteSetIndex, noteCollections in
+        return notes.enumerated().compactMap { noteSetIndex, noteCollections in
             guard let noteCollection = noteCollections[safe: position] else {
                 return nil
             }

@@ -6,7 +6,7 @@
 //  Copyright © 2015 Kyle Sherman. All rights reserved.
 //
 
-public struct Pitch {
+public struct SpelledPitch {
     
     public let noteLetter: NoteLetter
     public let accidental: Accidental
@@ -19,7 +19,7 @@ public struct Pitch {
     }
 }
 
-extension Pitch: CustomDebugStringConvertible {
+extension SpelledPitch: CustomDebugStringConvertible {
     public var debugDescription: String {
         switch accidental {
         case .natural:
@@ -30,8 +30,8 @@ extension Pitch: CustomDebugStringConvertible {
     }
 }
 
-extension Pitch: Equatable {
-    public static func ==(lhs: Pitch, rhs: Pitch) -> Bool {
+extension SpelledPitch: Equatable {
+    public static func ==(lhs: SpelledPitch, rhs: SpelledPitch) -> Bool {
         if lhs.accidental == rhs.accidental &&
             lhs.noteLetter == rhs.noteLetter &&
             lhs.octave == rhs.octave {
@@ -42,7 +42,7 @@ extension Pitch: Equatable {
     }
 }
 
-extension Pitch {
+extension SpelledPitch {
     public var midiNoteNumber: Int {
         var result = (octave.rawValue + 1) * 12
         
@@ -73,8 +73,8 @@ extension Pitch {
     }
 }
 
-extension Pitch: Enharmonic {
-    public func isEnharmonic(with other: Pitch) -> Bool {
+extension SpelledPitch: Enharmonic {
+    public func isEnharmonic(with other: SpelledPitch) -> Bool {
         return self.midiNoteNumber == other.midiNoteNumber
     }
 }

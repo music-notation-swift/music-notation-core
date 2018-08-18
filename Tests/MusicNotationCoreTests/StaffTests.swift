@@ -34,9 +34,9 @@ class StaffTests: XCTestCase {
         let timeSignature = TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120)
         let key = Key(noteLetter: .c)
         let note = Note(noteDuration: .sixteenth,
-                        pitch: Pitch(noteLetter: .c, octave: .octave1))
+                        pitch: SpelledPitch(noteLetter: .c, octave: .octave1))
         let note2 = Note(noteDuration: .sixteenth,
-                         pitch: Pitch(noteLetter: .a, octave: .octave1))
+                         pitch: SpelledPitch(noteLetter: .a, octave: .octave1))
         let tuplet = try! Tuplet(3, .sixteenth, notes: [note, note, note])
         let tuplet2 = try! Tuplet(3, .sixteenth, notes: [note2, note, note])
 
@@ -916,9 +916,9 @@ class StaffTests: XCTestCase {
     func testChangeClefTwiceAcross2NoteSetsIn1Measure() {
         assertNoErrorThrown {
             let sixteenth = Note(noteDuration: .sixteenth,
-                            pitch: Pitch(noteLetter: .c, octave: .octave1))
+                            pitch: SpelledPitch(noteLetter: .c, octave: .octave1))
             let quarter = Note(noteDuration: .quarter,
-                               pitch: Pitch(noteLetter: .c, octave: .octave1))
+                               pitch: SpelledPitch(noteLetter: .c, octave: .octave1))
             staff.appendMeasure(
                 Measure(timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
                         notes: [
@@ -934,7 +934,7 @@ class StaffTests: XCTestCase {
             let newLastMeasureIndex = 17
             let newClef1: Clef = .bass
             let newClef2 = Clef(
-                pitch: Pitch(noteLetter: .c, accidental: .sharp, octave: .octave3),
+                pitch: SpelledPitch(noteLetter: .c, accidental: .sharp, octave: .octave3),
                 location: StaffLocation(type: .space, number: 3))
             try staff.changeClef(newClef1, in: newLastMeasureIndex, atNote: 1, inSet: 0)
             try staff.changeClef(newClef2, in: newLastMeasureIndex, atNote: 2, inSet: 1)

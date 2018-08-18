@@ -16,7 +16,7 @@ public struct Note: NoteCollection {
     public var first: Note? { return self }
     public var last: Note? { return self }
 
-    public let pitches: [Pitch]
+    public let pitches: [SpelledPitch]
 
     public let isRest: Bool
 
@@ -39,7 +39,7 @@ public struct Note: NoteCollection {
     /**
      Initialize a note with a single pitch.
      */
-    public init(noteDuration: NoteDuration, pitch: Pitch) {
+    public init(noteDuration: NoteDuration, pitch: SpelledPitch) {
         self.noteDuration = noteDuration
         self.pitches = [pitch]
         self.isRest = false
@@ -48,7 +48,7 @@ public struct Note: NoteCollection {
     /**
      Initialize a note with multiple pitches (chord).
      */
-    public init(noteDuration: NoteDuration, pitches: [Pitch]) {
+    public init(noteDuration: NoteDuration, pitches: [SpelledPitch]) {
         isRest = false
         self.noteDuration = noteDuration
         self.pitches = pitches

@@ -20,7 +20,7 @@ public struct Clef {
      The pitch that defines the clef. This pitch is specified to be at a
      certain `StaffLocation` using the `staffLocation` property.
      */
-    public let pitch: Pitch?
+    public let pitch: SpelledPitch?
 
     /**
      The location on the staff at which the pitch for the clef is located.
@@ -33,26 +33,26 @@ public struct Clef {
      - parameter pitch: The pitch that the clef represents. Pitch is optional to support un-pitched (i.e. drums)
      - parameter location: The location on the staff
      */
-    public init(pitch: Pitch?, location: StaffLocation) {
+    public init(pitch: SpelledPitch?, location: StaffLocation) {
         self.pitch = pitch
         self.staffLocation = location
     }
 
-    public static let treble = Clef(pitch: Pitch(noteLetter: .g, octave: .octave4), location: StaffLocation(type: .line, number: 1))
-    public static let bass = Clef(pitch: Pitch(noteLetter: .f, octave: .octave3), location: StaffLocation(type: .line, number: 3))
-    public static let tenor = Clef(pitch: Pitch(noteLetter: .c, octave: .octave4), location: StaffLocation(type: .line, number: 3))
-    public static let alto = Clef(pitch: Pitch(noteLetter: .c, octave: .octave4), location: StaffLocation(type: .line, number: 2))
+    public static let treble = Clef(pitch: SpelledPitch(noteLetter: .g, octave: .octave4), location: StaffLocation(type: .line, number: 1))
+    public static let bass = Clef(pitch: SpelledPitch(noteLetter: .f, octave: .octave3), location: StaffLocation(type: .line, number: 3))
+    public static let tenor = Clef(pitch: SpelledPitch(noteLetter: .c, octave: .octave4), location: StaffLocation(type: .line, number: 3))
+    public static let alto = Clef(pitch: SpelledPitch(noteLetter: .c, octave: .octave4), location: StaffLocation(type: .line, number: 2))
     /// Un-pitched (drums, percussion, etc.)
     public static let neutral = Clef(pitch: nil, location: StaffLocation(type: .line, number: 2))
     /// For tablature (guitar, etc.)
     public static let tab = Clef(pitch: nil, location: StaffLocation(type: .line, number: 2))
     // Less common
-    public static let frenchViolin = Clef(pitch: Pitch(noteLetter: .g, octave: .octave4), location: StaffLocation(type: .line, number: 0))
-    public static let soprano = Clef(pitch: Pitch(noteLetter: .c, octave: .octave4), location: StaffLocation(type: .line, number: 0))
-    public static let mezzoSoprano = Clef(pitch: Pitch(noteLetter: .c, octave: .octave4), location: StaffLocation(type: .line, number: 1))
-    public static let baritone = Clef(pitch: Pitch(noteLetter: .f, octave: .octave3), location: StaffLocation(type: .line, number: 4))
+    public static let frenchViolin = Clef(pitch: SpelledPitch(noteLetter: .g, octave: .octave4), location: StaffLocation(type: .line, number: 0))
+    public static let soprano = Clef(pitch: SpelledPitch(noteLetter: .c, octave: .octave4), location: StaffLocation(type: .line, number: 0))
+    public static let mezzoSoprano = Clef(pitch: SpelledPitch(noteLetter: .c, octave: .octave4), location: StaffLocation(type: .line, number: 1))
+    public static let baritone = Clef(pitch: SpelledPitch(noteLetter: .f, octave: .octave3), location: StaffLocation(type: .line, number: 4))
     // TODO: Is this one correct?
-    public static let suboctaveTreble = Clef(pitch: Pitch(noteLetter: .g, octave: .octave3), location: StaffLocation(type: .line, number: 1))
+    public static let suboctaveTreble = Clef(pitch: SpelledPitch(noteLetter: .g, octave: .octave3), location: StaffLocation(type: .line, number: 1))
 
     /**
      Calculates the pitch for the given staff location for this Clef.
@@ -63,7 +63,7 @@ public struct Clef {
         - `ClefError.internal`: Logic error with math
         - `ClefError.octaveOutOfRange`
      */
-    internal func pitch(at location: StaffLocation) throws -> Pitch? {
+    internal func pitch(at location: StaffLocation) throws -> SpelledPitch? {
         guard let pitch = pitch else { return nil }
         let largestNoteLetter = NoteLetter.b.rawValue
         let delta = location.halfSteps - staffLocation.halfSteps
@@ -104,7 +104,7 @@ public struct Clef {
         guard let newOctave = Octave(rawValue: newOctaveValue) else {
             throw ClefError.octaveOutOfRange
         }
-        return Pitch(noteLetter: newNoteLetter, octave: newOctave)
+        return SpelledPitch(noteLetter: newNoteLetter, octave: newOctave)
     }
 }
 

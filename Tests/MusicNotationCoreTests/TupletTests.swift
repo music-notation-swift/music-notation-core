@@ -11,13 +11,13 @@ import XCTest
 
 class TupletTests: XCTestCase {
 
-	let pitch1 = Pitch(noteLetter: .a, octave: .octave1)
-	let pitch2 = Pitch(noteLetter: .b, accidental: .sharp, octave: .octave1)
-	let pitch3 = Pitch(noteLetter: .d, accidental: .natural, octave: .octave1)
+	let pitch1 = SpelledPitch(noteLetter: .a, octave: .octave1)
+	let pitch2 = SpelledPitch(noteLetter: .b, accidental: .sharp, octave: .octave1)
+	let pitch3 = SpelledPitch(noteLetter: .d, accidental: .natural, octave: .octave1)
 	let quarterRest = Note(noteDuration: .quarter)
 	let eighthRest = Note(noteDuration: .eighth)
     let dottedQuarterNote = Note(noteDuration: try! NoteDuration(value: .quarter, dotCount: 1),
-                                 pitch: Pitch(noteLetter: .c, octave: .octave3))
+                                 pitch: SpelledPitch(noteLetter: .c, octave: .octave3))
     var quarterNote1: Note!
     var quarterNote2: Note!
     var quarterNote3: Note!

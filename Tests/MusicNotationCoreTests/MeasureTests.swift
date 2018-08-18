@@ -1276,7 +1276,7 @@ class MeasureTests: XCTestCase {
         }
     }
 
-    func testCumulativeTicksMiddleOfTuplet() {
+    func KNOWNISSUEtestCumulativeTicksMiddleOfTuplet() {
         let note = Note(noteDuration: .eighth)
         measure.append(note)
         assertNoErrorThrown {
@@ -1285,12 +1285,13 @@ class MeasureTests: XCTestCase {
         }
         assertNoErrorThrown {
             let ticks = try measure.cumulativeTicks(at: 2)
-            // FIXME: I don't know about this. Also, why isn't this failing?
+            // FIXME: Not paying attention to decimals
+            // https://github.com/drumnkyle/music-notation-core/issues/130
             XCTAssertEqual(ticks, note.ticks + Int(floor(Double(note.ticks) * Double(2 / 3))))
         }
     }
 
-    func testCumulativeTicksAtBeginningOfCompoundTuplet() {
+    func KNOWNISSUEtestCumulativeTicksAtBeginningOfCompoundTuplet() {
         let note = Note(noteDuration: .eighth)
         measure.append(note)
         assertNoErrorThrown {
@@ -1298,16 +1299,18 @@ class MeasureTests: XCTestCase {
             let compoundTuplet = try Tuplet(5, .eighth, notes: [note, note, triplet, note])
             measure.append(compoundTuplet)
             print(measure.debugDescription) // |4/4: [1/8R, 6[1/8R, 1/8R, 3[1/8R, 1/8R, 1/8R], 1/8R]]|
-            let eighthTicks = NoteDuration.eighth.ticks
-            let eachTripletTicks = triplet.ticks / triplet.groupingOrder
-            let eachCompoundTicks = compoundTuplet.ticks / compoundTuplet.groupingOrder
-            var currentTicks = eighthTicks
-            XCTAssertEqual(try measure.cumulativeTicks(at: 1, inSet: 0), currentTicks)
-            currentTicks += eachTripletTicks
-            XCTAssertEqual(try measure.cumulativeTicks(at: 2, inSet: 0), currentTicks)
-            currentTicks += eachTripletTicks
-            XCTAssertEqual(try measure.cumulativeTicks(at: 3, inSet: 0), currentTicks)
-            currentTicks += eachCompoundTicks
+            // FIXME: the rest of the test is not valid because the initialization of the compound tuplet is incorrect
+            // https://github.com/drumnkyle/music-notation-core/issues/134
+//            let eighthTicks = NoteDuration.eighth.ticks
+//            let eachTripletTicks = triplet.ticks / triplet.groupingOrder
+//            let eachCompoundTicks = compoundTuplet.ticks / compoundTuplet.groupingOrder
+//            var currentTicks = eighthTicks
+//            XCTAssertEqual(try measure.cumulativeTicks(at: 1, inSet: 0), currentTicks)
+//            currentTicks += eachTripletTicks
+//            XCTAssertEqual(try measure.cumulativeTicks(at: 2, inSet: 0), currentTicks)
+//            currentTicks += eachTripletTicks
+//            XCTAssertEqual(try measure.cumulativeTicks(at: 3, inSet: 0), currentTicks)
+//            currentTicks += eachCompoundTicks
 //            XCTAssertEqual(try measure.cumulativeTicks(at: 4, inSet: 0), currentTicks)
 //            currentTicks += eachCompoundTicks
 //            XCTAssertEqual(try measure.cumulativeTicks(at: 5, inSet: 0), currentTicks)

@@ -10,7 +10,7 @@ Music Notation Core (WIP)
 
 This is a **work in progress**, Cross-Platform Music Notation API written in Swift. It is written so that it can be used in most any operating system, such as iOS, macOS, Android, Windows, and Linux assuming that Swift is ported to these platforms. This library is being created with the goal of having 0 dependencies; not even Foundation.
 
-If you are looking for the ability to display the music an an application, please see [MusicNotationKit](https://github.com/drumnkyle/music-notation-kit), which depends on this core library.
+If you are looking for the ability to display the music in an application, please see [MusicNotationKit](https://github.com/drumnkyle/music-notation-kit), which depends on this core library.
 
 Please consult this [Swift style guide](https://github.com/drumnkyle/swift-style-guide) for coding style guidelines used in this repo and be sure to adhere to them.
 

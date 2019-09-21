@@ -503,11 +503,11 @@
 			};
 			buildConfigurationList = 27CE86A01E75050A007AD729 /* Build configuration list for PBXProject "MusicNotationCore" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				English,
 				en,
+				Base,
 			);
 			mainGroup = 27CE869C1E75050A007AD729;
 			productRefGroup = 27CE86A91E750534007AD729 /* Products */;

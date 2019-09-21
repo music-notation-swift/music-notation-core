@@ -38,6 +38,12 @@ public struct Tuplet: NoteCollection {
     /// A 2-dimensional array that can be used to index into every note in the tuplet within compound tuplets as well.
     internal var flatIndexes: [[Int]] = [[Int]]()
 
+    /// True if the tuplet is a compound tuplet; false otherwise.
+    /// A tuplet is compound if at least 1 other tuplet is inside of it.
+    internal var isCompound: Bool {
+        return flatIndexes.contains { $0.count > 1 }
+    }
+
     /**
      This maps the standard number of notes in the tuplet (`groupingOrder`), to the number of notes the tuplet should fit
      in the space of (`noteTimingCount`).

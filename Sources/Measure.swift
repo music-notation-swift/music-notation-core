@@ -936,6 +936,9 @@ public struct Measure: ImmutableMeasure, Equatable, RandomAccessCollection {
                 assertionFailure("note collection should be tuplet, but cast failed")
                 throw MeasureError.internalError
             }
+            guard !lastNoteCollection.isCompound else {
+                throw MeasureError.cannotCalculateTicksWithinCompoundTuplet
+            }
             let tupletTicks = lastNoteCollection.ticks / lastNoteCollection.groupingOrder * tupletIndex
             ticks = ticksBeforeLast + tupletTicks
         }

@@ -1163,6 +1163,30 @@ class TupletTests: XCTestCase {
         }
     }
 
+    // MARK: - isCompound
+
+    func testIsCompoundTrue() {
+        assertNoErrorThrown {
+            let triplet = try? Tuplet(3, .eighth, notes: [eighthNote, eighthNote, eighthNote])
+            XCTAssertNotNil(triplet)
+            let compound = try Tuplet(
+                5,
+                .eighth,
+                notes: [
+                    triplet!, eighthNote, eighthNote, eighthNote
+                ]
+            )
+            XCTAssertTrue(compound.isCompound)
+        }
+    }
+
+    func testIsCompoundFalse() {
+        assertNoErrorThrown {
+            let triplet = try Tuplet(3, .quarter, notes: [quarterNote1, quarterNote2, quarterNote3])
+            XCTAssertFalse(triplet.isCompound)
+        }
+    }
+
     // MARK: - ==(lhs:rhs:)
     // MARK: Failures
 

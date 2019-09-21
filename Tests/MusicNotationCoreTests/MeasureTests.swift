@@ -1189,7 +1189,6 @@ class MeasureTests: XCTestCase {
             measure.append(compoundTuplet)
         }
         print(measure.debugDescription)
-        // FIXME: there is no implementation of throw MeasureError.cannotCalculateTicksWithinCompoundTuplet in cumulativeTicks
         assertThrowsError(MeasureError.cannotCalculateTicksWithinCompoundTuplet) {
             _ = try measure.cumulativeTicks(at: 4)
         }

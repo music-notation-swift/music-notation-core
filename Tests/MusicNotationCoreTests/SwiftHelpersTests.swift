@@ -79,15 +79,15 @@ class SwiftHelpersTests: XCTestCase {
     }
 
     func testIsValidIndexNotClosedValid() {
-        XCTAssertTrue(singleElementArray.isValidIndexRange(Range(0..<1)))
-        XCTAssertTrue(multipleElementArray.isValidIndexRange(Range(0..<5)))
+        XCTAssertTrue(singleElementArray.isValidIndexRange(0..<1))
+        XCTAssertTrue(multipleElementArray.isValidIndexRange(0..<5))
     }
 
     func testIsValidIndexNotClosedInvalid() {
-        XCTAssertFalse(emptyArray.isValidIndexRange(Range(0..<1)))
-        XCTAssertFalse(singleElementArray.isValidIndexRange(Range(0..<2)))
-        XCTAssertFalse(multipleElementArray.isValidIndexRange(Range(0..<6)))
-        XCTAssertFalse(multipleElementArray.isValidIndexRange(Range(-1..<5)))
+        XCTAssertFalse(emptyArray.isValidIndexRange(0..<1))
+        XCTAssertFalse(singleElementArray.isValidIndexRange(0..<2))
+        XCTAssertFalse(multipleElementArray.isValidIndexRange(0..<6))
+        XCTAssertFalse(multipleElementArray.isValidIndexRange(-1..<5))
     }
 
     // MARK: subscript(safe:)

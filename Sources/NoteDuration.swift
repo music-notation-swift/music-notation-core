@@ -6,9 +6,9 @@
 //  Copyright © 2016 Kyle Sherman. All rights reserved.
 //
 
-public struct NoteDuration {
+public struct NoteDuration: Hashable {
 
-    public enum Value: CustomDebugStringConvertible {
+    public enum Value: CustomDebugStringConvertible, Hashable {
         case large
         case long
         case doubleWhole
@@ -44,7 +44,7 @@ public struct NoteDuration {
      This holds the value for the bottom number of the time signature and relates the `NoteDuration.Value` to this
      number or nil if it cannot be used for the bottom number of a time signature.
      */
-    public enum TimeSignatureValue: Int {
+    public enum TimeSignatureValue: Int, Hashable {
         case whole = 1
         case half = 2
         case quarter = 4
@@ -189,25 +189,6 @@ public struct NoteDuration {
         } else {
             return Double(baseTicks) / Double(equalityTicks)
         }
-    }
-}
-
-extension NoteDuration: Hashable {
-    public var hashValue: Int {
-        let valueAsHash: Int
-        if let timeSignatureValue = timeSignatureValue {
-            valueAsHash = timeSignatureValue.rawValue
-        } else {
-            switch value {
-            case .doubleWhole: valueAsHash = -2
-            case .long: valueAsHash = -4
-            case .large: valueAsHash = -8
-            default:
-                assertionFailure("Should have been covered already")
-                valueAsHash = 0
-            }
-        }
-        return valueAsHash ^ dotCount
     }
 }
 

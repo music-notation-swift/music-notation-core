@@ -446,7 +446,7 @@ public struct Tuplet: NoteCollection {
             }
         }
         for (index, noteCollection) in notes.enumerated() {
-            if var tuplet = noteCollection as? Tuplet,
+            if let tuplet = noteCollection as? Tuplet,
                 tuplet.notes.isEmpty || tuplet.notes.reduce(0, accumulateNoteCount) == 0 {
                 indexesToRemove.append(index)
             } else if var tuplet = noteCollection as? Tuplet {

@@ -309,7 +309,7 @@ class MeasureTests: XCTestCase {
         assertNoErrorThrown {
             try measure.insert(note3, at: 1)
             XCTAssertEqual(measure.notes[0].count, 3)
-            print(measure)
+            print(measure!)
 
             let resultNote1 = try measure.note(at: 0, inSet: 0)
             let resultNote2 = try measure.note(at: 1, inSet: 0)

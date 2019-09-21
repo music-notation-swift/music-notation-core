@@ -1138,6 +1138,8 @@ class TupletTests: XCTestCase {
     }
 
     func testReplaceNotesFromFirstToLastInTupletWithNotesOfSameDuration() {
+        // FIXME: This test is somehow flaky.
+        // It says index out of range on `replaceNotes` call
         assertNoErrorThrown {
             let triplet = try Tuplet(3, .quarter, notes: [quarterNote1, quarterNote2, quarterNote3])
             var tuplet = try Tuplet(3, .quarter, notes: [quarterNote1, triplet])

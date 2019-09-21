@@ -780,8 +780,8 @@ public struct Measure: ImmutableMeasure, Equatable, RandomAccessCollection {
             throw MeasureError.invalidRequestedTieState
         }
 
-        let requestedModificationMethod = requestedTieState == nil ? Note.removeTie : Note.modifyTie
-        let secondaryModificationMethod = removal ? Note.removeTie : Note.modifyTie
+        let requestedModificationIsRemoval = requestedTieState == nil
+        let secondaryModificationIsRemoval = removal
 
         // Get first note here so that we can compare the pitch against second
         // note later. The pitch comparison must be done before modifying the state of
@@ -798,13 +798,17 @@ public struct Measure: ImmutableMeasure, Equatable, RandomAccessCollection {
                 throw MeasureError.notesMustHaveSamePitchesToTie
             }
 
-            try secondaryModificationMethod(&secondNote)(secondaryRequestedTieState)
+            secondaryModificationIsRemoval ?
+                try secondNote.removeTie(secondaryRequestedTieState) :
+                try secondNote.modifyTie(secondaryRequestedTieState)
             let collectionIndex = try noteCollectionIndex(fromNoteIndex: secondaryIndex, inSet: setIndex)
             try replaceNote(at: collectionIndex, with: [secondNote], inSet: setIndex)
         }
 
 
-        try requestedModificationMethod(&firstNote)(primaryRequestedTieState)
+        requestedModificationIsRemoval ?
+            try firstNote.removeTie(primaryRequestedTieState) :
+            try firstNote.modifyTie(primaryRequestedTieState)
         let collectionIndex = try noteCollectionIndex(fromNoteIndex: index, inSet: setIndex)
         try replaceNote(at: collectionIndex, with: [firstNote], inSet: setIndex)
     }

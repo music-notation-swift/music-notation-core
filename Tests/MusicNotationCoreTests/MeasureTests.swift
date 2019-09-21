@@ -573,7 +573,7 @@ class MeasureTests: XCTestCase {
         measure.append(Note(noteDuration: .quarter, pitch: SpelledPitch(noteLetter: .a, octave: .octave1)))
         measure.append(Note(noteDuration: .quarter, pitch: SpelledPitch(noteLetter: .b, octave: .octave1)))
         measure.append(Note(noteDuration: .quarter, pitch: SpelledPitch(noteLetter: .c, octave: .octave1)))
-        assertThrowsError(MeasureError.invalidNoteRange)  {
+        assertThrowsError(MeasureError.noteIndexOutOfRange)  {
             // FIXME: Find a way to reach the MeasureError.invalidNoteRange code path
             try measure.createTuplet(3, .quarter, fromNotesInRange: 0...3)
         }
@@ -1783,7 +1783,7 @@ class MeasureTests: XCTestCase {
     // MARK: - Collection Conformance
 
     func testMapEmpty() {
-        let mappedMeasureSlices = measure.map { $0 }
+        let mappedMeasureSlices = measure.compactMap { $0 }
         let expectedMeasureSlices: [MeasureSlice] = []
         XCTAssertTrue(mappedMeasureSlices.isEmpty)
         XCTAssertTrue(expectedMeasureSlices.isEmpty)
@@ -1815,7 +1815,7 @@ class MeasureTests: XCTestCase {
         )
         let repeatedMappedMeasureSlices = repeatedMeasure.map { $0 }
 
-        let mappedMeasureSlices = measure.map { $0 }
+        let mappedMeasureSlices = measure.compactMap { $0 }
         let expectedMeasureSlices: [[MeasureSlice]] = [
             [MeasureSlice(noteSetIndex: 0, noteCollection: Note(noteDuration: .quarter))],
             [MeasureSlice(noteSetIndex: 0, noteCollection: Note(noteDuration: .quarter))],
@@ -1875,7 +1875,7 @@ class MeasureTests: XCTestCase {
             ])
         let repeatedMappedMeasureSlices = repeatedMeasure.map { $0 }
 
-        let mappedMeasureSlices = measure.map { $0 }
+        let mappedMeasureSlices = measure.compactMap { $0 }
         let expectedMeasureSlices: [[MeasureSlice]] = [
             [
                 MeasureSlice(noteSetIndex: 0, noteCollection: Note(noteDuration: .quarter)),

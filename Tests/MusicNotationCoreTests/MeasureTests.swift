@@ -568,7 +568,7 @@ class MeasureTests: XCTestCase {
             try measure.createTuplet(3, .quarter, fromNotesInRange: 0...3)
         }
     }
-    
+
     func KNOWNISSUEtestCreateTupletNoteInvalidNoteRange() {
         measure.append(Note(noteDuration: .quarter, pitch: SpelledPitch(noteLetter: .a, octave: .octave1)))
         measure.append(Note(noteDuration: .quarter, pitch: SpelledPitch(noteLetter: .b, octave: .octave1)))
@@ -579,7 +579,7 @@ class MeasureTests: XCTestCase {
             try measure.createTuplet(3, .quarter, fromNotesInRange: 0...3)
         }
     }
-    
+
     // MARK: Successes
 
     func testCreateTuplet() {
@@ -1190,11 +1190,8 @@ class MeasureTests: XCTestCase {
             measure.append(compoundTuplet)
         }
         print(measure.debugDescription)
-<<<<<<< HEAD
-=======
         // FIXME: there is no implementation of throw MeasureError.cannotCalculateTicksWithinCompoundTuplet in cumulativeTicks
         // https://github.com/drumnkyle/music-notation-core/issues/129
->>>>>>> Disable some tests that has known issues
         assertThrowsError(MeasureError.cannotCalculateTicksWithinCompoundTuplet) {
             _ = try measure.cumulativeTicks(at: 4)
         }
@@ -1279,7 +1276,7 @@ class MeasureTests: XCTestCase {
         }
     }
 
-    func KNOWNISSUEtestCumulativeTicksMiddleOfTuplet() {
+    func testCumulativeTicksMiddleOfTuplet() {
         let note = Note(noteDuration: .eighth)
         measure.append(note)
         assertNoErrorThrown {
@@ -1288,13 +1285,12 @@ class MeasureTests: XCTestCase {
         }
         assertNoErrorThrown {
             let ticks = try measure.cumulativeTicks(at: 2)
-            // FIXME: Not paying attention to decimals
-            // https://github.com/drumnkyle/music-notation-core/issues/130
+            // FIXME: I don't know about this. Also, why isn't this failing?
             XCTAssertEqual(ticks, note.ticks + Int(floor(Double(note.ticks) * Double(2 / 3))))
         }
     }
 
-    func KNOWNISSUEtestCumulativeTicksAtBeginningOfCompoundTuplet() {
+    func testCumulativeTicksAtBeginningOfCompoundTuplet() {
         let note = Note(noteDuration: .eighth)
         measure.append(note)
         assertNoErrorThrown {
@@ -1302,23 +1298,21 @@ class MeasureTests: XCTestCase {
             let compoundTuplet = try Tuplet(5, .eighth, notes: [note, note, triplet, note])
             measure.append(compoundTuplet)
             print(measure.debugDescription) // |4/4: [1/8R, 6[1/8R, 1/8R, 3[1/8R, 1/8R, 1/8R], 1/8R]]|
-            // FIXME: the rest of the test is not valid because the initialization of the compound tuplet is incorrect
-            // https://github.com/drumnkyle/music-notation-core/issues/134
-//            let eighthTicks = NoteDuration.eighth.ticks
-//            let eachTripletTicks = triplet.ticks / triplet.groupingOrder
-//            let eachCompoundTicks = compoundTuplet.ticks / compoundTuplet.groupingOrder
-//            var currentTicks = eighthTicks
-//            XCTAssertEqual(try measure.cumulativeTicks(at: 1, inSet: 0), currentTicks)
-//            currentTicks += eachTripletTicks
-//            XCTAssertEqual(try measure.cumulativeTicks(at: 2, inSet: 0), currentTicks)
-//            currentTicks += eachTripletTicks
-//            XCTAssertEqual(try measure.cumulativeTicks(at: 3, inSet: 0), currentTicks)
-//            currentTicks += eachCompoundTicks
-//            XCTAssertEqual(try measure.cumulativeTicks(at: 4, inSet: 0), currentTicks)
-//            currentTicks += eachCompoundTicks
-//            XCTAssertEqual(try measure.cumulativeTicks(at: 5, inSet: 0), currentTicks)
-//            currentTicks += eachCompoundTicks
-//            XCTAssertEqual(try measure.cumulativeTicks(at: 6, inSet: 0), currentTicks)
+            let eighthTicks = NoteDuration.eighth.ticks
+            let eachTripletTicks = triplet.ticks / triplet.groupingOrder
+            let eachCompoundTicks = compoundTuplet.ticks / compoundTuplet.groupingOrder
+            var currentTicks = eighthTicks
+            XCTAssertEqual(try measure.cumulativeTicks(at: 1, inSet: 0), currentTicks)
+            currentTicks += eachTripletTicks
+            XCTAssertEqual(try measure.cumulativeTicks(at: 2, inSet: 0), currentTicks)
+            currentTicks += eachTripletTicks
+            XCTAssertEqual(try measure.cumulativeTicks(at: 3, inSet: 0), currentTicks)
+            currentTicks += eachCompoundTicks
+            XCTAssertEqual(try measure.cumulativeTicks(at: 4, inSet: 0), currentTicks)
+            currentTicks += eachCompoundTicks
+            XCTAssertEqual(try measure.cumulativeTicks(at: 5, inSet: 0), currentTicks)
+            currentTicks += eachCompoundTicks
+            XCTAssertEqual(try measure.cumulativeTicks(at: 6, inSet: 0), currentTicks)
 
         }
     }

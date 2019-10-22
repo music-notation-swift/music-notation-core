@@ -303,24 +303,15 @@ public struct Tuplet: NoteCollection {
     }
 
     private func validate() -> Bool {
-        var isValid = true
         var notesTicks = 0
         let fullTupletTicks = groupingOrder * noteDuration.ticks
         for noteCollection in notes {
-            if let tuplet = noteCollection as? Tuplet {
-                if !isValid {
-                    break
-                }
-                isValid = tuplet.validate()
+            if let tuplet = noteCollection as? Tuplet, !tuplet.validate() {
+                return false
             }
             notesTicks += noteCollection.ticks
         }
-        if !isValid {
-            return isValid
-        } else if fullTupletTicks != notesTicks {
-            return false
-        }
-        return true
+        return fullTupletTicks == notesTicks
     }
 
     // MARK: Mutating
@@ -387,6 +378,20 @@ public struct Tuplet: NoteCollection {
         try tuplet.insert(noteCollections, at: sliced)
         notes[flatIndex[0]] = tuplet
     }
+    
+    private mutating func removeNotes(at flatIndexes: [[Int]]) throws {
+        let counts = Set(flatIndexes.map { $0.count })
+        let flatIndexCountGroups = counts.map { count in
+            flatIndexes.filter { flatIndex in
+                return flatIndex.count == count
+            }
+        }.sorted(by: { $0[0][0] > $1[0][0] })
+        
+        for flatIndexes in flatIndexCountGroups {
+            try removeNotesRecursive(at: flatIndexes)
+        }
+        removeAllEmptyTuplets()
+    }
 
     private mutating func removeNotesRecursive(at flatIndexes: [[Int]]) throws {
         guard let first = flatIndexes.first else {
@@ -405,7 +410,7 @@ public struct Tuplet: NoteCollection {
             notes[first[0]] = tuplet
         } else if first.count == 2 {
             // This is the same as the method that calls this. Should be able to be extracted into helper function
-            let tupletIndexes = Set(flatIndexes.map { $0[0] })
+            let tupletIndexes = Set(flatIndexes.map({ $0[0] })).sorted(by: { $0 > $1 })
             let tupletGroups = tupletIndexes.map { tupletIndex in
                 flatIndexes.filter { group in
                     return group[0] == tupletIndex
@@ -428,42 +433,22 @@ public struct Tuplet: NoteCollection {
         }
     }
 
-    private mutating func removeNotes(at flatIndexes: [[Int]]) throws {
-        let counts = Set(flatIndexes.map { $0.count })
-        let flatIndexCountGroups = counts.map { count in
-            flatIndexes.filter { flatIndex in
-                return flatIndex.count == count
-            }
-        }
-        for flatIndexes in flatIndexCountGroups {
-            try removeNotesRecursive(at: flatIndexes)
-        }
-        removeAllEmptyTuplets()
-    }
-
     private mutating func removeAllEmptyTuplets() {
         var indexesToRemove = [Int]()
-        // TODO: We should probably figure out note count so that this switch on type isn't needed.
         let accumulateNoteCount: (Int, NoteCollection) -> Int = { prev, currentNoteCollection in
-            if let currentTuplet = currentNoteCollection as? Tuplet {
-                return prev + currentTuplet.noteCount
-            } else {
-                return prev + currentNoteCollection.noteCount
-            }
+            return prev + currentNoteCollection.noteCount
         }
         for (index, noteCollection) in notes.enumerated() {
-            if let tuplet = noteCollection as? Tuplet,
-                tuplet.notes.isEmpty || tuplet.notes.reduce(0, accumulateNoteCount) == 0 {
+            guard var tuplet = noteCollection as? Tuplet else { continue }
+            if tuplet.notes.isEmpty || tuplet.notes.reduce(0, accumulateNoteCount) == 0 {
                 indexesToRemove.append(index)
-            } else if var tuplet = noteCollection as? Tuplet {
+            } else {
                 tuplet.removeAllEmptyTuplets()
                 notes[index] = tuplet
             }
         }
-        var alreadyRemoved = 0
-        for index in indexesToRemove {
+        for (alreadyRemoved, index) in indexesToRemove.enumerated() {
             notes.remove(at: index - alreadyRemoved)
-            alreadyRemoved += 1
         }
     }
 
@@ -471,7 +456,7 @@ public struct Tuplet: NoteCollection {
         flatIndexes = [[Int]]()
         for (index, noteCollection) in notes.enumerated() {
             if noteCollection is Note {
-                let newIndexes = [parentIndexes.compactMap { $0 }, [index]].flatMap { $0 }
+                let newIndexes = [parentIndexes, [index]].flatMap { $0 }
                 flatIndexes.append(newIndexes)
             } else if var tuplet = noteCollection as? Tuplet {
                 let parents = [parentIndexes, [index]].flatMap { $0 }

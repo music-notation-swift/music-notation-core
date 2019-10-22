@@ -1137,10 +1137,7 @@ class TupletTests: XCTestCase {
         }
     }
 
-    func KNOWNISSUEtestReplaceNotesFromFirstToLastInTupletWithNotesOfSameDuration() {
-        // FIXME: This test is somehow flaky.
-        // It says index out of range on `replaceNotes` call
-        // https://github.com/drumnkyle/music-notation-core/issues/138
+    func testReplaceNotesFromFirstToLastInTupletWithNotesOfSameDuration() {
         assertNoErrorThrown {
             let triplet = try Tuplet(3, .quarter, notes: [quarterNote1, quarterNote2, quarterNote3])
             var tuplet = try Tuplet(3, .quarter, notes: [quarterNote1, triplet])
@@ -1151,8 +1148,7 @@ class TupletTests: XCTestCase {
         }
     }
 
-    func KNOWNISSUEtestReplaceNotesFromFirstToSecondToLastInTupletWithNotesOfSameDuration() {
-        // https://github.com/drumnkyle/music-notation-core/issues/138
+    func testReplaceNotesFromFirstToSecondToLastInTupletWithNotesOfSameDuration() {
         assertNoErrorThrown {
             let triplet = try Tuplet(3, .quarter, notes: [quarterNote1, quarterNote2, quarterNote3])
             var tuplet = try Tuplet(5, .quarter, notes: [quarterNote1, triplet, quarterNote2, quarterNote3])

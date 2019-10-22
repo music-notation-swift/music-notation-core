@@ -352,16 +352,6 @@ class TupletTests: XCTestCase {
             )
         }
     }
-    
-    func testInitSuccessForComplexCompound() {
-        assertNoErrorThrown {
-            let triplet = try Tuplet(3, .eighth, notes: [eighthNote, eighthNote, eighthNote])
-            let compoundTuplet = try Tuplet(5, .eighth, notes: [eighthNote, eighthNote, triplet, eighthNote])
-            print(compoundTuplet)
-            // FIXME: the print above returns: 6[1/8a1, 1/8a1, 3[1/8a1, 1/8a1, 1/8a1], 1/8a1] which is incorrect
-            // https://github.com/drumnkyle/music-notation-core/issues/134
-        }
-    }
 
     func testInitSuccessForStandardWithRests() {
         assertNoErrorThrown {

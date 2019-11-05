@@ -13,7 +13,7 @@ public protocol ImmutableMeasure: NotesHolder {
     var notes: [[NoteCollection]] { get }
     var noteCount: [Int] { get }
     /// Stores all clef changes that took place in this measure
-    var clefs: [Int: Clef] { get }
+    var clefs: [Decimal: Clef] { get }
     /// Stores the last clef used in the measure
     var lastClef: Clef? { get }
     /// Stores the clef used when the measure was created or inserted into the Staff

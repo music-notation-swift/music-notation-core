@@ -106,6 +106,10 @@
 		27CE87721E750623007AD729 /* TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE87651E750622007AD729 /* TestHelpers.swift */; };
 		27CE87731E750623007AD729 /* PitchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE87661E750623007AD729 /* PitchTests.swift */; };
 		27CE87741E750623007AD729 /* TupletTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE87671E750623007AD729 /* TupletTests.swift */; };
+		8AC0972F23720D4F00103FAD /* Decimal+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC0972E23720D4F00103FAD /* Decimal+Extension.swift */; };
+		8AC0973023729EA900103FAD /* Decimal+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC0972E23720D4F00103FAD /* Decimal+Extension.swift */; };
+		8AC0973123729EAA00103FAD /* Decimal+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC0972E23720D4F00103FAD /* Decimal+Extension.swift */; };
+		8AC0973223729EAA00103FAD /* Decimal+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC0972E23720D4F00103FAD /* Decimal+Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -167,6 +171,7 @@
 		27CE87651E750622007AD729 /* TestHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TestHelpers.swift; path = ../Tests/MusicNotationCoreTests/TestHelpers.swift; sourceTree = "<group>"; };
 		27CE87661E750623007AD729 /* PitchTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PitchTests.swift; path = ../Tests/MusicNotationCoreTests/PitchTests.swift; sourceTree = "<group>"; };
 		27CE87671E750623007AD729 /* TupletTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TupletTests.swift; path = ../Tests/MusicNotationCoreTests/TupletTests.swift; sourceTree = "<group>"; };
+		8AC0972E23720D4F00103FAD /* Decimal+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Decimal+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -274,6 +279,7 @@
 		27CE874B1E7505B2007AD729 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				8AC0972D23720D2D00103FAD /* Extension */,
 				27CE86E71E750599007AD729 /* Clef.swift */,
 				27CE86E81E750599007AD729 /* Enharmonic.swift */,
 				27CE86E91E750599007AD729 /* ImmutableMeasure.swift */,
@@ -334,6 +340,14 @@
 				27CE87751E75062B007AD729 /* MusicNotationCoreTests */,
 			);
 			name = Tests;
+			sourceTree = "<group>";
+		};
+		8AC0972D23720D2D00103FAD /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				8AC0972E23720D4F00103FAD /* Decimal+Extension.swift */,
+			);
+			path = Extension;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -568,6 +582,7 @@
 			files = (
 				27CE86FB1E750599007AD729 /* Clef.swift in Sources */,
 				27CE87171E750599007AD729 /* MeasureRepeat.swift in Sources */,
+				8AC0972F23720D4F00103FAD /* Decimal+Extension.swift in Sources */,
 				27CE870B1E750599007AD729 /* Key.swift in Sources */,
 				27CE87471E750599007AD729 /* Types.swift in Sources */,
 				27CE873B1E750599007AD729 /* TimeSignature.swift in Sources */,
@@ -595,6 +610,7 @@
 			files = (
 				27CE86FC1E750599007AD729 /* Clef.swift in Sources */,
 				27CE87181E750599007AD729 /* MeasureRepeat.swift in Sources */,
+				8AC0973023729EA900103FAD /* Decimal+Extension.swift in Sources */,
 				27CE870C1E750599007AD729 /* Key.swift in Sources */,
 				27CE87481E750599007AD729 /* Types.swift in Sources */,
 				27CE873C1E750599007AD729 /* TimeSignature.swift in Sources */,
@@ -622,6 +638,7 @@
 			files = (
 				27CE86FD1E750599007AD729 /* Clef.swift in Sources */,
 				27CE87191E750599007AD729 /* MeasureRepeat.swift in Sources */,
+				8AC0973123729EAA00103FAD /* Decimal+Extension.swift in Sources */,
 				27CE870D1E750599007AD729 /* Key.swift in Sources */,
 				27CE87491E750599007AD729 /* Types.swift in Sources */,
 				27CE873D1E750599007AD729 /* TimeSignature.swift in Sources */,
@@ -649,6 +666,7 @@
 			files = (
 				27CE86FE1E750599007AD729 /* Clef.swift in Sources */,
 				27CE871A1E750599007AD729 /* MeasureRepeat.swift in Sources */,
+				8AC0973223729EAA00103FAD /* Decimal+Extension.swift in Sources */,
 				27CE870E1E750599007AD729 /* Key.swift in Sources */,
 				27CE874A1E750599007AD729 /* Types.swift in Sources */,
 				27CE873E1E750599007AD729 /* TimeSignature.swift in Sources */,

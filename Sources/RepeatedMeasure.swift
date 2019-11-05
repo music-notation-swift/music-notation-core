@@ -40,7 +40,7 @@ public struct RepeatedMeasure: ImmutableMeasure, Equatable, RandomAccessCollecti
     public let notes: [[NoteCollection]]
     public let measureCount: Int = 1
     public let noteCount: [Int]
-    public let clefs: [Int: Clef]
+    public let clefs: [Decimal: Clef]
     public let lastClef: Clef?
     public let originalClef: Clef?
 
@@ -49,7 +49,7 @@ public struct RepeatedMeasure: ImmutableMeasure, Equatable, RandomAccessCollecti
                 notes: [[NoteCollection]] = [],
                 lastClef: Clef? = nil,
                 originalClef: Clef? = nil,
-                clefs: [Int: Clef] = [:]) {
+                clefs: [Decimal: Clef] = [:]) {
         self.lastClef = lastClef
         self.originalClef = originalClef
         self.clefs = clefs

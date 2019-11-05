@@ -79,7 +79,7 @@ public struct Tuplet: NoteCollection {
             throw TupletError.countMustBeLargerThan1
         }
         groupingOrder = count
-        let fullTupletTicks = count * baseNoteDuration.ticks
+        let fullTupletTicks = Decimal(count) * baseNoteDuration.ticks
         let notesTicks = notes.reduce(0) { prev, noteCollection in
             return prev + noteCollection.ticks
         }
@@ -303,8 +303,8 @@ public struct Tuplet: NoteCollection {
     }
 
     private func validate() -> Bool {
-        var notesTicks = 0
-        let fullTupletTicks = groupingOrder * noteDuration.ticks
+        var notesTicks: Decimal = 0
+        let fullTupletTicks = Decimal(groupingOrder) * noteDuration.ticks
         for noteCollection in notes {
             if let tuplet = noteCollection as? Tuplet, !tuplet.validate() {
                 return false

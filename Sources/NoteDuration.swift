@@ -95,9 +95,9 @@ public struct NoteDuration: Hashable {
      This is the number of ticks for the duration with the `dotCount` taken into account. This is a mathematical
      representation of a `NoteDuration` that can be used for different calculations of equivalence.
      */
-    internal var ticks: Int {
-        var ticks: Int = 0
-        let baseTicks: Int = {
+    internal var ticks: Decimal {
+        var ticks: Decimal = 0
+        let baseTicks: Decimal = {
             switch value {
             case .large: return 65_536
             case .long: return 32_768
@@ -178,17 +178,8 @@ public struct NoteDuration: Hashable {
      - returns: A `Double` representing how many of the first duration fit within the second. If the first duration is
         larger than the second, it will be a decimal number less than 0.
      */
-    public static func number(of noteDuration: NoteDuration, within baseNoteDuration: NoteDuration) -> Double {
-        let baseTicks = baseNoteDuration.ticks
-        let equalityTicks = noteDuration.ticks
-
-        let fullNotes = Double(baseTicks / equalityTicks)
-        if fullNotes >= 1 {
-            let decimalValue = Double(baseTicks % equalityTicks) / Double(baseTicks)
-            return fullNotes + decimalValue
-        } else {
-            return Double(baseTicks) / Double(equalityTicks)
-        }
+    public static func number(of noteDuration: NoteDuration, within baseNoteDuration: NoteDuration) -> Decimal {
+        return baseNoteDuration.ticks / noteDuration.ticks
     }
 }
 

@@ -1,0 +1,8 @@
+coverage_service: cobertura_xml
+xcodeproj: MusicNotationCore/MusicNotationCore.xcodeproj
+scheme: MusicNotationCoreMac
+source_directory: Sources
+output_directory: vendor/tests/coverage
+ignore:
+  - Tests/*
+  - MusicNotationCore/*

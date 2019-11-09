@@ -1258,7 +1258,6 @@ class MeasureTests: XCTestCase {
             measure.append(tuplet)
             measure.append(eighth)
             measure.append(eighth)
-            let eachTupletNoteTicks = tuplet.ticks / Decimal(tuplet.groupingOrder)
             let quarterTicks = NoteDuration.quarter.ticks
             let eighthTicks = NoteDuration.eighth.ticks
             XCTAssertEqual(try measure.cumulativeTicks(at: 1, inSet: 0), quarterTicks)

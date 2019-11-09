@@ -1293,8 +1293,8 @@ class MeasureTests: XCTestCase {
             measure.append(compoundTuplet)
             print(measure.debugDescription) // |4/4: [1/8R, 6[1/8R, 1/8R, 3[1/8R, 1/8R, 1/8R], 1/8R]]|
             let eighthTicks = NoteDuration.eighth.ticks
-            let eachCompoundTicks = compoundTuplet.ticks / Decimal(compoundTuplet.groupingOrder)
-            let eachTripletTicks = 2 * eachCompoundTicks / Decimal(triplet.groupingOrder)
+            let eachCompoundTicks = compoundTuplet.ticks / Double(compoundTuplet.groupingOrder)
+            let eachTripletTicks = 2 * eachCompoundTicks / Double(triplet.groupingOrder)
             var currentTicks = eighthTicks
             XCTAssertEqual(try measure.cumulativeTicks(at: 1, inSet: 0), currentTicks)
             currentTicks += eachCompoundTicks

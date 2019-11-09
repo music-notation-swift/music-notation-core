@@ -40,7 +40,7 @@ public struct Measure: ImmutableMeasure, Equatable, RandomAccessCollection {
     }
 
     public let measureCount: Int = 1
-    public private(set) var clefs: [Decimal: Clef] = [:] {
+    public private(set) var clefs: [Double: Clef] = [:] {
         didSet {
             // Recompute lastClef
             guard !clefs.isEmpty else {
@@ -364,7 +364,7 @@ public struct Measure: ImmutableMeasure, Equatable, RandomAccessCollection {
         return try clef(forTicks: ticks)
     }
 
-    private func clef(forTicks ticks: Decimal) throws -> Clef {
+    private func clef(forTicks ticks: Double) throws -> Clef {
         let sortedClefs = clefs.sorted { $0.key < $1.key }
         let prefixedClefs = sortedClefs.prefix { $0.key <= ticks }
         guard let lastClef = prefixedClefs.last?.value else {
@@ -911,25 +911,25 @@ public struct Measure: ImmutableMeasure, Equatable, RandomAccessCollection {
      Returns the number of ticks that exist in the measure up to, but not including
      the given note index.
      */
-    internal func cumulativeTicks(at noteIndex: Int, inSet setIndex: Int = 0) throws -> Decimal {
+    internal func cumulativeTicks(at noteIndex: Int, inSet setIndex: Int = 0) throws -> Double {
         let index = try noteCollectionIndex(fromNoteIndex: noteIndex, inSet: setIndex)
         return try cumulativeTicks(at: index, inSet: setIndex)
     }
 
-    private func cumulativeTicks(at noteCollectionIndex: NoteCollectionIndex, inSet setIndex: Int = 0) throws -> Decimal {
+    private func cumulativeTicks(at noteCollectionIndex: NoteCollectionIndex, inSet setIndex: Int = 0) throws -> Double {
         // If tupletIndex is nil or < 1, we can just get a total of all before
-        let ticks: Decimal
+        let ticks: Double
         if noteCollectionIndex.tupletIndex ?? 0 < 1 {
             let noteCollections = notes[setIndex]
             // Go up to index before
-            ticks = noteCollections[0..<noteCollectionIndex.noteIndex].reduce(Decimal(0)) { prev, currentCollection in
+            ticks = noteCollections[0..<noteCollectionIndex.noteIndex].reduce(Double(0)) { prev, currentCollection in
                 return prev + currentCollection.ticks
             }
         } else {
             let noteCollections = notes[setIndex]
             // Total up ticks before the last one
             let lastCollectionIndex = Swift.max(noteCollectionIndex.noteIndex, 0)
-            let ticksBeforeLast = noteCollections[0..<lastCollectionIndex].reduce(Decimal(0)) { prev, currentCollection in
+            let ticksBeforeLast = noteCollections[0..<lastCollectionIndex].reduce(Double(0)) { prev, currentCollection in
                 return prev + currentCollection.ticks
             }
             guard let lastNoteCollection = noteCollections[noteCollectionIndex.noteIndex] as? Tuplet, let tupletIndex = noteCollectionIndex.tupletIndex else {
@@ -939,7 +939,7 @@ public struct Measure: ImmutableMeasure, Equatable, RandomAccessCollection {
             guard !lastNoteCollection.isCompound else {
                 throw MeasureError.cannotCalculateTicksWithinCompoundTuplet
             }
-            let tupletTicks = lastNoteCollection.ticks / Decimal(lastNoteCollection.groupingOrder) * Decimal(tupletIndex)
+            let tupletTicks = lastNoteCollection.ticks / Double(lastNoteCollection.groupingOrder) * Double(tupletIndex)
             ticks = ticksBeforeLast + tupletTicks
         }
         return ticks

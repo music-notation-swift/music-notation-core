@@ -153,7 +153,7 @@ class NoteDurationTests: XCTestCase {
         let noteDuration = NoteDuration.quarter
         XCTAssertEqual(
             NoteDuration.number(of: try NoteDuration(value: .eighth, dotCount: 1), within: noteDuration),
-            Decimal(4)/3)
+            Double(4)/3)
     }
 
     func testEqualToForSmallerDurationSingleDotFromSingleDot() {

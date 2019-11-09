@@ -31,7 +31,7 @@ public protocol NoteCollection {
     var first: Note? { get }
     var last: Note? { get }
 
-    var ticks: Decimal { get }
+    var ticks: Double { get }
 
     /// - returns: The note at the given index.
     func note(at index: Int) throws -> Note
@@ -39,7 +39,7 @@ public protocol NoteCollection {
 
 extension NoteCollection {
 
-    public var ticks: Decimal { return Decimal(noteTimingCount) * noteDuration.ticks }
+    public var ticks: Double { return Double(noteTimingCount) * noteDuration.ticks }
 
 }
 

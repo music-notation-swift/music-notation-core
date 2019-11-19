@@ -69,11 +69,11 @@ public enum MeasureDurationValidator {
         } catch {
             return [.invalid]
         }
-        let fullMeasureTicksBudget = measure.timeSignature.topNumber * baseDuration.ticks
+        let fullMeasureTicksBudget = Double(measure.timeSignature.topNumber) * baseDuration.ticks
         // Validate each set separately
         return measure.notes.enumerated().map { (setIndex, noteCollection) in
             var overFilledStartIndex: Int?
-            let filledTicks = noteCollection.enumerated().reduce(0) { prev, indexAndCollection in
+            let filledTicks = noteCollection.enumerated().reduce(0.0) { prev, indexAndCollection in
                 let (index, currentCollection) = indexAndCollection
                 let newTicks = prev + currentCollection.ticks
                 if newTicks > fullMeasureTicksBudget && overFilledStartIndex == nil {
@@ -112,15 +112,15 @@ public enum MeasureDurationValidator {
             // TODO: Write TimeSignature validation, so this isn't possible
             return 0
         }
-        let fullMeasureTicksBudget = measure.timeSignature.topNumber * baseDuration.ticks
-        let alreadyFilledTicks = measure.notes[setIndex].reduce(0) { prev, currentCollection in
+        let fullMeasureTicksBudget = Double(measure.timeSignature.topNumber) * baseDuration.ticks
+        let alreadyFilledTicks = measure.notes[setIndex].reduce(0.0) { prev, currentCollection in
             return prev + currentCollection.ticks
         }
         let availableTicks = fullMeasureTicksBudget - alreadyFilledTicks
         guard availableTicks > 0 else {
             return 0
         }
-        return availableTicks / noteDuration.ticks
+        return Int(availableTicks / noteDuration.ticks)
     }
 
     /**
@@ -147,19 +147,21 @@ public enum MeasureDurationValidator {
         }
     }
 
-    private static func availableNotes(within ticks: Int) -> [NoteDuration: Int] {
+    private static func availableNotes(within ticks: Double) -> [NoteDuration: Int] {
         var ticksLeft = ticks
         var availableNotes: [NoteDuration: Int] = [:]
         while ticksLeft != 0 {
             let duration = findLargestDuration(lessThan: ticksLeft)
-            let noteCount = ticksLeft / duration.ticks
+            let noteCount = Int(ticksLeft / duration.ticks)
             availableNotes[duration] = noteCount
-            ticksLeft -= noteCount * duration.ticks
+            ticksLeft -= Double(noteCount) * duration.ticks
         }
         return availableNotes
     }
 
-    private static func findLargestDuration(lessThan ticks: Int) -> NoteDuration {
+    // TODO: Refactor - move allDurations and function findLargest(start:, end:) -> NoteDuration out of this function
+    // https://github.com/drumnkyle/music-notation-core/issues/141
+    private static func findLargestDuration(lessThan ticks: Double) -> NoteDuration {
         let allDurations: [NoteDuration] = [.large, .long, .doubleWhole, .whole, .half, .quarter, .eighth, .sixteenth,
                                             .thirtySecond, .sixtyFourth, .oneTwentyEighth, .twoFiftySixth]
         let allTicks = allDurations.map { $0.ticks }

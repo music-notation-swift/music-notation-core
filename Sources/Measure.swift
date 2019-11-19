@@ -922,14 +922,14 @@ public struct Measure: ImmutableMeasure, Equatable, RandomAccessCollection {
         if noteCollectionIndex.tupletIndex ?? 0 < 1 {
             let noteCollections = notes[setIndex]
             // Go up to index before
-            ticks = noteCollections[0..<noteCollectionIndex.noteIndex].reduce(Double(0)) { prev, currentCollection in
+            ticks = noteCollections[0..<noteCollectionIndex.noteIndex].reduce(0.0) { prev, currentCollection in
                 return prev + currentCollection.ticks
             }
         } else {
             let noteCollections = notes[setIndex]
             // Total up ticks before the last one
             let lastCollectionIndex = Swift.max(noteCollectionIndex.noteIndex, 0)
-            let ticksBeforeLast = noteCollections[0..<lastCollectionIndex].reduce(Double(0)) { prev, currentCollection in
+            let ticksBeforeLast = noteCollections[0..<lastCollectionIndex].reduce(0.0) { prev, currentCollection in
                 return prev + currentCollection.ticks
             }
             guard let lastNoteCollection = noteCollections[noteCollectionIndex.noteIndex] as? Tuplet, let tupletIndex = noteCollectionIndex.tupletIndex else {

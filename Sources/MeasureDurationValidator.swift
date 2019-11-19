@@ -73,7 +73,7 @@ public enum MeasureDurationValidator {
         // Validate each set separately
         return measure.notes.enumerated().map { (setIndex, noteCollection) in
             var overFilledStartIndex: Int?
-            let filledTicks = noteCollection.enumerated().reduce(Double(0)) { prev, indexAndCollection in
+            let filledTicks = noteCollection.enumerated().reduce(0.0) { prev, indexAndCollection in
                 let (index, currentCollection) = indexAndCollection
                 let newTicks = prev + currentCollection.ticks
                 if newTicks > fullMeasureTicksBudget && overFilledStartIndex == nil {
@@ -113,7 +113,7 @@ public enum MeasureDurationValidator {
             return 0
         }
         let fullMeasureTicksBudget = Double(measure.timeSignature.topNumber) * baseDuration.ticks
-        let alreadyFilledTicks = measure.notes[setIndex].reduce(Double(0)) { prev, currentCollection in
+        let alreadyFilledTicks = measure.notes[setIndex].reduce(0.0) { prev, currentCollection in
             return prev + currentCollection.ticks
         }
         let availableTicks = fullMeasureTicksBudget - alreadyFilledTicks
@@ -159,11 +159,12 @@ public enum MeasureDurationValidator {
         return availableNotes
     }
 
+    // TODO: Refactor - move allDurations and function findLargest(start:, end:) -> NoteDuration out of this function
+    // https://github.com/drumnkyle/music-notation-core/issues/141
     private static func findLargestDuration(lessThan ticks: Double) -> NoteDuration {
         let allDurations: [NoteDuration] = [.large, .long, .doubleWhole, .whole, .half, .quarter, .eighth, .sixteenth,
                                             .thirtySecond, .sixtyFourth, .oneTwentyEighth, .twoFiftySixth]
         let allTicks = allDurations.map { $0.ticks }
-        // TODO: Move the function below to Array extension
         func findLargest(start: Int, end: Int) -> NoteDuration {
             guard end - start > 1 else {
                 return allDurations[end]

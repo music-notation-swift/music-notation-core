@@ -6,6 +6,8 @@
 //  Copyright © 2016 Kyle Sherman. All rights reserved.
 //
 
+// TODO: Remove this import by replacing needed methods.
+// https://github.com/drumnkyle/music-notation-core/issues/146
 #if os(Linux)
     import Glibc
 #elseif os(iOS) || os(watchOS) || os(tvOS) || os(OSX)
@@ -88,6 +90,8 @@ public struct Clef {
         // Figure out the delta by looking at how many times the new pitch has multipled the base noteLetter
         let octaveDeltaRaw = Double(newPitchRawWithDelta) / Double(largestNoteLetter)
         let octaveDelta: Int = {
+            // TODO: Use `.rounded(_:)` instead of floor here and below.
+            // https://github.com/drumnkyle/music-notation-core/issues/146
             if octaveDeltaRaw == floor(octaveDeltaRaw) {
                 /**
                  If the value is an exact multiple, it has not crossed the octave border yet.

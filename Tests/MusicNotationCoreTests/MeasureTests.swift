@@ -33,7 +33,7 @@ class MeasureTests: XCTestCase {
         XCTAssertEqual(measure.notes[0].count, 0)
         measure.append(Note(noteDuration: .whole, pitch: SpelledPitch(noteLetter: .c, octave: .octave0)))
         measure.append(Note(noteDuration: .quarter, pitch: SpelledPitch(noteLetter: .d, accidental: .sharp, octave: .octave0)))
-        measure.append(Note(noteDuration: .whole))
+        measure.append(Note(restDuration: .whole))
         XCTAssertEqual(measure.notes[0].count, 3)
     }
 
@@ -61,8 +61,8 @@ class MeasureTests: XCTestCase {
 
     func testReplaceNote() {
         XCTAssertEqual(measure.notes[0].count, 0)
-        let note1 = Note(noteDuration: .whole)
-        let note2 = Note(noteDuration: .eighth)
+        let note1 = Note(restDuration: .whole)
+        let note2 = Note(restDuration: .eighth)
         measure.append(note1)
         measure.append(note2)
         assertNoErrorThrown {
@@ -79,7 +79,7 @@ class MeasureTests: XCTestCase {
     // MARK: Failures
 
     func testRepalceNoteWithInvalidNoteCollection() {
-        measure.append(Note(noteDuration: .whole))
+        measure.append(Note(restDuration: .whole))
         assertThrowsError(MeasureError.invalidNoteCollection) {
             try measure.replaceNote(at: 0, with: [Note]())
         }
@@ -89,8 +89,8 @@ class MeasureTests: XCTestCase {
 
     func testReplaceNoteWithNotesPreservingTie() {
         XCTAssertEqual(measure.notes[0].count, 0)
-        let note1 = Note(noteDuration: .whole)
-        let note2 = Note(noteDuration: .eighth)
+        let note1 = Note(restDuration: .whole)
+        let note2 = Note(restDuration: .eighth)
         measure.append(note1)
         measure.append(note2)
         assertNoErrorThrown {
@@ -186,8 +186,8 @@ class MeasureTests: XCTestCase {
 
     func testReplaceNotes() {
         XCTAssertEqual(measure.notes[0].count, 0)
-        let note1 = Note(noteDuration: .whole)
-        let note2 = Note(noteDuration: .eighth)
+        let note1 = Note(restDuration: .whole)
+        let note2 = Note(restDuration: .eighth)
         measure.append(note1)
         measure.append(note2)
         assertNoErrorThrown {
@@ -202,9 +202,9 @@ class MeasureTests: XCTestCase {
 
     func testReplaceNotesInRangeInvalidTie() {
         XCTAssertEqual(measure.notes[0].count, 0)
-        var note1 = Note(noteDuration: .whole)
+        var note1 = Note(restDuration: .whole)
         note1.tie = .beginAndEnd
-        let note2 = Note(noteDuration: .eighth)
+        let note2 = Note(restDuration: .eighth)
         measure.append(note1)
         measure.append(note2)
         assertThrowsError(MeasureError.invalidTieState) {
@@ -233,8 +233,8 @@ class MeasureTests: XCTestCase {
 
     func testReplaceNotesInRangeWithOtherNotes() {
         XCTAssertEqual(measure.notes[0].count, 0)
-        let note1 = Note(noteDuration: .whole)
-        let note2 = Note(noteDuration: .eighth)
+        let note1 = Note(restDuration: .whole)
+        let note2 = Note(restDuration: .eighth)
         measure.append(note1)
         measure.append(note2)
         assertNoErrorThrown {
@@ -276,7 +276,7 @@ class MeasureTests: XCTestCase {
     func testInsertNoteIndexOutOfRange() {
         XCTAssertEqual(measure.notes[0].count, 0)
         assertThrowsError(MeasureError.noteIndexOutOfRange) {
-            try measure.insert(Note(noteDuration: .whole), at: 1)
+            try measure.insert(Note(restDuration: .whole), at: 1)
         }
     }
 
@@ -301,9 +301,9 @@ class MeasureTests: XCTestCase {
 
     func testInsertNote() {
         XCTAssertEqual(measure.notes[0].count, 0)
-        let note1 = Note(noteDuration: .whole)
-        let note2 = Note(noteDuration: .eighth)
-        let note3 = Note(noteDuration: .quarter)
+        let note1 = Note(restDuration: .whole)
+        let note2 = Note(restDuration: .eighth)
+        let note3 = Note(restDuration: .quarter)
         measure.append(note1)
         measure.append(note2)
         assertNoErrorThrown {
@@ -348,7 +348,7 @@ class MeasureTests: XCTestCase {
 
     func testRemoveNoteFromTuplet() {
         XCTAssertEqual(measure.notes[0].count, 0)
-        let note1 = Note(noteDuration: .eighth)
+        let note1 = Note(restDuration: .eighth)
         measure.append(note1)
         assertThrowsError(MeasureError.removeNoteFromTuplet)  {
             let tuplet = try Tuplet(3, .eighth, notes: [note1, note1, note1])
@@ -382,9 +382,9 @@ class MeasureTests: XCTestCase {
 
     func testRemoveNote() {
         XCTAssertEqual(measure.notes[0].count, 0)
-        let note1 = Note(noteDuration: .whole)
-        let note2 = Note(noteDuration: .eighth)
-        let note3 = Note(noteDuration: .quarter)
+        let note1 = Note(restDuration: .whole)
+        let note2 = Note(restDuration: .eighth)
+        let note3 = Note(restDuration: .quarter)
         measure.append(note1)
         measure.append(note2)
         measure.append(note3)
@@ -415,9 +415,9 @@ class MeasureTests: XCTestCase {
 
     func testRemoveNotesInRangeInvalidTieAtStart() {
         XCTAssertEqual(measure.notes[0].count, 0)
-        var note1 = Note(noteDuration: .whole)
+        var note1 = Note(restDuration: .whole)
         note1.tie = .end
-        let note2 = Note(noteDuration: .eighth)
+        let note2 = Note(restDuration: .eighth)
         measure.append(note1)
         measure.append(note2)
         assertThrowsError(MeasureError.invalidTieState) {
@@ -428,8 +428,8 @@ class MeasureTests: XCTestCase {
 
     func testRemoveNotesInRangeInvalidTieAtEnd() {
         XCTAssertEqual(measure.notes[0].count, 0)
-        let note1 = Note(noteDuration: .whole)
-        var note2 = Note(noteDuration: .eighth)
+        let note1 = Note(restDuration: .whole)
+        var note2 = Note(restDuration: .eighth)
         note2.tie = .begin
         measure.append(note1)
         measure.append(note2)
@@ -473,14 +473,14 @@ class MeasureTests: XCTestCase {
 
     func testRemoveNotesInRange() {
         XCTAssertEqual(measure.notes[0].count, 0)
-        let note1 = Note(noteDuration: .whole)
-        let note2 = Note(noteDuration: .eighth)
-        let note3 = Note(noteDuration: .quarter)
+        let note1 = Note(restDuration: .whole)
+        let note2 = Note(restDuration: .eighth)
+        let note3 = Note(restDuration: .quarter)
         measure.append(note1)
-        measure.append(Note(noteDuration: .quarter))
-        measure.append(Note(noteDuration: .quarter))
-        measure.append(Note(noteDuration: .quarter))
-        measure.append(Note(noteDuration: .quarter))
+        measure.append(Note(restDuration: .quarter))
+        measure.append(Note(restDuration: .quarter))
+        measure.append(Note(restDuration: .quarter))
+        measure.append(Note(restDuration: .quarter))
         measure.append(note2)
         measure.append(note3)
         assertNoErrorThrown {
@@ -500,14 +500,14 @@ class MeasureTests: XCTestCase {
 
     func testRemoveNotesWithTupletsInRange() {
         XCTAssertEqual(measure.notes[0].count, 0)
-        let note1 = Note(noteDuration: .whole)
-        let note2 = Note(noteDuration: .eighth)
-        let note3 = Note(noteDuration: .quarter)
+        let note1 = Note(restDuration: .whole)
+        let note2 = Note(restDuration: .eighth)
+        let note3 = Note(restDuration: .quarter)
         measure.append(note1)
-        measure.append(Note(noteDuration: .quarter))
-        measure.append(Note(noteDuration: .quarter))
-        measure.append(Note(noteDuration: .quarter))
-        measure.append(Note(noteDuration: .quarter))
+        measure.append(Note(restDuration: .quarter))
+        measure.append(Note(restDuration: .quarter))
+        measure.append(Note(restDuration: .quarter))
+        measure.append(Note(restDuration: .quarter))
         measure.append(note2)
         measure.append(note3)
         let notes = [
@@ -1020,9 +1020,9 @@ class MeasureTests: XCTestCase {
 
     func testNoteCollectionIndexFromNoteIndexNoTuplets() {
         // NoteIndex should be the same if there are no tuplets
-        measure.append(Note(noteDuration: .quarter))
-        measure.append(Note(noteDuration: .quarter))
-        measure.append(Note(noteDuration: .quarter))
+        measure.append(Note(restDuration: .quarter))
+        measure.append(Note(restDuration: .quarter))
+        measure.append(Note(restDuration: .quarter))
 
         assertNoErrorThrown {
             let index = try measure.noteCollectionIndex(fromNoteIndex: 2, inSet: 0)
@@ -1035,7 +1035,7 @@ class MeasureTests: XCTestCase {
         // NoteIndex should be the beginning of the tuplet if the index specified
         // is within the tuplet, and tupletIndex should be the index of the note
         // within the tuplet
-        measure.append(Note(noteDuration: .quarter))
+        measure.append(Note(restDuration: .quarter))
         assertNoErrorThrown {
             let note1 = Note(noteDuration: .eighth,
                              pitch: SpelledPitch(noteLetter: .a, octave: .octave1))
@@ -1050,7 +1050,7 @@ class MeasureTests: XCTestCase {
             XCTAssertEqual(index.tupletIndex!, 1)
 
             // Properly address regular note coming after a tuplet
-            measure.append(Note(noteDuration: .eighth))
+            measure.append(Note(restDuration: .eighth))
             let index2 = try measure.noteCollectionIndex(fromNoteIndex: 4, inSet: 0)
             XCTAssertEqual(index2.noteIndex, 2)
             XCTAssertNil(index2.tupletIndex)
@@ -1061,20 +1061,20 @@ class MeasureTests: XCTestCase {
     // MARK: False
 
     func testHasClefAfterNoteInvalidIndex() {
-        measure.append(Note(noteDuration: .quarter))
-        measure.append(Note(noteDuration: .quarter))
+        measure.append(Note(restDuration: .quarter))
+        measure.append(Note(restDuration: .quarter))
         XCTAssertFalse(measure.hasClefAfterNote(at: 3, inSet: 0))
     }
 
     func testHasClefAfterNoteNoClefsFirstIndex() {
-        measure.append(Note(noteDuration: .quarter))
-        measure.append(Note(noteDuration: .quarter))
+        measure.append(Note(restDuration: .quarter))
+        measure.append(Note(restDuration: .quarter))
         XCTAssertFalse(measure.hasClefAfterNote(at: 1, inSet: 0))
     }
 
     func testHasClefAfterNoteNoClefsMiddleIndex() {
-        measure.append(Note(noteDuration: .quarter))
-        measure.append(Note(noteDuration: .quarter))
+        measure.append(Note(restDuration: .quarter))
+        measure.append(Note(restDuration: .quarter))
         assertNoErrorThrown {
             try measure.changeClef(Clef.treble, at: 0, inSet: 0)
         }
@@ -1082,7 +1082,7 @@ class MeasureTests: XCTestCase {
     }
 
     func testHasClefAfterNoteMiddleOfTuplet() {
-        let quarter = Note(noteDuration: .quarter)
+        let quarter = Note(restDuration: .quarter)
         let eighth = Note(noteDuration: .eighth, pitch: SpelledPitch(noteLetter: .c, octave: .octave1))
         assertNoErrorThrown {
             let tuplet = try Tuplet(3, .eighth, notes: [eighth, eighth, eighth])
@@ -1099,7 +1099,7 @@ class MeasureTests: XCTestCase {
     func KNOWNISSUEtestHasClefAfterNoteMiddleOfCompoundTuplet() {
         // FIXME: throws MeasureError.cannotCalculateTicksWithinCompoundTuplet error
         // https://github.com/drumnkyle/music-notation-core/issues/129
-        let note = Note(noteDuration: .eighth)
+        let note = Note(restDuration: .eighth)
         measure.append(note)
         assertNoErrorThrown {
             let triplet = try Tuplet(3, .eighth, notes: [note, note, note])
@@ -1111,8 +1111,8 @@ class MeasureTests: XCTestCase {
     }
 
     func testHasClefAfterNoteNoteOfClefChange() {
-        measure.append(Note(noteDuration: .quarter))
-        measure.append(Note(noteDuration: .quarter))
+        measure.append(Note(restDuration: .quarter))
+        measure.append(Note(restDuration: .quarter))
         assertNoErrorThrown {
             try measure.changeClef(Clef.treble, at: 1, inSet: 0)
         }
@@ -1120,9 +1120,9 @@ class MeasureTests: XCTestCase {
     }
 
     func testHasClefAfterNoteNoteAfterClefChange() {
-        measure.append(Note(noteDuration: .quarter))
-        measure.append(Note(noteDuration: .quarter))
-        measure.append(Note(noteDuration: .quarter))
+        measure.append(Note(restDuration: .quarter))
+        measure.append(Note(restDuration: .quarter))
+        measure.append(Note(restDuration: .quarter))
         assertNoErrorThrown {
             try measure.changeClef(Clef.treble, at: 1, inSet: 0)
         }
@@ -1132,9 +1132,9 @@ class MeasureTests: XCTestCase {
     // MARK: True
 
     func testHasClefAfterNoteOneClefNoteBefore() {
-        measure.append(Note(noteDuration: .quarter))
-        measure.append(Note(noteDuration: .quarter))
-        measure.append(Note(noteDuration: .quarter))
+        measure.append(Note(restDuration: .quarter))
+        measure.append(Note(restDuration: .quarter))
+        measure.append(Note(restDuration: .quarter))
         assertNoErrorThrown {
             try measure.changeClef(Clef.treble, at: 2, inSet: 0)
         }
@@ -1142,10 +1142,10 @@ class MeasureTests: XCTestCase {
     }
 
     func testHasClefAfterNoteMultipleClefsNoteBefore() {
-        measure.append(Note(noteDuration: .quarter))
-        measure.append(Note(noteDuration: .quarter))
-        measure.append(Note(noteDuration: .quarter))
-        measure.append(Note(noteDuration: .quarter))
+        measure.append(Note(restDuration: .quarter))
+        measure.append(Note(restDuration: .quarter))
+        measure.append(Note(restDuration: .quarter))
+        measure.append(Note(restDuration: .quarter))
         assertNoErrorThrown {
             try measure.changeClef(Clef.treble, at: 2, inSet: 0)
             try measure.changeClef(Clef.treble, at: 3, inSet: 0)
@@ -1154,10 +1154,10 @@ class MeasureTests: XCTestCase {
     }
 
     func testHasClefAfterNoteMultipleClefsNoteInMiddle() {
-        measure.append(Note(noteDuration: .quarter))
-        measure.append(Note(noteDuration: .quarter))
-        measure.append(Note(noteDuration: .quarter))
-        measure.append(Note(noteDuration: .quarter))
+        measure.append(Note(restDuration: .quarter))
+        measure.append(Note(restDuration: .quarter))
+        measure.append(Note(restDuration: .quarter))
+        measure.append(Note(restDuration: .quarter))
         assertNoErrorThrown {
             try measure.changeClef(Clef.treble, at: 1, inSet: 0)
             try measure.changeClef(Clef.treble, at: 3, inSet: 0)
@@ -1169,7 +1169,7 @@ class MeasureTests: XCTestCase {
     // MARK: Failures
 
     func testCumulativeTicksInvalidNoteIndex() {
-        let note = Note(noteDuration: .quarter)
+        let note = Note(restDuration: .quarter)
         measure.append(note)
         assertThrowsError(MeasureError.noteIndexOutOfRange) {
             _ = try measure.cumulativeTicks(at: 2, inSet: 0)
@@ -1177,7 +1177,7 @@ class MeasureTests: XCTestCase {
     }
 
     func testCumulativeTicksInvalidSetIndex() {
-        let note = Note(noteDuration: .quarter)
+        let note = Note(restDuration: .quarter)
         measure.append(note)
         assertThrowsError(MeasureError.noteIndexOutOfRange) {
             _ = try measure.cumulativeTicks(at: 0, inSet: 1)
@@ -1185,7 +1185,7 @@ class MeasureTests: XCTestCase {
     }
 
     func KNOWNISSUEtestCumulativeTicksInMiddleOfCompoundTuplet() {
-        let note = Note(noteDuration: .eighth)
+        let note = Note(restDuration: .eighth)
         measure.append(note)
         assertNoErrorThrown {
             let triplet = try Tuplet(3, .eighth, notes: [note, note, note])
@@ -1203,7 +1203,7 @@ class MeasureTests: XCTestCase {
     // MARK: Successes
 
     func testCumulativeTicksBeginning() {
-        let note = Note(noteDuration: .quarter)
+        let note = Note(restDuration: .quarter)
         measure.append(note)
         measure.append(note)
         measure.append(note)
@@ -1215,8 +1215,8 @@ class MeasureTests: XCTestCase {
     }
 
     func testCumulativeTicksAllNotes() {
-        let quarter = Note(noteDuration: .quarter)
-        let eighth = Note(noteDuration: .eighth)
+        let quarter = Note(restDuration: .quarter)
+        let eighth = Note(restDuration: .eighth)
         measure.append(quarter)
         measure.append(quarter)
         measure.append(eighth)
@@ -1250,7 +1250,7 @@ class MeasureTests: XCTestCase {
     }
 
     func testCumulativeTicksBeginningOfTuplet() {
-        let quarter = Note(noteDuration: .quarter)
+        let quarter = Note(restDuration: .quarter)
         let eighth = Note(noteDuration: .eighth, pitch: SpelledPitch(noteLetter: .c, octave: .octave1))
         assertNoErrorThrown {
             let tuplet = try Tuplet(3, .eighth, notes: [eighth, eighth, eighth])
@@ -1271,7 +1271,7 @@ class MeasureTests: XCTestCase {
     }
 
     func testCumulativeTicksMiddleOfTuplet() {
-        let note = Note(noteDuration: .eighth)
+        let note = Note(restDuration: .eighth)
         measure.append(note)
         assertNoErrorThrown {
             let triplet = try Tuplet(3, .eighth, notes: [note, note, note])
@@ -1286,7 +1286,7 @@ class MeasureTests: XCTestCase {
     func KNOWNISSUEtestCumulativeTicksAtBeginningOfCompoundTuplet() {
         // FIXME: throws MeasureError.cannotCalculateTicksWithinCompoundTuplet
         // https://github.com/drumnkyle/music-notation-core/issues/129
-        let note = Note(noteDuration: .eighth)
+        let note = Note(restDuration: .eighth)
         measure.append(note)
         assertNoErrorThrown {
             let triplet = try Tuplet(3, .eighth, notes: [note, note, note])
@@ -1713,7 +1713,7 @@ class MeasureTests: XCTestCase {
     }
 
     func testChangeClefWithinTuplet() {
-        let quarter = Note(noteDuration: .quarter)
+        let quarter = Note(restDuration: .quarter)
         let eighth = Note(noteDuration: .eighth, pitch: SpelledPitch(noteLetter: .c, octave: .octave1))
         assertNoErrorThrown {
             let tuplet = try Tuplet(3, .eighth, notes: [eighth, eighth, eighth])
@@ -1791,21 +1791,21 @@ class MeasureTests: XCTestCase {
     }
 
     func testMapSingleNoteSet() {
-        measure.append(Note(noteDuration: .quarter))
-        measure.append(Note(noteDuration: .quarter))
-        measure.append(Note(noteDuration: .eighth))
-        measure.append(Note(noteDuration: .eighth))
-        measure.append(Note(noteDuration: .quarter))
+        measure.append(Note(restDuration: .quarter))
+        measure.append(Note(restDuration: .quarter))
+        measure.append(Note(restDuration: .eighth))
+        measure.append(Note(restDuration: .eighth))
+        measure.append(Note(restDuration: .quarter))
 
         let repeatedMeasure = RepeatedMeasure(
             timeSignature: timeSignature,
             notes: [
                 [
-                    Note(noteDuration: .quarter),
-                    Note(noteDuration: .quarter),
-                    Note(noteDuration: .eighth),
-                    Note(noteDuration: .eighth),
-                    Note(noteDuration: .quarter)
+                    Note(restDuration: .quarter),
+                    Note(restDuration: .quarter),
+                    Note(restDuration: .eighth),
+                    Note(restDuration: .eighth),
+                    Note(restDuration: .quarter)
                 ]
             ]
         )
@@ -1813,11 +1813,11 @@ class MeasureTests: XCTestCase {
 
         let mappedMeasureSlices = measure.compactMap { $0 }
         let expectedMeasureSlices: [[MeasureSlice]] = [
-            [MeasureSlice(noteSetIndex: 0, noteCollection: Note(noteDuration: .quarter))],
-            [MeasureSlice(noteSetIndex: 0, noteCollection: Note(noteDuration: .quarter))],
-            [MeasureSlice(noteSetIndex: 0, noteCollection: Note(noteDuration: .eighth))],
-            [MeasureSlice(noteSetIndex: 0, noteCollection: Note(noteDuration: .eighth))],
-            [MeasureSlice(noteSetIndex: 0, noteCollection: Note(noteDuration: .quarter))],
+            [MeasureSlice(noteSetIndex: 0, noteCollection: Note(restDuration: .quarter))],
+            [MeasureSlice(noteSetIndex: 0, noteCollection: Note(restDuration: .quarter))],
+            [MeasureSlice(noteSetIndex: 0, noteCollection: Note(restDuration: .eighth))],
+            [MeasureSlice(noteSetIndex: 0, noteCollection: Note(restDuration: .eighth))],
+            [MeasureSlice(noteSetIndex: 0, noteCollection: Note(restDuration: .quarter))],
         ]
         var count = 0
         zip(mappedMeasureSlices, expectedMeasureSlices).forEach {
@@ -1835,38 +1835,38 @@ class MeasureTests: XCTestCase {
     }
 
     func testMapMultipleNoteSets() {
-        measure.append(Note(noteDuration: .quarter), inSet: 0)
-        measure.append(Note(noteDuration: .sixteenth), inSet: 1)
-        measure.append(Note(noteDuration: .quarter), inSet: 0)
-        measure.append(Note(noteDuration: .thirtySecond), inSet: 1)
-        measure.append(Note(noteDuration: .eighth), inSet: 0)
-        measure.append(Note(noteDuration: .quarter), inSet: 1)
-        measure.append(Note(noteDuration: .eighth), inSet: 0)
-        measure.append(Note(noteDuration: .quarter), inSet: 1)
-        measure.append(Note(noteDuration: .quarter), inSet: 0)
-        measure.append(Note(noteDuration: .quarter), inSet: 1)
-        measure.append(Note(noteDuration: .whole), inSet: 1)
-        measure.append(Note(noteDuration: .whole), inSet: 1)
+        measure.append(Note(restDuration: .quarter), inSet: 0)
+        measure.append(Note(restDuration: .sixteenth), inSet: 1)
+        measure.append(Note(restDuration: .quarter), inSet: 0)
+        measure.append(Note(restDuration: .thirtySecond), inSet: 1)
+        measure.append(Note(restDuration: .eighth), inSet: 0)
+        measure.append(Note(restDuration: .quarter), inSet: 1)
+        measure.append(Note(restDuration: .eighth), inSet: 0)
+        measure.append(Note(restDuration: .quarter), inSet: 1)
+        measure.append(Note(restDuration: .quarter), inSet: 0)
+        measure.append(Note(restDuration: .quarter), inSet: 1)
+        measure.append(Note(restDuration: .whole), inSet: 1)
+        measure.append(Note(restDuration: .whole), inSet: 1)
 
         let repeatedMeasure = RepeatedMeasure(
             timeSignature: timeSignature,
             notes: [
                 [
-                    Note(noteDuration: .quarter),
-                    Note(noteDuration: .quarter),
-                    Note(noteDuration: .eighth),
-                    Note(noteDuration: .eighth),
-                    Note(noteDuration: .quarter)
+                    Note(restDuration: .quarter),
+                    Note(restDuration: .quarter),
+                    Note(restDuration: .eighth),
+                    Note(restDuration: .eighth),
+                    Note(restDuration: .quarter)
 
                 ],
                 [
-                    Note(noteDuration: .sixteenth),
-                    Note(noteDuration: .thirtySecond),
-                    Note(noteDuration: .quarter),
-                    Note(noteDuration: .quarter),
-                    Note(noteDuration: .quarter),
-                    Note(noteDuration: .whole),
-                    Note(noteDuration: .whole),
+                    Note(restDuration: .sixteenth),
+                    Note(restDuration: .thirtySecond),
+                    Note(restDuration: .quarter),
+                    Note(restDuration: .quarter),
+                    Note(restDuration: .quarter),
+                    Note(restDuration: .whole),
+                    Note(restDuration: .whole),
                 ]
             ])
         let repeatedMappedMeasureSlices = repeatedMeasure.map { $0 }
@@ -1874,31 +1874,31 @@ class MeasureTests: XCTestCase {
         let mappedMeasureSlices = measure.compactMap { $0 }
         let expectedMeasureSlices: [[MeasureSlice]] = [
             [
-                MeasureSlice(noteSetIndex: 0, noteCollection: Note(noteDuration: .quarter)),
-                MeasureSlice(noteSetIndex: 1, noteCollection: Note(noteDuration: .sixteenth))
+                MeasureSlice(noteSetIndex: 0, noteCollection: Note(restDuration: .quarter)),
+                MeasureSlice(noteSetIndex: 1, noteCollection: Note(restDuration: .sixteenth))
 
             ],
             [
-                MeasureSlice(noteSetIndex: 0, noteCollection: Note(noteDuration: .quarter)),
-                MeasureSlice(noteSetIndex: 1, noteCollection: Note(noteDuration: .thirtySecond))
+                MeasureSlice(noteSetIndex: 0, noteCollection: Note(restDuration: .quarter)),
+                MeasureSlice(noteSetIndex: 1, noteCollection: Note(restDuration: .thirtySecond))
             ],
             [
-                MeasureSlice(noteSetIndex: 0, noteCollection: Note(noteDuration: .eighth)),
-                MeasureSlice(noteSetIndex: 1, noteCollection: Note(noteDuration: .quarter))
+                MeasureSlice(noteSetIndex: 0, noteCollection: Note(restDuration: .eighth)),
+                MeasureSlice(noteSetIndex: 1, noteCollection: Note(restDuration: .quarter))
             ],
             [
-                MeasureSlice(noteSetIndex: 0, noteCollection: Note(noteDuration: .eighth)),
-                MeasureSlice(noteSetIndex: 1, noteCollection: Note(noteDuration: .quarter))
+                MeasureSlice(noteSetIndex: 0, noteCollection: Note(restDuration: .eighth)),
+                MeasureSlice(noteSetIndex: 1, noteCollection: Note(restDuration: .quarter))
             ],
             [
-                MeasureSlice(noteSetIndex: 0, noteCollection: Note(noteDuration: .quarter)),
-                MeasureSlice(noteSetIndex: 1, noteCollection: Note(noteDuration: .quarter))
+                MeasureSlice(noteSetIndex: 0, noteCollection: Note(restDuration: .quarter)),
+                MeasureSlice(noteSetIndex: 1, noteCollection: Note(restDuration: .quarter))
             ],
             [
-                MeasureSlice(noteSetIndex: 1, noteCollection: Note(noteDuration: .whole))
+                MeasureSlice(noteSetIndex: 1, noteCollection: Note(restDuration: .whole))
             ],
             [
-                MeasureSlice(noteSetIndex: 1, noteCollection: Note(noteDuration: .whole))
+                MeasureSlice(noteSetIndex: 1, noteCollection: Note(restDuration: .whole))
             ]
         ]
         var count = 0
@@ -1917,29 +1917,29 @@ class MeasureTests: XCTestCase {
     }
 
     func testReversed() {
-        measure.append(Note(noteDuration: .whole), inSet: 0)
-        measure.append(Note(noteDuration: .thirtySecond), inSet: 1)
-        measure.append(Note(noteDuration: .quarter), inSet: 0)
-        measure.append(Note(noteDuration: .sixtyFourth), inSet: 1)
-        measure.append(Note(noteDuration: .eighth), inSet: 0)
-        measure.append(Note(noteDuration: .oneTwentyEighth), inSet: 1)
-        measure.append(Note(noteDuration: .sixteenth), inSet: 0)
-        measure.append(Note(noteDuration: .twoFiftySixth), inSet: 1)
+        measure.append(Note(restDuration: .whole), inSet: 0)
+        measure.append(Note(restDuration: .thirtySecond), inSet: 1)
+        measure.append(Note(restDuration: .quarter), inSet: 0)
+        measure.append(Note(restDuration: .sixtyFourth), inSet: 1)
+        measure.append(Note(restDuration: .eighth), inSet: 0)
+        measure.append(Note(restDuration: .oneTwentyEighth), inSet: 1)
+        measure.append(Note(restDuration: .sixteenth), inSet: 0)
+        measure.append(Note(restDuration: .twoFiftySixth), inSet: 1)
 
         let repeatedMeasure = RepeatedMeasure(
             timeSignature: timeSignature,
             notes: [
                 [
-                    Note(noteDuration: .whole),
-                    Note(noteDuration: .quarter),
-                    Note(noteDuration: .eighth),
-                    Note(noteDuration: .sixteenth)
+                    Note(restDuration: .whole),
+                    Note(restDuration: .quarter),
+                    Note(restDuration: .eighth),
+                    Note(restDuration: .sixteenth)
                 ],
                 [
-                    Note(noteDuration: .thirtySecond),
-                    Note(noteDuration: .sixtyFourth),
-                    Note(noteDuration: .oneTwentyEighth),
-                    Note(noteDuration: .twoFiftySixth)
+                    Note(restDuration: .thirtySecond),
+                    Note(restDuration: .sixtyFourth),
+                    Note(restDuration: .oneTwentyEighth),
+                    Note(restDuration: .twoFiftySixth)
                 ]
             ])
         let repeatedReversedMeasureSlices = repeatedMeasure.reversed()
@@ -1947,20 +1947,20 @@ class MeasureTests: XCTestCase {
         let reversedMeasureSlices = measure.reversed()
         let expectedMeasureSlices: [[MeasureSlice]] = [
             [
-                MeasureSlice(noteSetIndex: 0, noteCollection: Note(noteDuration: .sixteenth)),
-                MeasureSlice(noteSetIndex: 1, noteCollection: Note(noteDuration: .twoFiftySixth))
+                MeasureSlice(noteSetIndex: 0, noteCollection: Note(restDuration: .sixteenth)),
+                MeasureSlice(noteSetIndex: 1, noteCollection: Note(restDuration: .twoFiftySixth))
             ],
             [
-                MeasureSlice(noteSetIndex: 0, noteCollection: Note(noteDuration: .eighth)),
-                MeasureSlice(noteSetIndex: 1, noteCollection: Note(noteDuration: .oneTwentyEighth))
+                MeasureSlice(noteSetIndex: 0, noteCollection: Note(restDuration: .eighth)),
+                MeasureSlice(noteSetIndex: 1, noteCollection: Note(restDuration: .oneTwentyEighth))
             ],
             [
-                MeasureSlice(noteSetIndex: 0, noteCollection: Note(noteDuration: .quarter)),
-                MeasureSlice(noteSetIndex: 1, noteCollection: Note(noteDuration: .sixtyFourth))
+                MeasureSlice(noteSetIndex: 0, noteCollection: Note(restDuration: .quarter)),
+                MeasureSlice(noteSetIndex: 1, noteCollection: Note(restDuration: .sixtyFourth))
             ],
             [
-                MeasureSlice(noteSetIndex: 0, noteCollection: Note(noteDuration: .whole)),
-                MeasureSlice(noteSetIndex: 1, noteCollection: Note(noteDuration: .thirtySecond))
+                MeasureSlice(noteSetIndex: 0, noteCollection: Note(restDuration: .whole)),
+                MeasureSlice(noteSetIndex: 1, noteCollection: Note(restDuration: .thirtySecond))
             ],
         ]
 
@@ -1980,31 +1980,31 @@ class MeasureTests: XCTestCase {
     }
 
     func testIterator() {
-        measure.append(Note(noteDuration: .whole), inSet: 0)
-        measure.append(Note(noteDuration: .thirtySecond), inSet: 1)
-        measure.append(Note(noteDuration: .quarter), inSet: 0)
-        measure.append(Note(noteDuration: .eighth), inSet: 1)
+        measure.append(Note(restDuration: .whole), inSet: 0)
+        measure.append(Note(restDuration: .thirtySecond), inSet: 1)
+        measure.append(Note(restDuration: .quarter), inSet: 0)
+        measure.append(Note(restDuration: .eighth), inSet: 1)
 
         let repeatedMeasure = RepeatedMeasure(
             timeSignature: timeSignature,
             notes: [
                 [
-                    Note(noteDuration: .whole),
-                    Note(noteDuration: .quarter)
+                    Note(restDuration: .whole),
+                    Note(restDuration: .quarter)
                 ],
                 [
-                    Note(noteDuration: .thirtySecond),
-                    Note(noteDuration: .eighth)
+                    Note(restDuration: .thirtySecond),
+                    Note(restDuration: .eighth)
                 ]
             ])
 
         let expectedMeasureSlice1: [MeasureSlice] = [
-            MeasureSlice(noteSetIndex: 0, noteCollection: Note(noteDuration: .whole)),
-            MeasureSlice(noteSetIndex: 1, noteCollection: Note(noteDuration: .thirtySecond)),
+            MeasureSlice(noteSetIndex: 0, noteCollection: Note(restDuration: .whole)),
+            MeasureSlice(noteSetIndex: 1, noteCollection: Note(restDuration: .thirtySecond)),
         ]
         let expectedMeasureSlice2: [MeasureSlice] = [
-            MeasureSlice(noteSetIndex: 0, noteCollection: Note(noteDuration: .quarter)),
-            MeasureSlice(noteSetIndex: 1, noteCollection: Note(noteDuration: .eighth))
+            MeasureSlice(noteSetIndex: 0, noteCollection: Note(restDuration: .quarter)),
+            MeasureSlice(noteSetIndex: 1, noteCollection: Note(restDuration: .eighth))
         ]
         let expectedMeasureSlices = [expectedMeasureSlice1, expectedMeasureSlice2]
         var iterator = measure.makeIterator()

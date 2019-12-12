@@ -49,7 +49,7 @@ class MeasureDurationValidatorTests: XCTestCase {
         }()
         let quarter = Note(noteDuration: .quarter, pitch: SpelledPitch(noteLetter: .c, octave: .octave0))
         let thirtySecond = Note(noteDuration: .thirtySecond, pitch: SpelledPitch(noteLetter: .c, octave: .octave0))
-        let halfRest = Note(noteDuration: .half)
+        let halfRest = Note(restDuration: .half)
         let quarterTriplet = try! Tuplet(3, .quarter, notes: [quarter, quarter, quarter])
 
         fullMeasure = Measure(

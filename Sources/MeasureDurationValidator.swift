@@ -6,6 +6,16 @@
 //  Copyright © 2016 Kyle Sherman. All rights reserved.
 //
 
+// TODO: Remove this import by replacing needed methods.
+// https://github.com/drumnkyle/music-notation-core/issues/146
+#if os(Linux)
+    import Glibc
+#elseif os(iOS) || os(watchOS) || os(tvOS) || os(OSX)
+    import Foundation
+#else
+    import Darwin.C
+#endif
+
 /**
  This is a collection of static functions that will give information about the completeness of the duration of a 
  `Measure`. A measure must have a certain number of notes according to its `TimeSignature` in order to be valid.
@@ -127,6 +137,8 @@ public enum MeasureDurationValidator {
      */
     internal static func baseNoteDuration(from measure: ImmutableMeasure) throws -> NoteDuration {
         let bottomNumber = measure.timeSignature.bottomNumber
+        // TODO: Replace `pow`, `floor`, and `log`
+        // https://github.com/drumnkyle/music-notation-core/issues/146
         let rationalizedBottomNumber = Int(pow(2, floor(log(Double(bottomNumber)) / log(2))))
 
         // TODO: (Kyle) We should validate in TimeSignature to make sure the number

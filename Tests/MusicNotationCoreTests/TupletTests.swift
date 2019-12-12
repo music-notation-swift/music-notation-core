@@ -14,8 +14,8 @@ class TupletTests: XCTestCase {
 	let pitch1 = SpelledPitch(noteLetter: .a, octave: .octave1)
 	let pitch2 = SpelledPitch(noteLetter: .b, accidental: .sharp, octave: .octave1)
 	let pitch3 = SpelledPitch(noteLetter: .d, accidental: .natural, octave: .octave1)
-	let quarterRest = Note(noteDuration: .quarter)
-	let eighthRest = Note(noteDuration: .eighth)
+	let quarterRest = Note(restDuration: .quarter)
+	let eighthRest = Note(restDuration: .eighth)
     let dottedQuarterNote = Note(noteDuration: try! NoteDuration(value: .quarter, dotCount: 1),
                                  pitch: SpelledPitch(noteLetter: .c, octave: .octave3))
     var quarterNote1: Note!

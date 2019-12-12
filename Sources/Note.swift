@@ -30,8 +30,8 @@ public struct Note: NoteCollection {
     /**
      Initialize a rest.
      */
-    public init(noteDuration: NoteDuration) {
-        self.noteDuration = noteDuration
+    public init(restDuration: NoteDuration) {
+        self.noteDuration = restDuration
         self.pitches = []
         self.isRest = true
     }

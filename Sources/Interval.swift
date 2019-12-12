@@ -6,8 +6,6 @@
 //  Copyright © 2016 Kyle Sherman. All rights reserved.
 //
 
-import Foundation
-
 public enum IntervalQuality: String {
     case perfect
     case minor

@@ -569,16 +569,17 @@ class MeasureTests: XCTestCase {
         }
     }
 
-    func KNOWNISSUEtestCreateTupletNoteInvalidNoteRange() {
+    func testCreateTupletNoteInvalidNoteRange() {
         measure.append(Note(noteDuration: .quarter, pitch: SpelledPitch(noteLetter: .a, octave: .octave1)))
         measure.append(Note(noteDuration: .quarter, pitch: SpelledPitch(noteLetter: .b, octave: .octave1)))
         measure.append(Note(noteDuration: .quarter, pitch: SpelledPitch(noteLetter: .c, octave: .octave1)))
         assertThrowsError(MeasureError.noteIndexOutOfRange)  {
-            // FIXME: Find a way to reach the MeasureError.invalidNoteRange code path
-            // https://github.com/drumnkyle/music-notation-core/issues/128
             try measure.createTuplet(3, .quarter, fromNotesInRange: 0...3)
         }
     }
+
+    // TODO: Find a way to reach the MeasureError.invalidNoteRange code path
+    // https://github.com/drumnkyle/music-notation-core/issues/128
 
     // MARK: Successes
 

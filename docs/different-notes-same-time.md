@@ -25,7 +25,7 @@ This second set of notes in the measure can occur:
 We take the array of `[NoteCollection]` that we have now and make it two dimensional: `[[NoteCollection]]`. Each set of notes will be represented as an element in the outermost array.
 #### Reasoning
 - We can perform measure duration validation on each element of the outermost array completely separately.
-- Rendering index into each sub-array at the same time so that it can easily know if the where the notes line up with each other in the time slices.
+- Rendering index into each sub-array at the same time so that it can easily know if the notes line up with each other in the time slices.
 - API can change to simply have a set index that can default to 0.
 
 ## Alternatives Considered

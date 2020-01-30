@@ -13,7 +13,7 @@ If you are looking for the ability to display the music in an application, pleas
 
 Please consult this [Swift style guide](https://github.com/drumnkyle/swift-style-guide) for coding style guidelines used in this repo and be sure to adhere to them.
 
-There is a Slack channel you can join if you want to see more into the development process at [Music Notation Swift Slack](https://musicnotationswift.slack.com).
+There is a Slack channel you can join if you want to see more into the development process at [Music Notation Swift Slack](https://join.slack.com/t/musicnotationswift/shared_invite/enQtOTE1NzQyMzI5MTA2LWZlN2MyNmI5MjA2Njc4MGQ5N2IxNzYzY2QxMmYwNmFlNDNmNjUwNjBlMGY1MWIzNDkxMzY2MzAwNjc4NTJkNjU).
 
 ---
 

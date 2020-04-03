@@ -7,7 +7,7 @@
 //
 
 import XCTest
-import MusicNotationCoreMac
+import MusicNotationCore
 
 class PitchTests: XCTestCase {
 

@@ -7,7 +7,7 @@
 //
 
 import XCTest
-@testable import MusicNotationCoreMac
+@testable import MusicNotationCore
 
 class MeasureDurationValidatorTests: XCTestCase {
 

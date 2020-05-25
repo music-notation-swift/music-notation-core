@@ -25,4 +25,4 @@ There is also a plan to create an easy to use input file format to create the mu
 This library is under the MIT license. You can use it freely. We'd love to hear about if you use it, so let us know. Feel free to reach out to [Steven Woolgar](mailto:woolie@gmail.com).
 
 # Contributing
-If you are interested in contributing, feel free to pick an issue and start to look into it. However, we suggest contacting us to get more info until we have created a full contributing guide. Contact [Kyle Sherman](mailto:kyledsherman@gmail.com) for more details.
+If you are interested in contributing, feel free to pick an issue and start to look into it. However, we suggest contacting us to get more info until we have created a full contributing guide. Contact [Steven Woolgar](mailto:woolie@gmail.com) for more details.

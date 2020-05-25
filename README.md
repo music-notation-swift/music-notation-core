@@ -5,7 +5,7 @@ Music Notation Core (WIP)
 [![CocoaPods Platforms](https://img.shields.io/cocoapods/p/MusicNotationCore.svg)](#)
 [![Build Status](https://travis-ci.org/drumnkyle/music-notation-core.svg?branch=master)](https://travis-ci.org/drumnkyle/music-notation-core)
 [![codecov](https://codecov.io/gh/drumnkyle/music-notation-core/branch/master/graph/badge.svg)](https://codecov.io/gh/drumnkyle/music-notation-core/)
-![Swift](https://img.shields.io/badge/%20in-swift%205.0-orange.svg)
+![Swift](https://img.shields.io/badge/%20in-swift%205.3-orange.svg)
 
 This is a **work in progress**, Cross-Platform Music Notation API written in Swift. It is written so that it can be used in most any operating system, such as iOS, macOS, Android, Windows, and Linux assuming that Swift is ported to these platforms. This library is being created with the goal of having 0 dependencies; not even Foundation.
 

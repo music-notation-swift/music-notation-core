@@ -22,7 +22,7 @@ This library is meant to provide an easy-to-use API for creating tablature or st
 There is also a plan to create an easy to use input file format to create the music instead of having to create the objects in code as it stands right now. Hopefully a file format can be developed that will be able to make it so simple that a musician who is not necessarily tech savy, would be able to create sheet music or tablature. There are also some open file formats that may be looked into, such as MusicXML (http://www.musicxml.com).
 
 # License
-This library is under the MIT license. You can use it freely. We'd love to hear about if you use it, so let us know. Feel free to reach out to [Kyle Sherman](mailto:kyledsherman@gmail.com).
+This library is under the MIT license. You can use it freely. We'd love to hear about if you use it, so let us know. Feel free to reach out to [Steven Woolgar](mailto:woolie@gmail.com).
 
 # Contributing
 If you are interested in contributing, feel free to pick an issue and start to look into it. However, we suggest contacting us to get more info until we have created a full contributing guide. Contact [Kyle Sherman](mailto:kyledsherman@gmail.com) for more details.

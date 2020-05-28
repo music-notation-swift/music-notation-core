@@ -1,0 +1,4 @@
+--ifdef no-indent
+--indent tabs
+--disable consecutiveSpaces,unusedArguments
+--tabwidth 4

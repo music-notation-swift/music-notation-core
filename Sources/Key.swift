@@ -7,11 +7,10 @@
 //
 
 public struct Key {
-	
 	fileprivate let type: KeyType
 	fileprivate let noteLetter: NoteLetter
 	fileprivate let accidental: Accidental
-	
+
 	public init(noteLetter: NoteLetter, accidental: Accidental = .natural, type: KeyType = .major) {
 		self.noteLetter = noteLetter
 		self.accidental = accidental
@@ -19,21 +18,19 @@ public struct Key {
 	}
 }
 
-
 extension Key: CustomDebugStringConvertible {
 	public var debugDescription: String {
-		return "\(noteLetter)\(accidental.debugDescription) \(type)"
+		"\(noteLetter)\(accidental.debugDescription) \(type)"
 	}
 }
 
 extension Key: Equatable {
-    public static func ==(lhs: Key, rhs: Key) -> Bool {
-        if lhs.type == rhs.type &&
-            lhs.noteLetter == rhs.noteLetter &&
-            lhs.accidental == rhs.accidental {
-            return true
-        }
-        return false
-    }
+	public static func == (lhs: Key, rhs: Key) -> Bool {
+		if lhs.type == rhs.type,
+			lhs.noteLetter == rhs.noteLetter,
+			lhs.accidental == rhs.accidental {
+			return true
+		}
+		return false
+	}
 }
-

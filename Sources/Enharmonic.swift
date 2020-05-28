@@ -7,5 +7,5 @@
 //
 
 public protocol Enharmonic: Equatable {
-    func isEnharmonic(with other: Self) -> Bool
+	func isEnharmonic(with other: Self) -> Bool
 }

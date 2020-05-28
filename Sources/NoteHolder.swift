@@ -11,5 +11,5 @@
  i.e. `Measure` and `MeasureRepeat` both conform to this.
  */
 public protocol NotesHolder: CustomDebugStringConvertible {
-    var measureCount: Int { get }
+	var measureCount: Int { get }
 }

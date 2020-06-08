@@ -20,7 +20,7 @@ class ClefTests: XCTestCase {
 			location: StaffLocation(type: .line, number: 0)
 		)
 		XCTAssertEqual(clef.staffLocation.halfSteps, 0)
-/Users/woolie/Source/OpenSource/music-notation-core/Sources/TimeSignature.swift	}
+	}
 
 	func testInitForCustomOnSpace() {
 		let clef = Clef(

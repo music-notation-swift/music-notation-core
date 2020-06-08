@@ -1,0 +1,8 @@
+// === Common-macOS ===
+
+MACOSX_DEPLOYMENT_TARGET = 10.11
+INFOPLIST_FILE = MusicNotationCoreMac/Info.plist
+PRODUCT_BUNDLE_IDENTIFIER = com.woolsoft.MusicNotationCoreMac
+PRODUCT_NAME = MusicNotationCoreMac
+SDKROOT = macosx
+CODE_SIGN_IDENTITY = -

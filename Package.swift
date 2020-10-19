@@ -4,7 +4,7 @@ import PackageDescription
 
 var package = Package(
 	name: "swift-MusicNotationCore",
-	exclude: ["docs"]
+	exclude: ["docs"],
 	products: [
 		.library(name: "MusicNotationCoreMac", targets: ["MusicNotationCoreMac"]),
 		.library(name: "MusicNotationCoreiOS", targets: ["MusicNotationCoreiOS"]),

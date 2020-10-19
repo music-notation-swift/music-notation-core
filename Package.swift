@@ -16,7 +16,7 @@ var package = Package(
 
 		.target(name: "MusicNotationCoreiOS"),
 		.target(name: "MusicNotationCoreTV"),
-		.target(name: "MusicNotationCoreWatchOS"),
+		.target(name: "MusicNotationCoreWatch"),
 	],
 	swiftLanguageVersions: [
 		.v5

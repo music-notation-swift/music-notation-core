@@ -185,7 +185,7 @@ CLANG_ANALYZER_SECURITY_INSECUREAPI_VFORK = YES
 // === Swift Compiler - General ===
 // === Swift Compiler - Language ===
 
-SWIFT_VERSION = 5.0;
+SWIFT_VERSION = 5.3;
 
 // === Swift Compiler - Search Paths ===
 // === Swift Compiler - Warningss Policies ===

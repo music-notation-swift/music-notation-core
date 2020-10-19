@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -544,7 +544,7 @@
 				};
 			};
 			buildConfigurationList = 27CE86A01E75050A007AD729 /* Build configuration list for PBXProject "MusicNotationCore" */;
-			compatibilityVersion = "Xcode 11.0";
+			compatibilityVersion = "Xcode 12.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -760,6 +760,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E23E8B69248DE57000DFF990 /* music-notation-core-macos-debug.xcconfig */;
 			buildSettings = {
+				SWIFT_VERSION = 5.0;
 				VERSION_INFO_PREFIX = "";
 			};
 			name = Debug;
@@ -768,6 +769,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E23E8B67248DE57000DFF990 /* music-notation-core-macos-release.xcconfig */;
 			buildSettings = {
+				SWIFT_VERSION = 5.0;
 				VERSION_INFO_PREFIX = "";
 			};
 			name = Release;

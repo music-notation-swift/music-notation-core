@@ -1,6 +1,6 @@
 // === Common-watchOS ===
 
-WATCHOS_DEPLOYMENT_TARGET = 5.0
+WATCHOS_DEPLOYMENT_TARGET = 6.0
 INFOPLIST_FILE = MusicNotationCoreWatch/Info.plist
 PRODUCT_BUNDLE_IDENTIFIER = com.woolsoft.MusicNotationCoreWatch
 PRODUCT_NAME = MusicNotationCoreWatch

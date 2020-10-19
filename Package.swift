@@ -8,7 +8,6 @@ var package = Package(
 		.library(name: "MusicNotationCoreMac", targets: ["MusicNotationCoreMac"]),
 		.library(name: "MusicNotationCoreiOS", targets: ["MusicNotationCoreiOS"]),
 		.library(name: "MusicNotationCoreTV", targets: ["MusicNotationCoreTV"]),
-		.library(name: "MusicNotationCoreWatch", targets: ["MusicNotationCoreWatch"]),
 	],
 	targets: [
 		.target(name: "MusicNotationCoreMac", dependencies: []),
@@ -16,7 +15,6 @@ var package = Package(
 
 		.target(name: "MusicNotationCoreiOS"),
 		.target(name: "MusicNotationCoreTV"),
-		.target(name: "MusicNotationCoreWatch"),
 	],
 	swiftLanguageVersions: [
 		.v5

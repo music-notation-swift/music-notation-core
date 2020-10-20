@@ -21,6 +21,29 @@ This library is meant to provide an easy-to-use API for creating tablature or st
 
 There is also a plan to create an easy to use input file format to create the music instead of having to create the objects in code as it stands right now. Hopefully a file format can be developed that will be able to make it so simple that a musician who is not necessarily tech savy, would be able to create sheet music or tablature. There are also some open file formats that may be looked into, such as MusicXML (http://www.musicxml.com).
 
+# Including the library in your project
+
+## Swift Package Manager
+
+Currently unimplemented, but coming soon.
+
+## Manual dependencies
+
+`git checkout` the repository somewhere that your project can find it. You can use git _subtree_ or git sub modules method to keep the projects in sync, or use [`modulo`](https://github.com/modulo-dm/modulo) as a source only dependency manager, or yet still, simply keep them co-located and manage things manually.
+
+To add a sub project (such as this) as a build dependency for your project, follow these steps:
+
+- (If not present) Add a `Frameworks` group to your project.
+- Add the project file into that group.
+
+![Step1 & 2](docs/AddingFrameworkGroup.gif)
+
+- Make the project's targets into a build dependency
+- Link against the framework
+- Add a copy phase to the Build Phases and copy the framework into your application framework folder.
+
+![Step3, 4 & 5](docs/AddingFrameworkDeps.gif)
+
 # License
 This library is under the MIT license. You can use it freely. We'd love to hear about if you use it, so let us know. Feel free to reach out to [Steven Woolgar](mailto:woolie@gmail.com).
 

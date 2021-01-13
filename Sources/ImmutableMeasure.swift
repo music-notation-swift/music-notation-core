@@ -11,10 +11,13 @@ public protocol ImmutableMeasure: NotesHolder {
 	var key: Key? { get }
 	var notes: [[NoteCollection]] { get }
 	var noteCount: [Int] { get }
+
 	/// Stores all clef changes that took place in this measure
 	var clefs: [Double: Clef] { get }
+
 	/// Stores the last clef used in the measure
 	var lastClef: Clef? { get }
+
 	/// Stores the clef used when the measure was created or inserted into the Staff
 	var originalClef: Clef? { get }
 
@@ -64,21 +67,11 @@ public struct MeasureSlice: Equatable {
 }
 
 extension ImmutableMeasure {
-	public var startIndex: Int {
-		0
-	}
+	public var startIndex: Int { 0 }
+	public var endIndex: Int { notes.map { $0.endIndex }.max() ?? 0	}
+	public func index(after i: Int) -> Int { notes.index(after: i) }
 
-	public var endIndex: Int {
-		notes.map { $0.endIndex }.max() ?? 0
-	}
-
-	public func index(after i: Int) -> Int {
-		notes.index(after: i)
-	}
-
-	public func index(before i: Int) -> Int {
-		notes.index(before: i)
-	}
+	public func index(before i: Int) -> Int { notes.index(before: i) }
 
 	internal static func measureSlices(at position: Int, in notes: [[NoteCollection]]) -> [MeasureSlice]? {
 		notes.enumerated().compactMap { noteSetIndex, noteCollections in

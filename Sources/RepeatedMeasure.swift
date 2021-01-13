@@ -6,20 +6,20 @@
 //  Copyright © 2016 Kyle Sherman. All rights reserved.
 //
 
-/**
- This represents a measure that is part of a repeat. This is not one of the original measures that
- will be repeated. This represents a measure that is a repeat of one of the original measures to
- be repeated.
-
- i.e. If we want to repeat measure A 2 times, you would have
-
-    | A, repeated A, repeated A |
-
- This structure represents those repeated measures "repeated A", so that they can be differentiated from the
- original measure "A".
-
- - Note: Look at `MeasureRepeat.expand()` to see how this is used.
- */
+///
+/// This represents a measure that is part of a repeat. This is not one of the original measures that
+/// will be repeated. This represents a measure that is a repeat of one of the original measures to
+/// be repeated.
+///
+/// i.e. If we want to repeat measure A 2 times, you would have
+///
+///    | A, repeated A, repeated A |
+///
+/// This structure represents those repeated measures "repeated A", so that they can be differentiated from the
+/// original measure "A".
+///
+/// - Note: Look at `MeasureRepeat.expand()` to see how this is used.
+///
 public struct RepeatedMeasure: ImmutableMeasure, Equatable, RandomAccessCollection {
 	// MARK: - Collection Conformance
 

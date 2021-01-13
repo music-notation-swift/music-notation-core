@@ -73,60 +73,57 @@ public struct Staff: RandomAccessCollection {
 		measureCount += measureRepeat.measureCount
 	}
 
-	/**
-	 Changes the Clef at the given location.
-
-	 - parameter clef: The new `Clef` to change to
-	 - parameter measureIndex: The index of the measure to change the clef
-	 - parameter noteIndex: The index of the note at which you want the clef to change
-	 - parameter setIndex: The index of the note set in which the note resides where you want to change the clef
-	 - throws:
-	    - `StaffError.measureIndexOutOfRange`
-	    - `StaffError.repeatedMeasureCannotBeModified` if the measure is a repeated measure.
-	    - `StaffError.internalError` if the function has an internal implementation error.
-	 */
+	///
+	/// Changes the Clef at the given location.
+	///
+	/// - parameter clef: The new `Clef` to change to
+	/// - parameter measureIndex: The index of the measure to change the clef
+	/// - parameter noteIndex: The index of the note at which you want the clef to change
+	/// - parameter setIndex: The index of the note set in which the note resides where you want to change the clef
+	/// - throws:
+	///    - `StaffError.measureIndexOutOfRange`
+	///    - `StaffError.repeatedMeasureCannotBeModified` if the measure is a repeated measure.
+	///    - `StaffError.internalError` if the function has an internal implementation error.
+	///
 	public mutating func changeClef(_ clef: Clef,
 									in measureIndex: Int,
 									atNote noteIndex: Int,
 									inSet setIndex: Int = 0) throws {
-		guard var measure = try measure(at: measureIndex) as? Measure else {
-			throw StaffError.repeatedMeasureCannotBeModified
-		}
+		guard var measure = try measure(at: measureIndex) as? Measure else { throw StaffError.repeatedMeasureCannotBeModified }
 		try measure.changeClef(clef, at: noteIndex, inSet: setIndex)
 		try replaceMeasure(at: measureIndex, with: measure)
+
 		// If there is already another clef specified after the new clef, then
 		// there is no need to propagate to the following measures.
-		guard !measure.hasClefAfterNote(at: noteIndex, inSet: setIndex) else {
-			return
-		}
+		guard !measure.hasClefAfterNote(at: noteIndex, inSet: setIndex) else { return }
 		try propagateClefChange(clef, fromMeasureIndex: measureIndex)
 	}
 
-	/**
-	 Inserts a measure at the given index.
-
-	 If the given index falls on a `MeasureRepeat`, there are 3 things that can happen:
-
-	 1. If the index is the beginning of a repeat, see the `beforeRepeat` parameter.
-	 2. If the index is within the original measure(s) to be repeated, the `newMeasure`
-	 will be inserted into the repeat. The new measure is therefore repeated
-	 `MeasureRepeat.repeatCount` times.
-	 3. If the index is within the repeated portion, the insert will fail, because
-	 the repeated measures are immutable. See `MeasureRepeat`.
-
-	 - parameter measure: The measure to be inserted.
-	 - parameter index: The index where the measure should be inserted.
-	 - parameter beforeRepeat: Default value is true. This parameter is only used if the given index is
-	 the beginning of a repeat. True if you want the measure to be inserted before the repeat. False
-	 when you want the measure to be inserted into the repeat at the given index.
-	 - throws:
-	     - `StaffError.measureIndexOutOfRange`
-	     - `StaffError.noRepeatToInsertInto`
-	     - `StaffError.hasToInsertIntoRepeatIfIndexIsNotFirstMeasureOfRepeat`
-	     - `StaffError.internalError`
-	     - `MeasureRepeatError.indexOutOfRange`
-	     - `MeasureRepeatError.cannotModifyRepeatedMeasures`
-	 */
+	///
+	/// Inserts a measure at the given index.
+	///
+	/// If the given index falls on a `MeasureRepeat`, there are 3 things that can happen:
+	///
+	/// 1. If the index is the beginning of a repeat, see the `beforeRepeat` parameter.
+	/// 2. If the index is within the original measure(s) to be repeated, the `newMeasure`
+	/// will be inserted into the repeat. The new measure is therefore repeated
+	/// `MeasureRepeat.repeatCount` times.
+	/// 3. If the index is within the repeated portion, the insert will fail, because
+	/// the repeated measures are immutable. See `MeasureRepeat`.
+	///
+	/// - parameter measure: The measure to be inserted.
+	/// - parameter index: The index where the measure should be inserted.
+	/// - parameter beforeRepeat: Default value is true. This parameter is only used if the given index is
+	/// the beginning of a repeat. True if you want the measure to be inserted before the repeat. False
+	/// when you want the measure to be inserted into the repeat at the given index.
+	/// - throws:
+	///     - `StaffError.measureIndexOutOfRange`
+	///     - `StaffError.noRepeatToInsertInto`
+	///     - `StaffError.hasToInsertIntoRepeatIfIndexIsNotFirstMeasureOfRepeat`
+	///     - `StaffError.internalError`
+	///     - `MeasureRepeatError.indexOutOfRange`
+	///     - `MeasureRepeatError.cannotModifyRepeatedMeasures`
+	///
 	public mutating func insertMeasure(_ measure: Measure, at index: Int, beforeRepeat: Bool = true) throws {
 		var measure = measure
 		let measureBefore = try? self.measure(at: index - 1)
@@ -158,16 +155,16 @@ public struct Staff: RandomAccessCollection {
 		}
 	}
 
-	/**
-	 Inserts a `MeasureRepeat` at the given index. If there is already a repeat at the given index,
-	 this will fail.
-
-	 - parameter measureRepeat: The repeat to insert.
-	 - parameter index: The index where the repeat should be inserted.
-	 - throws:
-	     - `StaffError.measureIndexOutOfRange`
-	     - `StaffError.cannotInsertRepeatWhereOneAlreadyExists`
-	 */
+	///
+	/// Inserts a `MeasureRepeat` at the given index. If there is already a repeat at the given index,
+	/// this will fail.
+	///
+	/// - parameter measureRepeat: The repeat to insert.
+	/// - parameter index: The index where the repeat should be inserted.
+	/// - throws:
+	///     - `StaffError.measureIndexOutOfRange`
+	///     - `StaffError.cannotInsertRepeatWhereOneAlreadyExists`
+	///
 	public mutating func insertRepeat(_ measureRepeat: MeasureRepeat, at index: Int) throws {
 		var measureRepeat = measureRepeat
 		let measureBefore = try? measure(at: index - 1)
@@ -186,67 +183,67 @@ public struct Staff: RandomAccessCollection {
 		measureCount += measureRepeat.measureCount
 	}
 
-	/**
-	 Replaces the measure at the given index with a new measure. The measure index takes into consideration
-	 repeats. Therefore, the index is the actual index of the measure as it were played.
-
-	 - parameter measureIndex: The index of the measure to replace.
-	 - parameter newMeasure: The new measure to replace the old one.
-	 - throws:
-	     - `StaffError.repeatedMeasureCannotBeModified` if the measure is a repeated measure.
-	     - `StaffError.internalError` if index translation doesn't work properly.
-	 */
+	///
+	/// Replaces the measure at the given index with a new measure. The measure index takes into consideration
+	/// repeats. Therefore, the index is the actual index of the measure as it were played.
+	///
+	/// - parameter measureIndex: The index of the measure to replace.
+	/// - parameter newMeasure: The new measure to replace the old one.
+	/// - throws:
+	///     - `StaffError.repeatedMeasureCannotBeModified` if the measure is a repeated measure.
+	///     - `StaffError.internalError` if index translation doesn't work properly.
+	///
 	public mutating func replaceMeasure(at measureIndex: Int, with newMeasure: Measure) throws {
 		try replaceMeasure(at: measureIndex, with: newMeasure, shouldChangeClef: true)
 	}
 
-	/**
-	 Ties a note to the next note.
-
-	 - parameter noteIndex: The index of the note in the specified measure to begin the tie.
-	 - parameter measureIndex: The index of the measure that contains the note at which the tie should begin.
-	 - parameter setIndex: The index of the set of notes you want to modify. There can be multiple sets of notes
-	 that make up a full measure on their own. i.e. bass drum notes and hi-hat notes. See `Measure` for more info.
-	 - throws:
-	     - `StaffError.noteIndexoutOfRange`
-	     - `StaffError.noNextNoteToTie` if the note specified is the last note in the staff.
-	     - `StaffError.measureIndexOutOfRange`
-	     - `StaffError.repeatedMeasureCannotHaveTie` if the index for the measure specified refers to a measure that is
-	     a repeat of another measure.
-	     - `StaffError.internalError`, `MeasureError.internalError` if the function has an internal implementation error.
-	     - `MeasureError.noteIndexOutOfRange`
-	 */
+	///
+	/// Ties a note to the next note.
+	///
+	/// - parameter noteIndex: The index of the note in the specified measure to begin the tie.
+	/// - parameter measureIndex: The index of the measure that contains the note at which the tie should begin.
+	/// - parameter setIndex: The index of the set of notes you want to modify. There can be multiple sets of notes
+	/// that make up a full measure on their own. i.e. bass drum notes and hi-hat notes. See `Measure` for more info.
+	/// - throws:
+	///     - `StaffError.noteIndexoutOfRange`
+	///     - `StaffError.noNextNoteToTie` if the note specified is the last note in the staff.
+	///     - `StaffError.measureIndexOutOfRange`
+	///     - `StaffError.repeatedMeasureCannotHaveTie` if the index for the measure specified refers to a measure that is
+	///     a repeat of another measure.
+	///     - `StaffError.internalError`, `MeasureError.internalError` if the function has an internal implementation error.
+	///     - `MeasureError.noteIndexOutOfRange`
+	///
 	public mutating func startTieFromNote(at noteIndex: Int, inMeasureAt measureIndex: Int, inSet setIndex: Int = 0) throws {
 		try modifyTieForNote(at: noteIndex, inMeasureAt: measureIndex, removeTie: false, inSet: setIndex)
 	}
 
-	/**
-	 Removes the tie beginning at the note at the specified index.
-
-	 - parameter noteIndex: The index of the note in the specified measure where the tie begins.
-	 - parameter measureIndex: The index of the measure that contains the note at which the tie begins.
-	 - parameter setIndex: The index of the set of notes you want to modify. There can be multiple sets of notes
-	 that make up a full measure on their own. i.e. bass drum notes and hi-hat notes. See `Measure` for more info.
-	 - throws:
-	     - `StaffError.noteIndexoutOfRange`
-	     - `StaffError.noNextNoteToTie` if the note specified is the last note in the staff.
-	     - `StaffError.measureIndexOutOfRange`
-	     - `StaffError.repeatedMeasureCannotHaveTie` if the index for the measure specified refers to a measure that is
-	     a repeat of another measure.
-	     - `MeasureError.noteIndexOutOfRange`
-	     - `StaffError.internalError`, `MeasureError.internalError` if the function has an internal implementation error.
-	 */
+	///
+	/// Removes the tie beginning at the note at the specified index.
+	///
+	/// - parameter noteIndex: The index of the note in the specified measure where the tie begins.
+	/// - parameter measureIndex: The index of the measure that contains the note at which the tie begins.
+	/// - parameter setIndex: The index of the set of notes you want to modify. There can be multiple sets of notes
+	/// that make up a full measure on their own. i.e. bass drum notes and hi-hat notes. See `Measure` for more info.
+	/// - throws:
+	///     - `StaffError.noteIndexoutOfRange`
+	///     - `StaffError.noNextNoteToTie` if the note specified is the last note in the staff.
+	///     - `StaffError.measureIndexOutOfRange`
+	///     - `StaffError.repeatedMeasureCannotHaveTie` if the index for the measure specified refers to a measure that is
+	///     a repeat of another measure.
+	///     - `MeasureError.noteIndexOutOfRange`
+	///     - `StaffError.internalError`, `MeasureError.internalError` if the function has an internal implementation error.
+	///
 	public mutating func removeTieFromNote(at noteIndex: Int, inMeasureAt measureIndex: Int, inSet setIndex: Int = 0) throws {
 		try modifyTieForNote(at: noteIndex, inMeasureAt: measureIndex, removeTie: true, inSet: setIndex)
 	}
 
-	/**
-	 - parameter measureIndex: The index of the measure to return.
-	 - returns An `ImmutableMeasure` at the given index within the staff.
-	 - throws:
-	     - `StaffError.measureIndexOutOfRange`
-	     - `StaffError.internalError` if the function has an internal implementation error.
-	 */
+	///
+	/// - parameter measureIndex: The index of the measure to return.
+	/// - returns An `ImmutableMeasure` at the given index within the staff.
+	/// - throws:
+	///     - `StaffError.measureIndexOutOfRange`
+	///     - `StaffError.internalError` if the function has an internal implementation error.
+	///
 	public func measure(at measureIndex: Int) throws -> ImmutableMeasure {
 		let (notesHolderIndex, repeatMeasureIndex) = try notesHolderIndexFromMeasureIndex(measureIndex)
 		if let measureRepeat = notesHolders[notesHolderIndex] as? MeasureRepeat,
@@ -258,14 +255,14 @@ public struct Staff: RandomAccessCollection {
 		throw StaffError.internalError
 	}
 
-	/**
-	 - parameters measureIndex: The index of a measure that is either repeated or is one of the repeated measures.
-	 - returns A `MeasureRepeat` that contains the measure(s) that are repeated as well as the repeat count. Returns nil
-	 if the measure at the specified index is not part of repeat.
-	 - throws:
-	     - `StaffError.measureIndexOutOfRange`
-	     - `StaffError.internalError` if the function has an internal implementation error.
-	 */
+	///
+	/// - parameters measureIndex: The index of a measure that is either repeated or is one of the repeated measures.
+	/// - returns A `MeasureRepeat` that contains the measure(s) that are repeated as well as the repeat count. Returns nil
+	/// if the measure at the specified index is not part of repeat.
+	/// - throws:
+	///     - `StaffError.measureIndexOutOfRange`
+	///     - `StaffError.internalError` if the function has an internal implementation error.
+	///
 	public func measureRepeat(at measureIndex: Int) throws -> MeasureRepeat? {
 		let (notesHolderIndex, _) = try notesHolderIndexFromMeasureIndex(measureIndex)
 		return notesHolders[notesHolderIndex] as? MeasureRepeat

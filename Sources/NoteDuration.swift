@@ -39,10 +39,10 @@ public struct NoteDuration: Hashable {
 		}
 	}
 
-	/**
-	 This holds the value for the bottom number of the time signature and relates the `NoteDuration.Value` to this
-	 number or nil if it cannot be used for the bottom number of a time signature.
-	 */
+	///
+	/// This holds the value for the bottom number of the time signature and relates the `NoteDuration.Value` to this
+	/// number or nil if it cannot be used for the bottom number of a time signature.
+	///
 	public enum TimeSignatureValue: Int, Hashable {
 		case whole = 1
 		case half = 2
@@ -86,14 +86,14 @@ public struct NoteDuration: Hashable {
 	public let value: Value
 	/// The number of dots for this `NoteDuration`.
 	public let dotCount: Int
-	/**
-	 The value for which the bottom number of time signature will be if this duration value is used.
-	 */
+	///
+	/// The value for which the bottom number of time signature will be if this duration value is used.
+	///
 	public let timeSignatureValue: TimeSignatureValue?
-	/**
-	 This is the number of ticks for the duration with the `dotCount` taken into account. This is a mathematical
-	 representation of a `NoteDuration` that can be used for different calculations of equivalence.
-	 */
+	///
+	/// This is the number of ticks for the duration with the `dotCount` taken into account. This is a mathematical
+	/// representation of a `NoteDuration` that can be used for different calculations of equivalence.
+	///
 	internal var ticks: Double {
 		var ticks: Double = 0
 		let baseTicks: Double = {
@@ -127,15 +127,15 @@ public struct NoteDuration: Hashable {
 		timeSignatureValue = TimeSignatureValue(value: value)
 	}
 
-	/**
-	 Use this initializer if you would like to create a `NoteDuration` with 1 or more dots.
-	 Otherwise, use the static properties if you do not need any dots.
-
-	 - parameter value: The value of the duration. i.e. whole, quarter, eighth, etc.
-	 - parameter dotCount: The number of dots for this duration.
-	 - throws:
-	    - `NoteDurationError.negativeDotCountInvalid`
-	 */
+	///
+	/// Use this initializer if you would like to create a `NoteDuration` with 1 or more dots.
+	/// Otherwise, use the static properties if you do not need any dots.
+	///
+	/// - parameter value: The value of the duration. i.e. whole, quarter, eighth, etc.
+	/// - parameter dotCount: The number of dots for this duration.
+	/// - throws:
+	///    - `NoteDurationError.negativeDotCountInvalid`
+	///
 	public init(value: Value, dotCount: Int) throws {
 		guard dotCount >= 0 else {
 			throw NoteDurationError.negativeDotCountInvalid
@@ -145,9 +145,7 @@ public struct NoteDuration: Hashable {
 		timeSignatureValue = TimeSignatureValue(value: value)
 	}
 
-	/**
-	 Initialize a `NoteDuration` from a `TimeSignatureValue` which encapsulates the bottom number of a `TimeSignature`.
-	 */
+	/// Initialize a `NoteDuration` from a `TimeSignatureValue` which encapsulates the bottom number of a `TimeSignature`.
 	public init(timeSignatureValue: TimeSignatureValue) {
 		self = timeSignatureValue.duration
 	}
@@ -165,18 +163,18 @@ public struct NoteDuration: Hashable {
 	public static let oneTwentyEighth = NoteDuration(value: .oneTwentyEighth)
 	public static let twoFiftySixth = NoteDuration(value: .twoFiftySixth)
 
-	/**
-	 This can be used to find out how many of a certain duration fits within another a duration. This takes into account
-	 the `dotCount` as well.
-
-	 For example: How many eighth notes fit within a quarter note?
-	 `NoteDuration.number(of: .eighth, within: .quarter)` = 2.0
-
-	 - parameter noteDuration: the `NoteDuration` you would like to see how many would fit.
-	 - parameter baseNoteDuration: the `NoteDuration` that you would to see how many of the first duration will fit into.
-	 - returns: A `Double` representing how many of the first duration fit within the second. If the first duration is
-	    larger than the second, it will be a Double number less than 0.
-	 */
+	///
+	/// This can be used to find out how many of a certain duration fits within another a duration. This takes into account
+	/// the `dotCount` as well.
+	///
+	/// For example: How many eighth notes fit within a quarter note?
+	/// `NoteDuration.number(of: .eighth, within: .quarter)` = 2.0
+	///
+	/// - parameter noteDuration: the `NoteDuration` you would like to see how many would fit.
+	/// - parameter baseNoteDuration: the `NoteDuration` that you would to see how many of the first duration will fit into.
+	/// - returns: A `Double` representing how many of the first duration fit within the second. If the first duration is
+	///    larger than the second, it will be a Double number less than 0.
+	///
 	public static func number(of noteDuration: NoteDuration, within baseNoteDuration: NoteDuration) -> Double {
 		baseNoteDuration.ticks / noteDuration.ticks
 	}

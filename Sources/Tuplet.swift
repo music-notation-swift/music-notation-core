@@ -6,9 +6,7 @@
 //  Copyright © 2015 Kyle Sherman. All rights reserved.
 //
 
-/**
- Represents Duplet, Triplet, ... Septuplet, etc.
- */
+/// Represents Duplet, Triplet, ... Septuplet, etc.
 public struct Tuplet: NoteCollection {
 	/// The notes that make up the tuplet. They can be other tuplets.
 	public private(set) var notes: [NoteCollection] {
@@ -46,10 +44,10 @@ public struct Tuplet: NoteCollection {
 		flatIndexes.contains { $0.count > 1 }
 	}
 
-	/**
-	 This maps the standard number of notes in the tuplet (`groupingOrder`), to the number of notes the tuplet should fit
-	 in the space of (`noteTimingCount`).
-	 */
+	///
+	/// This maps the standard number of notes in the tuplet (`groupingOrder`), to the number of notes the tuplet should fit
+	/// in the space of (`noteTimingCount`).
+	///
 	public static let standardRatios = [
 		2: 3,
 		3: 2,
@@ -61,21 +59,21 @@ public struct Tuplet: NoteCollection {
 		9: 8,
 	]
 
-	/**
-	 There are two ways you can initialize a `Tuplet`:
-
-	 1) If you would like to create a tuplet with a count between
-	    2 and 9, inclusive, and wish to use the standard ratio associated with that count, then you can specify only the
-	    `count`, `baseDuration` and `notes`. Example:
-	    ````
-	    Tuplet(3, .quarter, [quarterNote1, quarterNote2, quarterNote3])
-	    ````
-	 2) If you would like specify a non-standard ratio or a `count` larger than 9, then you must specify the
-	    `baseCount` parameter. Example:
-	    ````
-	    Tuplet(35, .sixteenth, inSpaceOf: 25, notes: [sixteenth1, ... sixteenth35])
-	    ````
-	 */
+	///
+	/// There are two ways you can initialize a `Tuplet`:
+	///
+	/// 1) If you would like to create a tuplet with a count between
+	///    2 and 9, inclusive, and wish to use the standard ratio associated with that count, then you can specify only the
+	///    `count`, `baseDuration` and `notes`. Example:
+	///    ````
+	///    Tuplet(3, .quarter, [quarterNote1, quarterNote2, quarterNote3])
+	///    ````
+	/// 2) If you would like specify a non-standard ratio or a `count` larger than 9, then you must specify the
+	///    `baseCount` parameter. Example:
+	///    ````
+	///    Tuplet(35, .sixteenth, inSpaceOf: 25, notes: [sixteenth1, ... sixteenth35])
+	///    ````
+	///
 	public init(_ count: Int, _ baseNoteDuration: NoteDuration, inSpaceOf baseCount: Int? = nil, notes: [NoteCollection]) throws {
 		guard count > 1 else {
 			throw TupletError.countMustBeLargerThan1
@@ -222,10 +220,10 @@ public struct Tuplet: NoteCollection {
 		}
 	}
 
-	/**
-	 Returns a modified `NoteCollection` with the tie states correct for preserving the original tie states of the notes
-	 being replaced. The range may also include notes with tie states that represent an invalid state for modification.
-	 */
+	///
+	/// Returns a modified `NoteCollection` with the tie states correct for preserving the original tie states of the notes
+	/// being replaced. The range may also include notes with tie states that represent an invalid state for modification.
+	///
 	private func preserveTieStateForReplacement(in range: CountableClosedRange<Int>,
 												with newCollection: NoteCollection) throws -> NoteCollection {
 		try preserveTieStateForReplacement(in: range, with: [newCollection])[0]

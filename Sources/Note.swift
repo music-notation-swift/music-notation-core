@@ -26,27 +26,21 @@ public struct Note: NoteCollection {
 
 	internal var tie: Tie?
 
-	/**
-	 Initialize a rest.
-	 */
+	/// Initialize a rest.
 	public init(restDuration: NoteDuration) {
 		noteDuration = restDuration
 		pitches = []
 		isRest = true
 	}
 
-	/**
-	 Initialize a note with a single pitch.
-	 */
+	/// Initialize a note with a single pitch.
 	public init(noteDuration: NoteDuration, pitch: SpelledPitch) {
 		self.noteDuration = noteDuration
 		pitches = [pitch]
 		isRest = false
 	}
 
-	/**
-	 Initialize a note with multiple pitches (chord).
-	 */
+	/// Initialize a note with multiple pitches (chord).
 	public init(noteDuration: NoteDuration, pitches: [SpelledPitch]) {
 		isRest = false
 		self.noteDuration = noteDuration
@@ -77,14 +71,14 @@ public struct Note: NoteCollection {
 		}
 	}
 
-	/**
-	 Remove the tie from the note.
-
-	 - parameter currentTie: What part of the tie on the note the caller wants to remove. This is important if the
-	 note is both the beginning and end of a tie
-	 - throws:
-	 - `NoteError.invalidRequestedTieState`
-	 */
+	///
+	/// Remove the tie from the note.
+	///
+	/// - parameter currentTie: What part of the tie on the note the caller wants to remove. This is important if the
+	/// note is both the beginning and end of a tie
+	/// - throws:
+	/// - `NoteError.invalidRequestedTieState`
+	///
 	internal mutating func removeTie(_ currentTie: Tie) throws {
 		switch (currentTie, tie) {
 		case (.beginAndEnd, _):

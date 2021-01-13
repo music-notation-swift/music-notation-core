@@ -15,34 +15,26 @@ class ClefTests: XCTestCase {
 	// MARK: Successes
 
 	func testInitForCustomOnLine() {
-		let clef = Clef(
-			pitch: SpelledPitch(noteLetter: .c, octave: .octave4),
-			location: StaffLocation(type: .line, number: 0)
-		)
+		let clef = Clef(pitch: SpelledPitch(noteLetter: .c, octave: .octave4),
+						location: StaffLocation(type: .line, number: 0))
 		XCTAssertEqual(clef.staffLocation.halfSteps, 0)
 	}
 
 	func testInitForCustomOnSpace() {
-		let clef = Clef(
-			pitch: SpelledPitch(noteLetter: .g, octave: .octave4),
-			location: StaffLocation(type: .space, number: 1)
-		)
+		let clef = Clef(pitch: SpelledPitch(noteLetter: .g, octave: .octave4),
+						location: StaffLocation(type: .space, number: 1))
 		XCTAssertEqual(clef.staffLocation.halfSteps, 3)
 	}
 
 	func testInitForCustomNegativeLedger() {
-		let clef = Clef(
-			pitch: SpelledPitch(noteLetter: .g, octave: .octave3),
-			location: StaffLocation(type: .line, number: -2)
-		)
+		let clef = Clef(pitch: SpelledPitch(noteLetter: .g, octave: .octave3),
+						location: StaffLocation(type: .line, number: -2))
 		XCTAssertEqual(clef.staffLocation.halfSteps, -4)
 	}
 
 	func testInitForCustomPositiveLedger() {
-		let clef = Clef(
-			pitch: SpelledPitch(noteLetter: .a, octave: .octave4),
-			location: StaffLocation(type: .line, number: 7)
-		)
+		let clef = Clef(pitch: SpelledPitch(noteLetter: .a, octave: .octave4),
+						location: StaffLocation(type: .line, number: 7))
 		XCTAssertEqual(clef.staffLocation.halfSteps, 14)
 	}
 

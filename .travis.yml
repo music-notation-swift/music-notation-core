@@ -1,16 +1,16 @@
 language: swift
-osx_image: xcode11
+osx_image: xcode12.3
 script:
 
   - set -o pipefail
 
-  - xcodebuild clean build build-for-testing -project MusicNotationCore/MusicNotationCore.xcodeproj -scheme MusicNotationCoreMac -sdk macosx | xcpretty
-  - xcodebuild test-without-building -project MusicNotationCore/MusicNotationCore.xcodeproj -scheme MusicNotationCoreMac -sdk macosx | xcpretty
-  - xcodebuild build -project MusicNotationCore/MusicNotationCore.xcodeproj -scheme MusicNotationCoreiOS -sdk iphoneos | xcpretty
-  - xcodebuild build -project MusicNotationCore/MusicNotationCore.xcodeproj -scheme MusicNotationCoreTV -sdk appletvos | xcpretty
-  - xcodebuild build -project MusicNotationCore/MusicNotationCore.xcodeproj -scheme MusicNotationCoreWatch -sdk watchos | xcpretty
+  - swift package clean
+  - swift build --build-tests
+  - swift test --enable-code-coverage
+  - xcrun llvm-cov export -format="lcov" .build/debug/MusicNotationCorePackageTests.xctest/Contents/MacOS/MusicNotationCorePackageTests -instr-profile .build/debug/codecov/default.profdata > info.lcov
+
 after_success:
-  - bash <(curl -s https://codecov.io/bash)
+  - bash <(curl -s https://codecov.io/bash) -Z -f info.lcov
 notifications:
   slack: musicnotationswift:GAuOCY6YxRaZHrDvGRXRF9Im
   email: false

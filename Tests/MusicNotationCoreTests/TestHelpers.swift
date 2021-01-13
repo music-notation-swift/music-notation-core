@@ -9,20 +9,31 @@
 import XCTest
 
 extension XCTestCase {
-	func assertThrowsError<T: Error>(_ expectedError: T, inFile file: String = #file, atLine line: UInt = #line,
+	func assertThrowsError<T: Error>(_ expectedError: T,
+									 inFile file: String = #file, atLine line: UInt = #line,
 									 expression: () throws -> Void) where T: Equatable {
+		let location = XCTSourceCodeLocation(filePath: file, lineNumber: Int(line))
+		let context = XCTSourceCodeContext(location: location)
+
 		do {
 			try expression()
-			recordFailure(withDescription: "Expected error \(expectedError), but got no error.",
-						  inFile: file,
-						  atLine: Int(line),
-						  expected: false)
+
+			let issue = XCTIssue(type: .assertionFailure,
+								 compactDescription: "Expected error \(expectedError), but got no error.",
+								 detailedDescription: nil,
+								 sourceCodeContext: context,
+								 associatedError: nil,
+								 attachments: [])
+			record(issue)
 		} catch {
 			if error as? T != expectedError {
-				recordFailure(withDescription: "Expected error \(expectedError), but got: \(error).",
-							  inFile: file,
-							  atLine: Int(line),
-							  expected: false)
+				let issue = XCTIssue(type: .assertionFailure,
+									 compactDescription: "Expected error \(expectedError), but got: \(error).",
+									 detailedDescription: nil,
+									 sourceCodeContext: context,
+									 associatedError: nil,
+									 attachments: [])
+				record(issue)
 			}
 		}
 	}
@@ -31,7 +42,15 @@ extension XCTestCase {
 		do {
 			try expression()
 		} catch {
-			recordFailure(withDescription: "Expected no error, but got: \(error)", inFile: file, atLine: Int(line), expected: false)
+			let location = XCTSourceCodeLocation(filePath: file, lineNumber: Int(line))
+			let context = XCTSourceCodeContext(location: location)
+			let issue = XCTIssue(type: .assertionFailure,
+								 compactDescription: "Expected no error, but got: \(error)",
+								 detailedDescription: nil,
+								 sourceCodeContext: context,
+								 associatedError: nil,
+								 attachments: [])
+			record(issue)
 		}
 	}
 }

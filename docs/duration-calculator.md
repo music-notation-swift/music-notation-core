@@ -15,7 +15,7 @@ For example:
 ### Convert Note Duration Into Ticks Per Quarter Note (TPQN)
 
 Calculate measure budget based on time signature. Ideally, it is not ideal to
-work with fractions, so it would be better to express lengths w.r.t the shorest
+work with fractions, so it would be better to express lengths w.r.t the shortest
 note.
 
 https://en.wikipedia.org/wiki/Two_hundred_fifty-sixth_note

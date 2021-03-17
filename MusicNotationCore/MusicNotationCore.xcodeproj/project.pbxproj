@@ -106,6 +106,14 @@
 		27CE87721E750623007AD729 /* TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE87651E750622007AD729 /* TestHelpers.swift */; };
 		27CE87731E750623007AD729 /* PitchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE87661E750623007AD729 /* PitchTests.swift */; };
 		27CE87741E750623007AD729 /* TupletTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27CE87671E750623007AD729 /* TupletTests.swift */; };
+		E2DB7E0B25C666E000F7395D /* Score.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2DB7E0A25C666E000F7395D /* Score.swift */; };
+		E2DB7E0C25C666E000F7395D /* Score.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2DB7E0A25C666E000F7395D /* Score.swift */; };
+		E2DB7E0D25C666E000F7395D /* Score.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2DB7E0A25C666E000F7395D /* Score.swift */; };
+		E2DB7E0E25C666E000F7395D /* Score.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2DB7E0A25C666E000F7395D /* Score.swift */; };
+		E2DB7E1525C668C600F7395D /* StavesHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2DB7E1425C668C600F7395D /* StavesHolder.swift */; };
+		E2DB7E1625C668C600F7395D /* StavesHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2DB7E1425C668C600F7395D /* StavesHolder.swift */; };
+		E2DB7E1725C668C600F7395D /* StavesHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2DB7E1425C668C600F7395D /* StavesHolder.swift */; };
+		E2DB7E1825C668C600F7395D /* StavesHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2DB7E1425C668C600F7395D /* StavesHolder.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -184,6 +192,8 @@
 		E23E8B71248DE5FF00DFF990 /* music-notation-core-watchos-debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "music-notation-core-watchos-debug.xcconfig"; sourceTree = "<group>"; };
 		E23E8B72248DE5FF00DFF990 /* music-notation-core-watchos-release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "music-notation-core-watchos-release.xcconfig"; sourceTree = "<group>"; };
 		E23E8B73248DE76100DFF990 /* common-ios.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "common-ios.xcconfig"; sourceTree = "<group>"; };
+		E2DB7E0A25C666E000F7395D /* Score.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Score.swift; sourceTree = "<group>"; };
+		E2DB7E1425C668C600F7395D /* StavesHolder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StavesHolder.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -305,7 +315,9 @@
 				27CE86F11E750599007AD729 /* NoteDuration.swift */,
 				27CE86F21E750599007AD729 /* NoteHolder.swift */,
 				27CE86F31E750599007AD729 /* RepeatedMeasure.swift */,
+				E2DB7E0A25C666E000F7395D /* Score.swift */,
 				27CE86F41E750599007AD729 /* Staff.swift */,
+				E2DB7E1425C668C600F7395D /* StavesHolder.swift */,
 				27CE86F51E750599007AD729 /* StaffLocation.swift */,
 				27CE86F61E750599007AD729 /* SwiftHelpers.swift */,
 				27CE86F71E750599007AD729 /* TimeSignature.swift */,
@@ -608,6 +620,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E2DB7E1525C668C600F7395D /* StavesHolder.swift in Sources */,
 				27CE86FB1E750599007AD729 /* Clef.swift in Sources */,
 				27CE87171E750599007AD729 /* MeasureRepeat.swift in Sources */,
 				27CE870B1E750599007AD729 /* Key.swift in Sources */,
@@ -615,6 +628,7 @@
 				27CE873B1E750599007AD729 /* TimeSignature.swift in Sources */,
 				27CE87271E750599007AD729 /* NoteHolder.swift in Sources */,
 				27CE87131E750599007AD729 /* MeasureDurationValidator.swift in Sources */,
+				E2DB7E0B25C666E000F7395D /* Score.swift in Sources */,
 				27CE870F1E750599007AD729 /* Measure.swift in Sources */,
 				27CE87231E750599007AD729 /* NoteDuration.swift in Sources */,
 				27CE872B1E750599007AD729 /* RepeatedMeasure.swift in Sources */,
@@ -635,6 +649,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E2DB7E1625C668C600F7395D /* StavesHolder.swift in Sources */,
 				27CE86FC1E750599007AD729 /* Clef.swift in Sources */,
 				27CE87181E750599007AD729 /* MeasureRepeat.swift in Sources */,
 				27CE870C1E750599007AD729 /* Key.swift in Sources */,
@@ -642,6 +657,7 @@
 				27CE873C1E750599007AD729 /* TimeSignature.swift in Sources */,
 				27CE87281E750599007AD729 /* NoteHolder.swift in Sources */,
 				27CE87141E750599007AD729 /* MeasureDurationValidator.swift in Sources */,
+				E2DB7E0C25C666E000F7395D /* Score.swift in Sources */,
 				27CE87101E750599007AD729 /* Measure.swift in Sources */,
 				27CE87241E750599007AD729 /* NoteDuration.swift in Sources */,
 				27CE872C1E750599007AD729 /* RepeatedMeasure.swift in Sources */,
@@ -662,6 +678,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E2DB7E1725C668C600F7395D /* StavesHolder.swift in Sources */,
 				27CE86FD1E750599007AD729 /* Clef.swift in Sources */,
 				27CE87191E750599007AD729 /* MeasureRepeat.swift in Sources */,
 				27CE870D1E750599007AD729 /* Key.swift in Sources */,
@@ -669,6 +686,7 @@
 				27CE873D1E750599007AD729 /* TimeSignature.swift in Sources */,
 				27CE87291E750599007AD729 /* NoteHolder.swift in Sources */,
 				27CE87151E750599007AD729 /* MeasureDurationValidator.swift in Sources */,
+				E2DB7E0D25C666E000F7395D /* Score.swift in Sources */,
 				27CE87111E750599007AD729 /* Measure.swift in Sources */,
 				27CE87251E750599007AD729 /* NoteDuration.swift in Sources */,
 				27CE872D1E750599007AD729 /* RepeatedMeasure.swift in Sources */,
@@ -689,6 +707,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E2DB7E1825C668C600F7395D /* StavesHolder.swift in Sources */,
 				27CE86FE1E750599007AD729 /* Clef.swift in Sources */,
 				27CE871A1E750599007AD729 /* MeasureRepeat.swift in Sources */,
 				27CE870E1E750599007AD729 /* Key.swift in Sources */,
@@ -696,6 +715,7 @@
 				27CE873E1E750599007AD729 /* TimeSignature.swift in Sources */,
 				27CE872A1E750599007AD729 /* NoteHolder.swift in Sources */,
 				27CE87161E750599007AD729 /* MeasureDurationValidator.swift in Sources */,
+				E2DB7E0E25C666E000F7395D /* Score.swift in Sources */,
 				27CE87121E750599007AD729 /* Measure.swift in Sources */,
 				27CE87261E750599007AD729 /* NoteDuration.swift in Sources */,
 				27CE872E1E750599007AD729 /* RepeatedMeasure.swift in Sources */,

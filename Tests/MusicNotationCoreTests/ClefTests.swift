@@ -14,7 +14,7 @@ class ClefTests: XCTestCase {
 
 	// MARK: Successes
 
-	func testInitForCustomOnLine() {
+	func testInitForCustomOnLine() throws {
 		let clef = Clef(pitch: SpelledPitch(noteLetter: .c, octave: .octave4),
 						location: StaffLocation(type: .line, number: 0))
 		XCTAssertEqual(clef.staffLocation.halfSteps, 0)

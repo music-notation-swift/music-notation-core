@@ -1,6 +1,8 @@
 Music Notation Core (WIP)
 ==============
 
+# THIS REPO IS DEPRECATED IN FAVOR OF `music-notation`
+
 [![CocoaPods Version](https://img.shields.io/cocoapods/v/MusicNotationCore.svg)](#)
 [![CocoaPods Platforms](https://img.shields.io/cocoapods/p/MusicNotationCore.svg)](#)
 [![Build Status](https://travis-ci.org/drumnkyle/music-notation-core.svg?branch=master)](https://travis-ci.org/drumnkyle/music-notation-core)

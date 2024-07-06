@@ -2,7 +2,7 @@
 //  TestHelpers.swift
 //  MusicNotationCore
 //
-//  Created by Kyle Sherman on 7/12/15.
+//  Created by Kyle Sherman on 07/12/2015.
 //  Copyright © 2015 Kyle Sherman. All rights reserved.
 //
 

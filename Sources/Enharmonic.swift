@@ -2,7 +2,7 @@
 //  Enharmonic.swift
 //  MusicNotationCore
 //
-//  Created by Rob Hudson on 9/16/16.
+//  Created by Rob Hudson on 09/16/2016.
 //  Copyright © 2016 Kyle Sherman. All rights reserved.
 //
 

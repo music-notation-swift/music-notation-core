@@ -2,7 +2,7 @@
 //  SwiftHelpers.swift
 //  MusicNotationCore
 //
-//  Created by Kyle Sherman on 10/15/16.
+//  Created by Kyle Sherman on 10/15/2016.
 //  Copyright © 2016 Kyle Sherman. All rights reserved.
 //
 

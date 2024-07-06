@@ -2,11 +2,11 @@
 //  Types.swift
 //  MusicNotation
 //
-//  Created by Kyle Sherman on 6/12/15.
+//  Created by Kyle Sherman on 06/12/2015.
 //  Copyright (c) 2015 Kyle Sherman. All rights reserved.
 //
 
-public enum Octave: Int {
+public enum Octave: Int, Sendable {
 	case octaveNegative1 = -1
 	case octave0 = 0
 	case octave1 = 1
@@ -20,12 +20,12 @@ public enum Octave: Int {
 	case octave9 = 9
 }
 
-public enum Striking {
+public enum Striking: Sendable {
 	case left, up
 	case right, down
 }
 
-public enum Accidental {
+public enum Accidental: Sendable {
 	case sharp
 	case doubleSharp
 	case flat
@@ -45,7 +45,7 @@ extension Accidental: CustomDebugStringConvertible {
 	}
 }
 
-public enum NoteLetter: Int {
+public enum NoteLetter: Int, Sendable {
 	case c = 1
 	case d
 	case e
@@ -60,13 +60,13 @@ public enum Instrument {
 	case drums
 }
 
-public enum Accent {
+public enum Accent: Sendable {
 	case standard
 	case strong
 	case ghost
 }
 
-public enum Dynamics {
+public enum Dynamics: Sendable {
 	case ppp
 	case pp
 	case p
@@ -77,13 +77,13 @@ public enum Dynamics {
 	case fff
 }
 
-public enum Tie {
+public enum Tie: Sendable {
 	case begin
 	case end
 	case beginAndEnd
 }
 
-public enum KeyType {
+public enum KeyType: Sendable {
 	case major
 	case minor
 }

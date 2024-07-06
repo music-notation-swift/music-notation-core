@@ -2,7 +2,7 @@
 //  SpelledPitch.swift
 //  MusicNotationCore
 //
-//  Created by Kyle Sherman on 6/15/15.
+//  Created by Kyle Sherman on 06/15/2015.
 //  Copyright © 2015 Kyle Sherman. All rights reserved.
 //
 
@@ -13,7 +13,7 @@
 /// This struct represents a pitch that is already in the desired spelling.
 /// So, this assumes the user of this struct knows which spelling to pick.
 ///
-public struct SpelledPitch {
+public struct SpelledPitch: Sendable {
 	public let noteLetter: NoteLetter
 	public let accidental: Accidental
 	public let octave: Octave

@@ -2,17 +2,17 @@
 //  MeasureDurationValidatorTests.swift
 //  MusicNotationCore
 //
-//  Created by Kyle Sherman on 8/6/16.
+//  Created by Kyle Sherman on 08/06/2016.
 //  Copyright © 2016 Kyle Sherman. All rights reserved.
 //
 
-@testable import MusicNotationCoreMac
+@testable import MusicNotationCore
 import XCTest
 
 class MeasureDurationValidatorTests: XCTestCase {
-	static let standardTimeSignature = TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120)
-	static let oddTimeSignature = TimeSignature(topNumber: 11, bottomNumber: 16, tempo: 86)
-	static let irrationalTimeSignature = TimeSignature(topNumber: 3, bottomNumber: 6, tempo: 120)
+    static let standardTimeSignature = TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120)
+    static let oddTimeSignature = TimeSignature(topNumber: 11, bottomNumber: 16, tempo: 86)
+    static let irrationalTimeSignature = TimeSignature(topNumber: 3, bottomNumber: 6, tempo: 120)
 
 	var fullMeasure: Measure!
 	var notFullMeasure: Measure!

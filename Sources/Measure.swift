@@ -2,7 +2,7 @@
 //  Measure.swift
 //  MusicNotation
 //
-//  Created by Kyle Sherman on 6/12/15.
+//  Created by Kyle Sherman on 06/12/2015.
 //  Copyright (c) 2015 Kyle Sherman. All rights reserved.
 //
 

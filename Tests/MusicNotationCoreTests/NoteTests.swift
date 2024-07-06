@@ -2,11 +2,11 @@
 //  NoteTests.swift
 //  MusicNotationCore
 //
-//  Created by Kyle Sherman on 6/15/15.
+//  Created by Kyle Sherman on 06/15/2015.
 //  Copyright © 2015 Kyle Sherman. All rights reserved.
 //
 
-@testable import MusicNotationCoreMac
+@testable import MusicNotationCore
 import XCTest
 
 class NoteTests: XCTestCase {

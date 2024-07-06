@@ -2,11 +2,11 @@
 //  IntervalTests.swift
 //  MusicNotationCore
 //
-//  Created by Rob Hudson on 8/1/16.
+//  Created by Rob Hudson on 08/01/2016.
 //  Copyright © 2016 Kyle Sherman. All rights reserved.
 //
 
-import MusicNotationCoreMac
+@testable import MusicNotationCore
 import XCTest
 
 class IntervalTests: XCTestCase {

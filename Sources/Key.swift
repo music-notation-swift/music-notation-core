@@ -2,11 +2,11 @@
 //  Key.swift
 //  MusicNotationCore
 //
-//  Created by Kyle Sherman on 7/11/15.
+//  Created by Kyle Sherman on 07/11/2015.
 //  Copyright © 2015 Kyle Sherman. All rights reserved.
 //
 
-public struct Key {
+public struct Key: Sendable {
 	fileprivate let type: KeyType
 	fileprivate let noteLetter: NoteLetter
 	fileprivate let accidental: Accidental

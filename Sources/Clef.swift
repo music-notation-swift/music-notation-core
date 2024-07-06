@@ -2,17 +2,13 @@
 //  Clef.swift
 //  MusicNotationCore
 //
-//  Created by Kyle Sherman on 10/16/16.
+//  Created by Kyle Sherman on 10/16/2016.
 //  Copyright © 2016 Kyle Sherman. All rights reserved.
 //
 
-#if os(iOS) || os(watchOS) || os(tvOS) || os(OSX)
 import Foundation
-#else
-import Darwin.C
-#endif
 
-public struct Clef {
+public struct Clef: Sendable {
 	///
 	/// The pitch that defines the clef. This pitch is specified to be at a
 	/// certain `StaffLocation` using the `staffLocation` property.

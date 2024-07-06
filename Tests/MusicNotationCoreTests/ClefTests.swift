@@ -2,64 +2,59 @@
 //  ClefTests.swift
 //  MusicNotationCore
 //
-//  Created by Kyle Sherman on 10/16/16.
+//  Created by Kyle Sherman on 10/16/2016.
 //  Copyright © 2016 Kyle Sherman. All rights reserved.
 //
 
-@testable import MusicNotationCoreMac
-import XCTest
+@testable import MusicNotationCore
+import Testing
 
+@Suite final class ClefTests {
+    @Test func initForCustomOnLine() async throws {
+        let clef = Clef(pitch: SpelledPitch(noteLetter: .c, octave: .octave4),
+                        location: StaffLocation(type: .line, number: 0))
+        #expect(clef.staffLocation.halfSteps == 0)
+    }
+
+    @Test func initForCustomOnSpace() async throws {
+        let clef = Clef(pitch: SpelledPitch(noteLetter: .g, octave: .octave4),
+                        location: StaffLocation(type: .space, number: 1))
+        #expect(clef.staffLocation.halfSteps == 3)
+    }
+
+    @Test func initForCustomNegativeLedger() async throws {
+        let clef = Clef(pitch: SpelledPitch(noteLetter: .g, octave: .octave3),
+                        location: StaffLocation(type: .line, number: -2))
+        #expect(clef.staffLocation.halfSteps == -4)
+    }
+
+    @Test func initForCustomPositiveLedger() async throws {
+        let clef = Clef(pitch: SpelledPitch(noteLetter: .a, octave: .octave4),
+                        location: StaffLocation(type: .line, number: 7))
+        #expect(clef.staffLocation.halfSteps == 14)
+    }
+
+    @Test func pitchAtOctaveOutOfRange() async throws {
+        #expect(throws: ClefError.octaveOutOfRange) {
+            try Clef.treble.pitch(at: StaffLocation(type: .space, number: 300))
+        }
+
+        #expect(throws: ClefError.octaveOutOfRange) {
+            try Clef.treble.pitch(at: StaffLocation(type: .line, number: 300))
+        }
+
+        #expect(throws: ClefError.octaveOutOfRange) {
+            try Clef.treble.pitch(at: StaffLocation(type: .space, number: -300))
+        }
+
+        #expect(throws: ClefError.octaveOutOfRange) {
+            try Clef.treble.pitch(at: StaffLocation(type: .line, number: -300))
+        }
+    }
+}
+
+/*
 class ClefTests: XCTestCase {
-	// MARK: - init(pitch:lineNumber)
-
-	// MARK: Successes
-
-	func testInitForCustomOnLine() throws {
-		let clef = Clef(pitch: SpelledPitch(noteLetter: .c, octave: .octave4),
-						location: StaffLocation(type: .line, number: 0))
-		XCTAssertEqual(clef.staffLocation.halfSteps, 0)
-	}
-
-	func testInitForCustomOnSpace() {
-		let clef = Clef(pitch: SpelledPitch(noteLetter: .g, octave: .octave4),
-						location: StaffLocation(type: .space, number: 1))
-		XCTAssertEqual(clef.staffLocation.halfSteps, 3)
-	}
-
-	func testInitForCustomNegativeLedger() {
-		let clef = Clef(pitch: SpelledPitch(noteLetter: .g, octave: .octave3),
-						location: StaffLocation(type: .line, number: -2))
-		XCTAssertEqual(clef.staffLocation.halfSteps, -4)
-	}
-
-	func testInitForCustomPositiveLedger() {
-		let clef = Clef(pitch: SpelledPitch(noteLetter: .a, octave: .octave4),
-						location: StaffLocation(type: .line, number: 7))
-		XCTAssertEqual(clef.staffLocation.halfSteps, 14)
-	}
-
-	// MARK: - pitch(at:)
-
-	// MARK: Failures
-
-	func testPitchAtOctaveOutOfRange() {
-		assertThrowsError(ClefError.octaveOutOfRange) {
-			_ = try Clef.treble.pitch(at: StaffLocation(type: .space, number: 300))
-		}
-
-		assertThrowsError(ClefError.octaveOutOfRange) {
-			_ = try Clef.treble.pitch(at: StaffLocation(type: .line, number: 300))
-		}
-
-		assertThrowsError(ClefError.octaveOutOfRange) {
-			_ = try Clef.treble.pitch(at: StaffLocation(type: .space, number: -300))
-		}
-
-		assertThrowsError(ClefError.octaveOutOfRange) {
-			_ = try Clef.treble.pitch(at: StaffLocation(type: .line, number: -300))
-		}
-	}
-
 	// MARK: Successes
 
 	func testPitchAtUnpitched() {
@@ -215,3 +210,4 @@ class ClefTests: XCTestCase {
 		XCTAssertEqual(customNeutral.debugDescription, "neutral")
 	}
 }
+*/

@@ -2,11 +2,11 @@
 //  Note.swift
 //  MusicNotation
 //
-//  Created by Kyle Sherman on 6/12/15.
+//  Created by Kyle Sherman on 06/12/2015.
 //  Copyright (c) 2015 Kyle Sherman. All rights reserved.
 //
 
-public struct Note: NoteCollection {
+public struct Note: NoteCollection, Sendable {
 	// NoteCollection
 	public let noteCount = 1
 	public let noteDuration: NoteDuration

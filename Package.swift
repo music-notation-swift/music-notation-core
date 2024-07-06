@@ -1,21 +1,26 @@
-// swift-tools-version:5.3
+// swift-tools-version:6.0
+//
+//  Package.swift
+//  MusicNotationCore
+//
+//  Created by Steven Woolgar on 10/16/2020.
+//  Copyright © 2016 Kyle Sherman. All rights reserved.
+//
+
 import Foundation
 import PackageDescription
 
 var package = Package(
 	name: "MusicNotationCore",
 	products: [
-		.library(name: "MusicNotationCoreMac", targets: ["MusicNotationCoreMac"]),
-		.library(name: "MusicNotationCoreiOS", targets: ["MusicNotationCoreiOS"]),
-		.library(name: "MusicNotationCoreTV", targets: ["MusicNotationCoreTV"]),
+		.library(name: "MusicNotationCore", targets: ["MusicNotationCore"]),
 	],
-	targets: [
-		.target(name: "MusicNotationCoreMac", path: "MusicNotationCore"),
-		.testTarget(name: "MusicNotationCoreMacTests", dependencies: ["MusicNotationCoreMac"]),
-		.target(name: "MusicNotationCoreiOS", path: "MusicNotationCore"),
-		.target(name: "MusicNotationCoreTV", path: "MusicNotationCore"),
+
+    targets: [
+		.target(name: "MusicNotationCore", path: "Sources"),
+
+        .testTarget(name: "MusicNotationCoreTests", dependencies: ["MusicNotationCore"]),
 	],
-	swiftLanguageVersions: [
-		.v5
-	]
+
+    swiftLanguageVersions: [ .v6 ]
 )

@@ -2,11 +2,11 @@
 //  StaffTests.swift
 //  MusicNotationCore
 //
-//  Created by Kyle Sherman on 9/5/15.
+//  Created by Kyle Sherman on 09/05/2015.
 //  Copyright © 2015 Kyle Sherman. All rights reserved.
 //
 
-@testable import MusicNotationCoreMac
+@testable import MusicNotationCore
 import XCTest
 
 class StaffTests: XCTestCase {

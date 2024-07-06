@@ -2,11 +2,11 @@
 //  PitchTests.swift
 //  MusicNotationCore
 //
-//  Created by Rob Hudson on 7/29/16.
+//  Created by Rob Hudson on 07/29/016.
 //  Copyright © 2016 Kyle Sherman. All rights reserved.
 //
 
-import MusicNotationCoreMac
+@testable import MusicNotationCore
 import XCTest
 
 class PitchTests: XCTestCase {

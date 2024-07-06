@@ -2,7 +2,7 @@
 //  NoteCollection.swift
 //  MusicNotationCore
 //
-//  Created by Kyle Sherman on 6/15/15.
+//  Created by Kyle Sherman on 06/15/2015.
 //  Copyright © 2015 Kyle Sherman. All rights reserved.
 //
 
@@ -10,7 +10,7 @@
 /// This is a protocol that represents anything that represents one or more notes.
 /// i.e. `Note` and `Tuplet` both conform to this.
 ///
-public protocol NoteCollection {
+public protocol NoteCollection: Sendable {
 	/// The count of actual notes in this `NoteCollection`
 	var noteCount: Int { get }
 	///

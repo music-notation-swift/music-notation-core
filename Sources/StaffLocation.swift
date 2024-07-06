@@ -2,7 +2,7 @@
 //  StaffLocation.swift
 //  MusicNotationCore
 //
-//  Created by Kyle Sherman on 10/30/16.
+//  Created by Kyle Sherman on 10/30/2016.
 //  Copyright © 2016 Kyle Sherman. All rights reserved.
 //
 
@@ -10,8 +10,8 @@
 /// Represents a 0-based location on the staff where 0 is the first line/space from the bottom.
 /// Negative numbers represents ledger lines/spaces below the first line/space of the staff.
 ///
-public struct StaffLocation {
-	public enum LocationType {
+public struct StaffLocation: Sendable {
+    public enum LocationType: Sendable {
 		case line
 		case space
 	}

@@ -2,11 +2,11 @@
 //  NoteDurationTests.swift
 //  MusicNotationCore
 //
-//  Created by Kyle Sherman on 8/21/16.
+//  Created by Kyle Sherman on 08/21/2016.
 //  Copyright © 2016 Kyle Sherman. All rights reserved.
 //
 
-@testable import MusicNotationCoreMac
+@testable import MusicNotationCore
 import XCTest
 
 class NoteDurationTests: XCTestCase {

@@ -2,12 +2,12 @@
 //  NoteDuration.swift
 //  MusicNotationCore
 //
-//  Created by Kyle Sherman on 8/20/16.
+//  Created by Kyle Sherman on 08/20/2016.
 //  Copyright © 2016 Kyle Sherman. All rights reserved.
 //
 
-public struct NoteDuration: Hashable {
-	public enum Value: CustomDebugStringConvertible, Hashable {
+public struct NoteDuration: Hashable, Sendable {
+    public enum Value: CustomDebugStringConvertible, Hashable, Sendable {
 		case large
 		case long
 		case doubleWhole
@@ -43,7 +43,7 @@ public struct NoteDuration: Hashable {
 	/// This holds the value for the bottom number of the time signature and relates the `NoteDuration.Value` to this
 	/// number or nil if it cannot be used for the bottom number of a time signature.
 	///
-	public enum TimeSignatureValue: Int, Hashable {
+	public enum TimeSignatureValue: Int, Hashable, Sendable {
 		case whole = 1
 		case half = 2
 		case quarter = 4

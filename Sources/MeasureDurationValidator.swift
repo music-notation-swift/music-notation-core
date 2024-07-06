@@ -2,15 +2,11 @@
 //  MeasureDurationValidator.swift
 //  MusicNotationCore
 //
-//  Created by Kyle Sherman on 8/6/16.
+//  Created by Kyle Sherman on 08/06/2016.
 //  Copyright © 2016 Kyle Sherman. All rights reserved.
 //
 
-#if os(iOS) || os(watchOS) || os(tvOS) || os(OSX)
 import Foundation
-#else
-import Darwin.C
-#endif
 
 ///
 /// This is a collection of static functions that will give information about the completeness of the duration of a

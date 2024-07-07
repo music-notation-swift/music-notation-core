@@ -55,7 +55,7 @@ public enum NoteLetter: Int, Sendable {
 	case b
 }
 
-public enum Instrument {
+public enum Instrument: Sendable {
 	case guitar6
 	case drums
 }

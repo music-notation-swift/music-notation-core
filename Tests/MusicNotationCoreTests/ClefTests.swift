@@ -11,55 +11,55 @@ import Testing
 
 @Suite final class ClefTests {
     @Test func initForCustomOnLine() async throws {
-        let clef = Clef(pitch: SpelledPitch(noteLetter: .c, octave: .octave4),
-                        location: StaffLocation(type: .line, number: 0))
+        let clef = Clef(pitch: SpelledPitch(.c, .octave4),
+                        location: StaffLocation(.line, 0))
         #expect(clef.staffLocation.halfSteps == 0)
     }
 
     @Test func initForCustomOnSpace() async throws {
-        let clef = Clef(pitch: SpelledPitch(noteLetter: .g, octave: .octave4),
-                        location: StaffLocation(type: .space, number: 1))
+        let clef = Clef(pitch: SpelledPitch(.g, .octave4),
+                        location: StaffLocation(.space, 1))
         #expect(clef.staffLocation.halfSteps == 3)
     }
 
     @Test func initForCustomNegativeLedger() async throws {
-        let clef = Clef(pitch: SpelledPitch(noteLetter: .g, octave: .octave3),
-                        location: StaffLocation(type: .line, number: -2))
+        let clef = Clef(pitch: SpelledPitch(.g, .octave3),
+                        location: StaffLocation(.line, -2))
         #expect(clef.staffLocation.halfSteps == -4)
     }
 
     @Test func initForCustomPositiveLedger() async throws {
-        let clef = Clef(pitch: SpelledPitch(noteLetter: .a, octave: .octave4),
-                        location: StaffLocation(type: .line, number: 7))
+        let clef = Clef(pitch: SpelledPitch(.a, .octave4),
+                        location: StaffLocation(.line, 7))
         #expect(clef.staffLocation.halfSteps == 14)
     }
 
     @Test func pitchAtOctaveOutOfRange() async throws {
         #expect(throws: ClefError.octaveOutOfRange) {
-            try Clef.treble.pitch(at: StaffLocation(type: .space, number: 300))
+            try Clef.treble.pitch(at: StaffLocation(.space, 300))
         }
 
         #expect(throws: ClefError.octaveOutOfRange) {
-            try Clef.treble.pitch(at: StaffLocation(type: .line, number: 300))
+            try Clef.treble.pitch(at: StaffLocation(.line, 300))
         }
 
         #expect(throws: ClefError.octaveOutOfRange) {
-            try Clef.treble.pitch(at: StaffLocation(type: .space, number: -300))
+            try Clef.treble.pitch(at: StaffLocation(.space, -300))
         }
 
         #expect(throws: ClefError.octaveOutOfRange) {
-            try Clef.treble.pitch(at: StaffLocation(type: .line, number: -300))
+            try Clef.treble.pitch(at: StaffLocation(.line, -300))
         }
     }
 
     @Test func pitchAtUnpitched() async throws {
         var neutral: SpelledPitch?
-        #expect(throws: Never.self) { neutral = try Clef.neutral.pitch(at: StaffLocation(type: .space, number: 1)) }
+        #expect(throws: Never.self) { neutral = try Clef.neutral.pitch(at: StaffLocation(.space, 1)) }
         #expect(neutral == nil)
 
         var tab: SpelledPitch?
         #expect(throws: Never.self) {
-            tab = try Clef.tab.pitch(at: StaffLocation(type: .space, number: 1))
+            tab = try Clef.tab.pitch(at: StaffLocation(.space, 1))
         }
         #expect(tab == nil)
 
@@ -67,54 +67,43 @@ import Testing
     }
 
     @Test func pitchAtLocationWithinStaffIncrease() async throws {
-        #expect(try Clef.treble.pitch(at: StaffLocation(type: .space, number: 2)) == SpelledPitch(noteLetter: .c, octave: .octave5))
-        #expect(try Clef.treble.pitch(at: StaffLocation(type: .line, number: 2)) == SpelledPitch(noteLetter: .b, octave: .octave4))
-        #expect(try Clef.bass.pitch(at: StaffLocation(type: .space, number: 3)) == SpelledPitch(noteLetter: .g, octave: .octave3))
-        #expect(try Clef.alto.pitch(at: StaffLocation(type: .line, number: 4)) == SpelledPitch(noteLetter: .g, octave: .octave4))
-        #expect(try Clef.soprano.pitch(at: StaffLocation(type: .space, number: 3)) == SpelledPitch(noteLetter: .c, octave: .octave5))
+        #expect(try Clef.treble.pitch(at: StaffLocation(.space, 2)) == SpelledPitch(.c, .octave5))
+        #expect(try Clef.treble.pitch(at: StaffLocation(.line, 2)) == SpelledPitch(.b, .octave4))
+        #expect(try Clef.bass.pitch(at: StaffLocation(.space, 3)) == SpelledPitch(.g, .octave3))
+        #expect(try Clef.alto.pitch(at: StaffLocation(.line, 4)) == SpelledPitch(.g, .octave4))
+        #expect(try Clef.soprano.pitch(at: StaffLocation(.space, 3)) == SpelledPitch(.c, .octave5))
 
         let customBClef = Clef(
-            pitch: SpelledPitch(noteLetter: .b, octave: .octave3),
-            location: StaffLocation(type: .line, number: 2)
+            pitch: SpelledPitch(.b, .octave3),
+            location: StaffLocation(.line, 2)
         )
-        #expect(try customBClef.pitch(at: StaffLocation(type: .space, number: 2)) == SpelledPitch(noteLetter: .c, octave: .octave4))
+        #expect(try customBClef.pitch(at: StaffLocation(.space, 2)) == SpelledPitch(.c, .octave4))
     }
 
     @Test func pitchAtLocationDecrease() async throws {
+        #expect(try Clef.treble.pitch(at: StaffLocation(.line, 0)) == SpelledPitch(.e, .octave4))
+        #expect(try Clef.treble.pitch(at: StaffLocation(.space, -1)) == SpelledPitch(.d, .octave4))
+        #expect(try Clef.alto.pitch(at: StaffLocation(.line, -3)) == SpelledPitch(.g, .octave2))
+        #expect(try Clef.alto.pitch(at: StaffLocation(.line, -2)) == SpelledPitch(.b, .octave2))
+        #expect(try Clef.alto.pitch(at: StaffLocation(.space, 1)) == SpelledPitch(.b, .octave3))
+        #expect(try Clef.bass.pitch(at: StaffLocation(.line, 1)) == SpelledPitch(.b, .octave2))
     }
 
     @Test func pitchAtSamePitchAsClef() async throws {
+        #expect(try Clef.treble.pitch(at: StaffLocation(.line, 1)) ==
+                SpelledPitch(.g, .octave4))
+        #expect(try Clef.soprano.pitch(at: StaffLocation(.line, 0)) ==
+                SpelledPitch(.c, .octave4))
+    }
+
+    @Test func pitchAtNegativeClefDecrease() async throws {
+        let negativeClef = Clef(pitch: SpelledPitch(.d, .octave3), location: StaffLocation(.line, -1))
+        #expect(try negativeClef.pitch(at: StaffLocation(.line, -2)) == SpelledPitch(.b, .octave2))
     }
 }
 
 /*
 class ClefTests: XCTestCase {
-	func testPitchAtLocationDecrease() {
-		assertNoErrorThrown {
-			XCTAssertEqual(try Clef.treble.pitch(at: StaffLocation(type: .line, number: 0)),
-						   SpelledPitch(noteLetter: .e, octave: .octave4))
-			XCTAssertEqual(try Clef.treble.pitch(at: StaffLocation(type: .space, number: -1)),
-						   SpelledPitch(noteLetter: .d, octave: .octave4))
-			XCTAssertEqual(try Clef.alto.pitch(at: StaffLocation(type: .line, number: -3)),
-						   SpelledPitch(noteLetter: .g, octave: .octave2))
-			XCTAssertEqual(try Clef.alto.pitch(at: StaffLocation(type: .line, number: -2)),
-						   SpelledPitch(noteLetter: .b, octave: .octave2))
-			XCTAssertEqual(try Clef.alto.pitch(at: StaffLocation(type: .space, number: 1)),
-						   SpelledPitch(noteLetter: .b, octave: .octave3))
-			XCTAssertEqual(try Clef.bass.pitch(at: StaffLocation(type: .line, number: 1)),
-						   SpelledPitch(noteLetter: .b, octave: .octave2))
-		}
-	}
-
-	func testPitchAtSamePitchAsClef() {
-		assertNoErrorThrown {
-			XCTAssertEqual(try Clef.treble.pitch(at: StaffLocation(type: .line, number: 1)),
-						   SpelledPitch(noteLetter: .g, octave: .octave4))
-			XCTAssertEqual(try Clef.soprano.pitch(at: StaffLocation(type: .line, number: 0)),
-						   SpelledPitch(noteLetter: .c, octave: .octave4))
-		}
-	}
-
 	func testPitchAtNegativeClefDecrease() {
 		assertNoErrorThrown {
 			let negativeClef = Clef(pitch: SpelledPitch(noteLetter: .d, octave: .octave3),

@@ -35,7 +35,7 @@ public struct StaffLocation: Sendable {
 		}
 	}
 
-	public init(type: LocationType, number: Int) {
+	public init(_ type: LocationType, _ number: Int) {
 		locationType = type
 		self.number = number
 	}

@@ -14,7 +14,7 @@ class NoteTests: XCTestCase {
 
 	override func setUp() {
 		super.setUp()
-		note = Note(noteDuration: .eighth, pitch: SpelledPitch(noteLetter: .c, octave: .octave1))
+		note = Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1))
 	}
 
 	// MARK: - modifyTie(_:)

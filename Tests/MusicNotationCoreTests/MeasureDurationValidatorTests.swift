@@ -39,17 +39,17 @@ class MeasureDurationValidatorTests: XCTestCase {
 		let dotted16: Note = {
 			Note(
 				noteDuration: try! NoteDuration(value: .sixteenth, dotCount: 1),
-				pitch: SpelledPitch(noteLetter: .c, octave: .octave0)
+                pitch: SpelledPitch(.c, .octave0)
 			)
 		}()
 		let doubleDottedEighth: Note = {
 			Note(
 				noteDuration: try! NoteDuration(value: .eighth, dotCount: 2),
-				pitch: SpelledPitch(noteLetter: .c, octave: .octave0)
+                pitch: SpelledPitch(.c, .octave0)
 			)
 		}()
-		let quarter = Note(noteDuration: .quarter, pitch: SpelledPitch(noteLetter: .c, octave: .octave0))
-		let thirtySecond = Note(noteDuration: .thirtySecond, pitch: SpelledPitch(noteLetter: .c, octave: .octave0))
+        let quarter = Note(noteDuration: .quarter, pitch: SpelledPitch(.c, .octave0))
+        let thirtySecond = Note(noteDuration: .thirtySecond, pitch: SpelledPitch(.c, .octave0))
 		let halfRest = Note(restDuration: .half)
 		let quarterTriplet = try! Tuplet(3, .quarter, notes: [quarter, quarter, quarter])
 

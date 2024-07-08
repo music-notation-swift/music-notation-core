@@ -7,83 +7,83 @@
 //
 
 @testable import MusicNotationCore
-import XCTest
+import Testing
 
-class IntervalTests: XCTestCase {
-	func testUnison() {
+@Suite final class IntervalTests {
+	@Test func unison() async throws {
 		let interval = try! Interval(quality: .perfect, number: 1)
-		XCTAssertEqual(interval.debugDescription, "perfect unison")
-		XCTAssertEqual(interval.abbreviation, "P1")
+		#expect(interval.debugDescription == "perfect unison")
+		#expect(interval.abbreviation == "P1")
 	}
 
-	func testMinorSecond() {
+	@Test func minorSecond() async throws {
 		let interval = try! Interval(quality: .minor, number: 2)
-		XCTAssertEqual(interval.debugDescription, "minor 2nd")
-		XCTAssertEqual(interval.abbreviation, "m2")
+		#expect(interval.debugDescription == "minor 2nd")
+		#expect(interval.abbreviation == "m2")
 	}
 
-	func testMajorThird() {
+	@Test func majorThird() async throws {
 		let interval = try! Interval(quality: .major, number: 3)
-		XCTAssertEqual(interval.debugDescription, "major 3rd")
-		XCTAssertEqual(interval.abbreviation, "M3")
+		#expect(interval.debugDescription == "major 3rd")
+		#expect(interval.abbreviation == "M3")
 	}
 
-	func testAugmentedFourth() {
+	@Test func augmentedFourth() async throws {
 		let interval = try! Interval(quality: .augmented, number: 4)
-		XCTAssertEqual(interval.debugDescription, "augmented 4th")
-		XCTAssertEqual(interval.abbreviation, "A4")
+		#expect(interval.debugDescription == "augmented 4th")
+		#expect(interval.abbreviation == "A4")
 	}
 
-	func testDiminishedFifth() {
+	@Test func diminishedFifth() async throws {
 		let interval = try! Interval(quality: .diminished, number: 5)
-		XCTAssertEqual(interval.debugDescription, "diminished 5th")
-		XCTAssertEqual(interval.abbreviation, "d5")
+		#expect(interval.debugDescription == "diminished 5th")
+		#expect(interval.abbreviation == "d5")
 	}
 
-	func testDoublyAugmentedSixth() {
+	@Test func doublyAugmentedSixth() async throws {
 		let interval = try! Interval(quality: .doublyAugmented, number: 6)
-		XCTAssertEqual(interval.debugDescription, "doubly augmented 6th")
-		XCTAssertEqual(interval.abbreviation, "AA6")
+		#expect(interval.debugDescription == "doubly augmented 6th")
+		#expect(interval.abbreviation == "AA6")
 	}
 
-	func testDoubleDiminishedSeventh() {
+	@Test func doubleDiminishedSeventh() async throws {
 		let interval = try! Interval(quality: .doublyDiminished, number: 7)
-		XCTAssertEqual(interval.debugDescription, "doubly diminished 7th")
-		XCTAssertEqual(interval.abbreviation, "dd7")
+		#expect(interval.debugDescription == "doubly diminished 7th")
+		#expect(interval.abbreviation == "dd7")
 	}
 
-	func testOctave() {
+	@Test func octave() async throws {
 		let interval = try! Interval(quality: .perfect, number: 8)
-		XCTAssertEqual(interval.debugDescription, "perfect octave")
-		XCTAssertEqual(interval.abbreviation, "P8")
+		#expect(interval.debugDescription == "perfect octave")
+		#expect(interval.abbreviation == "P8")
 	}
 
-	func testLargeInterval() {
+	@Test func largeInterval() async throws {
 		let interval = try! Interval(quality: .perfect, number: 33)
-		XCTAssertEqual(interval.debugDescription, "perfect 33rd")
-		XCTAssertEqual(interval.abbreviation, "P33")
+		#expect(interval.debugDescription == "perfect 33rd")
+		#expect(interval.abbreviation == "P33")
 	}
 
-	func testMajorOctaveInvalid() {
-		assertThrowsError(IntervalError.invalidQuality) {
+	@Test func majorOctaveInvalid() async throws {
+		#expect(throws: IntervalError.invalidQuality) {
 			_ = try Interval(quality: .major, number: 8)
 		}
 	}
 
-	func testPerfectNinthInvalid() {
-		assertThrowsError(IntervalError.invalidQuality) {
+	@Test func perfectNinthInvalid() async throws {
+		#expect(throws: IntervalError.invalidQuality) {
 			_ = try Interval(quality: .perfect, number: 9)
 		}
 	}
 
-	func testZeroInvalid() {
-		assertThrowsError(IntervalError.numberNotPositive) {
+	@Test func zeroInvalid() async throws {
+		#expect(throws: IntervalError.numberNotPositive) {
 			_ = try Interval(quality: .augmented, number: 0)
 		}
 	}
 
-	func testNegativeNumberInvalid() {
-		assertThrowsError(IntervalError.numberNotPositive) {
+	@Test func negativeNumberInvalid() async throws {
+		#expect(throws: IntervalError.numberNotPositive) {
 			_ = try Interval(quality: .minor, number: -3)
 		}
 	}

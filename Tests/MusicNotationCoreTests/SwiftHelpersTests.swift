@@ -7,22 +7,20 @@
 //
 
 @testable import MusicNotationCore
-import XCTest
+import Testing
 
-class SwiftHelpersTests: XCTestCase {
+@Suite final class SwiftHelpersTests {
 	var emptyArray: [Int]!
 	var singleElementArray: [Int]!
 	var multipleElementArray: [Int]!
 
-	override func setUp() {
-		super.setUp()
+	init() {
 		emptyArray = []
 		singleElementArray = [1]
 		multipleElementArray = [1, 2, 3, 4, 5]
 	}
 
-	override func tearDown() {
-		super.tearDown()
+	deinit {
 		emptyArray = nil
 		singleElementArray = nil
 		multipleElementArray = nil

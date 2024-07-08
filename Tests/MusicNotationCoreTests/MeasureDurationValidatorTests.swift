@@ -7,9 +7,9 @@
 //
 
 @testable import MusicNotationCore
-import XCTest
+import Testing
 
-class MeasureDurationValidatorTests: XCTestCase {
+@Suite final class MeasureDurationValidatorTests {
     static let standardTimeSignature = TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120)
     static let oddTimeSignature = TimeSignature(topNumber: 11, bottomNumber: 16, tempo: 86)
     static let irrationalTimeSignature = TimeSignature(topNumber: 3, bottomNumber: 6, tempo: 120)
@@ -32,8 +32,7 @@ class MeasureDurationValidatorTests: XCTestCase {
 	var notFullMeasureIrrationalTimeSignature: Measure!
 	var overfilledMeasureIrrationalTimeSignature: Measure!
 
-	override func setUp() {
-		super.setUp()
+	init() {
 		let key = Key(noteLetter: .c)
 		var staff = Staff(clef: .treble, instrument: .guitar6)
 		let dotted16: Note = {
@@ -145,214 +144,210 @@ class MeasureDurationValidatorTests: XCTestCase {
 
 	// MARK: .full
 
-	func testCompletionStateFull() {
-		XCTAssertEqual(
-			MeasureDurationValidator.completionState(of: fullMeasure),
+	@Test func completionStateFull() async throws {
+		#expect(
+			MeasureDurationValidator.completionState(of: fullMeasure) ==
 			[MeasureDurationValidator.CompletionState.full]
 		)
-		XCTAssertEqual(
-			MeasureDurationValidator.completionState(of: fullMeasureOddTimeSignature),
+		#expect(
+			MeasureDurationValidator.completionState(of: fullMeasureOddTimeSignature) ==
 			[MeasureDurationValidator.CompletionState.full]
 		)
-		XCTAssertEqual(
-			MeasureDurationValidator.completionState(of: fullMeasureIrrationalTimeSignature),
+		#expect(
+			MeasureDurationValidator.completionState(of: fullMeasureIrrationalTimeSignature) ==
 			[MeasureDurationValidator.CompletionState.full]
 		)
 	}
 
 	// MARK: .notFull
 
-	func testCompletionStateNotFullForEmpty() {
-		XCTAssertEqual(
-			MeasureDurationValidator.completionState(of: emptyMeasure),
+	@Test func completionStateNotFullForEmpty() async throws {
+		#expect(
+			MeasureDurationValidator.completionState(of: emptyMeasure) ==
 			[MeasureDurationValidator.CompletionState.notFull(availableNotes: [.whole: 1])]
 		)
 	}
 
-	func testCompletionStateNotFullForStandard() {
-		XCTAssertEqual(
-			MeasureDurationValidator.completionState(of: notFullMeasure),
+	@Test func completionStateNotFullForStandard() async throws {
+		#expect(
+			MeasureDurationValidator.completionState(of: notFullMeasure) ==
 			[MeasureDurationValidator.CompletionState.notFull(availableNotes: [.quarter: 1, .eighth: 1, .sixteenth: 1])]
 		)
 	}
 
-	func testCompletionStateNotFullForDotted() {
-		XCTAssertEqual(
-			MeasureDurationValidator.completionState(of: notFullMeasureDotted),
+	@Test func completionStateNotFullForDotted() async throws {
+		#expect(
+			MeasureDurationValidator.completionState(of: notFullMeasureDotted) ==
 			[MeasureDurationValidator.CompletionState.notFull(availableNotes: [.quarter: 1, .thirtySecond: 1])]
 		)
 	}
 
-	func testCompletionStateNotFullForOddTimeSignature() {
-		XCTAssertEqual(
-			MeasureDurationValidator.completionState(of: notFullMeasureOddTimeSignature),
+	@Test func completionStateNotFullForOddTimeSignature() async throws {
+		#expect(
+			MeasureDurationValidator.completionState(of: notFullMeasureOddTimeSignature) ==
 			[MeasureDurationValidator.CompletionState.notFull(availableNotes: [.quarter: 1])]
 		)
 	}
 
-	func testCompletionStateNotFullForIrrationalTimeSignature() {
-		XCTAssertEqual(
-			MeasureDurationValidator.completionState(of: notFullMeasureIrrationalTimeSignature),
+	@Test func completionStateNotFullForIrrationalTimeSignature() async throws {
+		#expect(
+			MeasureDurationValidator.completionState(of: notFullMeasureIrrationalTimeSignature) ==
 			[MeasureDurationValidator.CompletionState.notFull(availableNotes: [.quarter: 1])]
 		)
 	}
 
 	// MARK: .overfilled
 
-	func testCompletionStateOverfilledForOneExtra() {
-		XCTAssertEqual(
-			MeasureDurationValidator.completionState(of: overfilledWithTooLargeMeasure),
+	@Test func completionStateOverfilledForOneExtra() async throws {
+		#expect(
+			MeasureDurationValidator.completionState(of: overfilledWithTooLargeMeasure) ==
 			[MeasureDurationValidator.CompletionState.overfilled(overflowingNotes: 4 ..< 5)]
 		)
 	}
 
-	func testCompletionStateOverfilledForMultipleExtra() {
-		XCTAssertEqual(
-			MeasureDurationValidator.completionState(of: overfilledMeasure),
+	@Test func completionStateOverfilledForMultipleExtra() async throws {
+		#expect(
+			MeasureDurationValidator.completionState(of: overfilledMeasure) ==
 			[MeasureDurationValidator.CompletionState.overfilled(overflowingNotes: 8 ..< 10)]
 		)
 	}
 
-	func testCompletionStateOverfilledForSingleExtraOddTimeSignature() {
-		XCTAssertEqual(
-			MeasureDurationValidator.completionState(of: overfilledMeasureOddTimeSignature),
+	@Test func completionStateOverfilledForSingleExtraOddTimeSignature() async throws {
+		#expect(
+			MeasureDurationValidator.completionState(of: overfilledMeasureOddTimeSignature) ==
 			[MeasureDurationValidator.CompletionState.overfilled(overflowingNotes: 6 ..< 7)]
 		)
 	}
 
-	func testCompletionStateOverfilledTooFullBecauseOfDot() {
-		XCTAssertEqual(
-			MeasureDurationValidator.completionState(of: overfilledWithDotMeasure),
+	@Test func completionStateOverfilledTooFullBecauseOfDot() async throws {
+		#expect(
+			MeasureDurationValidator.completionState(of: overfilledWithDotMeasure) ==
 			[MeasureDurationValidator.CompletionState.overfilled(overflowingNotes: 8 ..< 9)]
 		)
 	}
 
-	func testCompletionStateOverfilledForSingleExtraIrrationalTimeSignature() {
-		XCTAssertEqual(
-			MeasureDurationValidator.completionState(of: overfilledMeasureIrrationalTimeSignature),
+	@Test func completionStateOverfilledForSingleExtraIrrationalTimeSignature() async throws {
+		#expect(
+			MeasureDurationValidator.completionState(of: overfilledMeasureIrrationalTimeSignature) ==
 			[MeasureDurationValidator.CompletionState.overfilled(overflowingNotes: 3 ..< 4)]
 		)
 	}
 
 	// MARK: - number(of:fittingIn:)
 
-	func testNumberOfFittingInForFull() {
-		XCTAssertEqual(MeasureDurationValidator.number(of: .whole, fittingIn: fullMeasure), 0)
-		XCTAssertEqual(MeasureDurationValidator.number(of: .half, fittingIn: fullMeasure), 0)
-		XCTAssertEqual(MeasureDurationValidator.number(of: .quarter, fittingIn: fullMeasure), 0)
-		XCTAssertEqual(MeasureDurationValidator.number(of: .eighth, fittingIn: fullMeasureOddTimeSignature), 0)
-		XCTAssertEqual(MeasureDurationValidator.number(of: .sixteenth, fittingIn: fullMeasure), 0)
-		XCTAssertEqual(MeasureDurationValidator.number(of: .thirtySecond, fittingIn: fullMeasure), 0)
-		XCTAssertEqual(MeasureDurationValidator.number(of: .sixtyFourth, fittingIn: fullMeasure), 0)
+	@Test func numberOfFittingInForFull() async throws {
+		#expect(MeasureDurationValidator.number(of: .whole, fittingIn: fullMeasure) == 0)
+		#expect(MeasureDurationValidator.number(of: .half, fittingIn: fullMeasure) == 0)
+		#expect(MeasureDurationValidator.number(of: .quarter, fittingIn: fullMeasure) == 0)
+		#expect(MeasureDurationValidator.number(of: .eighth, fittingIn: fullMeasureOddTimeSignature) == 0)
+		#expect(MeasureDurationValidator.number(of: .sixteenth, fittingIn: fullMeasure) == 0)
+		#expect(MeasureDurationValidator.number(of: .thirtySecond, fittingIn: fullMeasure) == 0)
+		#expect(MeasureDurationValidator.number(of: .sixtyFourth, fittingIn: fullMeasure) == 0)
 	}
 
-	func testNumberOfFittingInForEmptyStandardTimeSignature() {
-		XCTAssertEqual(MeasureDurationValidator.number(of: .whole, fittingIn: emptyMeasure), 1)
-		XCTAssertEqual(MeasureDurationValidator.number(of: .half, fittingIn: emptyMeasure), 2)
-		XCTAssertEqual(MeasureDurationValidator.number(of: .quarter, fittingIn: emptyMeasure), 4)
-		XCTAssertEqual(MeasureDurationValidator.number(of: .eighth, fittingIn: emptyMeasure), 8)
-		XCTAssertEqual(MeasureDurationValidator.number(of: .sixteenth, fittingIn: emptyMeasure), 16)
-		XCTAssertEqual(MeasureDurationValidator.number(of: .thirtySecond, fittingIn: emptyMeasure), 32)
-		XCTAssertEqual(MeasureDurationValidator.number(of: .sixtyFourth, fittingIn: emptyMeasure), 64)
+	@Test func numberOfFittingInForEmptyStandardTimeSignature() async throws {
+		#expect(MeasureDurationValidator.number(of: .whole, fittingIn: emptyMeasure) == 1)
+		#expect(MeasureDurationValidator.number(of: .half, fittingIn: emptyMeasure) == 2)
+		#expect(MeasureDurationValidator.number(of: .quarter, fittingIn: emptyMeasure) == 4)
+		#expect(MeasureDurationValidator.number(of: .eighth, fittingIn: emptyMeasure) == 8)
+		#expect(MeasureDurationValidator.number(of: .sixteenth, fittingIn: emptyMeasure) == 16)
+		#expect(MeasureDurationValidator.number(of: .thirtySecond, fittingIn: emptyMeasure) == 32)
+		#expect(MeasureDurationValidator.number(of: .sixtyFourth, fittingIn: emptyMeasure) == 64)
 	}
 
-	func testNumberOfFittingInForStandardTimeSignature() {
+	@Test func numberOfFittingInForStandardTimeSignature() async throws {
 		// 1 3/4 beats missing
-		XCTAssertEqual(MeasureDurationValidator.number(of: .whole, fittingIn: notFullMeasure), 0)
-		XCTAssertEqual(MeasureDurationValidator.number(of: .half, fittingIn: notFullMeasure), 0)
-		XCTAssertEqual(MeasureDurationValidator.number(of: .quarter, fittingIn: notFullMeasure), 1)
-		XCTAssertEqual(MeasureDurationValidator.number(of: .eighth, fittingIn: notFullMeasure), 3)
-		XCTAssertEqual(MeasureDurationValidator.number(of: .sixteenth, fittingIn: notFullMeasure), 7)
-		XCTAssertEqual(MeasureDurationValidator.number(of: .thirtySecond, fittingIn: notFullMeasure), 14)
-		XCTAssertEqual(MeasureDurationValidator.number(of: .sixtyFourth, fittingIn: notFullMeasure), 28)
+		#expect(MeasureDurationValidator.number(of: .whole, fittingIn: notFullMeasure) == 0)
+		#expect(MeasureDurationValidator.number(of: .half, fittingIn: notFullMeasure) == 0)
+		#expect(MeasureDurationValidator.number(of: .quarter, fittingIn: notFullMeasure) == 1)
+		#expect(MeasureDurationValidator.number(of: .eighth, fittingIn: notFullMeasure) == 3)
+		#expect(MeasureDurationValidator.number(of: .sixteenth, fittingIn: notFullMeasure) == 7)
+		#expect(MeasureDurationValidator.number(of: .thirtySecond, fittingIn: notFullMeasure) == 14)
+		#expect(MeasureDurationValidator.number(of: .sixtyFourth, fittingIn: notFullMeasure) == 28)
 
 		// 1 1/8 beats missing
-		XCTAssertEqual(MeasureDurationValidator.number(of: .whole, fittingIn: notFullMeasureDotted), 0)
-		XCTAssertEqual(MeasureDurationValidator.number(of: .half, fittingIn: notFullMeasureDotted), 0)
-		XCTAssertEqual(MeasureDurationValidator.number(of: .quarter, fittingIn: notFullMeasureDotted), 1)
-		XCTAssertEqual(MeasureDurationValidator.number(of: .eighth, fittingIn: notFullMeasureDotted), 2)
-		XCTAssertEqual(MeasureDurationValidator.number(of: .sixteenth, fittingIn: notFullMeasureDotted), 4)
-		XCTAssertEqual(MeasureDurationValidator.number(of: .thirtySecond, fittingIn: notFullMeasureDotted), 9)
-		XCTAssertEqual(MeasureDurationValidator.number(of: .sixtyFourth, fittingIn: notFullMeasureDotted), 18)
+		#expect(MeasureDurationValidator.number(of: .whole, fittingIn: notFullMeasureDotted) == 0)
+		#expect(MeasureDurationValidator.number(of: .half, fittingIn: notFullMeasureDotted) == 0)
+		#expect(MeasureDurationValidator.number(of: .quarter, fittingIn: notFullMeasureDotted) == 1)
+		#expect(MeasureDurationValidator.number(of: .eighth, fittingIn: notFullMeasureDotted) == 2)
+		#expect(MeasureDurationValidator.number(of: .sixteenth, fittingIn: notFullMeasureDotted) == 4)
+		#expect(MeasureDurationValidator.number(of: .thirtySecond, fittingIn: notFullMeasureDotted) == 9)
+		#expect(MeasureDurationValidator.number(of: .sixtyFourth, fittingIn: notFullMeasureDotted) == 18)
 	}
 
-	func testNumberOfFittingInForOddTimeSignature() {
+	@Test func numberOfFittingInForOddTimeSignature() async throws {
 		// 4 beats missing - 1 quarter note
-		XCTAssertEqual(MeasureDurationValidator.number(of: .whole, fittingIn: notFullMeasureOddTimeSignature), 0)
-		XCTAssertEqual(MeasureDurationValidator.number(of: .half, fittingIn: notFullMeasureOddTimeSignature), 0)
-		XCTAssertEqual(MeasureDurationValidator.number(of: .quarter, fittingIn: notFullMeasureOddTimeSignature), 1)
-		XCTAssertEqual(MeasureDurationValidator.number(of: .eighth, fittingIn: notFullMeasureOddTimeSignature), 2)
-		XCTAssertEqual(MeasureDurationValidator.number(of: .sixteenth, fittingIn: notFullMeasureOddTimeSignature), 4)
-		XCTAssertEqual(MeasureDurationValidator.number(of: .thirtySecond, fittingIn: notFullMeasureOddTimeSignature), 8)
-		XCTAssertEqual(MeasureDurationValidator.number(of: .sixtyFourth, fittingIn: notFullMeasureOddTimeSignature), 16)
+		#expect(MeasureDurationValidator.number(of: .whole, fittingIn: notFullMeasureOddTimeSignature) == 0)
+		#expect(MeasureDurationValidator.number(of: .half, fittingIn: notFullMeasureOddTimeSignature) == 0)
+		#expect(MeasureDurationValidator.number(of: .quarter, fittingIn: notFullMeasureOddTimeSignature) == 1)
+		#expect(MeasureDurationValidator.number(of: .eighth, fittingIn: notFullMeasureOddTimeSignature) == 2)
+		#expect(MeasureDurationValidator.number(of: .sixteenth, fittingIn: notFullMeasureOddTimeSignature) == 4)
+		#expect(MeasureDurationValidator.number(of: .thirtySecond, fittingIn: notFullMeasureOddTimeSignature) == 8)
+		#expect(MeasureDurationValidator.number(of: .sixtyFourth, fittingIn: notFullMeasureOddTimeSignature) == 16)
 	}
 
-	func testNumberOfFittingInForOverfilled() {
-		XCTAssertEqual(MeasureDurationValidator.number(of: .whole, fittingIn: overfilledMeasure), 0)
-		XCTAssertEqual(MeasureDurationValidator.number(of: .half, fittingIn: overfilledMeasure), 0)
-		XCTAssertEqual(MeasureDurationValidator.number(of: .quarter, fittingIn: overfilledMeasure), 0)
-		XCTAssertEqual(MeasureDurationValidator.number(of: .eighth, fittingIn: overfilledMeasure), 0)
-		XCTAssertEqual(MeasureDurationValidator.number(of: .sixteenth, fittingIn: overfilledMeasure), 0)
-		XCTAssertEqual(MeasureDurationValidator.number(of: .thirtySecond, fittingIn: overfilledMeasure), 0)
-		XCTAssertEqual(MeasureDurationValidator.number(of: .sixtyFourth, fittingIn: overfilledMeasure), 0)
+	@Test func numberOfFittingInForOverfilled() async throws {
+		#expect(MeasureDurationValidator.number(of: .whole, fittingIn: overfilledMeasure) == 0)
+		#expect(MeasureDurationValidator.number(of: .half, fittingIn: overfilledMeasure) == 0)
+		#expect(MeasureDurationValidator.number(of: .quarter, fittingIn: overfilledMeasure) == 0)
+		#expect(MeasureDurationValidator.number(of: .eighth, fittingIn: overfilledMeasure) == 0)
+		#expect(MeasureDurationValidator.number(of: .sixteenth, fittingIn: overfilledMeasure) == 0)
+		#expect(MeasureDurationValidator.number(of: .thirtySecond, fittingIn: overfilledMeasure) == 0)
+		#expect(MeasureDurationValidator.number(of: .sixtyFourth, fittingIn: overfilledMeasure) == 0)
 	}
 
-	func testNumberOfFittingInForFullIrrationalTimeSignature() {
-		XCTAssertEqual(MeasureDurationValidator.number(of: .whole, fittingIn: fullMeasureIrrationalTimeSignature), 0)
-		XCTAssertEqual(MeasureDurationValidator.number(of: .half, fittingIn: fullMeasureIrrationalTimeSignature), 0)
-		XCTAssertEqual(MeasureDurationValidator.number(of: .quarter, fittingIn: fullMeasureIrrationalTimeSignature), 0)
-		XCTAssertEqual(MeasureDurationValidator.number(of: .eighth, fittingIn: fullMeasureIrrationalTimeSignature), 0)
-		XCTAssertEqual(MeasureDurationValidator.number(of: .sixteenth, fittingIn: fullMeasureIrrationalTimeSignature), 0)
-		XCTAssertEqual(MeasureDurationValidator.number(of: .thirtySecond,
-													   fittingIn: fullMeasureIrrationalTimeSignature), 0)
-		XCTAssertEqual(MeasureDurationValidator.number(of: .sixtyFourth,
-													   fittingIn: fullMeasureIrrationalTimeSignature), 0)
+	@Test func numberOfFittingInForFullIrrationalTimeSignature() async throws {
+		#expect(MeasureDurationValidator.number(of: .whole, fittingIn: fullMeasureIrrationalTimeSignature) == 0)
+		#expect(MeasureDurationValidator.number(of: .half, fittingIn: fullMeasureIrrationalTimeSignature) == 0)
+		#expect(MeasureDurationValidator.number(of: .quarter, fittingIn: fullMeasureIrrationalTimeSignature) == 0)
+		#expect(MeasureDurationValidator.number(of: .eighth, fittingIn: fullMeasureIrrationalTimeSignature) == 0)
+		#expect(MeasureDurationValidator.number(of: .sixteenth, fittingIn: fullMeasureIrrationalTimeSignature) == 0)
+		#expect(MeasureDurationValidator.number(of: .thirtySecond,
+													   fittingIn: fullMeasureIrrationalTimeSignature) == 0)
+		#expect(MeasureDurationValidator.number(of: .sixtyFourth,
+													   fittingIn: fullMeasureIrrationalTimeSignature) == 0)
 	}
 
-	func testNumberOfFittingInForNotFullIrrationalTimeSignature() {
-		XCTAssertEqual(MeasureDurationValidator.number(of: .whole,
-													   fittingIn: notFullMeasureIrrationalTimeSignature), 0)
-		XCTAssertEqual(MeasureDurationValidator.number(of: .half,
-													   fittingIn: notFullMeasureIrrationalTimeSignature), 0)
-		XCTAssertEqual(MeasureDurationValidator.number(of: .quarter,
-													   fittingIn: notFullMeasureIrrationalTimeSignature), 1)
-		XCTAssertEqual(MeasureDurationValidator.number(of: .eighth,
-													   fittingIn: notFullMeasureIrrationalTimeSignature), 2)
-		XCTAssertEqual(MeasureDurationValidator.number(of: .sixteenth,
-													   fittingIn: notFullMeasureIrrationalTimeSignature), 4)
-		XCTAssertEqual(MeasureDurationValidator.number(of: .thirtySecond,
-													   fittingIn: notFullMeasureIrrationalTimeSignature), 8)
-		XCTAssertEqual(MeasureDurationValidator.number(of: .sixtyFourth,
-													   fittingIn: notFullMeasureIrrationalTimeSignature), 16)
+	@Test func numberOfFittingInForNotFullIrrationalTimeSignature() async throws {
+		#expect(MeasureDurationValidator.number(of: .whole,
+													   fittingIn: notFullMeasureIrrationalTimeSignature) == 0)
+		#expect(MeasureDurationValidator.number(of: .half,
+													   fittingIn: notFullMeasureIrrationalTimeSignature) == 0)
+		#expect(MeasureDurationValidator.number(of: .quarter,
+													   fittingIn: notFullMeasureIrrationalTimeSignature) == 1)
+		#expect(MeasureDurationValidator.number(of: .eighth,
+													   fittingIn: notFullMeasureIrrationalTimeSignature) == 2)
+		#expect(MeasureDurationValidator.number(of: .sixteenth,
+													   fittingIn: notFullMeasureIrrationalTimeSignature) == 4)
+		#expect(MeasureDurationValidator.number(of: .thirtySecond,
+													   fittingIn: notFullMeasureIrrationalTimeSignature) == 8)
+		#expect(MeasureDurationValidator.number(of: .sixtyFourth,
+													   fittingIn: notFullMeasureIrrationalTimeSignature) == 16)
 	}
 
 	// MARK: - baseNoteDuration(from:)
 
 	// MARK: Failures
 
-	func testBaseNoteDurationForTooLargeBottomNumber() {
+	@Test func baseNoteDurationForTooLargeBottomNumber() async throws {
 		let timeSignature = TimeSignature(topNumber: 4, bottomNumber: 256, tempo: 120)
 		let measure = Measure(timeSignature: timeSignature, key: Key(noteLetter: .c))
-		assertThrowsError(MeasureDurationValidatorError.invalidBottomNumber) {
+		#expect(throws: MeasureDurationValidatorError.invalidBottomNumber) {
 			_ = try MeasureDurationValidator.baseNoteDuration(from: measure)
 		}
 	}
 
 	// MARK: Successes
 
-	func testBaseNoteDurationForCommonBottomNumber() {
-		assertNoErrorThrown {
-			let baseNoteDuration = try MeasureDurationValidator.baseNoteDuration(from: fullMeasure)
-			XCTAssertEqual(baseNoteDuration, .quarter)
-			let baseNoteDurationOdd = try MeasureDurationValidator.baseNoteDuration(from: fullMeasureOddTimeSignature)
-			XCTAssertEqual(baseNoteDurationOdd, .sixteenth)
-		}
+	@Test func baseNoteDurationForCommonBottomNumber() async throws {
+		let baseNoteDuration = try MeasureDurationValidator.baseNoteDuration(from: fullMeasure)
+		#expect(baseNoteDuration == .quarter)
+		let baseNoteDurationOdd = try MeasureDurationValidator.baseNoteDuration(from: fullMeasureOddTimeSignature)
+		#expect(baseNoteDurationOdd == .sixteenth)
 	}
 
-	func testBaseNoteDurationForIrrationalBottomNumber() {
-		assertNoErrorThrown {
-			let baseNoteDurationIrrational = try MeasureDurationValidator.baseNoteDuration(from: fullMeasureIrrationalTimeSignature)
-			XCTAssertEqual(baseNoteDurationIrrational, .quarter)
-		}
+	@Test func baseNoteDurationForIrrationalBottomNumber() async throws {
+		let baseNoteDurationIrrational = try MeasureDurationValidator.baseNoteDuration(from: fullMeasureIrrationalTimeSignature)
+		#expect(baseNoteDurationIrrational == .quarter)
 	}
 }

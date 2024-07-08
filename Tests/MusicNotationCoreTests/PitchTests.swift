@@ -7,156 +7,156 @@
 //
 
 @testable import MusicNotationCore
-import XCTest
+import Testing
 
-class PitchTests: XCTestCase {
-	func testPitch1() {
+@Suite final class PitchTests {
+	@Test func pitch1() async throws {
         let pitch = SpelledPitch(.c, .octave3)
-		XCTAssertTrue(pitch.debugDescription == "c3")
+		#expect(pitch.debugDescription == "c3")
 	}
 
-	func testPitch2() {
+	@Test func pitch2() async throws {
         let pitch = SpelledPitch(.g, accidental: .sharp, .octave6)
-		XCTAssertTrue(pitch.debugDescription == "g♯6")
+		#expect(pitch.debugDescription == "g♯6")
 	}
 
-	func testPitch3() {
+	@Test func pitch3() async throws {
         let pitch = SpelledPitch(.e, accidental: .flat, .octave2)
-		XCTAssertTrue(pitch.debugDescription == "e♭2")
+		#expect(pitch.debugDescription == "e♭2")
 	}
 
-	func testPitch4() {
+	@Test func pitch4() async throws {
         let pitch = SpelledPitch(.a, accidental: .natural, .octave4)
-		XCTAssertTrue(pitch.debugDescription == "a4")
+		#expect(pitch.debugDescription == "a4")
 	}
 
-	func testPitch5() {
+	@Test func pitch5() async throws {
         let pitch = SpelledPitch(.b, accidental: .doubleSharp, .octave5)
-		XCTAssertTrue(pitch.debugDescription == "b𝄪5")
+		#expect(pitch.debugDescription == "b𝄪5")
 	}
 
-	func testPitch6() {
+	@Test func pitch6() async throws {
         let pitch = SpelledPitch(.f, accidental: .doubleFlat, .octave7)
-		XCTAssertTrue(pitch.debugDescription == "f𝄫7")
+		#expect(pitch.debugDescription == "f𝄫7")
 	}
 
 	// MARK: - ==
 
 	// MARK: Failures
 
-	func testNotEqual() {
+	@Test func notEqual() async throws {
         let pitch1 = SpelledPitch(.b, accidental: .flat, .octave5)
         let pitch2 = SpelledPitch(.b, accidental: .flat, .octave4)
 
-		XCTAssertNotEqual(pitch1, pitch2)
+		#expect(pitch1 != pitch2)
 	}
 
 	// MARK: Successes
 
-	func testEqual() {
+	@Test func equal() async throws {
         let pitch1 = SpelledPitch(.d, accidental: .sharp, .octave1)
         let pitch2 = SpelledPitch(.d, accidental: .sharp, .octave1)
 
-		XCTAssertEqual(pitch1, pitch2)
+		#expect(pitch1 == pitch2)
 	}
 
 	// MARK: - MIDI numbers
 
 	// MARK: Successes
 
-	func testRidiculouslyLowNote() {
+	@Test func ridiculouslyLowNote() async throws {
         let pitch = SpelledPitch(.c, accidental: .natural, .octaveNegative1)
 
-		XCTAssertEqual(pitch.midiNoteNumber, 0)
+		#expect(pitch.midiNoteNumber == 0)
 	}
 
-	func testLowNote() {
+	@Test func lowNote() async throws {
         let pitch = SpelledPitch(.f, accidental: .sharp, .octave1)
 
-		XCTAssertEqual(pitch.midiNoteNumber, 30)
+		#expect(pitch.midiNoteNumber == 30)
 	}
 
-	func testMidRangeNote() {
+	@Test func midRangeNote() async throws {
         let pitch = SpelledPitch(.d, .octave4)
 
-		XCTAssertEqual(pitch.midiNoteNumber, 62)
+		#expect(pitch.midiNoteNumber == 62)
 	}
 
-	func testHighNote() {
+	@Test func highNote() async throws {
         let pitch = SpelledPitch(.c, accidental: .flat, .octave8)
 
-		XCTAssertEqual(pitch.midiNoteNumber, 107)
+		#expect(pitch.midiNoteNumber == 107)
 	}
 
 	// MARK: - isEnharmonic(with:)
 
 	// MARK: Failures
 
-	func testDifferentAccidentals() {
+	@Test func differentAccidentals() async throws {
         let pitch1 = SpelledPitch(.d, accidental: .flat, .octave1)
         let pitch2 = SpelledPitch(.d, accidental: .sharp, .octave1)
 
-		XCTAssertNotEqual(pitch1, pitch2)
-		XCTAssertFalse(pitch1.isEnharmonic(with: pitch2))
+		#expect(pitch1 != pitch2)
+		#expect(!pitch1.isEnharmonic(with: pitch2))
 	}
 
-	func testSamePitchDifferentOctaves() {
+	@Test func samePitchDifferentOctaves() async throws {
         let pitch1 = SpelledPitch(.e, accidental: .natural, .octave5)
         let pitch2 = SpelledPitch(.e, accidental: .natural, .octave6)
 
-		XCTAssertNotEqual(pitch1, pitch2)
-		XCTAssertFalse(pitch1.isEnharmonic(with: pitch2))
+		#expect(pitch1 != pitch2)
+		#expect(!pitch1.isEnharmonic(with: pitch2))
 	}
 
-	func testEnharmonicPitchDifferentOctaves() {
+	@Test func enharmonicPitchDifferentOctaves() async throws {
         let pitch1 = SpelledPitch(.f, accidental: .doubleSharp, .octave2)
         let pitch2 = SpelledPitch(.g, accidental: .natural, .octave5)
 
-		XCTAssertNotEqual(pitch1, pitch2)
-		XCTAssertFalse(pitch1.isEnharmonic(with: pitch2))
+		#expect(pitch1 != pitch2)
+		#expect(!pitch1.isEnharmonic(with: pitch2))
 	}
 
 	// MARK: Successes
 
-	func testSamePitchIsEnharmonic() {
+	@Test func samePitchIsEnharmonic() async throws {
         let pitch1 = SpelledPitch(.g, accidental: .natural, .octave6)
         let pitch2 = SpelledPitch(.g, accidental: .natural, .octave6)
 
-		XCTAssertEqual(pitch1, pitch2)
-		XCTAssertTrue(pitch1.isEnharmonic(with: pitch2))
+		#expect(pitch1 == pitch2)
+		#expect(pitch1.isEnharmonic(with: pitch2))
 		// Transitive property
-		XCTAssertTrue(pitch2.isEnharmonic(with: pitch1))
+		#expect(pitch2.isEnharmonic(with: pitch1))
 	}
 
-	func testEnharmonicNotEquatable() {
+	@Test func enharmonicNotEquatable() async throws {
         let pitch1 = SpelledPitch(.a, accidental: .flat, .octave3)
         let pitch2 = SpelledPitch(.g, accidental: .sharp, .octave3)
 
-		XCTAssertNotEqual(pitch1, pitch2)
-		XCTAssertTrue(pitch1.isEnharmonic(with: pitch2))
+		#expect(pitch1 != pitch2)
+		#expect(pitch1.isEnharmonic(with: pitch2))
 	}
 
-	func testNaturalAndFlat() {
+	@Test func naturalAndFlat() async throws {
         let pitch1 = SpelledPitch(.e, accidental: .natural, .octave4)
         let pitch2 = SpelledPitch(.f, accidental: .flat, .octave4)
 
-		XCTAssertNotEqual(pitch1, pitch2)
-		XCTAssertTrue(pitch1.isEnharmonic(with: pitch2))
+		#expect(pitch1 != pitch2)
+		#expect(pitch1.isEnharmonic(with: pitch2))
 	}
 
-	func testDoubleFlat() {
+	@Test func doubleFlat() async throws {
         let pitch1 = SpelledPitch(.b, accidental: .doubleFlat, .octave2)
         let pitch2 = SpelledPitch(.a, .octave2)
 
-		XCTAssertNotEqual(pitch1, pitch2)
-		XCTAssertTrue(pitch1.isEnharmonic(with: pitch2))
+		#expect(pitch1 != pitch2)
+		#expect(pitch1.isEnharmonic(with: pitch2))
 	}
 
-	func testDifferentOctaveNumbers() {
+	@Test func differentOctaveNumbers() async throws {
         let pitch1 = SpelledPitch(.b, accidental: .sharp, .octave6)
         let pitch2 = SpelledPitch(.c, accidental: .natural, .octave7)
 
-		XCTAssertNotEqual(pitch1, pitch2)
-		XCTAssertTrue(pitch1.isEnharmonic(with: pitch2))
+		#expect(pitch1 != pitch2)
+		#expect(pitch1.isEnharmonic(with: pitch2))
 	}
 }

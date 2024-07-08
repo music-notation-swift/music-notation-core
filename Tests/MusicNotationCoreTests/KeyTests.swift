@@ -7,51 +7,37 @@
 //
 
 @testable import MusicNotationCore
-import XCTest
+import Testing
 
-class KeyTests: XCTestCase {
-	override func setUp() {
-		super.setUp()
-		// Put setup code here. This method is called before the invocation of each test method in the class.
-	}
-
-	override func tearDown() {
-		// Put teardown code here. This method is called after the invocation of each test method in the class.
-		super.tearDown()
-	}
-
-	// MARK: - debugDescription
-
-	func testDebugDescription() {
+@Suite final class KeyTests {
+	@Test func debugDescription() async throws {
 		let naturalMajor = Key(noteLetter: .c)
-		XCTAssertEqual(naturalMajor.debugDescription, "c♮ major")
+		#expect(naturalMajor.debugDescription == "c♮ major")
 		let naturalMinor = Key(noteLetter: .a, accidental: .natural, type: .minor)
-		XCTAssertEqual(naturalMinor.debugDescription, "a♮ minor")
+		#expect(naturalMinor.debugDescription == "a♮ minor")
 		let sharpMajor = Key(noteLetter: .b, accidental: .sharp, type: .major)
-		XCTAssertEqual(sharpMajor.debugDescription, "b♯ major")
+		#expect(sharpMajor.debugDescription == "b♯ major")
 		let doubleFlatMinor = Key(noteLetter: .e, accidental: .doubleFlat, type: .minor)
-		XCTAssertEqual(doubleFlatMinor.debugDescription, "e𝄫 minor")
+		#expect(doubleFlatMinor.debugDescription == "e𝄫 minor")
 	}
 
-	// MARK: - ==
-
-	func testEqualityTrue() {
+	@Test func equalityTrue() async throws {
 		let sharpMinor = Key(noteLetter: .g, accidental: .sharp, type: .minor)
 		let sharpMinor2 = Key(noteLetter: .g, accidental: .sharp, type: .minor)
-		XCTAssertTrue(sharpMinor == sharpMinor2)
+		#expect(sharpMinor == sharpMinor2)
 	}
 
-	func testEqualityFalse() {
+	@Test func equalityFalse() async throws {
 		let differentType = Key(noteLetter: .b, accidental: .natural, type: .major)
 		let differentType2 = Key(noteLetter: .b, accidental: .natural, type: .minor)
-		XCTAssertFalse(differentType == differentType2)
+		#expect(differentType != differentType2)
 
 		let differentNoteLetter = Key(noteLetter: .a)
 		let differentNoteLetter2 = Key(noteLetter: .f)
-		XCTAssertFalse(differentNoteLetter == differentNoteLetter2)
+		#expect(differentNoteLetter != differentNoteLetter2)
 
 		let differentAccidental = Key(noteLetter: .a, accidental: .sharp, type: .major)
 		let differentAccidental2 = Key(noteLetter: .a, accidental: .doubleSharp, type: .major)
-		XCTAssertFalse(differentAccidental == differentAccidental2)
+		#expect(differentAccidental != differentAccidental2)
 	}
 }

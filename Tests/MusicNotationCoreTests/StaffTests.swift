@@ -278,50 +278,50 @@ import Testing
 
 	// MARK: Failures
 
-	func testStartTieFailIfNoteIndexInvalid() async throws {
+    @Test func startTieFailIfNoteIndexInvalid() async throws {
 		#expect(throws: StaffError.noteIndexOutOfRange) {
 			try staff.startTieFromNote(at: 10, inMeasureAt: 0)
 		}
 	}
 
-	func testStartTieFailIfMeasureIndexInvalid() async throws {
+    @Test func startTieFailIfMeasureIndexInvalid() async throws {
 		#expect(throws: StaffError.measureIndexOutOfRange) {
 			try staff.startTieFromNote(at: 0, inMeasureAt: 25)
 		}
 	}
 
-	func testStartTieFailIfNoNextNote() async throws {
+    @Test func startTieFailIfNoNextNote() async throws {
 		#expect(throws: StaffError.noNextNoteToTie) {
 			try staff.startTieFromNote(at: 4, inMeasureAt: 16)
 		}
 	}
 
-	func testStartTieFailIfLastNoteOfSingleMeasureRepeat() async throws {
+    @Test func startTieFailIfLastNoteOfSingleMeasureRepeat() async throws {
 		// Reason: can't finish in the next measure
 		#expect(throws: StaffError.repeatedMeasureCannotHaveTie) {
 			try staff.startTieFromNote(at: 3, inMeasureAt: 5)
 		}
 	}
 
-	func testStartTieFailIfLastNoteInLastMeasureOfMultiMeasureRepeat() async throws {
+    @Test func startTieFailIfLastNoteInLastMeasureOfMultiMeasureRepeat() async throws {
 		#expect(throws: StaffError.repeatedMeasureCannotHaveTie) {
 			try staff.startTieFromNote(at: 3, inMeasureAt: 8)
 		}
 	}
 
-	func testStartTieFailIfNotesWithinRepeatAfterTheFirstCount() async throws {
+	@Test func startTieFailIfNotesWithinRepeatAfterTheFirstCount() async throws {
 		#expect(throws: StaffError.repeatedMeasureCannotHaveTie) {
 			try staff.startTieFromNote(at: 0, inMeasureAt: 9)
 		}
 	}
 
-	func testStartTieAcrossMeasuresTupletToNoteDiffPitch() async throws {
+    @Test func startTieAcrossMeasuresTupletToNoteDiffPitch() async throws {
 		#expect(throws: StaffError.notesMustHaveSamePitchesToTie) {
 			try staff.startTieFromNote(at: 6, inMeasureAt: 14)
 		}
 	}
 
-	func testStartTieAcrossMeasuresNoteToTupletDiffPitch() async throws {
+    @Test func startTieAcrossMeasuresNoteToTupletDiffPitch() async throws {
 		#expect(throws: StaffError.notesMustHaveSamePitchesToTie) {
 			try staff.startTieFromNote(at: 7, inMeasureAt: 15)
 		}
@@ -329,7 +329,7 @@ import Testing
 
 	// MARK: Successes
 
-	func testStartTieWithinMeasureIfHasNextNote() async throws {
+    @Test func startTieWithinMeasureIfHasNextNote() async throws {
 		let firstNoteIndex = 0
 		let firstMeasureIndex = 0
 		try staff.startTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
@@ -340,7 +340,7 @@ import Testing
 		#expect(secondNote.tie == .end)
 	}
 
-	func testStartTieWithinMeasureIfAlreadyEndOfTie() async throws {
+    @Test func startTieWithinMeasureIfAlreadyEndOfTie() async throws {
 		let firstNoteIndex = 0
 		let firstMeasureIndex = 0
 		try staff.startTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
@@ -484,119 +484,103 @@ import Testing
 	}
 
 	func testRemoveTieBeginIfBeginAndEndOfTie() async throws {
-		assertNoErrorThrown {
-			try staff.startTieFromNote(at: 0, inMeasureAt: 0)
-			try staff.startTieFromNote(at: 1, inMeasureAt: 0)
-			try staff.removeTieFromNote(at: 1, inMeasureAt: 0)
-			let measure = staff.notesHolders[0] as! Measure
-			let firstNote = measure.notes[0][0] as! Note
-			let secondNote = measure.notes[0][1] as! Note
-			XCTAssertEqual(firstNote.tie, .begin)
-			XCTAssertEqual(secondNote.tie, .end)
-		}
+        try staff.startTieFromNote(at: 0, inMeasureAt: 0)
+        try staff.startTieFromNote(at: 1, inMeasureAt: 0)
+        try staff.removeTieFromNote(at: 1, inMeasureAt: 0)
+        let measure = staff.notesHolders[0] as! Measure
+        let firstNote = measure.notes[0][0] as! Note
+        let secondNote = measure.notes[0][1] as! Note
+        #expect(firstNote.tie == .begin)
+        #expect(secondNote.tie == .end)
 	}
 
-	func testRemoveTieWithinMeasureNoteToNote() async throws {
-		assertNoErrorThrown {
-			let firstNoteIndex = 0
-			let firstMeasureIndex = 0
-			try staff.startTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
-			try staff.removeTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
-			let measure = staff.notesHolders[firstMeasureIndex] as! Measure
-			let firstNote = measure.notes[0][firstNoteIndex] as! Note
-			let secondNote = measure.notes[0][firstNoteIndex + 1] as! Note
-			XCTAssertNil(firstNote.tie)
-			XCTAssertNil(secondNote.tie)
-		}
-	}
+    func testRemoveTieWithinMeasureNoteToNote() async throws {
+        let firstNoteIndex = 0
+        let firstMeasureIndex = 0
+        try staff.startTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
+        try staff.removeTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
+        let measure = staff.notesHolders[firstMeasureIndex] as! Measure
+        let firstNote = measure.notes[0][firstNoteIndex] as! Note
+        let secondNote = measure.notes[0][firstNoteIndex + 1] as! Note
+        #expect(firstNote.tie == nil)
+        #expect(secondNote.tie == nil)
+    }
 
-	func testRemoveTieWithinMeasureWithinTuplet() async throws {
-		assertNoErrorThrown {
-			let firstNoteIndex = 4
-			let firstMeasureIndex = 0
-			try staff.startTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
-			try staff.removeTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
-			let measure = staff.notesHolders[firstMeasureIndex] as! Measure
-			let firstNote = try (measure.notes[0][firstNoteIndex] as! Tuplet).note(at: 0)
-			let secondNote = try (measure.notes[0][firstNoteIndex] as! Tuplet).note(at: 1)
-			XCTAssertNil(firstNote.tie)
-			XCTAssertNil(secondNote.tie)
-		}
-	}
+    func testRemoveTieWithinMeasureWithinTuplet() async throws {
+        let firstNoteIndex = 4
+        let firstMeasureIndex = 0
+        try staff.startTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
+        try staff.removeTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
+        let measure = staff.notesHolders[firstMeasureIndex] as! Measure
+        let firstNote = try (measure.notes[0][firstNoteIndex] as! Tuplet).note(at: 0)
+        let secondNote = try (measure.notes[0][firstNoteIndex] as! Tuplet).note(at: 1)
+        #expect(firstNote.tie == nil)
+        #expect(secondNote.tie == nil)
+    }
 
-	func testRemoveTieWithinMeasureFromTupletToNote() async throws {
-		assertNoErrorThrown {
-			let firstNoteIndex = 2
-			let firstMeasureIndex = 1
-			try staff.startTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
-			try staff.removeTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
-			let measure = staff.notesHolders[firstMeasureIndex] as! Measure
-			let firstNote = try (measure.notes[0][0] as! Tuplet).note(at: firstNoteIndex)
-			let secondNote = measure.notes[0][1] as! Note
-			XCTAssertNil(firstNote.tie)
-			XCTAssertNil(secondNote.tie)
-		}
-	}
+    func testRemoveTieWithinMeasureFromTupletToNote() async throws {
+        let firstNoteIndex = 2
+        let firstMeasureIndex = 1
+        try staff.startTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
+        try staff.removeTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
+        let measure = staff.notesHolders[firstMeasureIndex] as! Measure
+        let firstNote = try (measure.notes[0][0] as! Tuplet).note(at: firstNoteIndex)
+        let secondNote = measure.notes[0][1] as! Note
+        #expect(firstNote.tie == nil)
+        #expect(secondNote.tie == nil)
+    }
 
 	func testRemoveTieWithinMeasureFromTupletToNewTuplet() async throws {
-		assertNoErrorThrown {
-			let firstNoteIndex = 2
-			let firstMeasureIndex = 13
-			try staff.startTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
-			try staff.removeTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
-			let measure = staff.notesHolders[7] as! Measure
-			let firstNote = try (measure.notes[0][0] as! Tuplet).note(at: firstNoteIndex)
-			let secondNote = try (measure.notes[0][1] as! Tuplet).note(at: 0)
-			XCTAssertNil(firstNote.tie)
-			XCTAssertNil(secondNote.tie)
-		}
+        let firstNoteIndex = 2
+        let firstMeasureIndex = 13
+        try staff.startTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
+        try staff.removeTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
+        let measure = staff.notesHolders[7] as! Measure
+        let firstNote = try (measure.notes[0][0] as! Tuplet).note(at: firstNoteIndex)
+        let secondNote = try (measure.notes[0][1] as! Tuplet).note(at: 0)
+        #expect(firstNote.tie == nil)
+        #expect(secondNote.tie == nil)
 	}
 
 	func testRemoveTieAcrossMeasuresFromTupletToNote() async throws {
-		assertNoErrorThrown {
-			let firstNoteIndex = 4
-			let firstMeasureIndex = 2
-			try staff.startTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
-			try staff.removeTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
-			let measure1 = staff.notesHolders[firstMeasureIndex] as! Measure
-			let measure2 = staff.notesHolders[firstMeasureIndex + 1] as! Measure
-			let firstNote = try (measure1.notes[0][4] as! Tuplet).note(at: 2)
-			let secondNote = measure2.notes[0][0] as! Note
-			XCTAssertNil(firstNote.tie)
-			XCTAssertNil(secondNote.tie)
-		}
+        let firstNoteIndex = 4
+        let firstMeasureIndex = 2
+        try staff.startTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
+        try staff.removeTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
+        let measure1 = staff.notesHolders[firstMeasureIndex] as! Measure
+        let measure2 = staff.notesHolders[firstMeasureIndex + 1] as! Measure
+        let firstNote = try (measure1.notes[0][4] as! Tuplet).note(at: 2)
+        let secondNote = measure2.notes[0][0] as! Note
+        #expect(firstNote.tie == nil)
+        #expect(secondNote.tie == nil)
 	}
 
 	func testRemoveTieAcrosssMeasuresFromTupletToNewTuplet() async throws {
-		assertNoErrorThrown {
-			let firstNoteIndex = 6
-			let firstMeasureIndex = 0
-			try staff.startTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
-			try staff.removeTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
-			let measure1 = staff.notesHolders[firstMeasureIndex] as! Measure
-			let measure2 = staff.notesHolders[firstMeasureIndex + 1] as! Measure
-			let firstNote = try (measure1.notes[0][4] as! Tuplet).note(at: 2)
-			let secondNote = try (measure2.notes[0][0] as! Tuplet).note(at: 0)
-			XCTAssertNil(firstNote.tie)
-			XCTAssertNil(secondNote.tie)
-		}
+        let firstNoteIndex = 6
+        let firstMeasureIndex = 0
+        try staff.startTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
+        try staff.removeTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
+        let measure1 = staff.notesHolders[firstMeasureIndex] as! Measure
+        let measure2 = staff.notesHolders[firstMeasureIndex + 1] as! Measure
+        let firstNote = try (measure1.notes[0][4] as! Tuplet).note(at: 2)
+        let secondNote = try (measure2.notes[0][0] as! Tuplet).note(at: 0)
+        #expect(firstNote.tie == nil)
+        #expect(secondNote.tie == nil)
 	}
 
 	func testremoveTieFromNoteThatIsBeginAndEnd() async throws {
-		assertNoErrorThrown {
-			let firstNoteIndex = 0
-			let firstMeasureIndex = 0
-			try staff.startTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
-			try staff.startTieFromNote(at: firstNoteIndex + 1, inMeasureAt: firstMeasureIndex)
-			try staff.removeTieFromNote(at: firstNoteIndex + 1, inMeasureAt: firstMeasureIndex)
-			let measure = staff.notesHolders[firstMeasureIndex] as! Measure
-			let firstNote = measure.notes[0][firstNoteIndex] as! Note
-			let secondNote = measure.notes[0][firstNoteIndex + 1] as! Note
-			let thirdNote = measure.notes[0][firstNoteIndex + 2] as! Note
-			#expect(firstNote.tie == .begin)
-			#expect(secondNote.tie == .end)
-			XCTAssertNil(thirdNote.tie)
-		}
+        let firstNoteIndex = 0
+        let firstMeasureIndex = 0
+        try staff.startTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
+        try staff.startTieFromNote(at: firstNoteIndex + 1, inMeasureAt: firstMeasureIndex)
+        try staff.removeTieFromNote(at: firstNoteIndex + 1, inMeasureAt: firstMeasureIndex)
+        let measure = staff.notesHolders[firstMeasureIndex] as! Measure
+        let firstNote = measure.notes[0][firstNoteIndex] as! Note
+        let secondNote = measure.notes[0][firstNoteIndex + 1] as! Note
+        let thirdNote = measure.notes[0][firstNoteIndex + 2] as! Note
+        #expect(firstNote.tie == .begin)
+        #expect(secondNote.tie == .end)
+        #expect(thirdNote.tie == nil)
 	}
 
 	// MARK: - notesHolderIndexFromMeasureIndex(_: Int) -> (Int, Int?)
@@ -662,32 +646,26 @@ import Testing
 	func testNotesHolderAtMeasureIndexForSecondMeasureThatIsRepeated() async throws {
 		let actual = try staff.notesHolderAtMeasureIndex(8)
 		let expected = staff.notesHolders[6]
-		XCTAssertEqual(actual as? MeasureRepeat, expected as? MeasureRepeat)
+        #expect(actual as? MeasureRepeat == expected as? MeasureRepeat)
 	}
 
 	func testNotesHolderAtMeasureIndexForRepeatedMeasureInFirstRepeat() async throws {
-		assertNoErrorThrown {
-			let actual = try staff.notesHolderAtMeasureIndex(6)
-			let expected = staff.notesHolders[5]
-			XCTAssertEqual(actual as? MeasureRepeat, expected as? MeasureRepeat)
-		}
-	}
+		let actual = try staff.notesHolderAtMeasureIndex(6)
+		let expected = staff.notesHolders[5]
+        #expect(actual as? MeasureRepeat == expected as? MeasureRepeat)
+    }
 
 	func testNotesHolderAtMeasureIndexForRepeatedMeasureInSecondRepeat() async throws {
-		assertNoErrorThrown {
-			let actual = try staff.notesHolderAtMeasureIndex(12)
-			let expected = staff.notesHolders[6]
-			XCTAssertEqual(actual as? MeasureRepeat, expected as? MeasureRepeat)
-		}
-	}
+		let actual = try staff.notesHolderAtMeasureIndex(12)
+		let expected = staff.notesHolders[6]
+        #expect(actual as? MeasureRepeat == expected as? MeasureRepeat)
+    }
 
 	func testNotesHolderAtMeasureIndexForRegularMeasure() async throws {
-		assertNoErrorThrown {
-			let actual = try staff.notesHolderAtMeasureIndex(0)
-			let expected = staff.notesHolders[0]
-			XCTAssertEqual(actual as? Measure, expected as? Measure)
-		}
-	}
+		let actual = try staff.notesHolderAtMeasureIndex(0)
+		let expected = staff.notesHolders[0]
+        #expect(actual as? Measure == expected as? Measure)
+    }
 
 	// MARK: - measure(at:_: Int) -> ImmutableMeasure
 
@@ -708,28 +686,22 @@ import Testing
 	// MARK: Successes
 
 	func testMeasureAtIndexForRegularMeasure() async throws {
-		assertNoErrorThrown {
-			let measure = try staff.measure(at: 1)
-			XCTAssertEqual(measure as? Measure, staff.notesHolders[1] as? Measure)
-		}
-	}
+		let measure = try staff.measure(at: 1)
+        #expect(measure as? Measure == staff.notesHolders[1] as? Measure)
+    }
 
 	func testMeasureAtIndexForMeasureThatRepeats() async throws {
-		assertNoErrorThrown {
-			let measureThatRepeats = try staff.measure(at: 5)
-			let measureRepeat = staff.notesHolders[5] as! MeasureRepeat
-			XCTAssertEqual(measureThatRepeats as? RepeatedMeasure, measureRepeat.expand()[0] as? RepeatedMeasure)
-		}
-	}
+		let measureThatRepeats = try staff.measure(at: 5)
+		let measureRepeat = staff.notesHolders[5] as! MeasureRepeat
+        #expect(measureThatRepeats as? RepeatedMeasure == measureRepeat.expand()[0] as? RepeatedMeasure)
+    }
 
 	func testMeasureAtIndexForRepeatedMeasure() async throws {
-		assertNoErrorThrown {
-			let repeatedMeasure = try staff.measure(at: 6)
-			let measureRepeat = staff.notesHolders[5] as! MeasureRepeat
-			let expectedMeasure = measureRepeat.expand()[1]
-			XCTAssertNotNil(expectedMeasure as? RepeatedMeasure)
-			XCTAssertEqual(repeatedMeasure as? RepeatedMeasure, expectedMeasure as? RepeatedMeasure)
-		}
+        let repeatedMeasure = try staff.measure(at: 6)
+        let measureRepeat = staff.notesHolders[5] as! MeasureRepeat
+        let expectedMeasure = measureRepeat.expand()[1]
+        #expect(expectedMeasure as? RepeatedMeasure == nil)
+        #expect(repeatedMeasure as? RepeatedMeasure == expectedMeasure as? RepeatedMeasure)
 	}
 
 	// MARK: - measureRepeat(at:_: Int) -> MeasureRepeat
@@ -751,43 +723,33 @@ import Testing
 	// MARK: Successes
 
 	func testMeasureRepeatAtIndexForMeasureNotPartOfRepeat() async throws {
-		assertNoErrorThrown {
-			let measureRepeat = try staff.measureRepeat(at: 1)
-			XCTAssertNil(measureRepeat)
-		}
+		let measureRepeat = try staff.measureRepeat(at: 1)
+        #expect(measureRepeat == nil)
 	}
 
 	func testMeasureRepeatAtIndexForFirstMeasureThatIsRepeated() async throws {
-		assertNoErrorThrown {
-			let measureRepeat = try staff.measureRepeat(at: 5)
-			let expected = staff.notesHolders[5] as! MeasureRepeat
-			XCTAssertEqual(measureRepeat, expected)
-		}
-	}
+		let measureRepeat = try staff.measureRepeat(at: 5)
+		let expected = staff.notesHolders[5] as! MeasureRepeat
+        #expect(measureRepeat == expected)
+    }
 
 	func testMeasureRepeatAtIndexForSecondMeasureThatIsRepeated() async throws {
-		assertNoErrorThrown {
-			let measureRepeat = try staff.measureRepeat(at: 8)
-			let expected = staff.notesHolders[6] as! MeasureRepeat
-			XCTAssertEqual(measureRepeat, expected)
-		}
+        let measureRepeat = try staff.measureRepeat(at: 8)
+        let expected = staff.notesHolders[6] as! MeasureRepeat
+        #expect(measureRepeat == expected)
 	}
 
-	func testMeasureRepeatAtIndexForRepeatedMeasureInFirstRepeat() async throws {
-		assertNoErrorThrown {
-			let measureRepeat = try staff.measureRepeat(at: 6)
-			let expected = staff.notesHolders[5] as! MeasureRepeat
-			XCTAssertEqual(measureRepeat, expected)
-		}
-	}
+    func testMeasureRepeatAtIndexForRepeatedMeasureInFirstRepeat() async throws {
+        let measureRepeat = try staff.measureRepeat(at: 6)
+        let expected = staff.notesHolders[5] as! MeasureRepeat
+        #expect(measureRepeat == expected)
+    }
 
-	func testMeasureRepeatAtIndexForRepeatedMeasureInSecondRepeat() async throws {
-		assertNoErrorThrown {
-			let measureRepeat = try staff.measureRepeat(at: 12)
-			let expected = staff.notesHolders[6] as! MeasureRepeat
-			XCTAssertEqual(measureRepeat, expected)
-		}
-	}
+    func testMeasureRepeatAtIndexForRepeatedMeasureInSecondRepeat() async throws {
+        let measureRepeat = try staff.measureRepeat(at: 12)
+        let expected = staff.notesHolders[6] as! MeasureRepeat
+        #expect(measureRepeat == expected)
+    }
 
 	// MARK: - replaceMeasure(at:, with:)
 
@@ -802,22 +764,18 @@ import Testing
 	// MARK: Successes
 
 	func testReplaceMeasureAtIndex() async throws {
-		assertNoErrorThrown {
-			try staff.replaceMeasure(at: 0, with: measure2)
-			let replacedMeasure = Measure(try staff.measure(at: 0))
-			XCTAssertEqual(replacedMeasure, changedClef(of: measure2))
-		}
+        try staff.replaceMeasure(at: 0, with: measure2)
+        let replacedMeasure = Measure(try staff.measure(at: 0))
+        #expect(replacedMeasure == changedClef(of: measure2))
 	}
 
-	func testReplaceMeasureWithRepeat() async throws {
-		assertNoErrorThrown {
-			try staff.replaceMeasure(at: 5, with: measure1)
-			let replacedMeasure = Measure(try staff.measure(at: 5))
-			let repeatedMeasure = Measure(try staff.measure(at: 6))
-			XCTAssertEqual(replacedMeasure, changedClef(of: measure1))
-			XCTAssertEqual(repeatedMeasure, changedClef(of: measure1))
-		}
-	}
+    func testReplaceMeasureWithRepeat() async throws {
+        try staff.replaceMeasure(at: 5, with: measure1)
+        let replacedMeasure = Measure(try staff.measure(at: 5))
+        let repeatedMeasure = Measure(try staff.measure(at: 6))
+        #expect(replacedMeasure == changedClef(of: measure1))
+        #expect(repeatedMeasure == changedClef(of: measure1))
+    }
 
 	// MARK: - changeClef(_:, in:, at:, inSet:)
 
@@ -842,130 +800,114 @@ import Testing
 	}
 
 	func testChangeClefAtBeginningOfStaff() async throws {
-		assertNoErrorThrown {
-			try verifyAndChangeClef(to: .alto, in: 0, atNote: 0)
-		}
+        try verifyAndChangeClef(to: .alto, in: 0, atNote: 0)
 	}
 
 	func testChangeClefAtMiddleOfMeasure() async throws {
-		assertNoErrorThrown {
-			try verifyAndChangeClef(to: .baritone, in: 3, atNote: 2)
-		}
+		try verifyAndChangeClef(to: .baritone, in: 3, atNote: 2)
 	}
 
 	func testChangeClefTwiceInOneMeasure() async throws {
-		assertNoErrorThrown {
-			let newClef1: Clef = .bass
-			let newClef2: Clef = .alto
+        let newClef1: Clef = .bass
+        let newClef2: Clef = .alto
 
-			try staff.changeClef(newClef1, in: 1, atNote: 1)
-			try staff.changeClef(newClef2, in: 1, atNote: 2)
+        try staff.changeClef(newClef1, in: 1, atNote: 1)
+        try staff.changeClef(newClef2, in: 1, atNote: 2)
 
-			try verifyClefsUnchanged(before: 1)
-			try verifyClefsChanged(to: newClef2, after: 1)
-		}
+        try verifyClefsUnchanged(before: 1)
+        try verifyClefsChanged(to: newClef2, after: 1)
 	}
 
-	func testChangeClefTwiceAcross2Measures() async throws {
-		assertNoErrorThrown {
-			let newClef1: Clef = .tenor
-			let newClef2: Clef = .bass
+    func testChangeClefTwiceAcross2Measures() async throws {
+        let newClef1: Clef = .tenor
+        let newClef2: Clef = .bass
 
-			try staff.changeClef(newClef1, in: 2, atNote: 0)
-			try staff.changeClef(newClef2, in: 4, atNote: 0)
+        try staff.changeClef(newClef1, in: 2, atNote: 0)
+        try staff.changeClef(newClef2, in: 4, atNote: 0)
 
-			try verifyClefsUnchanged(before: 2)
-			try verifyClefsChanged(to: newClef1, after: 2, until: 4)
-			try verifyClefsChanged(to: newClef2, after: 4)
-		}
-	}
+        try verifyClefsUnchanged(before: 2)
+        try verifyClefsChanged(to: newClef1, after: 2, until: 4)
+        try verifyClefsChanged(to: newClef2, after: 4)
+    }
 
-	func testChangeClefTwiceAcross2NoteSetsIn1Measure() async throws {
-		assertNoErrorThrown {
-			let sixteenth = Note(noteDuration: .sixteenth, pitch: SpelledPitch(.c, .octave1))
-            let quarter = Note(noteDuration: .quarter, pitch: SpelledPitch(.c, .octave1))
-			staff.appendMeasure(
-				Measure(timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
-						notes: [
-							[
-								sixteenth, sixteenth, sixteenth, sixteenth, sixteenth, sixteenth, sixteenth, sixteenth,
-							],
-							[
-								quarter, quarter, quarter, quarter,
-							],
-						])
-			)
+    func testChangeClefTwiceAcross2NoteSetsIn1Measure() async throws {
+        let sixteenth = Note(noteDuration: .sixteenth, pitch: SpelledPitch(.c, .octave1))
+        let quarter = Note(noteDuration: .quarter, pitch: SpelledPitch(.c, .octave1))
+        staff.appendMeasure(
+            Measure(timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
+                    notes: [
+                        [
+                            sixteenth, sixteenth, sixteenth, sixteenth, sixteenth, sixteenth, sixteenth, sixteenth,
+                        ],
+                        [
+                            quarter, quarter, quarter, quarter,
+                        ],
+                    ])
+        )
 
-			let newLastMeasureIndex = 17
-			let newClef1: Clef = .bass
-			let newClef2 = Clef(
-                pitch: SpelledPitch(.c, accidental: .sharp, .octave3),
-                location: StaffLocation(.space, 3)
-			)
-			try staff.changeClef(newClef1, in: newLastMeasureIndex, atNote: 1, inSet: 0)
-			try staff.changeClef(newClef2, in: newLastMeasureIndex, atNote: 2, inSet: 1)
-			let measure = Measure(try staff.measure(at: newLastMeasureIndex))
-			try verifyClefsUnchanged(before: newLastMeasureIndex)
-			XCTAssertNotNil(measure.lastClef)
-			XCTAssertEqual(measure.lastClef, newClef2)
-			let firstChangeTicks = try measure.cumulativeTicks(at: 1, inSet: 0)
-			let secondChangeTicks = try measure.cumulativeTicks(at: 2, inSet: 1)
-			XCTAssertEqual(measure.clefs, [firstChangeTicks: newClef1, secondChangeTicks: newClef2])
-		}
-	}
+        let newLastMeasureIndex = 17
+        let newClef1: Clef = .bass
+        let newClef2 = Clef(
+            pitch: SpelledPitch(.c, accidental: .sharp, .octave3),
+            location: StaffLocation(.space, 3)
+        )
+        try staff.changeClef(newClef1, in: newLastMeasureIndex, atNote: 1, inSet: 0)
+        try staff.changeClef(newClef2, in: newLastMeasureIndex, atNote: 2, inSet: 1)
+        let measure = Measure(try staff.measure(at: newLastMeasureIndex))
+        try verifyClefsUnchanged(before: newLastMeasureIndex)
+        #expect(measure.lastClef == nil)
+        #expect(measure.lastClef == newClef2)
+        let firstChangeTicks = try measure.cumulativeTicks(at: 1, inSet: 0)
+        let secondChangeTicks = try measure.cumulativeTicks(at: 2, inSet: 1)
+        #expect(measure.clefs == [firstChangeTicks: newClef1, secondChangeTicks: newClef2])
+    }
 
-	func testChangeClefAtBeginningOfFirstMeasureWithinRepeat() async throws {
-		assertNoErrorThrown {
-			let newClef: Clef = .bass
-			try staff.changeClef(newClef, in: 5, atNote: 0, inSet: 0)
-			try verifyClefsUnchanged(before: 5)
-			try verifyClefsChanged(to: newClef, after: 6)
-			let immutableMeasure1 = try staff.measure(at: 5)
-			let immutableMeasure2 = try staff.measure(at: 6)
-			XCTAssertEqual(immutableMeasure1.lastClef, .bass)
-			XCTAssertEqual(immutableMeasure2.lastClef, .bass)
-			XCTAssertEqual(immutableMeasure1.clefs, [0: .bass])
-			XCTAssertEqual(immutableMeasure2.clefs, [0: .bass])
-		}
-	}
+    func testChangeClefAtBeginningOfFirstMeasureWithinRepeat() async throws {
+        let newClef: Clef = .bass
+        try staff.changeClef(newClef, in: 5, atNote: 0, inSet: 0)
+        try verifyClefsUnchanged(before: 5)
+        try verifyClefsChanged(to: newClef, after: 6)
+        let immutableMeasure1 = try staff.measure(at: 5)
+        let immutableMeasure2 = try staff.measure(at: 6)
+        #expect(immutableMeasure1.lastClef == .bass)
+        #expect(immutableMeasure2.lastClef == .bass)
+        #expect(immutableMeasure1.clefs == [0: .bass])
+        #expect(immutableMeasure2.clefs == [0: .bass])
+    }
 
-	func testChangeClefInMeasureRepeatWith1Measure() async throws {
-		assertNoErrorThrown {
-			let newClef: Clef = .bass
-			try staff.changeClef(newClef, in: 5, atNote: 1, inSet: 0)
-			try verifyClefsUnchanged(before: 5)
-			try verifyClefsChanged(to: newClef, after: 6)
-			let immutableMeasure1 = try staff.measure(at: 5)
-			let immutableMeasure2 = try staff.measure(at: 6)
-			let ticks = try Measure(immutableMeasure1).cumulativeTicks(at: 1)
-			XCTAssertEqual(immutableMeasure1.lastClef, newClef)
-			XCTAssertEqual(immutableMeasure2.lastClef, newClef)
-			XCTAssertEqual(immutableMeasure1.clefs, [ticks: newClef])
-			XCTAssertEqual(immutableMeasure2.clefs, [ticks: newClef])
-		}
-	}
-
-	func testChangeClefInEachMeasureInRepeat() async throws {
-		assertNoErrorThrown {
-			let newClef1: Clef = .bass
-			let newClef2: Clef = .alto
-			try staff.changeClef(newClef1, in: 7, atNote: 0, inSet: 0)
-			try staff.changeClef(newClef2, in: 8, atNote: 1, inSet: 0)
-			try verifyClefsUnchanged(before: 7)
-			try verifyClefsChanged(to: newClef2, after: 12)
-			let firstChangeMeasures = [try staff.measure(at: 7), try staff.measure(at: 9), try staff.measure(at: 11)]
-			let secondChangeMeasures = [try staff.measure(at: 8), try staff.measure(at: 10), try staff.measure(at: 12)]
-			let secondChangeTicks = try Measure(secondChangeMeasures[0]).cumulativeTicks(at: 1)
-			firstChangeMeasures.forEach {
-				XCTAssertEqual($0.lastClef, newClef1)
-				XCTAssertEqual($0.clefs, [0: newClef1])
-			}
-			secondChangeMeasures.forEach {
-				XCTAssertEqual($0.lastClef, newClef2)
-				XCTAssertEqual($0.clefs, [secondChangeTicks: newClef2])
-			}
-		}
-	}
+    func testChangeClefInMeasureRepeatWith1Measure() async throws {
+        let newClef: Clef = .bass
+        try staff.changeClef(newClef, in: 5, atNote: 1, inSet: 0)
+        try verifyClefsUnchanged(before: 5)
+        try verifyClefsChanged(to: newClef, after: 6)
+        let immutableMeasure1 = try staff.measure(at: 5)
+        let immutableMeasure2 = try staff.measure(at: 6)
+        let ticks = try Measure(immutableMeasure1).cumulativeTicks(at: 1)
+        #expect(immutableMeasure1.lastClef == newClef)
+        #expect(immutableMeasure2.lastClef == newClef)
+        #expect(immutableMeasure1.clefs == [ticks: newClef])
+        #expect(immutableMeasure2.clefs == [ticks: newClef])
+    }
+    
+    func testChangeClefInEachMeasureInRepeat() async throws {
+        let newClef1: Clef = .bass
+        let newClef2: Clef = .alto
+        try staff.changeClef(newClef1, in: 7, atNote: 0, inSet: 0)
+        try staff.changeClef(newClef2, in: 8, atNote: 1, inSet: 0)
+        try verifyClefsUnchanged(before: 7)
+        try verifyClefsChanged(to: newClef2, after: 12)
+        let firstChangeMeasures = [try staff.measure(at: 7), try staff.measure(at: 9), try staff.measure(at: 11)]
+        let secondChangeMeasures = [try staff.measure(at: 8), try staff.measure(at: 10), try staff.measure(at: 12)]
+        let secondChangeTicks = try Measure(secondChangeMeasures[0]).cumulativeTicks(at: 1)
+        firstChangeMeasures.forEach {
+            #expect($0.lastClef == newClef1)
+            #expect($0.clefs == [0: newClef1])
+        }
+        secondChangeMeasures.forEach {
+            #expect($0.lastClef == newClef2)
+            #expect($0.clefs == [secondChangeTicks: newClef2])
+        }
+    }
 
 	private func verifyAndChangeClef(to clef: Clef,
 									 in measureIndex: Int,
@@ -987,12 +929,12 @@ import Testing
 			staff[0 ..< notesHolderIndexPrevious.notesHolderIndex].forEach { notesHolder in
 				switch notesHolder {
 				case let measure as Measure:
-					XCTAssertEqual(measure.lastClef, Constant.standardClef, file: file, line: line)
-					XCTAssertEqual(measure.originalClef, Constant.standardClef, file: file, line: line)
+                    #expect(measure.lastClef == Constant.standardClef)
+                    #expect(measure.originalClef == Constant.standardClef)
 				case let measureRepeat as MeasureRepeat:
 					measureRepeat.expand().forEach {
-						XCTAssertEqual($0.lastClef, Constant.standardClef, file: file, line: line)
-						XCTAssertEqual($0.originalClef, Constant.standardClef, file: file, line: line)
+                        #expect($0.lastClef == Constant.standardClef)
+                        #expect($0.originalClef == Constant.standardClef)
 					}
 				default: XCTFail("Invalid type. Should be Measure or MeasureRepeat")
 				}
@@ -1014,12 +956,12 @@ import Testing
 			staff[notesHolderIndexNext.notesHolderIndex ..< (endingIndex ?? staff.endIndex)].forEach { notesHolder in
 				switch notesHolder {
 				case let measure as Measure:
-					XCTAssertEqual(measure.lastClef, newClef, file: file, line: line)
-					XCTAssertEqual(measure.originalClef, newClef, file: file, line: line)
+                    #expect(measure.lastClef == newClef)
+                    #expect(measure.originalClef == newClef)
 				case let measureRepeat as MeasureRepeat:
 					measureRepeat.expand().forEach {
-						XCTAssertEqual($0.lastClef, newClef, file: file, line: line)
-						XCTAssertEqual($0.originalClef, newClef, file: file, line: line)
+                        #expect($0.lastClef == newClef)
+                        #expect($0.originalClef == newClef)
 					}
 				default: XCTFail("Invalid type. Should be Measure or MeasureRepeat")
 				}
@@ -1048,15 +990,15 @@ import Testing
 		zip(mappedNotesHolders, expectedNotesHolders).forEach { actualNotesHolder, expectedNotesHolder in
 			switch (actualNotesHolder, expectedNotesHolder) {
 			case let (actual as Measure, expected as Measure):
-				XCTAssertEqual(actual, expected)
+                #expect(actual, expected)
 			case let (actual as MeasureRepeat, expected as MeasureRepeat):
-				XCTAssertEqual(actual, expected)
+                #expect(actual, expected)
 			default:
 				XCTFail("NotesHolders not equal")
 			}
 			count += 1
 		}
-		XCTAssertEqual(count, expectedNotesHolders.count)
+        #expect(count, expectedNotesHolders.count)
 	}
 
 	func testReversed() async throws {
@@ -1078,21 +1020,21 @@ import Testing
 		zip(reversedNotesHolders, expectedNotesHolders).forEach { actualNotesHolder, expectedNotesHolder in
 			switch (actualNotesHolder, expectedNotesHolder) {
 			case let (actual as Measure, expected as Measure):
-				XCTAssertEqual(actual, expected)
+                #expect(actual, expected)
 			case let (actual as MeasureRepeat, expected as MeasureRepeat):
-				XCTAssertEqual(actual, expected)
+                #expect(actual == expected)
 			default:
 				XCTFail("NotesHolders not equal")
 			}
 			count += 1
 		}
-		XCTAssertEqual(count, expectedNotesHolders.count)
+        #expect(count == expectedNotesHolders.count)
 	}
 
 	func testIterator() async throws {
 		var iterator = staff.makeIterator()
 		if let actual = iterator.next() as? Measure {
-			XCTAssertEqual(actual, changedClef(of: measure1))
+            #expect(actual == changedClef(of: measure1))
 		} else {
 			XCTFail("Iterator didn't return correct value for next()")
 		}

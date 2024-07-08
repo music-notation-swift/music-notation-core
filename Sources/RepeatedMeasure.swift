@@ -13,7 +13,7 @@
 ///
 /// i.e. If we want to repeat measure A 2 times, you would have
 ///
-///    | A, repeated A, repeated A |
+///		| A, repeated A, repeated A |
 ///
 /// This structure represents those repeated measures "repeated A", so that they can be differentiated from the
 /// original measure "A".

@@ -10,9 +10,9 @@
 import Testing
 
 @Suite final class MeasureDurationValidatorTests {
-    static let standardTimeSignature = TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120)
-    static let oddTimeSignature = TimeSignature(topNumber: 11, bottomNumber: 16, tempo: 86)
-    static let irrationalTimeSignature = TimeSignature(topNumber: 3, bottomNumber: 6, tempo: 120)
+	static let standardTimeSignature = TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120)
+	static let oddTimeSignature = TimeSignature(topNumber: 11, bottomNumber: 16, tempo: 86)
+	static let irrationalTimeSignature = TimeSignature(topNumber: 3, bottomNumber: 6, tempo: 120)
 
 	var fullMeasure: Measure!
 	var notFullMeasure: Measure!
@@ -36,20 +36,16 @@ import Testing
 		let key = Key(noteLetter: .c)
 		var staff = Staff(clef: .treble, instrument: .guitar6)
 		let dotted16: Note = {
-			Note(
-				noteDuration: try! NoteDuration(value: .sixteenth, dotCount: 1),
-                pitch: SpelledPitch(.c, .octave0)
-			)
+			Note(try! NoteDuration(value: .sixteenth, dotCount: 1),
+				 pitch: SpelledPitch(.c, .octave0))
 		}()
 		let doubleDottedEighth: Note = {
-			Note(
-				noteDuration: try! NoteDuration(value: .eighth, dotCount: 2),
-                pitch: SpelledPitch(.c, .octave0)
-			)
+			Note(try! NoteDuration(value: .eighth, dotCount: 2),
+				 pitch: SpelledPitch(.c, .octave0))
 		}()
-        let quarter = Note(noteDuration: .quarter, pitch: SpelledPitch(.c, .octave0))
-        let thirtySecond = Note(noteDuration: .thirtySecond, pitch: SpelledPitch(.c, .octave0))
-		let halfRest = Note(restDuration: .half)
+		let quarter = Note(.quarter, pitch: SpelledPitch(.c, .octave0))
+		let thirtySecond = Note(.thirtySecond, pitch: SpelledPitch(.c, .octave0))
+		let halfRest = Note(.half)
 		let quarterTriplet = try! Tuplet(3, .quarter, notes: [quarter, quarter, quarter])
 
 		fullMeasure = Measure(

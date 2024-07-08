@@ -13,9 +13,9 @@ import Testing
 	let pitch1 = SpelledPitch(.a, .octave1)
 	let pitch2 = SpelledPitch(.b, accidental: .sharp, .octave1)
 	let pitch3 = SpelledPitch(.d, accidental: .natural, .octave1)
-	let quarterRest = Note(restDuration: .quarter)
-	let eighthRest = Note(restDuration: .eighth)
-	let dottedQuarterNote = Note(noteDuration: try! NoteDuration(value: .quarter, dotCount: 1),
+	let quarterRest = Note(.quarter)
+	let eighthRest = Note(.eighth)
+	let dottedQuarterNote = Note(try! NoteDuration(value: .quarter, dotCount: 1),
 								 pitch: SpelledPitch(.c, .octave3))
 	var quarterNote1: Note!
 	var quarterNote2: Note!
@@ -26,13 +26,13 @@ import Testing
 	var sixteenthNote: Note!
 
 	init() {
-		quarterNote1 = Note(noteDuration: .quarter, pitch: pitch1)
-		quarterNote2 = Note(noteDuration: .quarter, pitch: pitch1)
-		quarterNote3 = Note(noteDuration: .quarter, pitch: pitch2)
-		eighthNote = Note(noteDuration: .eighth, pitch: pitch1)
-		quarterChord = Note(noteDuration: .quarter, pitches: [pitch1, pitch2, pitch3])
-		eighthChord = Note(noteDuration: .eighth, pitches: [pitch1, pitch2, pitch3])
-		sixteenthNote = Note(noteDuration: .sixteenth, pitch: pitch1)
+		quarterNote1 = Note(.quarter, pitch: pitch1)
+		quarterNote2 = Note(.quarter, pitch: pitch1)
+		quarterNote3 = Note(.quarter, pitch: pitch2)
+		eighthNote = Note(.eighth, pitch: pitch1)
+		quarterChord = Note(.quarter, pitches: [pitch1, pitch2, pitch3])
+		eighthChord = Note(.eighth, pitches: [pitch1, pitch2, pitch3])
+		sixteenthNote = Note(.sixteenth, pitch: pitch1)
 	}
 
 	// MARK: - init(notes:)

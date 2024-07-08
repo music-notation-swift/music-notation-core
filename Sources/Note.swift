@@ -27,24 +27,24 @@ public struct Note: NoteCollection, Sendable {
 	internal var tie: Tie?
 
 	/// Initialize a rest.
-	public init(restDuration: NoteDuration) {
+	public init(_ restDuration: NoteDuration) {
 		noteDuration = restDuration
 		pitches = []
 		isRest = true
 	}
 
 	/// Initialize a note with a single pitch.
-	public init(noteDuration: NoteDuration, pitch: SpelledPitch) {
+	public init(_ noteDuration: NoteDuration, pitch: SpelledPitch) {
 		self.noteDuration = noteDuration
 		pitches = [pitch]
 		isRest = false
 	}
 
 	/// Initialize a note with multiple pitches (chord).
-	public init(noteDuration: NoteDuration, pitches: [SpelledPitch]) {
-		isRest = false
+	public init(_ noteDuration: NoteDuration, pitches: [SpelledPitch]) {
 		self.noteDuration = noteDuration
 		self.pitches = pitches
+		isRest = false
 	}
 
 	// MARK: - Methods

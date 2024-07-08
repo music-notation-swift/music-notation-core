@@ -39,8 +39,8 @@ public struct MeasureRepeat {
 	/// - parameter measure: The measure to be inserted.
 	/// - parameter index: The index at which to insert the measure within the measures to be repeated.
 	/// - throws:
-	///    - `MeasureRepeatError.indexOutOfRange`
-	///    - `MeasureRepeatError.cannotModifyRepeatedMeasures`
+	///		- `MeasureRepeatError.indexOutOfRange`
+	///		- `MeasureRepeatError.cannotModifyRepeatedMeasures`
 	///
 	public mutating func insertMeasure(_ measure: Measure, at index: Int) throws {
 		guard index >= 0 else { throw MeasureRepeatError.indexOutOfRange }

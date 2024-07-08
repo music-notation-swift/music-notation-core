@@ -81,9 +81,9 @@ public struct Staff: RandomAccessCollection {
 	/// - parameter noteIndex: The index of the note at which you want the clef to change
 	/// - parameter setIndex: The index of the note set in which the note resides where you want to change the clef
 	/// - throws:
-	///    - `StaffError.measureIndexOutOfRange`
-	///    - `StaffError.repeatedMeasureCannotBeModified` if the measure is a repeated measure.
-	///    - `StaffError.internalError` if the function has an internal implementation error.
+	///		- `StaffError.measureIndexOutOfRange`
+	///		- `StaffError.repeatedMeasureCannotBeModified` if the measure is a repeated measure.
+	///		- `StaffError.internalError` if the function has an internal implementation error.
 	///
 	public mutating func changeClef(_ clef: Clef,
 									in measureIndex: Int,
@@ -117,12 +117,12 @@ public struct Staff: RandomAccessCollection {
 	/// the beginning of a repeat. True if you want the measure to be inserted before the repeat. False
 	/// when you want the measure to be inserted into the repeat at the given index.
 	/// - throws:
-	///     - `StaffError.measureIndexOutOfRange`
-	///     - `StaffError.noRepeatToInsertInto`
-	///     - `StaffError.hasToInsertIntoRepeatIfIndexIsNotFirstMeasureOfRepeat`
-	///     - `StaffError.internalError`
-	///     - `MeasureRepeatError.indexOutOfRange`
-	///     - `MeasureRepeatError.cannotModifyRepeatedMeasures`
+	///		- `StaffError.measureIndexOutOfRange`
+	/// 	- `StaffError.noRepeatToInsertInto`
+	/// 	- `StaffError.hasToInsertIntoRepeatIfIndexIsNotFirstMeasureOfRepeat`
+	/// 	- `StaffError.internalError`
+	/// 	- `MeasureRepeatError.indexOutOfRange`
+	/// 	- `MeasureRepeatError.cannotModifyRepeatedMeasures`
 	///
 	public mutating func insertMeasure(_ measure: Measure, at index: Int, beforeRepeat: Bool = true) throws {
 		var measure = measure

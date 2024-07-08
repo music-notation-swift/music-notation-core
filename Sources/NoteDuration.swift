@@ -7,7 +7,7 @@
 //
 
 public struct NoteDuration: Hashable, Sendable {
-    public enum Value: CustomDebugStringConvertible, Hashable, Sendable {
+	public enum Value: CustomDebugStringConvertible, Hashable, Sendable {
 		case large
 		case long
 		case doubleWhole
@@ -134,7 +134,7 @@ public struct NoteDuration: Hashable, Sendable {
 	/// - parameter value: The value of the duration. i.e. whole, quarter, eighth, etc.
 	/// - parameter dotCount: The number of dots for this duration.
 	/// - throws:
-	///    - `NoteDurationError.negativeDotCountInvalid`
+	///		- `NoteDurationError.negativeDotCountInvalid`
 	///
 	public init(value: Value, dotCount: Int) throws {
 		guard dotCount >= 0 else {
@@ -173,7 +173,7 @@ public struct NoteDuration: Hashable, Sendable {
 	/// - parameter noteDuration: the `NoteDuration` you would like to see how many would fit.
 	/// - parameter baseNoteDuration: the `NoteDuration` that you would to see how many of the first duration will fit into.
 	/// - returns: A `Double` representing how many of the first duration fit within the second. If the first duration is
-	///    larger than the second, it will be a Double number less than 0.
+	///		larger than the second, it will be a Double number less than 0.
 	///
 	public static func number(of noteDuration: NoteDuration, within baseNoteDuration: NoteDuration) -> Double {
 		baseNoteDuration.ticks / noteDuration.ticks

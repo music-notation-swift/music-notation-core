@@ -29,9 +29,9 @@ import Testing
 
 	@Test func addNote() async throws {
 		#expect(measure.notes[0].count == 0)
-        measure.append(Note(noteDuration: .whole, pitch: SpelledPitch(.c, .octave0)))
-        measure.append(Note(noteDuration: .quarter, pitch: SpelledPitch(.d, accidental: .sharp, .octave0)))
-		measure.append(Note(restDuration: .whole))
+        measure.append(Note(.whole, pitch: SpelledPitch(.c, .octave0)))
+        measure.append(Note(.quarter, pitch: SpelledPitch(.d, accidental: .sharp, .octave0)))
+		measure.append(Note(.whole))
 		#expect(measure.notes[0].count == 3)
 	}
 
@@ -42,11 +42,11 @@ import Testing
 	// MARK: Successes
 
 	@Test func replaceNoteInTuplet() async throws {
-        let note = Note(noteDuration: .quarter, pitch: SpelledPitch(.a, .octave1))
+        let note = Note(.quarter, pitch: SpelledPitch(.a, .octave1))
 		let notes = [
-            Note(noteDuration: .sixteenth, pitch: SpelledPitch(.c, .octave1)),
-            Note(noteDuration: .sixteenth, pitch: SpelledPitch(.c, .octave1)),
-            Note(noteDuration: .sixteenth, pitch: SpelledPitch(.a, .octave1)),
+            Note(.sixteenth, pitch: SpelledPitch(.c, .octave1)),
+            Note(.sixteenth, pitch: SpelledPitch(.c, .octave1)),
+            Note(.sixteenth, pitch: SpelledPitch(.a, .octave1)),
 		]
 
 		let tuplet = try Tuplet(3, .sixteenth, notes: notes)
@@ -59,8 +59,8 @@ import Testing
 
 	@Test func replaceNote() async throws {
 		#expect(measure.notes[0].count == 0)
-		let note1 = Note(restDuration: .whole)
-		let note2 = Note(restDuration: .eighth)
+		let note1 = Note(.whole)
+		let note2 = Note(.eighth)
 		measure.append(note1)
 		measure.append(note2)
 
@@ -77,7 +77,7 @@ import Testing
 	// MARK: Failures
 
 	@Test func replaceNoteWithInvalidNoteCollection() async throws {
-		measure.append(Note(restDuration: .whole))
+		measure.append(Note(.whole))
 		#expect(throws: MeasureError.invalidNoteCollection) {
 			try measure.replaceNote(at: 0, with: [Note]())
 		}
@@ -87,8 +87,8 @@ import Testing
 
 	@Test func replaceNoteWithNotesPreservingTie() async throws {
 		#expect(measure.notes[0].count == 0)
-		let note1 = Note(restDuration: .whole)
-		let note2 = Note(restDuration: .eighth)
+		let note1 = Note(.whole)
+		let note2 = Note(.eighth)
 		measure.append(note1)
 		measure.append(note2)
 
@@ -135,11 +135,11 @@ import Testing
 
 	@Test func replaceNoteWithTupletPreservingTie() async throws {
 		#expect(measure.notes[0].count == 0)
-		let note = Note(noteDuration: .whole,  pitch: SpelledPitch(.c, .octave1))
+		let note = Note(.whole,  pitch: SpelledPitch(.c, .octave1))
 		let notes = [
-			Note(noteDuration: .sixteenth, pitch: SpelledPitch(.c, .octave1)),
-			Note(noteDuration: .sixteenth, pitch: SpelledPitch(.c, .octave1)),
-			Note(noteDuration: .sixteenth, pitch: SpelledPitch(.a, .octave1)),
+			Note(.sixteenth, pitch: SpelledPitch(.c, .octave1)),
+			Note(.sixteenth, pitch: SpelledPitch(.c, .octave1)),
+			Note(.sixteenth, pitch: SpelledPitch(.a, .octave1)),
 		]
 		measure.append(note)
 		measure.append(note)
@@ -164,11 +164,11 @@ import Testing
 	// MARK: Failures
 
 	@Test func replaceNotesInRangeInvalidIndex() async throws {
-        let note = Note(noteDuration: .quarter, pitch: SpelledPitch(.a, .octave1))
+        let note = Note(.quarter, pitch: SpelledPitch(.a, .octave1))
 		let notes = [
-            Note(noteDuration: .sixteenth, pitch: SpelledPitch(.c, .octave1)),
-            Note(noteDuration: .sixteenth, pitch: SpelledPitch(.c, .octave1)),
-            Note(noteDuration: .sixteenth, pitch: SpelledPitch(.a, .octave1)),
+            Note(.sixteenth, pitch: SpelledPitch(.c, .octave1)),
+            Note(.sixteenth, pitch: SpelledPitch(.c, .octave1)),
+            Note(.sixteenth, pitch: SpelledPitch(.a, .octave1)),
 		]
 		let tuplet = try Tuplet(3, .sixteenth, notes: notes)
 		measure.append(tuplet)
@@ -183,8 +183,8 @@ import Testing
 
 	@Test func replaceNotes() async throws {
 		#expect(measure.notes[0].count == 0)
-		let note1 = Note(restDuration: .whole)
-		let note2 = Note(restDuration: .eighth)
+		let note1 = Note(.whole)
+		let note2 = Note(.eighth)
 		measure.append(note1)
 		measure.append(note2)
 
@@ -199,9 +199,9 @@ import Testing
 
 	@Test func replaceNotesInRangeInvalidTie() async throws {
 		#expect(measure.notes[0].count == 0)
-		var note1 = Note(restDuration: .whole)
+		var note1 = Note(.whole)
 		note1.tie = .beginAndEnd
-		let note2 = Note(restDuration: .eighth)
+		let note2 = Note(.eighth)
 		measure.append(note1)
 		measure.append(note2)
 		#expect(measure.noteCount[0] == 2)
@@ -211,11 +211,11 @@ import Testing
 	}
 
 	@Test func replaceNotesInRangeWithInvalidIndexRange() async throws {
-        let note = Note(noteDuration: .quarter, pitch: SpelledPitch(.a, .octave1))
+        let note = Note(.quarter, pitch: SpelledPitch(.a, .octave1))
 		let notes = [
-            Note(noteDuration: .sixteenth, pitch: SpelledPitch(.c, .octave1)),
-            Note(noteDuration: .sixteenth, pitch: SpelledPitch(.c, .octave1)),
-            Note(noteDuration: .sixteenth, pitch: SpelledPitch(.a, .octave1)),
+            Note(.sixteenth, pitch: SpelledPitch(.c, .octave1)),
+            Note(.sixteenth, pitch: SpelledPitch(.c, .octave1)),
+            Note(.sixteenth, pitch: SpelledPitch(.a, .octave1)),
 		]
 		let tuplet = try Tuplet(3, .sixteenth, notes: notes)
 		measure.append(tuplet)
@@ -230,8 +230,8 @@ import Testing
 
 	@Test func replaceNotesInRangeWithOtherNotes() async throws {
 		#expect(measure.notes[0].count == 0)
-		let note1 = Note(restDuration: .whole)
-		let note2 = Note(restDuration: .eighth)
+		let note1 = Note(.whole)
+		let note2 = Note(.eighth)
 		measure.append(note1)
 		measure.append(note2)
 
@@ -246,9 +246,9 @@ import Testing
 
 	@Test func replaceTupletInRangeWithNotes() async throws {
 		#expect(measure.notes[0].count == 0)
-        let note1 = Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1))
-        let note2 = Note(noteDuration: .eighth, pitch: SpelledPitch(.a, .octave1))
-        let note3 = Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1))
+        let note1 = Note(.eighth, pitch: SpelledPitch(.c, .octave1))
+        let note2 = Note(.eighth, pitch: SpelledPitch(.a, .octave1))
+        let note3 = Note(.eighth, pitch: SpelledPitch(.c, .octave1))
 
 		let tuplet = try Tuplet(3, .eighth, notes: [note1, note2, note3])
 		measure.append(note3)
@@ -272,19 +272,19 @@ import Testing
 	@Test func insertNoteIndexOutOfRange() async throws {
 		#expect(measure.notes[0].count == 0)
 		#expect(throws: MeasureError.noteIndexOutOfRange) {
-			try measure.insert(Note(restDuration: .whole), at: 1)
+			try measure.insert(Note(.whole), at: 1)
 		}
 	}
 
 	@Test func insertInvalidTupletIndex() async throws {
-        let note1 = Note(noteDuration: .quarter, pitch: SpelledPitch(.a, .octave1))
-        let note2 = Note(noteDuration: .quarter, pitch: SpelledPitch(.b, .octave1))
+        let note1 = Note(.quarter, pitch: SpelledPitch(.a, .octave1))
+        let note2 = Note(.quarter, pitch: SpelledPitch(.b, .octave1))
 		measure.append(note1)
 		measure.append(note2)
 		let notes = [
-            Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1)),
-            Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1)),
-            Note(noteDuration: .eighth, pitch: SpelledPitch(.a, .octave1)),
+            Note(.eighth, pitch: SpelledPitch(.c, .octave1)),
+            Note(.eighth, pitch: SpelledPitch(.c, .octave1)),
+            Note(.eighth, pitch: SpelledPitch(.a, .octave1)),
 		]
 		#expect(throws: MeasureError.invalidTupletIndex) {
 			let tuplet = try Tuplet(3, .eighth, notes: notes)
@@ -297,9 +297,9 @@ import Testing
 
 	@Test func insertNote() async throws {
 		#expect(measure.notes[0].count == 0)
-		let note1 = Note(restDuration: .whole)
-		let note2 = Note(restDuration: .eighth)
-		let note3 = Note(restDuration: .quarter)
+		let note1 = Note(.whole)
+		let note2 = Note(.eighth)
+		let note3 = Note(.quarter)
 		measure.append(note1)
 		measure.append(note2)
 
@@ -316,14 +316,14 @@ import Testing
 	}
 
 	@Test func insertTuplet() async throws {
-        let note1 = Note(noteDuration: .quarter, pitch: SpelledPitch(.a, .octave1))
-        let note2 = Note(noteDuration: .quarter, pitch: SpelledPitch(.b, .octave1))
+        let note1 = Note(.quarter, pitch: SpelledPitch(.a, .octave1))
+        let note2 = Note(.quarter, pitch: SpelledPitch(.b, .octave1))
 		measure.append(note1)
 		measure.append(note2)
 		let notes = [
-            Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1)),
-            Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1)),
-            Note(noteDuration: .eighth, pitch: SpelledPitch(.a, .octave1)),
+            Note(.eighth, pitch: SpelledPitch(.c, .octave1)),
+            Note(.eighth, pitch: SpelledPitch(.c, .octave1)),
+            Note(.eighth, pitch: SpelledPitch(.a, .octave1)),
 		]
 
 		let tuplet = try Tuplet(3, .eighth, notes: notes)
@@ -343,7 +343,7 @@ import Testing
 
 	@Test func removeNoteFromTuplet() async throws {
 		#expect(measure.notes[0].count == 0)
-		let note1 = Note(restDuration: .eighth)
+		let note1 = Note(.eighth)
 		measure.append(note1)
 		#expect(throws: MeasureError.removeNoteFromTuplet)  {
 			let tuplet = try Tuplet(3, .eighth, notes: [note1, note1, note1])
@@ -353,19 +353,19 @@ import Testing
 	}
 
 	@Test func removeNoteInvalidTieStateStart() async throws {
-        var note = Note(noteDuration: .quarter, pitch: SpelledPitch(.c, .octave1))
+        var note = Note(.quarter, pitch: SpelledPitch(.c, .octave1))
 		note.tie = .end
 		measure.append(note)
-        measure.append(Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1)))
+        measure.append(Note(.eighth, pitch: SpelledPitch(.c, .octave1)))
 		#expect(throws: MeasureError.invalidTieState) {
 			try measure.removeNote(at: 0)
 		}
 	}
 
 	@Test func removeNoteInvalidTieStateEnd() async throws {
-        var note = Note(noteDuration: .quarter, pitch: SpelledPitch(.c, .octave1))
+        var note = Note(.quarter, pitch: SpelledPitch(.c, .octave1))
 		note.tie = .begin
-        measure.append(Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1)))
+        measure.append(Note(.eighth, pitch: SpelledPitch(.c, .octave1)))
 		measure.append(note)
 		#expect(measure.noteCount[0] == 2)
 		#expect(throws: MeasureError.invalidTieState) {
@@ -377,9 +377,9 @@ import Testing
 
 	@Test func removeNote() async throws {
 		#expect(measure.notes[0].count == 0)
-		let note1 = Note(restDuration: .whole)
-		let note2 = Note(restDuration: .eighth)
-		let note3 = Note(restDuration: .quarter)
+		let note1 = Note(.whole)
+		let note2 = Note(.eighth)
+		let note3 = Note(.quarter)
 		measure.append(note1)
 		measure.append(note2)
 		measure.append(note3)
@@ -395,8 +395,8 @@ import Testing
 	}
 
 	@Test func removeNoteWithEndTie() async throws {
-        measure.append(Note(noteDuration: .quarter, pitch: SpelledPitch(.c, .octave1)))
-        measure.append(Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1)))
+        measure.append(Note(.quarter, pitch: SpelledPitch(.c, .octave1)))
+        measure.append(Note(.eighth, pitch: SpelledPitch(.c, .octave1)))
 
 		try measure.startTie(at: 0, inSet: 0)
 		try measure.removeNote(at: 1)
@@ -408,9 +408,9 @@ import Testing
 
 	@Test func removeNotesInRangeInvalidTieAtStart() async throws {
 		#expect(measure.notes[0].count == 0)
-		var note1 = Note(restDuration: .whole)
+		var note1 = Note(.whole)
 		note1.tie = .end
-		let note2 = Note(restDuration: .eighth)
+		let note2 = Note(.eighth)
 		measure.append(note1)
 		measure.append(note2)
 		#expect(measure.noteCount[0] == 2)
@@ -421,8 +421,8 @@ import Testing
 
 	@Test func removeNotesInRangeInvalidTieAtEnd() async throws {
 		#expect(measure.notes[0].count == 0)
-		let note1 = Note(restDuration: .whole)
-		var note2 = Note(restDuration: .eighth)
+		let note1 = Note(.whole)
+		var note2 = Note(.eighth)
 		note2.tie = .begin
 		measure.append(note1)
 		measure.append(note2)
@@ -433,11 +433,11 @@ import Testing
 	}
 
 	@Test func removeNotesWithInvalidRangeStart() async throws {
-        measure.append(Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1)))
+        measure.append(Note(.eighth, pitch: SpelledPitch(.c, .octave1)))
 		let notes = [
-            Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1)),
-            Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1)),
-            Note(noteDuration: .eighth, pitch: SpelledPitch(.a, .octave1)),
+            Note(.eighth, pitch: SpelledPitch(.c, .octave1)),
+            Note(.eighth, pitch: SpelledPitch(.c, .octave1)),
+            Note(.eighth, pitch: SpelledPitch(.a, .octave1)),
 		]
 		let tuplet = try Tuplet(3, .eighth, notes: notes)
 		measure.append(tuplet)
@@ -449,13 +449,13 @@ import Testing
 
 	@Test func removeNotesWithInvalidRangeEnd() async throws {
 		let notes = [
-            Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1)),
-            Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1)),
-            Note(noteDuration: .eighth, pitch: SpelledPitch(.a, .octave1)),
+            Note(.eighth, pitch: SpelledPitch(.c, .octave1)),
+            Note(.eighth, pitch: SpelledPitch(.c, .octave1)),
+            Note(.eighth, pitch: SpelledPitch(.a, .octave1)),
 		]
 		let tuplet = try Tuplet(3, .eighth, notes: notes)
 		measure.append(tuplet)
-		measure.append(Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1)))
+		measure.append(Note(.eighth, pitch: SpelledPitch(.c, .octave1)))
 		#expect(measure.noteCount[0] == 4)
 		#expect(throws: MeasureError.tupletNotCompletelyCovered) {
 			try measure.removeNotesInRange(2 ... 3)
@@ -466,14 +466,14 @@ import Testing
 
 	@Test func removeNotesInRange() async throws {
 		#expect(measure.notes[0].count == 0)
-		let note1 = Note(restDuration: .whole)
-		let note2 = Note(restDuration: .eighth)
-		let note3 = Note(restDuration: .quarter)
+		let note1 = Note(.whole)
+		let note2 = Note(.eighth)
+		let note3 = Note(.quarter)
 		measure.append(note1)
-		measure.append(Note(restDuration: .quarter))
-		measure.append(Note(restDuration: .quarter))
-		measure.append(Note(restDuration: .quarter))
-		measure.append(Note(restDuration: .quarter))
+		measure.append(Note(.quarter))
+		measure.append(Note(.quarter))
+		measure.append(Note(.quarter))
+		measure.append(Note(.quarter))
 		measure.append(note2)
 		measure.append(note3)
 
@@ -492,20 +492,20 @@ import Testing
 
 	@Test func removeNotesWithTupletsInRange() async throws {
 		#expect(measure.notes[0].count == 0)
-		let note1 = Note(restDuration: .whole)
-		let note2 = Note(restDuration: .eighth)
-		let note3 = Note(restDuration: .quarter)
+		let note1 = Note(.whole)
+		let note2 = Note(.eighth)
+		let note3 = Note(.quarter)
 		measure.append(note1)
-		measure.append(Note(restDuration: .quarter))
-		measure.append(Note(restDuration: .quarter))
-		measure.append(Note(restDuration: .quarter))
-		measure.append(Note(restDuration: .quarter))
+		measure.append(Note(.quarter))
+		measure.append(Note(.quarter))
+		measure.append(Note(.quarter))
+		measure.append(Note(.quarter))
 		measure.append(note2)
 		measure.append(note3)
 		let notes = [
-            Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1)),
-            Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1)),
-            Note(noteDuration: .eighth, pitch: SpelledPitch(.a, .octave1)),
+            Note(.eighth, pitch: SpelledPitch(.c, .octave1)),
+            Note(.eighth, pitch: SpelledPitch(.c, .octave1)),
+            Note(.eighth, pitch: SpelledPitch(.a, .octave1)),
 		]
 
 		let tuplet = try Tuplet(3, .eighth, notes: notes)
@@ -529,21 +529,21 @@ import Testing
 	// MARK: Failures
 
 	@Test func createTupletInvalidTupletIndexStart() async throws {
-        let note1 = Note(noteDuration: .eighth, pitch: SpelledPitch(.a, .octave1))
-        let note2 = Note(noteDuration: .eighth, pitch: SpelledPitch(.b, .octave1))
-        let note3 = Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1))
+        let note1 = Note(.eighth, pitch: SpelledPitch(.a, .octave1))
+        let note2 = Note(.eighth, pitch: SpelledPitch(.b, .octave1))
+        let note3 = Note(.eighth, pitch: SpelledPitch(.c, .octave1))
 		#expect(throws: MeasureError.invalidTupletIndex)  {
 			let tuplet = try Tuplet(3, .eighth, notes: [note1, note2, note3])
 			measure.append(tuplet)
-            measure.append(Note(noteDuration: .quarter, pitch: SpelledPitch(.c, .octave1)))
+            measure.append(Note(.quarter, pitch: SpelledPitch(.c, .octave1)))
 			try measure.createTuplet(3, .quarter, fromNotesInRange: 1 ... 3)
 		}
 	}
 
 	@Test func createTupletInvalidTupletIndexEnd() async throws {
-        let note1 = Note(noteDuration: .eighth, pitch: SpelledPitch(.a, .octave1))
-        let note2 = Note(noteDuration: .eighth, pitch: SpelledPitch(.b, .octave1))
-        let note3 = Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1))
+        let note1 = Note(.eighth, pitch: SpelledPitch(.a, .octave1))
+        let note2 = Note(.eighth, pitch: SpelledPitch(.b, .octave1))
+        let note3 = Note(.eighth, pitch: SpelledPitch(.c, .octave1))
 		measure.append(note1)
 		#expect(throws: MeasureError.invalidTupletIndex)  {
 			let tuplet = try Tuplet(3, .eighth, notes: [note1, note2, note3])
@@ -553,18 +553,18 @@ import Testing
 	}
 
 	@Test func createTupletNoteIndexOutOfRange() async throws {
-        measure.append(Note(noteDuration: .quarter, pitch: SpelledPitch(.a, .octave1)))
-        measure.append(Note(noteDuration: .quarter, pitch: SpelledPitch(.b, .octave1)))
-        measure.append(Note(noteDuration: .quarter, pitch: SpelledPitch(.c, .octave1)))
+        measure.append(Note(.quarter, pitch: SpelledPitch(.a, .octave1)))
+        measure.append(Note(.quarter, pitch: SpelledPitch(.b, .octave1)))
+        measure.append(Note(.quarter, pitch: SpelledPitch(.c, .octave1)))
 		#expect(throws: MeasureError.noteIndexOutOfRange)  {
 			try measure.createTuplet(3, .quarter, fromNotesInRange: 0 ... 3)
 		}
 	}
 
 	@Test func createTupletNoteInvalidNoteRange() async throws {
-        measure.append(Note(noteDuration: .quarter, pitch: SpelledPitch(.a, .octave1)))
-        measure.append(Note(noteDuration: .quarter, pitch: SpelledPitch(.b, .octave1)))
-        measure.append(Note(noteDuration: .quarter, pitch: SpelledPitch(.c, .octave1)))
+        measure.append(Note(.quarter, pitch: SpelledPitch(.a, .octave1)))
+        measure.append(Note(.quarter, pitch: SpelledPitch(.b, .octave1)))
+        measure.append(Note(.quarter, pitch: SpelledPitch(.c, .octave1)))
 		#expect(throws: MeasureError.noteIndexOutOfRange)  {
 			try measure.createTuplet(3, .quarter, fromNotesInRange: 0 ... 3)
 		}
@@ -576,9 +576,9 @@ import Testing
 	// MARK: Successes
 
 	@Test func createTuplet() async throws {
-        measure.append(Note(noteDuration: .quarter, pitch: SpelledPitch(.a, .octave1)))
-        measure.append(Note(noteDuration: .quarter, pitch: SpelledPitch(.b, .octave1)))
-        measure.append(Note(noteDuration: .quarter, pitch: SpelledPitch(.c, .octave1)))
+        measure.append(Note(.quarter, pitch: SpelledPitch(.a, .octave1)))
+        measure.append(Note(.quarter, pitch: SpelledPitch(.b, .octave1)))
+        measure.append(Note(.quarter, pitch: SpelledPitch(.c, .octave1)))
 
 		try measure.createTuplet(3, .quarter, fromNotesInRange: 0 ... 2)
 		#expect(measure.notes[0].count == 1)
@@ -589,7 +589,7 @@ import Testing
 	// MARK: Failures
 
 	@Test func breakDownTupletInvalidIndex() async throws {
-        measure.append(Note(noteDuration: .eighth, pitch: SpelledPitch(.a, .octave1)))
+        measure.append(Note(.eighth, pitch: SpelledPitch(.a, .octave1)))
 		#expect(measure.noteCount[0] == 1)
 		#expect(throws: MeasureError.invalidTupletIndex) {
 			try measure.breakdownTuplet(at: 0)
@@ -599,9 +599,9 @@ import Testing
 	// MARK: Successes
 
 	@Test func breakDownTuplet() async throws {
-        let note1 = Note(noteDuration: .eighth, pitch: SpelledPitch(.a, .octave1))
-        let note2 = Note(noteDuration: .eighth, pitch: SpelledPitch(.b, .octave1))
-        let note3 = Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1))
+        let note1 = Note(.eighth, pitch: SpelledPitch(.a, .octave1))
+        let note2 = Note(.eighth, pitch: SpelledPitch(.b, .octave1))
+        let note3 = Note(.eighth, pitch: SpelledPitch(.c, .octave1))
 
 		let tuplet = try Tuplet(3, .eighth, notes: [note1, note2, note3])
 		measure.append(tuplet)
@@ -623,11 +623,11 @@ import Testing
 	// MARK: Failures
 
 	@Test func prepTieForInsertNoteRemoveTie() async throws {
-        measure.append(Note(noteDuration: .quarter, pitch: SpelledPitch(.c, .octave1)))
-        measure.append(Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1)))
+        measure.append(Note(.quarter, pitch: SpelledPitch(.c, .octave1)))
+        measure.append(Note(.eighth, pitch: SpelledPitch(.c, .octave1)))
 		#expect(throws: MeasureError.invalidTieState) {
 			try measure.startTie(at: 0, inSet: 0)
-            let note = Note(noteDuration: .quarter, pitch: SpelledPitch(.c, .octave1))
+            let note = Note(.quarter, pitch: SpelledPitch(.c, .octave1))
 			try measure.insert(note, at: 1, inSet: 0)
 		}
 	}
@@ -635,12 +635,12 @@ import Testing
 	// MARK: Successes
 
 	@Test func prepTieForInsertNote() async throws {
-        measure.append(Note(noteDuration: .quarter, pitch: SpelledPitch(.c, .octave1)))
-        measure.append(Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1)))
-        measure.append(Note(noteDuration: .quarter, pitch: SpelledPitch(.c, .octave1)))
+        measure.append(Note(.quarter, pitch: SpelledPitch(.c, .octave1)))
+        measure.append(Note(.eighth, pitch: SpelledPitch(.c, .octave1)))
+        measure.append(Note(.quarter, pitch: SpelledPitch(.c, .octave1)))
 
 		try measure.startTie(at: 1, inSet: 0)
-		let note = Note(noteDuration: .quarter, pitch: SpelledPitch(.a, .octave1))
+		let note = Note(.quarter, pitch: SpelledPitch(.a, .octave1))
 		try measure.insert(note, at: 1, inSet: 0)
 
 		let note1 = try measure.note(at: 1, inSet: 0)
@@ -659,7 +659,7 @@ import Testing
 	// MARK: Successes
 
 	@Test func startTieNoNextNote() async throws {
-        measure.append(Note(noteDuration: .quarter, pitch: SpelledPitch(.c, .octave1)))
+        measure.append(Note(.quarter, pitch: SpelledPitch(.c, .octave1)))
 
 		// Only change note to .begin
 		try measure.startTie(at: 0, inSet: 0)
@@ -669,8 +669,8 @@ import Testing
 	}
 
 	@Test func startTieHasNextNote() async throws {
-        measure.append(Note(noteDuration: .quarter, pitch: SpelledPitch(.c, .octave1)))
-        measure.append(Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1)))
+        measure.append(Note(.quarter, pitch: SpelledPitch(.c, .octave1)))
+        measure.append(Note(.eighth, pitch: SpelledPitch(.c, .octave1)))
 
 		try measure.startTie(at: 0, inSet: 0)
 		let note1 = measure.notes[0][0] as! Note
@@ -682,8 +682,8 @@ import Testing
 	}
 
 	@Test func startTieNoteAlreadyBeginningOfTie() async throws {
-        measure.append(Note(noteDuration: .quarter, pitch: SpelledPitch(.c, .octave1)))
-        measure.append(Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1)))
+        measure.append(Note(.quarter, pitch: SpelledPitch(.c, .octave1)))
+        measure.append(Note(.eighth, pitch: SpelledPitch(.c, .octave1)))
 
 		try measure.startTie(at: 0, inSet: 0)
 		try measure.startTie(at: 0, inSet: 0)
@@ -694,13 +694,13 @@ import Testing
 	}
 
 	@Test func startTieNextNoteInTuplet() async throws {
-        measure.append(Note(noteDuration: .quarter, pitch: SpelledPitch(.c, .octave1)))
-        measure.append(Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1)))
-        measure.append(Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1)))
+        measure.append(Note(.quarter, pitch: SpelledPitch(.c, .octave1)))
+        measure.append(Note(.eighth, pitch: SpelledPitch(.c, .octave1)))
+        measure.append(Note(.eighth, pitch: SpelledPitch(.c, .octave1)))
 		let notes = [
-            Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1)),
-            Note(noteDuration: .eighth, pitch: SpelledPitch(.a, .octave1)),
-            Note(noteDuration: .eighth, pitch: SpelledPitch(.a, .octave1)),
+            Note(.eighth, pitch: SpelledPitch(.c, .octave1)),
+            Note(.eighth, pitch: SpelledPitch(.a, .octave1)),
+            Note(.eighth, pitch: SpelledPitch(.a, .octave1)),
 		]
 
 		// setup
@@ -717,13 +717,13 @@ import Testing
 
 	@Test func startTieLastNoteOfTupletNoNextNote() async throws {
 		// Just change to .begin
-        measure.append(Note(noteDuration: .quarter, pitch: SpelledPitch(.c, .octave1)))
-        measure.append(Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1)))
-        measure.append(Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1)))
+        measure.append(Note(.quarter, pitch: SpelledPitch(.c, .octave1)))
+        measure.append(Note(.eighth, pitch: SpelledPitch(.c, .octave1)))
+        measure.append(Note(.eighth, pitch: SpelledPitch(.c, .octave1)))
 		let notes = [
-            Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1)),
-            Note(noteDuration: .eighth, pitch: SpelledPitch(.a, .octave1)),
-            Note(noteDuration: .eighth, pitch: SpelledPitch(.a, .octave1)),
+            Note(.eighth, pitch: SpelledPitch(.c, .octave1)),
+            Note(.eighth, pitch: SpelledPitch(.a, .octave1)),
+            Note(.eighth, pitch: SpelledPitch(.a, .octave1)),
 		]
 
 		// setup
@@ -738,13 +738,13 @@ import Testing
 	}
 
 	@Test func startTieNoteIsEndOfAnotherTie() async throws {
-        measure.append(Note(noteDuration: .quarter, pitch: SpelledPitch(.c, .octave1)))
-        measure.append(Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1)))
-        measure.append(Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1)))
+        measure.append(Note(.quarter, pitch: SpelledPitch(.c, .octave1)))
+        measure.append(Note(.eighth, pitch: SpelledPitch(.c, .octave1)))
+        measure.append(Note(.eighth, pitch: SpelledPitch(.c, .octave1)))
 		let notes = [
-            Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1)),
-            Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1)),
-            Note(noteDuration: .eighth, pitch: SpelledPitch(.a, .octave1)),
+            Note(.eighth, pitch: SpelledPitch(.c, .octave1)),
+            Note(.eighth, pitch: SpelledPitch(.c, .octave1)),
+            Note(.eighth, pitch: SpelledPitch(.a, .octave1)),
 		]
 
 		// setup
@@ -760,13 +760,13 @@ import Testing
 	}
 
 	@Test func startTieLastNoteOfTupletHasNextNote() async throws {
-        measure.append(Note(noteDuration: .quarter, pitch: SpelledPitch(.c, .octave1)))
-        measure.append(Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1)))
-        measure.append(Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1)))
+        measure.append(Note(.quarter, pitch: SpelledPitch(.c, .octave1)))
+        measure.append(Note(.eighth, pitch: SpelledPitch(.c, .octave1)))
+        measure.append(Note(.eighth, pitch: SpelledPitch(.c, .octave1)))
 		let notes = [
-            Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1)),
-            Note(noteDuration: .eighth, pitch: SpelledPitch(.a, .octave1)),
-            Note(noteDuration: .eighth, pitch: SpelledPitch(.a, .octave1)),
+            Note(.eighth, pitch: SpelledPitch(.c, .octave1)),
+            Note(.eighth, pitch: SpelledPitch(.a, .octave1)),
+            Note(.eighth, pitch: SpelledPitch(.a, .octave1)),
 		]
 
 		// setup
@@ -781,7 +781,7 @@ import Testing
 	}
 
 	@Test func startTieLastNoteOfTupletNextNoteTuplet() async throws {
-		let note = Note(noteDuration: .sixteenth, pitch: SpelledPitch(.c, .octave1))
+		let note = Note(.sixteenth, pitch: SpelledPitch(.c, .octave1))
 		let tuplet1 = try Tuplet(3, .sixteenth, notes: [note, note, note])
 		let tuplet2 = try Tuplet(5, .sixteenth, notes: [note, note, note, note, note])
 		measure.append(tuplet1)
@@ -794,7 +794,7 @@ import Testing
 	}
 
 	@Test func startTieInNestedTuplet() async throws {
-		let note = Note(noteDuration: .eighth,
+		let note = Note(.eighth,
 						pitch: SpelledPitch(.c, .octave1))
 		let triplet = try Tuplet(3, .eighth, notes: [note, note, note])
 		let tuplet = try Tuplet(3, .eighth, notes: [triplet, note])
@@ -812,21 +812,21 @@ import Testing
 	// MARK: Failures
 
 	@Test func startTieNoteHasDiffPitch() async throws {
-        measure.append(Note(noteDuration: .quarter, pitch: SpelledPitch(.a, .octave1)))
-        measure.append(Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1)))
+        measure.append(Note(.quarter, pitch: SpelledPitch(.a, .octave1)))
+        measure.append(Note(.eighth, pitch: SpelledPitch(.c, .octave1)))
 		#expect(throws: MeasureError.notesMustHaveSamePitchesToTie) {
 			try measure.startTie(at: 0, inSet: 0)
 		}
 	}
 
 	@Test func startTieNextNoteInTupletDiffPitch() async throws {
-        measure.append(Note(noteDuration: .quarter, pitch: SpelledPitch(.c, .octave1)))
-        measure.append(Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1)))
-        measure.append(Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1)))
+        measure.append(Note(.quarter, pitch: SpelledPitch(.c, .octave1)))
+        measure.append(Note(.eighth, pitch: SpelledPitch(.c, .octave1)))
+        measure.append(Note(.eighth, pitch: SpelledPitch(.c, .octave1)))
 		let notes = [
-            Note(noteDuration: .eighth, pitch: SpelledPitch(.a, .octave1)),
-            Note(noteDuration: .eighth, pitch: SpelledPitch(.a, .octave1)),
-            Note(noteDuration: .eighth, pitch: SpelledPitch(.a, .octave1)),
+            Note(.eighth, pitch: SpelledPitch(.a, .octave1)),
+            Note(.eighth, pitch: SpelledPitch(.a, .octave1)),
+            Note(.eighth, pitch: SpelledPitch(.a, .octave1)),
 		]
 		#expect(throws: MeasureError.notesMustHaveSamePitchesToTie) {
 			let tuplet = try Tuplet(3, .eighth, notes: notes)
@@ -840,10 +840,10 @@ import Testing
 	// MARK: Failures
 
 	@Test func removeTieNoNoteAtIndex() async throws {
-        measure.append(Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1)))
-        measure.append(Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1)))
-        measure.append(Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1)))
-        measure.append(Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1)))
+        measure.append(Note(.eighth, pitch: SpelledPitch(.c, .octave1)))
+        measure.append(Note(.eighth, pitch: SpelledPitch(.c, .octave1)))
+        measure.append(Note(.eighth, pitch: SpelledPitch(.c, .octave1)))
+        measure.append(Note(.eighth, pitch: SpelledPitch(.c, .octave1)))
 
 		#expect(throws: MeasureError.noteIndexOutOfRange) {
 			try measure.removeTie(at: 4, inSet: 0)
@@ -853,10 +853,10 @@ import Testing
 	// MARK: Successes
 
 	@Test func removeTieNoTie() async throws {
-        measure.append(Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1)))
-        measure.append(Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1)))
-        measure.append(Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1)))
-        measure.append(Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1)))
+        measure.append(Note(.eighth, pitch: SpelledPitch(.c, .octave1)))
+        measure.append(Note(.eighth, pitch: SpelledPitch(.c, .octave1)))
+        measure.append(Note(.eighth, pitch: SpelledPitch(.c, .octave1)))
+        measure.append(Note(.eighth, pitch: SpelledPitch(.c, .octave1)))
 
 		try measure.removeTie(at: 0, inSet: 0)
 		let firstNote = noteFromMeasure(measure, noteIndex: 0, tupletIndex: nil)
@@ -866,10 +866,10 @@ import Testing
 	}
 
 	@Test func removeTieBeginOfTie() async throws {
-        measure.append(Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1)))
-        measure.append(Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1)))
-        measure.append(Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1)))
-        measure.append(Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1)))
+        measure.append(Note(.eighth, pitch: SpelledPitch(.c, .octave1)))
+        measure.append(Note(.eighth, pitch: SpelledPitch(.c, .octave1)))
+        measure.append(Note(.eighth, pitch: SpelledPitch(.c, .octave1)))
+        measure.append(Note(.eighth, pitch: SpelledPitch(.c, .octave1)))
 
 		try setTie(at: 0)
 		try measure.removeTie(at: 0, inSet: 0)
@@ -880,10 +880,10 @@ import Testing
 	}
 
 	@Test func removeTieFromBeginAndEnd() async throws {
-        measure.append(Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1)))
-        measure.append(Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1)))
-        measure.append(Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1)))
-        measure.append(Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1)))
+        measure.append(Note(.eighth, pitch: SpelledPitch(.c, .octave1)))
+        measure.append(Note(.eighth, pitch: SpelledPitch(.c, .octave1)))
+        measure.append(Note(.eighth, pitch: SpelledPitch(.c, .octave1)))
+        measure.append(Note(.eighth, pitch: SpelledPitch(.c, .octave1)))
 
 		try setTie(at: 0)
 		try setTie(at: 1)
@@ -895,12 +895,12 @@ import Testing
 	}
 
 	@Test func removeTieBeginsInTuplet() async throws {
-		measure.append(Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1)))
-		measure.append(Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1)))
-		measure.append(Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1)))
-		measure.append(Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1)))
+		measure.append(Note(.eighth, pitch: SpelledPitch(.c, .octave1)))
+		measure.append(Note(.eighth, pitch: SpelledPitch(.c, .octave1)))
+		measure.append(Note(.eighth, pitch: SpelledPitch(.c, .octave1)))
+		measure.append(Note(.eighth, pitch: SpelledPitch(.c, .octave1)))
 
-		let note = Note(noteDuration: .sixteenth, pitch: SpelledPitch(.c, .octave1))
+		let note = Note(.sixteenth, pitch: SpelledPitch(.c, .octave1))
 
 		let tuplet = try Tuplet(3, .sixteenth, notes: [note, note, note])
 		measure.append(tuplet)
@@ -915,12 +915,12 @@ import Testing
 	}
 
 	@Test func removeTieBeginAndEndInOneTuplet() async throws {
-        measure.append(Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1)))
-        measure.append(Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1)))
-        measure.append(Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1)))
-        measure.append(Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1)))
+        measure.append(Note(.eighth, pitch: SpelledPitch(.c, .octave1)))
+        measure.append(Note(.eighth, pitch: SpelledPitch(.c, .octave1)))
+        measure.append(Note(.eighth, pitch: SpelledPitch(.c, .octave1)))
+        measure.append(Note(.eighth, pitch: SpelledPitch(.c, .octave1)))
 
-        let note = Note(noteDuration: .sixteenth, pitch: SpelledPitch(.c, .octave1))
+        let note = Note(.sixteenth, pitch: SpelledPitch(.c, .octave1))
 		let tuplet = try Tuplet(3, .sixteenth, notes: [note, note, note])
 		measure.append(tuplet)
 		measure.append(note)
@@ -934,12 +934,12 @@ import Testing
 	}
 
 	@Test func removeTieEndsInTuplet() async throws {
-		measure.append(Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1)))
-		measure.append(Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1)))
-		measure.append(Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1)))
-		measure.append(Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1)))
+		measure.append(Note(.eighth, pitch: SpelledPitch(.c, .octave1)))
+		measure.append(Note(.eighth, pitch: SpelledPitch(.c, .octave1)))
+		measure.append(Note(.eighth, pitch: SpelledPitch(.c, .octave1)))
+		measure.append(Note(.eighth, pitch: SpelledPitch(.c, .octave1)))
 
-		let note = Note(noteDuration: .sixteenth, pitch: SpelledPitch(.c, .octave1))
+		let note = Note(.sixteenth, pitch: SpelledPitch(.c, .octave1))
 		let tuplet = try Tuplet(3, .sixteenth, notes: [note, note, note])
 		measure.append(tuplet)
 		measure.append(note)
@@ -953,12 +953,12 @@ import Testing
 	}
 
 	@Test func removeTieTupletToOtherTuplet() async throws {
-        measure.append(Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1)))
-        measure.append(Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1)))
-        measure.append(Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1)))
-        measure.append(Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1)))
+        measure.append(Note(.eighth, pitch: SpelledPitch(.c, .octave1)))
+        measure.append(Note(.eighth, pitch: SpelledPitch(.c, .octave1)))
+        measure.append(Note(.eighth, pitch: SpelledPitch(.c, .octave1)))
+        measure.append(Note(.eighth, pitch: SpelledPitch(.c, .octave1)))
 
-        let note = Note(noteDuration: .sixteenth, pitch: SpelledPitch(.c, .octave1))
+        let note = Note(.sixteenth, pitch: SpelledPitch(.c, .octave1))
 		let tuplet = try Tuplet(3, .sixteenth, notes: [note, note, note])
 		measure.append(tuplet)
 		measure.append(note)
@@ -981,9 +981,9 @@ import Testing
 
 	@Test func noteCollectionIndexFromNoteIndexNoTuplets() async throws {
 		// NoteIndex should be the same if there are no tuplets
-		measure.append(Note(restDuration: .quarter))
-		measure.append(Note(restDuration: .quarter))
-		measure.append(Note(restDuration: .quarter))
+		measure.append(Note(.quarter))
+		measure.append(Note(.quarter))
+		measure.append(Note(.quarter))
 
 		let index = try measure.noteCollectionIndex(fromNoteIndex: 2, inSet: 0)
 		#expect(index.noteIndex == 2)
@@ -994,13 +994,10 @@ import Testing
 		// NoteIndex should be the beginning of the tuplet if the index specified
 		// is within the tuplet, and tupletIndex should be the index of the note
 		// within the tuplet
-		measure.append(Note(restDuration: .quarter))
-		let note1 = Note(noteDuration: .eighth,
-						 pitch: SpelledPitch(.a, .octave1))
-		let note2 = Note(noteDuration: .eighth,
-						 pitch: SpelledPitch(.b, .octave1))
-		let note3 = Note(noteDuration: .eighth,
-						 pitch: SpelledPitch(.c, .octave1))
+		measure.append(Note(.quarter))
+		let note1 = Note(.eighth, pitch: SpelledPitch(.a, .octave1))
+		let note2 = Note(.eighth, pitch: SpelledPitch(.b, .octave1))
+		let note3 = Note(.eighth, pitch: SpelledPitch(.c, .octave1))
 		measure.append(try Tuplet(3, .eighth, notes: [note1, note2, note3]))
 		let index = try measure.noteCollectionIndex(fromNoteIndex: 2, inSet: 0)
 		#expect(index.noteIndex == 1)
@@ -1008,7 +1005,7 @@ import Testing
 		#expect(index.tupletIndex! == 1)
 
 		// Properly address regular note coming after a tuplet
-		measure.append(Note(restDuration: .eighth))
+		measure.append(Note(.eighth))
 		let index2 = try measure.noteCollectionIndex(fromNoteIndex: 4, inSet: 0)
 		#expect(index2.noteIndex == 2)
 		#expect(index2.tupletIndex == nil)
@@ -1019,27 +1016,27 @@ import Testing
 	// MARK: False
 
 	@Test func hasClefAfterNoteInvalidIndex() async throws {
-		measure.append(Note(restDuration: .quarter))
-		measure.append(Note(restDuration: .quarter))
+		measure.append(Note(.quarter))
+		measure.append(Note(.quarter))
 		#expect(!measure.hasClefAfterNote(at: 3, inSet: 0))
 	}
 
 	@Test func hasClefAfterNoteNoClefsFirstIndex() async throws {
-		measure.append(Note(restDuration: .quarter))
-		measure.append(Note(restDuration: .quarter))
+		measure.append(Note(.quarter))
+		measure.append(Note(.quarter))
 		#expect(!measure.hasClefAfterNote(at: 1, inSet: 0))
 	}
 
 	@Test func hasClefAfterNoteNoClefsMiddleIndex() async throws {
-		measure.append(Note(restDuration: .quarter))
-		measure.append(Note(restDuration: .quarter))
+		measure.append(Note(.quarter))
+		measure.append(Note(.quarter))
 		try measure.changeClef(Clef.treble, at: 0, inSet: 0)
 		#expect(!measure.hasClefAfterNote(at: 1, inSet: 0))
 	}
 
 	@Test func hasClefAfterNoteMiddleOfTuplet() async throws {
-		let quarter = Note(restDuration: .quarter)
-        let eighth = Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1))
+		let quarter = Note(.quarter)
+        let eighth = Note(.eighth, pitch: SpelledPitch(.c, .octave1))
 		let tuplet = try Tuplet(3, .eighth, notes: [eighth, eighth, eighth])
 		measure.append(quarter)
 		measure.append(quarter)
@@ -1053,7 +1050,7 @@ import Testing
 	func KNOWNISSUEtestHasClefAfterNoteMiddleOfCompoundTuplet() async throws {
 		// FIXME: throws MeasureError.cannotCalculateTicksWithinCompoundTuplet error
 		// https://github.com/drumnkyle/music-notation-core/issues/129
-		let note = Note(restDuration: .eighth)
+		let note = Note(.eighth)
 		measure.append(note)
 		let triplet = try Tuplet(3, .eighth, notes: [note, note, note])
 		let compoundTuplet = try Tuplet(5, .eighth, notes: [note, note, triplet, note])
@@ -1063,16 +1060,16 @@ import Testing
 	}
 
 	@Test func hasClefAfterNoteNoteOfClefChange() async throws {
-		measure.append(Note(restDuration: .quarter))
-		measure.append(Note(restDuration: .quarter))
+		measure.append(Note(.quarter))
+		measure.append(Note(.quarter))
 		try measure.changeClef(Clef.treble, at: 1, inSet: 0)
 		#expect(!measure.hasClefAfterNote(at: 1, inSet: 0))
 	}
 
 	@Test func hasClefAfterNoteNoteAfterClefChange() async throws {
-		measure.append(Note(restDuration: .quarter))
-		measure.append(Note(restDuration: .quarter))
-		measure.append(Note(restDuration: .quarter))
+		measure.append(Note(.quarter))
+		measure.append(Note(.quarter))
+		measure.append(Note(.quarter))
 		try measure.changeClef(Clef.treble, at: 1, inSet: 0)
 		#expect(!measure.hasClefAfterNote(at: 2, inSet: 0))
 	}
@@ -1080,28 +1077,28 @@ import Testing
 	// MARK: True
 
 	@Test func hasClefAfterNoteOneClefNoteBefore() async throws {
-		measure.append(Note(restDuration: .quarter))
-		measure.append(Note(restDuration: .quarter))
-		measure.append(Note(restDuration: .quarter))
+		measure.append(Note(.quarter))
+		measure.append(Note(.quarter))
+		measure.append(Note(.quarter))
 		try measure.changeClef(Clef.treble, at: 2, inSet: 0)
 		#expect(measure.hasClefAfterNote(at: 1, inSet: 0))
 	}
 
 	@Test func hasClefAfterNoteMultipleClefsNoteBefore() async throws {
-		measure.append(Note(restDuration: .quarter))
-		measure.append(Note(restDuration: .quarter))
-		measure.append(Note(restDuration: .quarter))
-		measure.append(Note(restDuration: .quarter))
+		measure.append(Note(.quarter))
+		measure.append(Note(.quarter))
+		measure.append(Note(.quarter))
+		measure.append(Note(.quarter))
 		try measure.changeClef(Clef.treble, at: 2, inSet: 0)
 		try measure.changeClef(Clef.treble, at: 3, inSet: 0)
 		#expect(measure.hasClefAfterNote(at: 1, inSet: 0))
 	}
 
 	@Test func hasClefAfterNoteMultipleClefsNoteInMiddle() async throws {
-		measure.append(Note(restDuration: .quarter))
-		measure.append(Note(restDuration: .quarter))
-		measure.append(Note(restDuration: .quarter))
-		measure.append(Note(restDuration: .quarter))
+		measure.append(Note(.quarter))
+		measure.append(Note(.quarter))
+		measure.append(Note(.quarter))
+		measure.append(Note(.quarter))
 		try measure.changeClef(Clef.treble, at: 1, inSet: 0)
 		try measure.changeClef(Clef.treble, at: 3, inSet: 0)
 		#expect(measure.hasClefAfterNote(at: 2, inSet: 0))
@@ -1112,7 +1109,7 @@ import Testing
 	// MARK: Failures
 
 	@Test func cumulativeTicksInvalidNoteIndex() async throws {
-		let note = Note(restDuration: .quarter)
+		let note = Note(.quarter)
 		measure.append(note)
 		#expect(throws: MeasureError.noteIndexOutOfRange) {
 			_ = try measure.cumulativeTicks(at: 2, inSet: 0)
@@ -1120,7 +1117,7 @@ import Testing
 	}
 
 	@Test func cumulativeTicksInvalidSetIndex() async throws {
-		let note = Note(restDuration: .quarter)
+		let note = Note(.quarter)
 		measure.append(note)
 		#expect(throws: MeasureError.noteIndexOutOfRange) {
 			_ = try measure.cumulativeTicks(at: 0, inSet: 1)
@@ -1128,7 +1125,7 @@ import Testing
 	}
 
 	func KNOWNISSUEtestCumulativeTicksInMiddleOfCompoundTuplet() async throws {
-		let note = Note(restDuration: .eighth)
+		let note = Note(.eighth)
 		measure.append(note)
 		let triplet = try Tuplet(3, .eighth, notes: [note, note, note])
 		let compoundTuplet = try Tuplet(5, .eighth, notes: [note, note, triplet, note])
@@ -1145,7 +1142,7 @@ import Testing
 	// MARK: Successes
 
 	@Test func cumulativeTicksBeginning() async throws {
-		let note = Note(restDuration: .quarter)
+		let note = Note(.quarter)
 		measure.append(note)
 		measure.append(note)
 		measure.append(note)
@@ -1155,8 +1152,8 @@ import Testing
 	}
 
 	@Test func cumulativeTicksAllNotes() async throws {
-		let quarter = Note(restDuration: .quarter)
-		let eighth = Note(restDuration: .eighth)
+		let quarter = Note(.quarter)
+		let eighth = Note(.eighth)
 		measure.append(quarter)
 		measure.append(quarter)
 		measure.append(eighth)
@@ -1189,8 +1186,8 @@ import Testing
 	}
 
 	@Test func cumulativeTicksBeginningOfTuplet() async throws {
-		let quarter = Note(restDuration: .quarter)
-        let eighth = Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1))
+		let quarter = Note(.quarter)
+        let eighth = Note(.eighth, pitch: SpelledPitch(.c, .octave1))
 
 		let tuplet = try Tuplet(3, .eighth, notes: [eighth, eighth, eighth])
 		measure.append(quarter)
@@ -1209,7 +1206,7 @@ import Testing
 	}
 
 	@Test func cumulativeTicksMiddleOfTuplet() async throws {
-		let note = Note(restDuration: .eighth)
+		let note = Note(.eighth)
 		measure.append(note)
 
 		let triplet = try Tuplet(3, .eighth, notes: [note, note, note])
@@ -1222,7 +1219,7 @@ import Testing
 	func KNOWNISSUEtestCumulativeTicksAtBeginningOfCompoundTuplet() async throws {
 		// FIXME: throws MeasureError.cannotCalculateTicksWithinCompoundTuplet
 		// https://github.com/drumnkyle/music-notation-core/issues/129
-		let note = Note(restDuration: .eighth)
+		let note = Note(.eighth)
 		measure.append(note)
 
 		let triplet = try Tuplet(3, .eighth, notes: [note, note, note])
@@ -1251,7 +1248,7 @@ import Testing
 	// MARK: Successes
 
 	@Test func oneClefAtBeginningNoOriginal() async throws {
-        let note = Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1))
+        let note = Note(.eighth, pitch: SpelledPitch(.c, .octave1))
 		var testMeasure = Measure(timeSignature: timeSignature, notes: [[note, note, note, note]])
 
 		let newClef: Clef = .bass
@@ -1267,7 +1264,7 @@ import Testing
 	}
 
 	@Test func oneClefAtBeginningWithOriginal() async throws {
-        let note = Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1))
+        let note = Note(.eighth, pitch: SpelledPitch(.c, .octave1))
 		var testMeasure = Measure(timeSignature: timeSignature, notes: [
 			[
 				note, note, note, note,
@@ -1290,7 +1287,7 @@ import Testing
 	}
 
 	@Test func oneClefAtBeginningAnd1Other() async throws {
-        let note = Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1))
+        let note = Note(.eighth, pitch: SpelledPitch(.c, .octave1))
 		var testMeasure = Measure(timeSignature: timeSignature, notes: [[note, note, note, note]])
 
 		let newClef1: Clef = .bass
@@ -1310,7 +1307,7 @@ import Testing
 	}
 
 	@Test func oneClefAtEndWithOriginal() async throws {
-        let note = Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1))
+        let note = Note(.eighth, pitch: SpelledPitch(.c, .octave1))
 		var testMeasure = Measure(timeSignature: timeSignature, notes: [[note, note, note, note]])
 		let originalClef: Clef = .treble
 		testMeasure.originalClef = originalClef
@@ -1326,8 +1323,8 @@ import Testing
 	}
 
 	@Test func twoClefsInDifferentSetsWithOriginal() async throws {
-        let eighth = Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1))
-        let sixteenth = Note(noteDuration: .sixteenth, pitch: SpelledPitch(.c, .octave1))
+        let eighth = Note(.eighth, pitch: SpelledPitch(.c, .octave1))
+        let sixteenth = Note(.sixteenth, pitch: SpelledPitch(.c, .octave1))
 
 		var testMeasure = Measure(timeSignature: timeSignature, notes: [
 			[sixteenth, sixteenth, sixteenth, sixteenth, sixteenth, sixteenth, sixteenth, sixteenth],
@@ -1382,8 +1379,8 @@ import Testing
 	}
 
 	@Test func twoClefsInDifferentSetsNoOriginal() async throws {
-        let eighth = Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1))
-        let sixteenth = Note(noteDuration: .sixteenth, pitch: SpelledPitch(.c, .octave1))
+        let eighth = Note(.eighth, pitch: SpelledPitch(.c, .octave1))
+        let sixteenth = Note(.sixteenth, pitch: SpelledPitch(.c, .octave1))
 
 		var testMeasure = Measure(timeSignature: timeSignature, notes: [
 			[sixteenth, sixteenth, sixteenth, sixteenth, sixteenth, sixteenth, sixteenth, sixteenth],
@@ -1430,7 +1427,7 @@ import Testing
 	// MARK: Failures
 
 	@Test func noClefsNoOriginal() async throws {
-        let note = Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1))
+        let note = Note(.eighth, pitch: SpelledPitch(.c, .octave1))
 		let testMeasure = Measure(timeSignature: timeSignature, notes: [
 			[
 				note, note, note, note,
@@ -1444,7 +1441,7 @@ import Testing
 	}
 
 	@Test func oneClefNotAtBeginningNoOriginal() async throws {
-        let note = Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1))
+        let note = Note(.eighth, pitch: SpelledPitch(.c, .octave1))
 		var testMeasure = Measure(timeSignature: timeSignature, notes: [
 			[
 				note, note, note, note,
@@ -1468,7 +1465,7 @@ import Testing
 	}
 
 	@Test func clefsInvalidNoteIndex() async throws {
-        let note = Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1))
+        let note = Note(.eighth, pitch: SpelledPitch(.c, .octave1))
 		let testMeasure = Measure(timeSignature: timeSignature, notes: [
 			[
 				note, note, note, note,
@@ -1480,7 +1477,7 @@ import Testing
 	}
 
 	@Test func clefsInvalidSetIndex() async throws {
-        let note = Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1))
+        let note = Note(.eighth, pitch: SpelledPitch(.c, .octave1))
 		let testMeasure = Measure(timeSignature: timeSignature, notes: [
 			[
 				note, note, note, note,
@@ -1496,7 +1493,7 @@ import Testing
 	// MARK: Failures
 
 	@Test func changeClefInvalidNoteIndex() async throws {
-        let note = Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1))
+        let note = Note(.eighth, pitch: SpelledPitch(.c, .octave1))
 		var measure = Measure(timeSignature: timeSignature, notes: [
 			[
 				note, note, note, note,
@@ -1511,7 +1508,7 @@ import Testing
 	}
 
 	@Test func changeClefInvalidSetIndex() async throws {
-        let note = Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1))
+        let note = Note(.eighth, pitch: SpelledPitch(.c, .octave1))
 		var measure = Measure(timeSignature: timeSignature, notes: [
 			[
 				note, note, note, note,
@@ -1528,8 +1525,8 @@ import Testing
 	// MARK: Successes
 
 	@Test func changeClefAtBeginningNoOthers() async throws {
-        let eighth = Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1))
-        let quarter = Note(noteDuration: .sixteenth, pitch: SpelledPitch(.c, .octave1))
+        let eighth = Note(.eighth, pitch: SpelledPitch(.c, .octave1))
+        let quarter = Note(.sixteenth, pitch: SpelledPitch(.c, .octave1))
 		var measure = Measure(timeSignature: timeSignature, notes: [
 			[
 				quarter, quarter, quarter, quarter,
@@ -1546,8 +1543,8 @@ import Testing
 	}
 
 	@Test func changeClefAtBeginningNoOthersSecondSet() async throws {
-        let eighth = Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1))
-        let quarter = Note(noteDuration: .sixteenth, pitch: SpelledPitch(.c, .octave1))
+        let eighth = Note(.eighth, pitch: SpelledPitch(.c, .octave1))
+        let quarter = Note(.sixteenth, pitch: SpelledPitch(.c, .octave1))
 		var measure = Measure(timeSignature: timeSignature, notes: [
 			[
 				quarter, quarter, quarter, quarter,
@@ -1564,8 +1561,8 @@ import Testing
 	}
 
 	@Test func changeClefAtBeginningAlreadyThere() async throws {
-        let eighth = Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1))
-        let quarter = Note(noteDuration: .sixteenth, pitch: SpelledPitch(.c, .octave1))
+        let eighth = Note(.eighth, pitch: SpelledPitch(.c, .octave1))
+        let quarter = Note(.sixteenth, pitch: SpelledPitch(.c, .octave1))
 		var measure = Measure(timeSignature: timeSignature, notes: [
 			[
 				quarter, quarter, quarter, quarter,
@@ -1583,8 +1580,8 @@ import Testing
 	}
 
 	@Test func changeClefInMiddleNoOthers() async throws {
-        let eighth = Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1))
-        let quarter = Note(noteDuration: .sixteenth, pitch: SpelledPitch(.c, .octave1))
+        let eighth = Note(.eighth, pitch: SpelledPitch(.c, .octave1))
+        let quarter = Note(.sixteenth, pitch: SpelledPitch(.c, .octave1))
 		var measure = Measure(timeSignature: timeSignature, notes: [
 			[
 				quarter, quarter, quarter, quarter,
@@ -1601,8 +1598,8 @@ import Testing
 	}
 
 	@Test func changeClefInMiddleHasBeginning() async throws {
-        let eighth = Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1))
-        let quarter = Note(noteDuration: .sixteenth, pitch: SpelledPitch(.c, .octave1))
+        let eighth = Note(.eighth, pitch: SpelledPitch(.c, .octave1))
+        let quarter = Note(.sixteenth, pitch: SpelledPitch(.c, .octave1))
 		var measure = Measure(timeSignature: timeSignature, notes: [
 			[
 				quarter, quarter, quarter, quarter,
@@ -1619,8 +1616,8 @@ import Testing
 	}
 
 	@Test func changeClefInMiddleHasEnd() async throws {
-        let eighth = Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1))
-        let quarter = Note(noteDuration: .sixteenth, pitch: SpelledPitch(.c, .octave1))
+        let eighth = Note(.eighth, pitch: SpelledPitch(.c, .octave1))
+        let quarter = Note(.sixteenth, pitch: SpelledPitch(.c, .octave1))
 		var measure = Measure(timeSignature: timeSignature, notes: [
 			[
 				quarter, quarter, quarter, quarter,
@@ -1638,8 +1635,8 @@ import Testing
 	}
 
 	@Test func changeClefInMiddleHasBeginningAndEnd() async throws {
-        let eighth = Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1))
-        let quarter = Note(noteDuration: .sixteenth, pitch: SpelledPitch(.c, .octave1))
+        let eighth = Note(.eighth, pitch: SpelledPitch(.c, .octave1))
+        let quarter = Note(.sixteenth, pitch: SpelledPitch(.c, .octave1))
 		var measure = Measure(timeSignature: timeSignature, notes: [
 			[
 				quarter, quarter, quarter, quarter,
@@ -1658,8 +1655,8 @@ import Testing
 	}
 
 	@Test func changeClefWithinTuplet() async throws {
-		let quarter = Note(restDuration: .quarter)
-        let eighth = Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1))
+		let quarter = Note(.quarter)
+        let eighth = Note(.eighth, pitch: SpelledPitch(.c, .octave1))
 		let tuplet = try Tuplet(3, .eighth, notes: [eighth, eighth, eighth])
 		measure.append(quarter)
 		measure.append(quarter)
@@ -1678,8 +1675,8 @@ import Testing
 
 	@Test func changeFirstClefIfNeededWhenNotEmpty() async throws {
 		// Setup
-        let eighth = Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1))
-        let quarter = Note(noteDuration: .sixteenth, pitch: SpelledPitch(.c, .octave1))
+        let eighth = Note(.eighth, pitch: SpelledPitch(.c, .octave1))
+        let quarter = Note(.sixteenth, pitch: SpelledPitch(.c, .octave1))
 		var measure = Measure(timeSignature: timeSignature, notes: [
 			[
 				quarter, quarter, quarter, quarter,
@@ -1701,8 +1698,8 @@ import Testing
 
 	@Test func changeFirstClefIfNeededWhenEmtpy() async throws {
 		// Setup
-        let eighth = Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1))
-        let quarter = Note(noteDuration: .sixteenth, pitch: SpelledPitch(.c, .octave1))
+        let eighth = Note(.eighth, pitch: SpelledPitch(.c, .octave1))
+        let quarter = Note(.sixteenth, pitch: SpelledPitch(.c, .octave1))
 		var measure = Measure(timeSignature: timeSignature, notes: [
 			[
 				quarter, quarter, quarter, quarter,
@@ -1733,33 +1730,25 @@ import Testing
 	}
 
 	@Test func mapSingleNoteSet() async throws {
-		measure.append(Note(restDuration: .quarter))
-		measure.append(Note(restDuration: .quarter))
-		measure.append(Note(restDuration: .eighth))
-		measure.append(Note(restDuration: .eighth))
-		measure.append(Note(restDuration: .quarter))
+		measure.append(Note(.quarter))
+		measure.append(Note(.quarter))
+		measure.append(Note(.eighth))
+		measure.append(Note(.eighth))
+		measure.append(Note(.quarter))
 
 		let repeatedMeasure = RepeatedMeasure(
 			timeSignature: timeSignature,
-			notes: [
-				[
-					Note(restDuration: .quarter),
-					Note(restDuration: .quarter),
-					Note(restDuration: .eighth),
-					Note(restDuration: .eighth),
-					Note(restDuration: .quarter),
-				],
-			]
+			notes: [[Note(.quarter), Note(.quarter), Note(.eighth), Note(.eighth), Note(.quarter)]]
 		)
 		let repeatedMappedMeasureSlices = repeatedMeasure.map { $0 }
 
 		let mappedMeasureSlices = measure.compactMap { $0 }
 		let expectedMeasureSlices: [[MeasureSlice]] = [
-			[MeasureSlice(noteSetIndex: 0, noteCollection: Note(restDuration: .quarter))],
-			[MeasureSlice(noteSetIndex: 0, noteCollection: Note(restDuration: .quarter))],
-			[MeasureSlice(noteSetIndex: 0, noteCollection: Note(restDuration: .eighth))],
-			[MeasureSlice(noteSetIndex: 0, noteCollection: Note(restDuration: .eighth))],
-			[MeasureSlice(noteSetIndex: 0, noteCollection: Note(restDuration: .quarter))],
+			[MeasureSlice(noteSetIndex: 0, noteCollection: Note(.quarter))],
+			[MeasureSlice(noteSetIndex: 0, noteCollection: Note(.quarter))],
+			[MeasureSlice(noteSetIndex: 0, noteCollection: Note(.eighth))],
+			[MeasureSlice(noteSetIndex: 0, noteCollection: Note(.eighth))],
+			[MeasureSlice(noteSetIndex: 0, noteCollection: Note(.quarter))],
 		]
 		var count = 0
 		zip(mappedMeasureSlices, expectedMeasureSlices).forEach {
@@ -1777,38 +1766,38 @@ import Testing
 	}
 
 	@Test func mapMultipleNoteSets() async throws {
-		measure.append(Note(restDuration: .quarter), inSet: 0)
-		measure.append(Note(restDuration: .sixteenth), inSet: 1)
-		measure.append(Note(restDuration: .quarter), inSet: 0)
-		measure.append(Note(restDuration: .thirtySecond), inSet: 1)
-		measure.append(Note(restDuration: .eighth), inSet: 0)
-		measure.append(Note(restDuration: .quarter), inSet: 1)
-		measure.append(Note(restDuration: .eighth), inSet: 0)
-		measure.append(Note(restDuration: .quarter), inSet: 1)
-		measure.append(Note(restDuration: .quarter), inSet: 0)
-		measure.append(Note(restDuration: .quarter), inSet: 1)
-		measure.append(Note(restDuration: .whole), inSet: 1)
-		measure.append(Note(restDuration: .whole), inSet: 1)
+		measure.append(Note(.quarter), inSet: 0)
+		measure.append(Note(.sixteenth), inSet: 1)
+		measure.append(Note(.quarter), inSet: 0)
+		measure.append(Note(.thirtySecond), inSet: 1)
+		measure.append(Note(.eighth), inSet: 0)
+		measure.append(Note(.quarter), inSet: 1)
+		measure.append(Note(.eighth), inSet: 0)
+		measure.append(Note(.quarter), inSet: 1)
+		measure.append(Note(.quarter), inSet: 0)
+		measure.append(Note(.quarter), inSet: 1)
+		measure.append(Note(.whole), inSet: 1)
+		measure.append(Note(.whole), inSet: 1)
 
 		let repeatedMeasure = RepeatedMeasure(
 			timeSignature: timeSignature,
 			notes: [
 				[
-					Note(restDuration: .quarter),
-					Note(restDuration: .quarter),
-					Note(restDuration: .eighth),
-					Note(restDuration: .eighth),
-					Note(restDuration: .quarter),
+					Note(.quarter),
+					Note(.quarter),
+					Note(.eighth),
+					Note(.eighth),
+					Note(.quarter),
 
 				],
 				[
-					Note(restDuration: .sixteenth),
-					Note(restDuration: .thirtySecond),
-					Note(restDuration: .quarter),
-					Note(restDuration: .quarter),
-					Note(restDuration: .quarter),
-					Note(restDuration: .whole),
-					Note(restDuration: .whole),
+					Note(.sixteenth),
+					Note(.thirtySecond),
+					Note(.quarter),
+					Note(.quarter),
+					Note(.quarter),
+					Note(.whole),
+					Note(.whole),
 				],
 			]
 		)
@@ -1817,31 +1806,31 @@ import Testing
 		let mappedMeasureSlices = measure.compactMap { $0 }
 		let expectedMeasureSlices: [[MeasureSlice]] = [
 			[
-				MeasureSlice(noteSetIndex: 0, noteCollection: Note(restDuration: .quarter)),
-				MeasureSlice(noteSetIndex: 1, noteCollection: Note(restDuration: .sixteenth)),
+				MeasureSlice(noteSetIndex: 0, noteCollection: Note(.quarter)),
+				MeasureSlice(noteSetIndex: 1, noteCollection: Note(.sixteenth)),
 
 			],
 			[
-				MeasureSlice(noteSetIndex: 0, noteCollection: Note(restDuration: .quarter)),
-				MeasureSlice(noteSetIndex: 1, noteCollection: Note(restDuration: .thirtySecond)),
+				MeasureSlice(noteSetIndex: 0, noteCollection: Note(.quarter)),
+				MeasureSlice(noteSetIndex: 1, noteCollection: Note(.thirtySecond)),
 			],
 			[
-				MeasureSlice(noteSetIndex: 0, noteCollection: Note(restDuration: .eighth)),
-				MeasureSlice(noteSetIndex: 1, noteCollection: Note(restDuration: .quarter)),
+				MeasureSlice(noteSetIndex: 0, noteCollection: Note(.eighth)),
+				MeasureSlice(noteSetIndex: 1, noteCollection: Note(.quarter)),
 			],
 			[
-				MeasureSlice(noteSetIndex: 0, noteCollection: Note(restDuration: .eighth)),
-				MeasureSlice(noteSetIndex: 1, noteCollection: Note(restDuration: .quarter)),
+				MeasureSlice(noteSetIndex: 0, noteCollection: Note(.eighth)),
+				MeasureSlice(noteSetIndex: 1, noteCollection: Note(.quarter)),
 			],
 			[
-				MeasureSlice(noteSetIndex: 0, noteCollection: Note(restDuration: .quarter)),
-				MeasureSlice(noteSetIndex: 1, noteCollection: Note(restDuration: .quarter)),
+				MeasureSlice(noteSetIndex: 0, noteCollection: Note(.quarter)),
+				MeasureSlice(noteSetIndex: 1, noteCollection: Note(.quarter)),
 			],
 			[
-				MeasureSlice(noteSetIndex: 1, noteCollection: Note(restDuration: .whole)),
+				MeasureSlice(noteSetIndex: 1, noteCollection: Note(.whole)),
 			],
 			[
-				MeasureSlice(noteSetIndex: 1, noteCollection: Note(restDuration: .whole)),
+				MeasureSlice(noteSetIndex: 1, noteCollection: Note(.whole)),
 			],
 		]
 		var count = 0
@@ -1860,29 +1849,29 @@ import Testing
 	}
 
 	@Test func reversed() async throws {
-		measure.append(Note(restDuration: .whole), inSet: 0)
-		measure.append(Note(restDuration: .thirtySecond), inSet: 1)
-		measure.append(Note(restDuration: .quarter), inSet: 0)
-		measure.append(Note(restDuration: .sixtyFourth), inSet: 1)
-		measure.append(Note(restDuration: .eighth), inSet: 0)
-		measure.append(Note(restDuration: .oneTwentyEighth), inSet: 1)
-		measure.append(Note(restDuration: .sixteenth), inSet: 0)
-		measure.append(Note(restDuration: .twoFiftySixth), inSet: 1)
+		measure.append(Note(.whole), inSet: 0)
+		measure.append(Note(.thirtySecond), inSet: 1)
+		measure.append(Note(.quarter), inSet: 0)
+		measure.append(Note(.sixtyFourth), inSet: 1)
+		measure.append(Note(.eighth), inSet: 0)
+		measure.append(Note(.oneTwentyEighth), inSet: 1)
+		measure.append(Note(.sixteenth), inSet: 0)
+		measure.append(Note(.twoFiftySixth), inSet: 1)
 
 		let repeatedMeasure = RepeatedMeasure(
 			timeSignature: timeSignature,
 			notes: [
 				[
-					Note(restDuration: .whole),
-					Note(restDuration: .quarter),
-					Note(restDuration: .eighth),
-					Note(restDuration: .sixteenth),
+					Note(.whole),
+					Note(.quarter),
+					Note(.eighth),
+					Note(.sixteenth),
 				],
 				[
-					Note(restDuration: .thirtySecond),
-					Note(restDuration: .sixtyFourth),
-					Note(restDuration: .oneTwentyEighth),
-					Note(restDuration: .twoFiftySixth),
+					Note(.thirtySecond),
+					Note(.sixtyFourth),
+					Note(.oneTwentyEighth),
+					Note(.twoFiftySixth),
 				],
 			]
 		)
@@ -1891,20 +1880,20 @@ import Testing
 		let reversedMeasureSlices = measure.reversed()
 		let expectedMeasureSlices: [[MeasureSlice]] = [
 			[
-				MeasureSlice(noteSetIndex: 0, noteCollection: Note(restDuration: .sixteenth)),
-				MeasureSlice(noteSetIndex: 1, noteCollection: Note(restDuration: .twoFiftySixth)),
+				MeasureSlice(noteSetIndex: 0, noteCollection: Note(.sixteenth)),
+				MeasureSlice(noteSetIndex: 1, noteCollection: Note(.twoFiftySixth)),
 			],
 			[
-				MeasureSlice(noteSetIndex: 0, noteCollection: Note(restDuration: .eighth)),
-				MeasureSlice(noteSetIndex: 1, noteCollection: Note(restDuration: .oneTwentyEighth)),
+				MeasureSlice(noteSetIndex: 0, noteCollection: Note(.eighth)),
+				MeasureSlice(noteSetIndex: 1, noteCollection: Note(.oneTwentyEighth)),
 			],
 			[
-				MeasureSlice(noteSetIndex: 0, noteCollection: Note(restDuration: .quarter)),
-				MeasureSlice(noteSetIndex: 1, noteCollection: Note(restDuration: .sixtyFourth)),
+				MeasureSlice(noteSetIndex: 0, noteCollection: Note(.quarter)),
+				MeasureSlice(noteSetIndex: 1, noteCollection: Note(.sixtyFourth)),
 			],
 			[
-				MeasureSlice(noteSetIndex: 0, noteCollection: Note(restDuration: .whole)),
-				MeasureSlice(noteSetIndex: 1, noteCollection: Note(restDuration: .thirtySecond)),
+				MeasureSlice(noteSetIndex: 0, noteCollection: Note(.whole)),
+				MeasureSlice(noteSetIndex: 1, noteCollection: Note(.thirtySecond)),
 			],
 		]
 
@@ -1924,32 +1913,26 @@ import Testing
 	}
 
 	@Test func iterator() async throws {
-		measure.append(Note(restDuration: .whole), inSet: 0)
-		measure.append(Note(restDuration: .thirtySecond), inSet: 1)
-		measure.append(Note(restDuration: .quarter), inSet: 0)
-		measure.append(Note(restDuration: .eighth), inSet: 1)
+		measure.append(Note(.whole), inSet: 0)
+		measure.append(Note(.thirtySecond), inSet: 1)
+		measure.append(Note(.quarter), inSet: 0)
+		measure.append(Note(.eighth), inSet: 1)
 
 		let repeatedMeasure = RepeatedMeasure(
 			timeSignature: timeSignature,
 			notes: [
-				[
-					Note(restDuration: .whole),
-					Note(restDuration: .quarter),
-				],
-				[
-					Note(restDuration: .thirtySecond),
-					Note(restDuration: .eighth),
-				],
+				[Note(.whole), Note(.quarter)],
+				[Note(.thirtySecond), Note(.eighth)],
 			]
 		)
 
 		let expectedMeasureSlice1: [MeasureSlice] = [
-			MeasureSlice(noteSetIndex: 0, noteCollection: Note(restDuration: .whole)),
-			MeasureSlice(noteSetIndex: 1, noteCollection: Note(restDuration: .thirtySecond)),
+			MeasureSlice(noteSetIndex: 0, noteCollection: Note(.whole)),
+			MeasureSlice(noteSetIndex: 1, noteCollection: Note(.thirtySecond)),
 		]
 		let expectedMeasureSlice2: [MeasureSlice] = [
-			MeasureSlice(noteSetIndex: 0, noteCollection: Note(restDuration: .quarter)),
-			MeasureSlice(noteSetIndex: 1, noteCollection: Note(restDuration: .eighth)),
+			MeasureSlice(noteSetIndex: 0, noteCollection: Note(.quarter)),
+			MeasureSlice(noteSetIndex: 1, noteCollection: Note(.eighth)),
 		]
 		let expectedMeasureSlices = [expectedMeasureSlice1, expectedMeasureSlice2]
 		var iterator = measure.makeIterator()

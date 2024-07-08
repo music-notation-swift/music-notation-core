@@ -21,7 +21,7 @@ public enum MeasureDurationValidator {
 	/// measure when it is checked.
 	///
 	/// - notFull: The measure doesn't have all the notes needed to be full. The `availableNotes` associated value will give a
-	///    dictionary of notes that will fit. It gives the smallest number of notes possible to fill.
+	///		dictionary of notes that will fit. It gives the smallest number of notes possible to fill.
 	/// - full: The measure is complete and cannot hold any more or less notes.
 	/// - overfilled: The measure has too many notes to be complete. The `overflowingNotes` associated value will give the range
 	/// of notes that would need to be removed for the measure to not be full anymore. Note that if the range of notes
@@ -121,9 +121,9 @@ public enum MeasureDurationValidator {
 	///
 	/// - parameter measure: The measure for which the base duration should be derived.
 	/// - returns: The duration that is equivalent to the bottom number of the time signature associated with the specified
-	///    measure.
+	///		measure.
 	/// - throws:
-	///    - MeasureDurationValidatorError.invalidBottomNumber
+	///		- MeasureDurationValidatorError.invalidBottomNumber
 	///
 	internal static func baseNoteDuration(from measure: ImmutableMeasure) throws -> NoteDuration {
 		let bottomNumber = measure.timeSignature.bottomNumber

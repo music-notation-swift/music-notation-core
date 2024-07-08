@@ -16,11 +16,10 @@ var package = Package(
 		.library(name: "MusicNotationCore", targets: ["MusicNotationCore"]),
 	],
 
-    targets: [
+	targets: [
 		.target(name: "MusicNotationCore", path: "Sources"),
-
-        .testTarget(name: "MusicNotationCoreTests", dependencies: ["MusicNotationCore"]),
+		.testTarget(name: "MusicNotationCoreTests", dependencies: ["MusicNotationCore"]),
 	],
 
-    swiftLanguageVersions: [ .v6 ]
+	swiftLanguageVersions: [ .v6 ]
 )

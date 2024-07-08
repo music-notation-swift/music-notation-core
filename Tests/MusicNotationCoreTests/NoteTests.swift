@@ -13,7 +13,7 @@ import Testing
 	var note: Note!
 
 	init() {
-		note = Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1))
+		note = Note(.eighth, pitch: SpelledPitch(.c, .octave1))
 	}
 
 	// MARK: - modifyTie(_:)

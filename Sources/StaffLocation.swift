@@ -11,7 +11,7 @@
 /// Negative numbers represents ledger lines/spaces below the first line/space of the staff.
 ///
 public struct StaffLocation: Sendable {
-    public enum LocationType: Sendable {
+	public enum LocationType: Sendable {
 		case line
 		case space
 	}

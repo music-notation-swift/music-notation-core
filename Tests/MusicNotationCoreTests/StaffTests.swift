@@ -31,10 +31,8 @@ import Testing
 		staff = Staff(clef: Constant.standardClef, instrument: .guitar6)
 		let timeSignature = TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120)
 		let key = Key(noteLetter: .c)
-		let note = Note(noteDuration: .sixteenth,
-                        pitch: SpelledPitch(.c, .octave1))
-		let note2 = Note(noteDuration: .sixteenth,
-                         pitch: SpelledPitch(.a, .octave1))
+		let note = Note(.sixteenth, pitch: SpelledPitch(.c, .octave1))
+		let note2 = Note(.sixteenth, pitch: SpelledPitch(.a, .octave1))
 		let tuplet = try! Tuplet(3, .sixteenth, notes: [note, note, note])
 		let tuplet2 = try! Tuplet(3, .sixteenth, notes: [note2, note, note])
 
@@ -831,17 +829,13 @@ import Testing
     }
 
 	@Test func changeClefTwiceAcross2NoteSetsIn1Measure() async throws {
-        let sixteenth = Note(noteDuration: .sixteenth, pitch: SpelledPitch(.c, .octave1))
-        let quarter = Note(noteDuration: .quarter, pitch: SpelledPitch(.c, .octave1))
+        let sixteenth = Note(.sixteenth, pitch: SpelledPitch(.c, .octave1))
+        let quarter = Note(.quarter, pitch: SpelledPitch(.c, .octave1))
         staff.appendMeasure(
             Measure(timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
                     notes: [
-                        [
-                            sixteenth, sixteenth, sixteenth, sixteenth, sixteenth, sixteenth, sixteenth, sixteenth,
-                        ],
-                        [
-                            quarter, quarter, quarter, quarter,
-                        ],
+						[sixteenth, sixteenth, sixteenth, sixteenth, sixteenth, sixteenth, sixteenth, sixteenth],
+                        [quarter, quarter, quarter, quarter]
                     ])
         )
 

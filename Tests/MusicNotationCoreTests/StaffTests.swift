@@ -354,7 +354,7 @@ import Testing
 		#expect(thirdNote.tie == .end)
 	}
 
-	func testStartTieWithinMeasureTupletToTuplet() async throws {
+	@Test func startTieWithinMeasureTupletToTuplet() async throws {
 		let firstNoteIndex = 2
 		let firstMeasureIndex = 13
 		try staff.startTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
@@ -483,7 +483,7 @@ import Testing
 		#expect(secondNote.tie == nil)
 	}
 
-	func testRemoveTieBeginIfBeginAndEndOfTie() async throws {
+	@Test func removeTieBeginIfBeginAndEndOfTie() async throws {
         try staff.startTieFromNote(at: 0, inMeasureAt: 0)
         try staff.startTieFromNote(at: 1, inMeasureAt: 0)
         try staff.removeTieFromNote(at: 1, inMeasureAt: 0)
@@ -494,7 +494,7 @@ import Testing
         #expect(secondNote.tie == .end)
 	}
 
-    func testRemoveTieWithinMeasureNoteToNote() async throws {
+	@Test func removeTieWithinMeasureNoteToNote() async throws {
         let firstNoteIndex = 0
         let firstMeasureIndex = 0
         try staff.startTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
@@ -506,7 +506,7 @@ import Testing
         #expect(secondNote.tie == nil)
     }
 
-    func testRemoveTieWithinMeasureWithinTuplet() async throws {
+	@Test func removeTieWithinMeasureWithinTuplet() async throws {
         let firstNoteIndex = 4
         let firstMeasureIndex = 0
         try staff.startTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
@@ -518,7 +518,7 @@ import Testing
         #expect(secondNote.tie == nil)
     }
 
-    func testRemoveTieWithinMeasureFromTupletToNote() async throws {
+	@Test func removeTieWithinMeasureFromTupletToNote() async throws {
         let firstNoteIndex = 2
         let firstMeasureIndex = 1
         try staff.startTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
@@ -530,7 +530,7 @@ import Testing
         #expect(secondNote.tie == nil)
     }
 
-	func testRemoveTieWithinMeasureFromTupletToNewTuplet() async throws {
+	@Test func removeTieWithinMeasureFromTupletToNewTuplet() async throws {
         let firstNoteIndex = 2
         let firstMeasureIndex = 13
         try staff.startTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
@@ -542,7 +542,7 @@ import Testing
         #expect(secondNote.tie == nil)
 	}
 
-	func testRemoveTieAcrossMeasuresFromTupletToNote() async throws {
+	@Test func removeTieAcrossMeasuresFromTupletToNote() async throws {
         let firstNoteIndex = 4
         let firstMeasureIndex = 2
         try staff.startTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
@@ -555,7 +555,7 @@ import Testing
         #expect(secondNote.tie == nil)
 	}
 
-	func testRemoveTieAcrosssMeasuresFromTupletToNewTuplet() async throws {
+	@Test func removeTieAcrosssMeasuresFromTupletToNewTuplet() async throws {
         let firstNoteIndex = 6
         let firstMeasureIndex = 0
         try staff.startTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
@@ -568,7 +568,7 @@ import Testing
         #expect(secondNote.tie == nil)
 	}
 
-	func testremoveTieFromNoteThatIsBeginAndEnd() async throws {
+	@Test func removeTieFromNoteThatIsBeginAndEnd() async throws {
         let firstNoteIndex = 0
         let firstMeasureIndex = 0
         try staff.startTieFromNote(at: firstNoteIndex, inMeasureAt: firstMeasureIndex)
@@ -587,7 +587,7 @@ import Testing
 
 	// MARK: Failures
 
-	func testNotesHolderIndexForOutOfRangeMeasureIndex() async throws {
+	@Test func notesHolderIndexForOutOfRangeMeasureIndex() async throws {
 		#expect(throws: StaffError.measureIndexOutOfRange) {
 			_ = try staff.notesHolderIndexFromMeasureIndex(20)
 		}
@@ -607,7 +607,7 @@ import Testing
 		#expect(indexes.repeatMeasureIndex == 1)
 	}
 
-	@Test func testNotesHolderIndexForRepeatedMeasure() async throws {
+	@Test func notesHolderIndexForRepeatedMeasure() async throws {
 		let indexes = try staff.notesHolderIndexFromMeasureIndex(9)
 		#expect(indexes.notesHolderIndex == 6)
 		#expect(indexes.repeatMeasureIndex == 2)
@@ -643,25 +643,25 @@ import Testing
 		#expect(actual as? MeasureRepeat == expected as? MeasureRepeat)
 	}
 
-	func testNotesHolderAtMeasureIndexForSecondMeasureThatIsRepeated() async throws {
+	@Test func notesHolderAtMeasureIndexForSecondMeasureThatIsRepeated() async throws {
 		let actual = try staff.notesHolderAtMeasureIndex(8)
 		let expected = staff.notesHolders[6]
         #expect(actual as? MeasureRepeat == expected as? MeasureRepeat)
 	}
 
-	func testNotesHolderAtMeasureIndexForRepeatedMeasureInFirstRepeat() async throws {
+	@Test func notesHolderAtMeasureIndexForRepeatedMeasureInFirstRepeat() async throws {
 		let actual = try staff.notesHolderAtMeasureIndex(6)
 		let expected = staff.notesHolders[5]
         #expect(actual as? MeasureRepeat == expected as? MeasureRepeat)
     }
 
-	func testNotesHolderAtMeasureIndexForRepeatedMeasureInSecondRepeat() async throws {
+	@Test func notesHolderAtMeasureIndexForRepeatedMeasureInSecondRepeat() async throws {
 		let actual = try staff.notesHolderAtMeasureIndex(12)
 		let expected = staff.notesHolders[6]
         #expect(actual as? MeasureRepeat == expected as? MeasureRepeat)
     }
 
-	func testNotesHolderAtMeasureIndexForRegularMeasure() async throws {
+	@Test func notesHolderAtMeasureIndexForRegularMeasure() async throws {
 		let actual = try staff.notesHolderAtMeasureIndex(0)
 		let expected = staff.notesHolders[0]
         #expect(actual as? Measure == expected as? Measure)
@@ -671,13 +671,13 @@ import Testing
 
 	// MARK: Failures
 
-	func testMeasureAtIndexForInvalidIndexNegative() async throws {
+	@Test func measureAtIndexForInvalidIndexNegative() async throws {
 		#expect(throws: StaffError.measureIndexOutOfRange) {
 			_ = try staff.measure(at: -1)
 		}
 	}
 
-	func testMeasureAtIndexForInvalidIndexTooLarge() async throws {
+	@Test func measureAtIndexForInvalidIndexTooLarge() async throws {
 		#expect(throws: StaffError.measureIndexOutOfRange) {
 			_ = try staff.measure(at: staff.notesHolders.count + 10)
 		}
@@ -685,22 +685,22 @@ import Testing
 
 	// MARK: Successes
 
-	func testMeasureAtIndexForRegularMeasure() async throws {
+	@Test func measureAtIndexForRegularMeasure() async throws {
 		let measure = try staff.measure(at: 1)
         #expect(measure as? Measure == staff.notesHolders[1] as? Measure)
     }
 
-	func testMeasureAtIndexForMeasureThatRepeats() async throws {
+	@Test func measureAtIndexForMeasureThatRepeats() async throws {
 		let measureThatRepeats = try staff.measure(at: 5)
 		let measureRepeat = staff.notesHolders[5] as! MeasureRepeat
         #expect(measureThatRepeats as? RepeatedMeasure == measureRepeat.expand()[0] as? RepeatedMeasure)
     }
 
-	func testMeasureAtIndexForRepeatedMeasure() async throws {
+	@Test func measureAtIndexForRepeatedMeasure() async throws {
         let repeatedMeasure = try staff.measure(at: 6)
         let measureRepeat = staff.notesHolders[5] as! MeasureRepeat
         let expectedMeasure = measureRepeat.expand()[1]
-        #expect(expectedMeasure as? RepeatedMeasure == nil)
+        #expect(expectedMeasure as? RepeatedMeasure != nil)
         #expect(repeatedMeasure as? RepeatedMeasure == expectedMeasure as? RepeatedMeasure)
 	}
 
@@ -708,13 +708,13 @@ import Testing
 
 	// MARK: Failures
 
-	func testMeasureRepeatAtIndexForInvalidIndexNegative() async throws {
+	@Test func measureRepeatAtIndexForInvalidIndexNegative() async throws {
 		#expect(throws: StaffError.measureIndexOutOfRange) {
 			_ = try staff.measureRepeat(at: -1)
 		}
 	}
 
-	func testMeasureRepeatAtIndexForInvalidIndexTooLarge() async throws {
+	@Test func measureRepeatAtIndexForInvalidIndexTooLarge() async throws {
 		#expect(throws: StaffError.measureIndexOutOfRange) {
 			_ = try staff.measureRepeat(at: staff.notesHolders.count + 10)
 		}
@@ -722,30 +722,30 @@ import Testing
 
 	// MARK: Successes
 
-	func testMeasureRepeatAtIndexForMeasureNotPartOfRepeat() async throws {
+	@Test func measureRepeatAtIndexForMeasureNotPartOfRepeat() async throws {
 		let measureRepeat = try staff.measureRepeat(at: 1)
         #expect(measureRepeat == nil)
 	}
 
-	func testMeasureRepeatAtIndexForFirstMeasureThatIsRepeated() async throws {
+	@Test func measureRepeatAtIndexForFirstMeasureThatIsRepeated() async throws {
 		let measureRepeat = try staff.measureRepeat(at: 5)
 		let expected = staff.notesHolders[5] as! MeasureRepeat
         #expect(measureRepeat == expected)
     }
 
-	func testMeasureRepeatAtIndexForSecondMeasureThatIsRepeated() async throws {
+	@Test func measureRepeatAtIndexForSecondMeasureThatIsRepeated() async throws {
         let measureRepeat = try staff.measureRepeat(at: 8)
         let expected = staff.notesHolders[6] as! MeasureRepeat
         #expect(measureRepeat == expected)
 	}
 
-    func testMeasureRepeatAtIndexForRepeatedMeasureInFirstRepeat() async throws {
+	@Test func measureRepeatAtIndexForRepeatedMeasureInFirstRepeat() async throws {
         let measureRepeat = try staff.measureRepeat(at: 6)
         let expected = staff.notesHolders[5] as! MeasureRepeat
         #expect(measureRepeat == expected)
     }
 
-    func testMeasureRepeatAtIndexForRepeatedMeasureInSecondRepeat() async throws {
+	@Test func measureRepeatAtIndexForRepeatedMeasureInSecondRepeat() async throws {
         let measureRepeat = try staff.measureRepeat(at: 12)
         let expected = staff.notesHolders[6] as! MeasureRepeat
         #expect(measureRepeat == expected)
@@ -755,7 +755,7 @@ import Testing
 
 	// MARK: Failures
 
-	func testReplaceRepeatedMeasure() async throws {
+	@Test func replaceRepeatedMeasure() async throws {
 		#expect(throws: StaffError.repeatedMeasureCannotBeModified) {
 			try staff.replaceMeasure(at: 6, with: measure1)
 		}
@@ -763,13 +763,13 @@ import Testing
 
 	// MARK: Successes
 
-	func testReplaceMeasureAtIndex() async throws {
+	@Test func replaceMeasureAtIndex() async throws {
         try staff.replaceMeasure(at: 0, with: measure2)
         let replacedMeasure = Measure(try staff.measure(at: 0))
         #expect(replacedMeasure == changedClef(of: measure2))
 	}
 
-    func testReplaceMeasureWithRepeat() async throws {
+	@Test func replaceMeasureWithRepeat() async throws {
         try staff.replaceMeasure(at: 5, with: measure1)
         let replacedMeasure = Measure(try staff.measure(at: 5))
         let repeatedMeasure = Measure(try staff.measure(at: 6))
@@ -781,13 +781,13 @@ import Testing
 
 	// MARK: Failures
 
-	func testChangeClefInvalidMeasureIndex() async throws {
+	@Test func changeClefInvalidMeasureIndex() async throws {
 		#expect(throws: StaffError.measureIndexOutOfRange) {
 			try staff.changeClef(.bass, in: 17, atNote: 0, inSet: 0)
 		}
 	}
 
-	func testChangeClefRepeatedMeasure() async throws {
+	@Test func changeClefRepeatedMeasure() async throws {
 		#expect(throws: StaffError.repeatedMeasureCannotBeModified) {
 			try staff.changeClef(.bass, in: 6, atNote: 0, inSet: 0)
 		}
@@ -799,15 +799,15 @@ import Testing
 		try verifyAndChangeClef(to: .bass, in: 2, atNote: 0)
 	}
 
-	func testChangeClefAtBeginningOfStaff() async throws {
+	@Test func changeClefAtBeginningOfStaff() async throws {
         try verifyAndChangeClef(to: .alto, in: 0, atNote: 0)
 	}
 
-	func testChangeClefAtMiddleOfMeasure() async throws {
+	@Test func changeClefAtMiddleOfMeasure() async throws {
 		try verifyAndChangeClef(to: .baritone, in: 3, atNote: 2)
 	}
 
-	func testChangeClefTwiceInOneMeasure() async throws {
+	@Test func changeClefTwiceInOneMeasure() async throws {
         let newClef1: Clef = .bass
         let newClef2: Clef = .alto
 
@@ -818,7 +818,7 @@ import Testing
         try verifyClefsChanged(to: newClef2, after: 1)
 	}
 
-    func testChangeClefTwiceAcross2Measures() async throws {
+	@Test func changeClefTwiceAcross2Measures() async throws {
         let newClef1: Clef = .tenor
         let newClef2: Clef = .bass
 
@@ -830,7 +830,7 @@ import Testing
         try verifyClefsChanged(to: newClef2, after: 4)
     }
 
-    func testChangeClefTwiceAcross2NoteSetsIn1Measure() async throws {
+	@Test func changeClefTwiceAcross2NoteSetsIn1Measure() async throws {
         let sixteenth = Note(noteDuration: .sixteenth, pitch: SpelledPitch(.c, .octave1))
         let quarter = Note(noteDuration: .quarter, pitch: SpelledPitch(.c, .octave1))
         staff.appendMeasure(
@@ -855,14 +855,14 @@ import Testing
         try staff.changeClef(newClef2, in: newLastMeasureIndex, atNote: 2, inSet: 1)
         let measure = Measure(try staff.measure(at: newLastMeasureIndex))
         try verifyClefsUnchanged(before: newLastMeasureIndex)
-        #expect(measure.lastClef == nil)
+        #expect(measure.lastClef != nil)
         #expect(measure.lastClef == newClef2)
         let firstChangeTicks = try measure.cumulativeTicks(at: 1, inSet: 0)
         let secondChangeTicks = try measure.cumulativeTicks(at: 2, inSet: 1)
         #expect(measure.clefs == [firstChangeTicks: newClef1, secondChangeTicks: newClef2])
     }
 
-    func testChangeClefAtBeginningOfFirstMeasureWithinRepeat() async throws {
+	@Test func changeClefAtBeginningOfFirstMeasureWithinRepeat() async throws {
         let newClef: Clef = .bass
         try staff.changeClef(newClef, in: 5, atNote: 0, inSet: 0)
         try verifyClefsUnchanged(before: 5)
@@ -875,7 +875,7 @@ import Testing
         #expect(immutableMeasure2.clefs == [0: .bass])
     }
 
-    func testChangeClefInMeasureRepeatWith1Measure() async throws {
+	@Test func changeClefInMeasureRepeatWith1Measure() async throws {
         let newClef: Clef = .bass
         try staff.changeClef(newClef, in: 5, atNote: 1, inSet: 0)
         try verifyClefsUnchanged(before: 5)
@@ -889,7 +889,7 @@ import Testing
         #expect(immutableMeasure2.clefs == [ticks: newClef])
     }
     
-    func testChangeClefInEachMeasureInRepeat() async throws {
+	@Test func changeClefInEachMeasureInRepeat() async throws {
         let newClef1: Clef = .bass
         let newClef2: Clef = .alto
         try staff.changeClef(newClef1, in: 7, atNote: 0, inSet: 0)
@@ -936,7 +936,8 @@ import Testing
                         #expect($0.lastClef == Constant.standardClef)
                         #expect($0.originalClef == Constant.standardClef)
 					}
-				default: XCTFail("Invalid type. Should be Measure or MeasureRepeat")
+				default:
+					Issue.record("Invalid type. Should be Measure or MeasureRepeat")
 				}
 			}
 		}
@@ -963,7 +964,8 @@ import Testing
                         #expect($0.lastClef == newClef)
                         #expect($0.originalClef == newClef)
 					}
-				default: XCTFail("Invalid type. Should be Measure or MeasureRepeat")
+				default:
+					Issue.record("Invalid type. Should be Measure or MeasureRepeat")
 				}
 			}
 		}
@@ -971,7 +973,7 @@ import Testing
 
 	// MARK: - Collection Conformance
 
-	func testMap() async throws {
+	@Test func map() async throws {
 		let mappedNotesHolders: [NotesHolder] = staff.map { $0 }
 		let expectedNotesHolders: [NotesHolder] = [
 			changedClef(of: measure1),
@@ -990,18 +992,18 @@ import Testing
 		zip(mappedNotesHolders, expectedNotesHolders).forEach { actualNotesHolder, expectedNotesHolder in
 			switch (actualNotesHolder, expectedNotesHolder) {
 			case let (actual as Measure, expected as Measure):
-                #expect(actual, expected)
+                #expect(actual == expected)
 			case let (actual as MeasureRepeat, expected as MeasureRepeat):
-                #expect(actual, expected)
+                #expect(actual == expected)
 			default:
-				XCTFail("NotesHolders not equal")
+				Issue.record("NotesHolders not equal")
 			}
 			count += 1
 		}
-        #expect(count, expectedNotesHolders.count)
+        #expect(count == expectedNotesHolders.count)
 	}
 
-	func testReversed() async throws {
+	@Test func reversed() async throws {
 		let reversedNotesHolders = staff.reversed()
 		let expectedNotesHolders: [NotesHolder] = [
 			changedClef(of: measure1),
@@ -1020,23 +1022,23 @@ import Testing
 		zip(reversedNotesHolders, expectedNotesHolders).forEach { actualNotesHolder, expectedNotesHolder in
 			switch (actualNotesHolder, expectedNotesHolder) {
 			case let (actual as Measure, expected as Measure):
-                #expect(actual, expected)
+                #expect(actual == expected)
 			case let (actual as MeasureRepeat, expected as MeasureRepeat):
                 #expect(actual == expected)
 			default:
-				XCTFail("NotesHolders not equal")
+				Issue.record("NotesHolders not equal")
 			}
 			count += 1
 		}
         #expect(count == expectedNotesHolders.count)
 	}
 
-	func testIterator() async throws {
+	@Test func iterator() async throws {
 		var iterator = staff.makeIterator()
 		if let actual = iterator.next() as? Measure {
             #expect(actual == changedClef(of: measure1))
 		} else {
-			XCTFail("Iterator didn't return correct value for next()")
+			Issue.record("Iterator didn't return correct value for next()")
 		}
 	}
 

@@ -39,13 +39,13 @@ import Testing
 
 	// MARK: Failures
 
-	func testInitFailForCountLessThan2() async throws {
+	@Test func initFailForCountLessThan2() async throws {
 		#expect(throws: TupletError.countMustBeLargerThan1) {
 			_ = try Tuplet(1, .quarter, notes: [quarterNote1])
 		}
 	}
 
-	func testInitFailForOddCountNoBaseCount() async throws {
+	@Test func initFailForOddCountNoBaseCount() async throws {
 		// count specified is something not in 2-9 range and no base count specified
 		#expect(throws: TupletError.countHasNoStandardRatio) {
 			_ = try Tuplet(
@@ -59,7 +59,7 @@ import Testing
 		}
 	}
 
-	func testInitFailForEmptyNotes() async throws {
+	@Test func initFailForEmptyNotes() async throws {
 		// standard ratio
 		#expect(throws: TupletError.notesDoNotFillTuplet) {
 			_ = try Tuplet(3, .eighth, notes: [])
@@ -71,7 +71,7 @@ import Testing
 		}
 	}
 
-	func testInitFailForNotesSameDurationNotEnough() async throws {
+	@Test func initFailForNotesSameDurationNotEnough() async throws {
 		// standard ratio
 		#expect(throws: TupletError.notesDoNotFillTuplet) {
 			_ = try Tuplet(3, .quarter, notes: [quarterNote1, quarterNote2])
@@ -83,7 +83,7 @@ import Testing
 		}
 	}
 
-	func testInitFailForNotesSameDurationTooMany() async throws {
+	@Test func initFailForNotesSameDurationTooMany() async throws {
 		// standard ratio
 		#expect(throws: TupletError.notesOverfillTuplet) {
 			_ = try Tuplet(3, .quarter, notes: [quarterNote1, quarterNote2, quarterNote3, quarterNote1])
@@ -102,7 +102,7 @@ import Testing
 		}
 	}
 
-	func testInitFailForNotesShorterNotEnough() async throws {
+	@Test func initFailForNotesShorterNotEnough() async throws {
 		// standard ratio
 		#expect(throws: TupletError.notesDoNotFillTuplet) {
 			_ = try Tuplet(4, .quarter, notes: [eighthNote, eighthNote, quarterNote1])
@@ -123,7 +123,7 @@ import Testing
 		}
 	}
 
-	func testInitFailForShorterTooMany() async throws {
+	@Test func initFailForShorterTooMany() async throws {
 		// standard ratio
 		#expect(throws: TupletError.notesOverfillTuplet) {
 			_ = try Tuplet(
@@ -149,7 +149,7 @@ import Testing
 		}
 	}
 
-	func testInitFailForLongerNotEnough() async throws {
+	@Test func initFailForLongerNotEnough() async throws {
 		// standard ratio
 		#expect(throws: TupletError.notesDoNotFillTuplet) {
 			_ = try Tuplet(4, .eighth, notes: [quarterNote1, eighthNote])
@@ -161,7 +161,7 @@ import Testing
 		}
 	}
 
-	func testInitFailForLongerTooMany() async throws {
+	@Test func initFailForLongerTooMany() async throws {
 		// standard ratio
 		#expect(throws: TupletError.notesOverfillTuplet) {
 			_ = try Tuplet(
@@ -186,7 +186,7 @@ import Testing
 		}
 	}
 
-	func testInitFailForSameDurationWithRestsNotEnough() async throws {
+	@Test func initFailForSameDurationWithRestsNotEnough() async throws {
 		// standard ratio
 		#expect(throws: TupletError.notesDoNotFillTuplet) {
 			_ = try Tuplet(3, .quarter, notes: [quarterNote1, quarterRest])
@@ -198,7 +198,7 @@ import Testing
 		}
 	}
 
-	func testInitFailForCompoundTupletTooLarge() async throws {
+	@Test func initFailForCompoundTupletTooLarge() async throws {
 		#expect(throws: TupletError.notesOverfillTuplet) {
 			// This is worth 4 quarter notes
 			let quintuplet = try? Tuplet(
@@ -221,7 +221,7 @@ import Testing
 		}
 	}
 
-	func testInitFailForCompoundTupletTooSmall() async throws {
+	@Test func initFailForCompoundTupletTooSmall() async throws {
 		#expect(throws: TupletError.notesDoNotFillTuplet) {
 			let triplet = try? Tuplet(
 				3,
@@ -324,7 +324,7 @@ import Testing
 		)
 	}
 
-	func testInitSuccessForStandardDottedBase() async throws {
+	@Test func initSuccessForStandardDottedBase() async throws {
 		let baseDuration = try? NoteDuration(value: .quarter, dotCount: 1)
         #expect(baseDuration != nil)
 		_ = try Tuplet(
@@ -336,7 +336,7 @@ import Testing
 		)
 	}
 
-	func testInitSuccessForStandardDottedBaseMixedDuration() async throws {
+	@Test func initSuccessForStandardDottedBaseMixedDuration() async throws {
 		let baseDuration = try? NoteDuration(value: .quarter, dotCount: 1)
         #expect(baseDuration != nil)
 		_ = try Tuplet(
@@ -376,7 +376,7 @@ import Testing
 		)
 	}
 
-	func testInitSuccessForNonStandardDottedBase() async throws {
+	@Test func initSuccessForNonStandardDottedBase() async throws {
 		_ = try Tuplet(
 			4,
 			NoteDuration(value: .quarter, dotCount: 1),
@@ -387,7 +387,7 @@ import Testing
 		)
 	}
 
-	func testInitSuccessForNonStandardCompound() async throws {
+	@Test func initSuccessForNonStandardCompound() async throws {
 		// Space of 4 eighth notes
 		let quintuplet = try? Tuplet(5, .eighth, notes: [eighthNote, eighthNote, eighthNote, eighthNote, eighthNote])
 		#expect(quintuplet != nil)
@@ -402,7 +402,7 @@ import Testing
 		)
 	}
 
-	func testInitSuccessForNonStandardNestedCompound() async throws {
+	@Test func initSuccessForNonStandardNestedCompound() async throws {
         // Space of 4 eighth notes
         let triplet = try? Tuplet(3, .eighth, notes: [eighthNote, eighthNote, eighthNote])
         #expect(triplet != nil)
@@ -442,7 +442,7 @@ import Testing
 		}
 	}
 
-	func testNoteAtForInvalidIndexTooLarge() async throws {
+	@Test func noteAtForInvalidIndexTooLarge() async throws {
 		#expect(throws: TupletError.invalidIndex) {
 			let tuplet = try Tuplet(3, .eighth, notes: [eighthNote, eighthNote, eighthNote])
 			_ = try tuplet.note(at: 5)
@@ -468,17 +468,17 @@ import Testing
 		}
 	}
 
-	func testReplaceNoteWithNoteTooShort() async throws {
+	@Test func replaceNoteWithNoteTooShort() async throws {
 		#expect(throws: TupletError.replacementNotSameDuration) {
 			var tuplet = try Tuplet(3, .quarter, notes: [quarterNote1, quarterNote2, quarterNote3])
 			try tuplet.replaceNote(at: 0, with: eighthNote)
 		}
 	}
 
-	func testReplaceNoteInTupletWithNoteTooShort() async throws {
+	@Test func replaceNoteInTupletWithNoteTooShort() async throws {
 		#expect(throws: TupletError.replacementNotSameDuration) {
 			let triplet = try? Tuplet(3, .quarter, notes: [quarterNote1, quarterNote2, quarterNote3])
-			XCTAssertNotNil(triplet)
+			#expect(triplet != nil)
 			var tuplet = try Tuplet(5, .quarter, notes: [
 				triplet!, quarterNote1, quarterNote2, quarterNote3,
 			])
@@ -486,10 +486,10 @@ import Testing
 		}
 	}
 
-	func testReplaceNoteInTupletWithNoteTooLong() async throws {
+	@Test func replaceNoteInTupletWithNoteTooLong() async throws {
 		#expect(throws: TupletError.replacementNotSameDuration) {
 			let triplet = try? Tuplet(3, .eighth, notes: [eighthNote, eighthNote, eighthNote])
-			XCTAssertNotNil(triplet)
+			#expect(triplet != nil)
 			var tuplet = try Tuplet(5, .eighth, notes: [
 				triplet!, eighthNote, eighthNote, eighthNote,
 			])
@@ -497,7 +497,7 @@ import Testing
 		}
 	}
 
-	func testReplaceNoteWithTupletTooLong() async throws {
+	@Test func replaceNoteWithTupletTooLong() async throws {
 		#expect(throws: TupletError.replacementNotSameDuration) {
 			let triplet = try Tuplet(3, .eighth, notes: [eighthNote, eighthNote, eighthNote])
 			var tuplet = try Tuplet(5, .eighth, notes: [eighthNote, eighthNote, eighthNote, eighthNote, eighthNote])
@@ -507,134 +507,118 @@ import Testing
 
 	// MARK: Successes
 
-	func testReplaceNoteWithRestOfSameDuration() async throws {
-		assertNoErrorThrown {
-			var tuplet = try Tuplet(3, .quarter, notes: [quarterNote1, quarterNote2, quarterNote3])
-			try tuplet.replaceNote(at: 0, with: quarterRest)
-			#expect(try tuplet.note(at: 0) == quarterRest)
-			#expect(try tuplet.note(at: 1) == quarterNote2)
-			#expect(try tuplet.note(at: 2) == quarterNote3)
-		}
+	@Test func replaceNoteWithRestOfSameDuration() async throws {
+		var tuplet = try Tuplet(3, .quarter, notes: [quarterNote1, quarterNote2, quarterNote3])
+		try tuplet.replaceNote(at: 0, with: quarterRest)
+		#expect(try tuplet.note(at: 0) == quarterRest)
+		#expect(try tuplet.note(at: 1) == quarterNote2)
+		#expect(try tuplet.note(at: 2) == quarterNote3)
 	}
 
-	func testReplaceNoteInTupletWithRestOfSameDuration() async throws {
-		assertNoErrorThrown {
-			let triplet = try? Tuplet(3, .quarter, notes: [quarterNote1, quarterNote2, quarterNote3])
-			XCTAssertNotNil(triplet)
-			var tuplet = try Tuplet(5, .quarter, notes: [
-				triplet!, quarterNote1, quarterNote2, quarterNote3,
-			])
-			try tuplet.replaceNote(at: 1, with: quarterRest)
-			#expect(try tuplet.note(at: 0) == quarterNote1)
-			#expect(try tuplet.note(at: 1) == quarterRest)
-			#expect(try tuplet.note(at: 2) == quarterNote3)
-			#expect(try tuplet.note(at: 3) == quarterNote1)
-			#expect(try tuplet.note(at: 4) == quarterNote2)
-			#expect(try tuplet.note(at: 5) == quarterNote3)
-		}
+	@Test func replaceNoteInTupletWithRestOfSameDuration() async throws {
+		let triplet = try? Tuplet(3, .quarter, notes: [quarterNote1, quarterNote2, quarterNote3])
+		#expect(triplet != nil)
+		var tuplet = try Tuplet(5, .quarter, notes: [
+			triplet!, quarterNote1, quarterNote2, quarterNote3,
+		])
+		try tuplet.replaceNote(at: 1, with: quarterRest)
+		#expect(try tuplet.note(at: 0) == quarterNote1)
+		#expect(try tuplet.note(at: 1) == quarterRest)
+		#expect(try tuplet.note(at: 2) == quarterNote3)
+		#expect(try tuplet.note(at: 3) == quarterNote1)
+		#expect(try tuplet.note(at: 4) == quarterNote2)
+		#expect(try tuplet.note(at: 5) == quarterNote3)
 	}
 
-	func testReplaceNoteWithNoteOfSameDuration() async throws {
-		assertNoErrorThrown {
-			var tuplet = try Tuplet(3, .quarter, notes: [quarterNote1, quarterNote2, quarterNote3])
-			try tuplet.replaceNote(at: 0, with: quarterNote3)
-			#expect(try tuplet.note(at: 0) == quarterNote3)
-			#expect(try tuplet.note(at: 1) == quarterNote2)
-			#expect(try tuplet.note(at: 2) == quarterNote3)
-		}
+	@Test func replaceNoteWithNoteOfSameDuration() async throws {
+		var tuplet = try Tuplet(3, .quarter, notes: [quarterNote1, quarterNote2, quarterNote3])
+		try tuplet.replaceNote(at: 0, with: quarterNote3)
+		#expect(try tuplet.note(at: 0) == quarterNote3)
+		#expect(try tuplet.note(at: 1) == quarterNote2)
+		#expect(try tuplet.note(at: 2) == quarterNote3)
 	}
 
-	func testReplaceNoteInTupletWithNoteOfSameDuration() async throws {
-		assertNoErrorThrown {
-			let triplet = try Tuplet(3, .quarter, notes: [quarterNote1, quarterNote2, quarterNote3])
-			var tuplet = try Tuplet(5,
-									.quarter,
-									notes: [triplet, quarterNote1, quarterNote2, quarterNote3])
-			try tuplet.replaceNote(at: 1, with: quarterNote1)
-			#expect(try tuplet.note(at: 0) == quarterNote1)
-			#expect(try tuplet.note(at: 1) == quarterNote1)
-			#expect(try tuplet.note(at: 2) == quarterNote3)
-			#expect(try tuplet.note(at: 3) == quarterNote1)
-			#expect(try tuplet.note(at: 4) == quarterNote2)
-			#expect(try tuplet.note(at: 5) == quarterNote3)
-		}
+	@Test func replaceNoteInTupletWithNoteOfSameDuration() async throws {
+		let triplet = try Tuplet(3, .quarter, notes: [quarterNote1, quarterNote2, quarterNote3])
+		var tuplet = try Tuplet(5, .quarter, notes: [triplet, quarterNote1, quarterNote2, quarterNote3])
+		try tuplet.replaceNote(at: 1, with: quarterNote1)
+		#expect(try tuplet.note(at: 0) == quarterNote1)
+		#expect(try tuplet.note(at: 1) == quarterNote1)
+		#expect(try tuplet.note(at: 2) == quarterNote3)
+		#expect(try tuplet.note(at: 3) == quarterNote1)
+		#expect(try tuplet.note(at: 4) == quarterNote2)
+		#expect(try tuplet.note(at: 5) == quarterNote3)
 	}
 
-	func testReplaceNoteTieWithNoteOfSameDuration() async throws {
-		assertNoErrorThrown {
-			var beginTieNote = eighthNote!
-			beginTieNote.tie = .begin
-			var beginAndEndTieNote = eighthNote!
-			beginAndEndTieNote.tie = .beginAndEnd
-			var endTieNote = eighthNote!
-			endTieNote.tie = .end
+	@Test func replaceNoteTieWithNoteOfSameDuration() async throws {
+		var beginTieNote = eighthNote!
+		beginTieNote.tie = .begin
+		var beginAndEndTieNote = eighthNote!
+		beginAndEndTieNote.tie = .beginAndEnd
+		var endTieNote = eighthNote!
+		endTieNote.tie = .end
 
-			var tupletBegin = try Tuplet(3, .eighth, notes: [eighthNote, eighthNote, beginTieNote])
-			try tupletBegin.replaceNote(at: 2, with: eighthNote)
-			#expect(try tupletBegin.note(at: 2) == beginTieNote)
+		var tupletBegin = try Tuplet(3, .eighth, notes: [eighthNote, eighthNote, beginTieNote])
+		try tupletBegin.replaceNote(at: 2, with: eighthNote)
+		#expect(try tupletBegin.note(at: 2) == beginTieNote)
 
-			var tupletBeginAndEnd = try Tuplet(3, .eighth, notes: [eighthNote, beginTieNote, beginAndEndTieNote])
-			try tupletBeginAndEnd.replaceNote(at: 2, with: eighthNote)
-			#expect(try tupletBeginAndEnd.note(at: 2) == beginAndEndTieNote)
+		var tupletBeginAndEnd = try Tuplet(3, .eighth, notes: [eighthNote, beginTieNote, beginAndEndTieNote])
+		try tupletBeginAndEnd.replaceNote(at: 2, with: eighthNote)
+		#expect(try tupletBeginAndEnd.note(at: 2) == beginAndEndTieNote)
 
-			var tupletEnd = try Tuplet(3, .eighth, notes: [endTieNote, eighthNote, eighthNote])
-			try tupletEnd.replaceNote(at: 0, with: eighthNote)
-			#expect(try tupletEnd.note(at: 0) == endTieNote)
-		}
+		var tupletEnd = try Tuplet(3, .eighth, notes: [endTieNote, eighthNote, eighthNote])
+		try tupletEnd.replaceNote(at: 0, with: eighthNote)
+		#expect(try tupletEnd.note(at: 0) == endTieNote)
 	}
 
-	func testReplaceNoteTieWithTupletSameDuration() async throws {
-		assertNoErrorThrown {
-			var beginTieNote = quarterNote1!
-			beginTieNote.tie = .begin
-			var endTieNote = quarterNote1!
-			endTieNote.tie = .end
+	@Test func replaceNoteTieWithTupletSameDuration() async throws {
+		var beginTieNote = quarterNote1!
+		beginTieNote.tie = .begin
+		var endTieNote = quarterNote1!
+		endTieNote.tie = .end
 
-			let triplet = try Tuplet(3, .eighth, notes: [eighthNote, eighthNote, eighthNote])
+		let triplet = try Tuplet(3, .eighth, notes: [eighthNote, eighthNote, eighthNote])
 
-			var tupletBegin = try Tuplet(3, .quarter, notes: [quarterNote2, quarterNote2, beginTieNote])
-			try tupletBegin.replaceNote(at: 2, with: triplet)
-			var eighthNoteTieBegin = eighthNote!
-			eighthNoteTieBegin.tie = .begin
-			#expect(try tupletBegin.note(at: 2) == eighthNote)
-			#expect(try tupletBegin.note(at: 3) == eighthNote)
-			#expect(try tupletBegin.note(at: 4) == eighthNoteTieBegin)
+		var tupletBegin = try Tuplet(3, .quarter, notes: [quarterNote2, quarterNote2, beginTieNote])
+		try tupletBegin.replaceNote(at: 2, with: triplet)
+		var eighthNoteTieBegin = eighthNote!
+		eighthNoteTieBegin.tie = .begin
+		#expect(try tupletBegin.note(at: 2) == eighthNote)
+		#expect(try tupletBegin.note(at: 3) == eighthNote)
+		#expect(try tupletBegin.note(at: 4) == eighthNoteTieBegin)
 
-			var tupletEnd = try Tuplet(3, .quarter, notes: [endTieNote, quarterNote2, quarterNote2])
-			try tupletEnd.replaceNote(at: 0, with: triplet)
-			var eighthNoteTieEnd = eighthNote!
-			eighthNoteTieEnd.tie = .end
-			#expect(try tupletEnd.note(at: 0) == eighthNoteTieEnd)
-			#expect(try tupletEnd.note(at: 1) == eighthNote)
-			#expect(try tupletEnd.note(at: 2) == eighthNote)
-		}
+		var tupletEnd = try Tuplet(3, .quarter, notes: [endTieNote, quarterNote2, quarterNote2])
+		try tupletEnd.replaceNote(at: 0, with: triplet)
+		var eighthNoteTieEnd = eighthNote!
+		eighthNoteTieEnd.tie = .end
+		#expect(try tupletEnd.note(at: 0) == eighthNoteTieEnd)
+		#expect(try tupletEnd.note(at: 1) == eighthNote)
+		#expect(try tupletEnd.note(at: 2) == eighthNote)
 	}
 
-	func testReplaceNoteBeginAndEndTieWithTupletSameDuration() async throws {
-		assertNoErrorThrown {
-			var beginTieNote = quarterNote1!
-			beginTieNote.tie = .begin
-			var beginAndEndTieNote = quarterNote1!
-			beginAndEndTieNote.tie = .beginAndEnd
+	@Test func replaceNoteBeginAndEndTieWithTupletSameDuration() async throws {
+		var beginTieNote = quarterNote1!
+		beginTieNote.tie = .begin
+		var beginAndEndTieNote = quarterNote1!
+		beginAndEndTieNote.tie = .beginAndEnd
 
-			let triplet = try Tuplet(3, .eighth, notes: [eighthNote, eighthNote, eighthNote])
-			var tuplet = try Tuplet(3, .quarter, notes: [quarterNote1, beginTieNote, beginAndEndTieNote])
-			try tuplet.replaceNote(at: 2, with: triplet)
-		}
+		let triplet = try Tuplet(3, .eighth, notes: [eighthNote, eighthNote, eighthNote])
+		var tuplet = try Tuplet(3, .quarter, notes: [quarterNote1, beginTieNote, beginAndEndTieNote])
+		try tuplet.replaceNote(at: 2, with: triplet)
 	}
 
 	// MARK: - replaceNote<T: NoteCollection>(at:with:[T])
 
 	// MARK: Failures
 
-	func testReplaceNoteWithArrayOfNotesTooLong() async throws {
+	@Test func replaceNoteWithArrayOfNotesTooLong() async throws {
 		#expect(throws: TupletError.replacementNotSameDuration) {
 			var triplet = try Tuplet(3, .quarter, notes: [quarterNote1, quarterNote2, quarterNote3])
 			try triplet.replaceNote(at: 1, with: [eighthNote, eighthNote, eighthNote])
 		}
 	}
 
-	func testReplaceNoteWithArrayOfNotesTooShort() async throws {
+	@Test func replaceNoteWithArrayOfNotesTooShort() async throws {
 		#expect(throws: TupletError.replacementNotSameDuration) {
 			var triplet = try Tuplet(3,
 									 NoteDuration(value: .quarter, dotCount: 1),
@@ -643,7 +627,7 @@ import Testing
 		}
 	}
 
-	func testReplaceNoteInTupletWithArrayOfNotesTooLong() async throws {
+	@Test func replaceNoteInTupletWithArrayOfNotesTooLong() async throws {
 		#expect(throws: TupletError.replacementNotSameDuration) {
 			let triplet = try Tuplet(3, .quarter, notes: [quarterNote1, quarterNote2, quarterNote3])
 			var tuplet = try Tuplet(5,
@@ -653,7 +637,7 @@ import Testing
 		}
 	}
 
-	func testReplaceNoteInTupletWithArrayOfNotesTooShort() async throws {
+	@Test func replaceNoteInTupletWithArrayOfNotesTooShort() async throws {
 		#expect(throws: TupletError.replacementNotSameDuration) {
 			let triplet = try Tuplet(3, .quarter, notes: [quarterNote1, quarterNote2, quarterNote3])
 			var tuplet = try Tuplet(5,
@@ -663,7 +647,7 @@ import Testing
 		}
 	}
 
-	func testReplaceNoteInTupletWithArrayOfTupletsTooLong() async throws {
+	@Test func replaceNoteInTupletWithArrayOfTupletsTooLong() async throws {
 		#expect(throws: TupletError.replacementNotSameDuration) {
 			let triplet = try Tuplet(3, .quarter, notes: [quarterNote1, quarterNote2, quarterNote3])
 			var tuplet = try Tuplet(5,
@@ -674,7 +658,7 @@ import Testing
 		}
 	}
 
-	func testReplaceNoteInTupletWithArrayOfTupletsTooShort() async throws {
+	@Test func replaceNoteInTupletWithArrayOfTupletsTooShort() async throws {
 		#expect(throws: TupletError.replacementNotSameDuration) {
 			let triplet = try Tuplet(3,
 									 NoteDuration(value: .quarter, dotCount: 1),
@@ -689,7 +673,7 @@ import Testing
 
 	// MARK: Successes
 
-	func testReplaceNoteWithArrayOfNotesSameDuration() async throws {
+	@Test func replaceNoteWithArrayOfNotesSameDuration() async throws {
 		var tuplet = try Tuplet(3, .quarter, notes: [quarterNote1, quarterNote2, quarterNote3])
 		try tuplet.replaceNote(at: 0, with: [eighthNote, eighthNote])
 		#expect(try tuplet.note(at: 0) == eighthNote)
@@ -698,7 +682,7 @@ import Testing
 		#expect(try tuplet.note(at: 3) == quarterNote3)
 	}
 
-	func testReplaceNoteWithArrayOfRestsSameDuration() async throws {
+	@Test func replaceNoteWithArrayOfRestsSameDuration() async throws {
 		var tuplet = try Tuplet(3,
 								NoteDuration(value: .quarter, dotCount: 1),
 								notes: [dottedQuarterNote, dottedQuarterNote, dottedQuarterNote])
@@ -710,7 +694,7 @@ import Testing
 		#expect(try tuplet.note(at: 4) == dottedQuarterNote)
 	}
 
-	func testReplaceNoteInTupletWithArrayOfNotesSameDuration() async throws {
+	@Test func replaceNoteInTupletWithArrayOfNotesSameDuration() async throws {
 		let triplet = try Tuplet(3, .quarter, notes: [quarterNote1, quarterNote2, quarterNote3])
 		var tuplet = try Tuplet(5, .quarter, notes: [quarterNote1, triplet, quarterNote2, quarterNote3])
 		try tuplet.replaceNote(at: 2, with: [eighthNote, eighthNote])
@@ -723,10 +707,8 @@ import Testing
 		#expect(try tuplet.note(at: 6) == quarterNote3)
 	}
 
-	func testReplaceNoteWithArrayOfTupletsSameDuration() async throws {
-		var tuplet = try Tuplet(5,
-								.quarter,
-								notes: [quarterNote1, quarterNote1, quarterNote1, quarterNote1, quarterNote1])
+	@Test func replaceNoteWithArrayOfTupletsSameDuration() async throws {
+		var tuplet = try Tuplet(5, .quarter, notes: [quarterNote1, quarterNote1, quarterNote1, quarterNote1, quarterNote1])
 		let triplet = try Tuplet(3, .sixteenth, notes: [sixteenthNote, sixteenthNote, sixteenthNote])
 		try tuplet.replaceNote(at: 1, with: [triplet, triplet])
 		#expect(try tuplet.note(at: 0) == quarterNote1)
@@ -811,24 +793,22 @@ import Testing
         #expect(try tuplet.note(at: 8) == eighthNote)
     }
 
-	func testReplaceNoteBeginAndEndTieWithArrayOfNotes() async throws {
-		assertNoErrorThrown {
-			var beginAndEndNote = quarterNote1!
-			beginAndEndNote.tie = .beginAndEnd
-			var beginNote = quarterNote2!
-			beginNote.tie = .begin
+	@Test func replaceNoteBeginAndEndTieWithArrayOfNotes() async throws {
+		var beginAndEndNote = quarterNote1!
+		beginAndEndNote.tie = .beginAndEnd
+		var beginNote = quarterNote2!
+		beginNote.tie = .begin
 
-			var tuplet = try Tuplet(3, .quarter, notes: [quarterNote1, beginNote, beginAndEndNote])
-			try tuplet.replaceNote(at: 2, with: [eighthNote, eighthNote])
-			var endEighth = eighthNote!
-			endEighth.tie = .end
-			var beginEighth = eighthNote!
-			beginEighth.tie = .begin
-			#expect(try tuplet.note(at: 0) == quarterNote1)
-			#expect(try tuplet.note(at: 1) == beginNote)
-			#expect(try tuplet.note(at: 2) == endEighth)
-			#expect(try tuplet.note(at: 3) == beginEighth)
-		}
+		var tuplet = try Tuplet(3, .quarter, notes: [quarterNote1, beginNote, beginAndEndNote])
+		try tuplet.replaceNote(at: 2, with: [eighthNote, eighthNote])
+		var endEighth = eighthNote!
+		endEighth.tie = .end
+		var beginEighth = eighthNote!
+		beginEighth.tie = .begin
+		#expect(try tuplet.note(at: 0) == quarterNote1)
+		#expect(try tuplet.note(at: 1) == beginNote)
+		#expect(try tuplet.note(at: 2) == endEighth)
+		#expect(try tuplet.note(at: 3) == beginEighth)
 	}
 
 	// MARK: - replaceNotes<T: NoteCollection>(in:with:T)
@@ -962,7 +942,7 @@ import Testing
 		}
 	}
 
-	func testReplaceNotesWithFirstNoteBeginAndEndTieWithNoteSameDuration() async throws {
+	@Test func replaceNotesWithFirstNoteBeginAndEndTieWithNoteSameDuration() async throws {
 		#expect(throws: TupletError.invalidTieState) {
 			var beginAndEnd = eighthNote!
 			beginAndEnd.tie = .beginAndEnd
@@ -973,7 +953,7 @@ import Testing
 		}
 	}
 
-	func testReplaceNotesWithLastNoteBeginAndEndTieWithNoteSameDuration() async throws {
+	@Test func replaceNotesWithLastNoteBeginAndEndTieWithNoteSameDuration() async throws {
 		#expect(throws: TupletError.invalidTieState) {
 			var beginAndEnd = eighthNote!
 			beginAndEnd.tie = .beginAndEnd
@@ -986,82 +966,70 @@ import Testing
 
 	// MARK: Successes
 
-	func testReplaceNotesWithNoteSameDuration() async throws {
-		assertNoErrorThrown {
-			var tuplet = try Tuplet(5, .eighth, notes: [eighthNote, eighthNote, eighthNote, eighthNote, eighthNote])
-			try tuplet.replaceNotes(in: 2 ... 3, with: quarterNote1)
-			#expect(try tuplet.note(at: 0) == eighthNote)
-			#expect(try tuplet.note(at: 1) == eighthNote)
-			#expect(try tuplet.note(at: 2) == quarterNote1)
-			#expect(try tuplet.note(at: 3) == eighthNote)
-		}
+	@Test func replaceNotesWithNoteSameDuration() async throws {
+		var tuplet = try Tuplet(5, .eighth, notes: [eighthNote, eighthNote, eighthNote, eighthNote, eighthNote])
+		try tuplet.replaceNotes(in: 2 ... 3, with: quarterNote1)
+		#expect(try tuplet.note(at: 0) == eighthNote)
+		#expect(try tuplet.note(at: 1) == eighthNote)
+		#expect(try tuplet.note(at: 2) == quarterNote1)
+		#expect(try tuplet.note(at: 3) == eighthNote)
 	}
 
-	func testReplaceNotesWithTupletSameDuration() async throws {
-		assertNoErrorThrown {
-			var tuplet = try Tuplet(5, .eighth, notes: [eighthNote, eighthNote, eighthNote, eighthNote, eighthNote])
-			let triplet = try Tuplet(3, .eighth, notes: [eighthChord, eighthNote, eighthRest])
-			try tuplet.replaceNotes(in: 0 ... 1, with: triplet)
-			#expect(try tuplet.note(at: 0) == eighthChord)
-			#expect(try tuplet.note(at: 1) == eighthNote)
-			#expect(try tuplet.note(at: 2) == eighthRest)
-			#expect(try tuplet.note(at: 3) == eighthNote)
-			#expect(try tuplet.note(at: 4) == eighthNote)
-			#expect(try tuplet.note(at: 5) == eighthNote)
-		}
+	@Test func replaceNotesWithTupletSameDuration() async throws {
+		var tuplet = try Tuplet(5, .eighth, notes: [eighthNote, eighthNote, eighthNote, eighthNote, eighthNote])
+		let triplet = try Tuplet(3, .eighth, notes: [eighthChord, eighthNote, eighthRest])
+		try tuplet.replaceNotes(in: 0 ... 1, with: triplet)
+		#expect(try tuplet.note(at: 0) == eighthChord)
+		#expect(try tuplet.note(at: 1) == eighthNote)
+		#expect(try tuplet.note(at: 2) == eighthRest)
+		#expect(try tuplet.note(at: 3) == eighthNote)
+		#expect(try tuplet.note(at: 4) == eighthNote)
+		#expect(try tuplet.note(at: 5) == eighthNote)
 	}
 
-	func testReplaceNotesFromTupletAndNonTupletWithNoteSameDuration() async throws {
-		assertNoErrorThrown {
-			let triplet = try Tuplet(3, .eighth, notes: [eighthNote, eighthNote, eighthNote])
-			var tuplet = try Tuplet(5, .eighth, notes: [eighthNote, eighthNote, triplet, eighthNote])
-			try tuplet.replaceNotes(in: 2 ... 5, with: dottedQuarterNote)
-			#expect(try tuplet.note(at: 0) == eighthNote)
-			#expect(try tuplet.note(at: 1) == eighthNote)
-			#expect(try tuplet.note(at: 2) == dottedQuarterNote)
-		}
+	@Test func replaceNotesFromTupletAndNonTupletWithNoteSameDuration() async throws {
+		let triplet = try Tuplet(3, .eighth, notes: [eighthNote, eighthNote, eighthNote])
+		var tuplet = try Tuplet(5, .eighth, notes: [eighthNote, eighthNote, triplet, eighthNote])
+		try tuplet.replaceNotes(in: 2 ... 5, with: dottedQuarterNote)
+		#expect(try tuplet.note(at: 0) == eighthNote)
+		#expect(try tuplet.note(at: 1) == eighthNote)
+		#expect(try tuplet.note(at: 2) == dottedQuarterNote)
 	}
 
-	func testReplaceNotesFromTupletAndNonTupletWithTupletSameDuration() async throws {
-		assertNoErrorThrown {
-			let triplet = try Tuplet(3, .eighth, notes: [eighthNote, eighthNote, eighthNote])
-			var tuplet = try Tuplet(5, .eighth, notes: [eighthNote, eighthNote, triplet, eighthNote])
-			let quadruplet = try Tuplet(4, .eighth, notes: [eighthChord, eighthRest, eighthNote, eighthChord])
-			try tuplet.replaceNotes(in: 2 ... 5, with: quadruplet)
-			#expect(try tuplet.note(at: 0) == eighthNote)
-			#expect(try tuplet.note(at: 1) == eighthNote)
-			#expect(try tuplet.note(at: 2) == eighthChord)
-			#expect(try tuplet.note(at: 3) == eighthRest)
-			#expect(try tuplet.note(at: 4) == eighthNote)
-			#expect(try tuplet.note(at: 5) == eighthChord)
-		}
+	@Test func replaceNotesFromTupletAndNonTupletWithTupletSameDuration() async throws {
+		let triplet = try Tuplet(3, .eighth, notes: [eighthNote, eighthNote, eighthNote])
+		var tuplet = try Tuplet(5, .eighth, notes: [eighthNote, eighthNote, triplet, eighthNote])
+		let quadruplet = try Tuplet(4, .eighth, notes: [eighthChord, eighthRest, eighthNote, eighthChord])
+		try tuplet.replaceNotes(in: 2 ... 5, with: quadruplet)
+		#expect(try tuplet.note(at: 0) == eighthNote)
+		#expect(try tuplet.note(at: 1) == eighthNote)
+		#expect(try tuplet.note(at: 2) == eighthChord)
+		#expect(try tuplet.note(at: 3) == eighthRest)
+		#expect(try tuplet.note(at: 4) == eighthNote)
+		#expect(try tuplet.note(at: 5) == eighthChord)
 	}
 
-	func testReplaceNotesFrom2FullTupletsWithNoteSameDuration() async throws {
-		assertNoErrorThrown {
-			let triplet = try Tuplet(3, .sixteenth, notes: [sixteenthNote, sixteenthNote, sixteenthNote])
-			var tuplet = try Tuplet(5, .sixteenth, notes: [sixteenthNote, triplet, triplet])
-			try tuplet.replaceNotes(in: 1 ... 6, with: quarterNote1)
-			#expect(try tuplet.note(at: 0) == sixteenthNote)
-			#expect(try tuplet.note(at: 1) == quarterNote1)
-		}
+	@Test func replaceNotesFrom2FullTupletsWithNoteSameDuration() async throws {
+		let triplet = try Tuplet(3, .sixteenth, notes: [sixteenthNote, sixteenthNote, sixteenthNote])
+		var tuplet = try Tuplet(5, .sixteenth, notes: [sixteenthNote, triplet, triplet])
+		try tuplet.replaceNotes(in: 1 ... 6, with: quarterNote1)
+		#expect(try tuplet.note(at: 0) == sixteenthNote)
+		#expect(try tuplet.note(at: 1) == quarterNote1)
 	}
 
-	func testReplaceNotesFrom2FullTupletsWithTupletSameDuration() async throws {
-		assertNoErrorThrown {
-			let triplet = try Tuplet(3, .eighth, notes: [eighthNote, eighthNote, eighthNote])
-			var tuplet = try Tuplet(5, .eighth, notes: [eighthNote, triplet, triplet])
-			let replacementTuplet = try Tuplet(5,
-											   .eighth,
-											   notes: [eighthChord, eighthNote, eighthRest, eighthNote, eighthChord])
-			try tuplet.replaceNotes(in: 1 ... 6, with: replacementTuplet)
-			#expect(try tuplet.note(at: 0) == eighthNote)
-			#expect(try tuplet.note(at: 1) == eighthChord)
-			#expect(try tuplet.note(at: 2) == eighthNote)
-			#expect(try tuplet.note(at: 3) == eighthRest)
-			#expect(try tuplet.note(at: 4) == eighthNote)
-			#expect(try tuplet.note(at: 5) == eighthChord)
-		}
+	@Test func replaceNotesFrom2FullTupletsWithTupletSameDuration() async throws {
+		let triplet = try Tuplet(3, .eighth, notes: [eighthNote, eighthNote, eighthNote])
+		var tuplet = try Tuplet(5, .eighth, notes: [eighthNote, triplet, triplet])
+		let replacementTuplet = try Tuplet(5,
+										   .eighth,
+										   notes: [eighthChord, eighthNote, eighthRest, eighthNote, eighthChord])
+		try tuplet.replaceNotes(in: 1 ... 6, with: replacementTuplet)
+		#expect(try tuplet.note(at: 0) == eighthNote)
+		#expect(try tuplet.note(at: 1) == eighthChord)
+		#expect(try tuplet.note(at: 2) == eighthNote)
+		#expect(try tuplet.note(at: 3) == eighthRest)
+		#expect(try tuplet.note(at: 4) == eighthNote)
+		#expect(try tuplet.note(at: 5) == eighthChord)
 	}
 
 	// MARK: - replaceNotes<T: NoteCollection>(in:with:[T])
@@ -1071,14 +1039,14 @@ import Testing
 
 	// MARK: Failures
 
-	func testReplaceNotesInTupletWithNotesTooLarge() async throws {
+	@Test func replaceNotesInTupletWithNotesTooLarge() async throws {
 		#expect(throws: TupletError.replacementNotSameDuration) {
 			var tuplet = try Tuplet(3, .eighth, notes: [eighthNote, eighthNote, eighthNote])
 			try tuplet.replaceNotes(in: 0 ... 1, with: [eighthNote, eighthNote, eighthNote])
 		}
 	}
 
-	func testReplaceNotesInvalidRangeOutOfBounds() async throws {
+	@Test func replaceNotesInvalidRangeOutOfBounds() async throws {
 		#expect(throws: TupletError.invalidIndex) {
 			var tuplet = try Tuplet(3, .eighth, notes: [eighthNote, eighthNote, eighthNote])
 			try tuplet.replaceNotes(in: 1 ... 4, with: [eighthNote, eighthNote, eighthNote, eighthNote])
@@ -1087,7 +1055,7 @@ import Testing
 
 	// MARK: Successes
 
-	func testReplaceNotesInMultiNestedCompoundTupletWithNotesOfSameDuration() async throws {
+	@Test func replaceNotesInMultiNestedCompoundTupletWithNotesOfSameDuration() async throws {
 		let triplet = try Tuplet(3, .eighth, notes: [eighthNote, eighthNote, eighthNote])
 		let quintuplet = try Tuplet(5, .eighth, notes: [triplet, triplet, eighthNote])
 		var tuplet = try Tuplet(9, .eighth, notes: [triplet, quintuplet, eighthNote, eighthNote, eighthNote])
@@ -1135,7 +1103,7 @@ import Testing
 		#expect(try tuplet.note(at: 2) == quarterNote1)
 	}
 
-	func testReplaceNotesFromFirstToSecondToLastInTupletWithNotesOfSameDuration() async throws {
+	@Test func replaceNotesFromFirstToSecondToLastInTupletWithNotesOfSameDuration() async throws {
 		let triplet = try Tuplet(3, .quarter, notes: [quarterNote1, quarterNote2, quarterNote3])
 		var tuplet = try Tuplet(5, .quarter, notes: [quarterNote1, triplet, quarterNote2, quarterNote3])
 		try tuplet.replaceNotes(in: 0 ... 3, with: [quarterNote3, quarterNote2, quarterNote1])
@@ -1148,7 +1116,7 @@ import Testing
 
 	// MARK: - isCompound
 
-	func testIsCompoundTrue() async throws {
+	@Test func isCompoundTrue() async throws {
 		let triplet = try? Tuplet(3, .eighth, notes: [eighthNote, eighthNote, eighthNote])
 		#expect(triplet != nil)
 		let compound = try Tuplet(
@@ -1161,7 +1129,7 @@ import Testing
 		#expect(compound.isCompound)
 	}
 
-	func testIsCompoundFalse() async throws {
+	@Test func isCompoundFalse() async throws {
 		let triplet = try Tuplet(3, .quarter, notes: [quarterNote1, quarterNote2, quarterNote3])
 		#expect(!triplet.isCompound)
 	}
@@ -1170,19 +1138,19 @@ import Testing
 
 	// MARK: Failures
 
-	func testEqualityDifferentNumberOfNotes() async throws {
+	@Test func equalityDifferentNumberOfNotes() async throws {
 		let tuplet1 = try Tuplet(3, .eighth, notes: [eighthNote, eighthNote, eighthNote])
 		let tuplet2 = try Tuplet(3, .eighth, notes: [quarterNote1, eighthNote])
 		#expect(tuplet1 != tuplet2)
 	}
 
-	func testEqualityDifferentNotes() async throws {
+	@Test func equalityDifferentNotes() async throws {
 		let tuplet1 = try Tuplet(3, .quarter, notes: [quarterNote1, quarterNote2, quarterNote3])
 		let tuplet2 = try Tuplet(3, .quarter, notes: [quarterNote1, quarterNote1, quarterNote1])
 		#expect(tuplet1 != tuplet2)
 	}
 
-	func testEqualitySameNotesDifferentTimingCount() async throws {
+	@Test func equalitySameNotesDifferentTimingCount() async throws {
 		let tuplet1 = try Tuplet(3, .eighth, notes: [eighthNote, eighthNote, eighthNote])
 		let tuplet2 = try Tuplet(3, .eighth, inSpaceOf: 1, notes: [eighthNote, eighthNote, eighthNote])
 		#expect(tuplet1 != tuplet2)

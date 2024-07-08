@@ -21,13 +21,13 @@ import Testing
 
 	// MARK: Failures
 
-	func testInitInvalidRepeatCount() async throws {
+	@Test func initInvalidRepeatCount() async throws {
 		#expect(throws: MeasureRepeatError.invalidRepeatCount) {
 			_ = try MeasureRepeat(measures: [measure1], repeatCount: -2)
 		}
 	}
 
-	func testInitNoMeasures() async throws {
+	@Test func initNoMeasures() async throws {
 		#expect(throws: MeasureRepeatError.noMeasures) {
 			_ = try MeasureRepeat(measures: [])
 		}
@@ -35,22 +35,22 @@ import Testing
 
 	// MARK: Successes
 
-	func testInitNotSpecifiedRepeatCount() async throws {
+	@Test func initNotSpecifiedRepeatCount() async throws {
 		let measureRepeat = try MeasureRepeat(measures: [measure1])
 		#expect(measureRepeat.repeatCount == 1)
 	}
 
-	func testInitSingleMeasure() async throws {
+	@Test func initSingleMeasure() async throws {
 		_ = try MeasureRepeat(measures: [measure2], repeatCount: 3)
 	}
 
-	func testInitMultipleMeasures() async throws {
+	@Test func initMultipleMeasures() async throws {
 		_ = try MeasureRepeat(measures: [measure1, measure2], repeatCount: 4)
 	}
 
 	// MARK: - expand()
 
-	func testExpandSingleMeasureRepeatedOnce() async throws {
+	@Test func expandSingleMeasureRepeatedOnce() async throws {
 		let measureRepeat = try MeasureRepeat(measures: [measure1], repeatCount: 1)
 		let expected = [measure1, RepeatedMeasure(immutableMeasure: measure1)] as [ImmutableMeasure]
 		let actual = measureRepeat.expand()
@@ -62,7 +62,7 @@ import Testing
 		#expect(String(describing: measureRepeat) == "[ |4/4: [1/8c1, 1/8c1]| ] × 2")
 	}
 
-	func testExpandSingleMeasureRepeatedMany() async throws {
+	@Test func expandSingleMeasureRepeatedMany() async throws {
 		let measureRepeat = try MeasureRepeat(measures: [measure1], repeatCount: 3)
 		let repeatedMeasure = RepeatedMeasure(immutableMeasure: measure1)
 		let expected = [measure1, repeatedMeasure, repeatedMeasure, repeatedMeasure] as [ImmutableMeasure]
@@ -75,7 +75,7 @@ import Testing
 		#expect(String(describing: measureRepeat) == "[ |4/4: [1/8c1, 1/8c1]| ] × 4")
 	}
 
-	func testExpandManyMeasuresRepeatedOnce() async throws {
+	@Test func expandManyMeasuresRepeatedOnce() async throws {
 		let measureRepeat = try MeasureRepeat(measures: [measure1, measure2], repeatCount: 1)
 		let repeatedMeasure1 = RepeatedMeasure(immutableMeasure: measure1)
 		let repeatedMeasure2 = RepeatedMeasure(immutableMeasure: measure2)
@@ -89,7 +89,7 @@ import Testing
 		#expect(String(describing: measureRepeat) == "[ |4/4: [1/8c1, 1/8c1]|, |4/4: [1/4d1, 1/4d1]| ] × 2")
 	}
 
-	func testExpandManyMeasuresRepeatedMany() async throws {
+	@Test func expandManyMeasuresRepeatedMany() async throws {
 		let measureRepeat = try MeasureRepeat(measures: [measure1, measure2], repeatCount: 3)
 		let repeatedMeasure1 = RepeatedMeasure(immutableMeasure: measure1)
 		let repeatedMeasure2 = RepeatedMeasure(immutableMeasure: measure2)
@@ -112,25 +112,25 @@ import Testing
 
 	// MARK: Failures
 
-	func testEqualitySameMeasureCountDifferentMeasures() async throws {
+	@Test func equalitySameMeasureCountDifferentMeasures() async throws {
 		let measureRepeat1 = try MeasureRepeat(measures: [measure1, measure2, measure1])
 		let measureRepeat2 = try MeasureRepeat(measures: [measure2, measure1, measure2])
 		#expect(measureRepeat1 != measureRepeat2)
 	}
 
-	func testEqualityDifferentMeasureCountSameMeasures() async throws {
+	@Test func equalityDifferentMeasureCountSameMeasures() async throws {
 		let measureRepeat1 = try MeasureRepeat(measures: [measure1, measure2])
 		let measureRepeat2 = try MeasureRepeat(measures: [measure1, measure2, measure1])
 		#expect(measureRepeat1 != measureRepeat2)
 	}
 
-	func testEqualityDifferentMeasureCountDifferentMeasures() async throws {
+	@Test func equalityDifferentMeasureCountDifferentMeasures() async throws {
 		let measureRepeat1 = try MeasureRepeat(measures: [measure1, measure2])
 		let measureRepeat2 = try MeasureRepeat(measures: [measure2, measure1, measure2])
 		#expect(measureRepeat1 != measureRepeat2)
 	}
 
-	func testEqualityDifferentRepeatCount() async throws {
+	@Test func equalityDifferentRepeatCount() async throws {
 		let measureRepeat1 = try MeasureRepeat(measures: [measure1, measure2], repeatCount: 2)
 		let measureRepeat2 = try MeasureRepeat(measures: [measure1, measure2], repeatCount: 3)
 		#expect(measureRepeat1 != measureRepeat2)
@@ -138,7 +138,7 @@ import Testing
 
 	// MARK: Successes
 
-	func testEqualitySucceeds() async throws {
+	@Test func equalitySucceeds() async throws {
 		let measureRepeat1 = try MeasureRepeat(measures: [measure1], repeatCount: 2)
 		let measureRepeat2 = try MeasureRepeat(measures: [measure1], repeatCount: 2)
 		#expect(measureRepeat1 == measureRepeat2)

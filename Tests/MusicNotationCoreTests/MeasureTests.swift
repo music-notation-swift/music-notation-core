@@ -1252,17 +1252,17 @@ import Testing
 
 	@Test func oneClefAtBeginningNoOriginal() async throws {
         let note = Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1))
-		var testMeasure = Measure(timeSignature: timeSignature, notes: [
-			[
-				note, note, note, note,
-			],
-		])
+		var testMeasure = Measure(timeSignature: timeSignature, notes: [[note, note, note, note]])
 
 		let newClef: Clef = .bass
 		try testMeasure.changeClef(newClef, at: 0)
 		#expect(try testMeasure.clef(at: 0, inSet: 0) == newClef)
 		(1 ..< testMeasure.noteCount[0]).forEach {
-			#expect(try testMeasure.clef(at: $0, inSet: 0) == newClef)
+			do {
+				#expect(try testMeasure.clef(at: $0, inSet: 0) == newClef)
+			} catch {
+				Issue.record("Should not have thrown")
+			}
 		}
 	}
 
@@ -1280,17 +1280,18 @@ import Testing
 		try testMeasure.changeClef(newClef, at: 0)
 		#expect(try testMeasure.clef(at: 0, inSet: 0) == newClef)
 		(1 ..< testMeasure.noteCount[0]).forEach {
-			#expect(try testMeasure.clef(at: $0, inSet: 0) == newClef)
+			do {
+				#expect(try testMeasure.clef(at: $0, inSet: 0) == newClef)
+			} catch {
+				Issue.record("Should not have thrown")
+			}
+
 		}
 	}
 
 	@Test func oneClefAtBeginningAnd1Other() async throws {
         let note = Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1))
-		var testMeasure = Measure(timeSignature: timeSignature, notes: [
-			[
-				note, note, note, note,
-			],
-		])
+		var testMeasure = Measure(timeSignature: timeSignature, notes: [[note, note, note, note]])
 
 		let newClef1: Clef = .bass
 		let newClef2: Clef = .alto
@@ -1298,9 +1299,13 @@ import Testing
 		try testMeasure.changeClef(newClef2, at: 2)
 		#expect(try testMeasure.clef(at: 0, inSet: 0) == newClef1)
 		#expect(try testMeasure.clef(at: 1, inSet: 0) == newClef1)
-		#expect(try testMeasure.clef(at: 2, inSet: 0) == newClef1)
+		#expect(try testMeasure.clef(at: 2, inSet: 0) == newClef2)
 		(2 ..< testMeasure.noteCount[0]).forEach {
-			#expect(try testMeasure.clef(at: $0, inSet: 0) == newClef2)
+			do {
+				#expect(try testMeasure.clef(at: $0, inSet: 0) == newClef2)
+			} catch {
+				Issue.record("Should not have thrown")
+			}
 		}
 	}
 
@@ -1325,12 +1330,8 @@ import Testing
         let sixteenth = Note(noteDuration: .sixteenth, pitch: SpelledPitch(.c, .octave1))
 
 		var testMeasure = Measure(timeSignature: timeSignature, notes: [
-			[
-				sixteenth, sixteenth, sixteenth, sixteenth, sixteenth, sixteenth, sixteenth, sixteenth,
-			],
-			[
-				eighth, eighth, eighth, eighth,
-			],
+			[sixteenth, sixteenth, sixteenth, sixteenth, sixteenth, sixteenth, sixteenth, sixteenth],
+			[eighth, eighth, eighth, eighth],
 		])
 		let originalClef: Clef = .treble
 		testMeasure.originalClef = originalClef
@@ -1342,20 +1343,41 @@ import Testing
 
 		// set 0
 		(0 ..< 4).forEach {
-			#expect(try testMeasure.clef(at: $0, inSet: 0) == originalClef)
+			do {
+				#expect(try testMeasure.clef(at: $0, inSet: 0) == originalClef)
+			} catch {
+				Issue.record("Should not have thrown")
+			}
+
 		}
 		(4 ..< 7).forEach {
-			#expect(try testMeasure.clef(at: $0, inSet: 0) == newClef1)
+			do {
+				#expect(try testMeasure.clef(at: $0, inSet: 0) == newClef1)
+			} catch {
+				Issue.record("Should not have thrown")
+			}
 		}
 		(7 ..< testMeasure.noteCount[0]).forEach {
-			#expect(try testMeasure.clef(at: $0, inSet: 0) == newClef2)
+			do {
+				#expect(try testMeasure.clef(at: $0, inSet: 0) == newClef2)
+			} catch {
+				Issue.record("Should not have thrown")
+			}
 		}
 		// set 1
 		(0 ..< 2).forEach {
-			#expect(try testMeasure.clef(at: $0, inSet: 1) == originalClef)
+			do {
+				#expect(try testMeasure.clef(at: $0, inSet: 0) == originalClef)
+			} catch {
+				Issue.record("Should not have thrown")
+			}
 		}
 		(2 ..< testMeasure.noteCount[1]).forEach {
-			#expect(try testMeasure.clef(at: $0, inSet: 1) == newClef1)
+			do {
+				#expect(try testMeasure.clef(at: $0, inSet: 1) == newClef1)
+			} catch {
+				Issue.record("Should not have thrown")
+			}
 		}
 	}
 
@@ -1364,12 +1386,8 @@ import Testing
         let sixteenth = Note(noteDuration: .sixteenth, pitch: SpelledPitch(.c, .octave1))
 
 		var testMeasure = Measure(timeSignature: timeSignature, notes: [
-			[
-				sixteenth, sixteenth, sixteenth, sixteenth, sixteenth, sixteenth, sixteenth, sixteenth,
-			],
-			[
-				eighth, eighth, eighth, eighth,
-			],
+			[sixteenth, sixteenth, sixteenth, sixteenth, sixteenth, sixteenth, sixteenth, sixteenth],
+			[eighth, eighth, eighth, eighth],
 		])
 
 		let newClef1: Clef = .bass
@@ -1384,19 +1402,28 @@ import Testing
 			}
 		}
 		(4 ..< 7).forEach {
-			#expect(try testMeasure.clef(at: $0, inSet: 0) == newClef1)
-		}
-		(7 ..< testMeasure.noteCount[0]).forEach {
-			#expect(try testMeasure.clef(at: $0, inSet: 0) == newClef2)
-		}
-		// set 1
-		(0 ..< 2).forEach { index in
-			#expect(throws: MeasureError.noClefSpecified) {
-				_ = try testMeasure.clef(at: index, inSet: 1)
+			do {
+				#expect(try testMeasure.clef(at: $0, inSet: 0) == newClef1)
+			} catch {
+				Issue.record("Should not have thrown")
 			}
 		}
+		(7 ..< testMeasure.noteCount[0]).forEach {
+			do {
+				#expect(try testMeasure.clef(at: $0, inSet: 0) == newClef2)
+			} catch {
+				Issue.record("Should not have thrown")
+			}
+		}
+		// set 1
+		#expect(throws: MeasureError.noClefSpecified) { _ = try testMeasure.clef(at: 0, inSet: 1) }
+		#expect(throws: MeasureError.noClefSpecified) { _ = try testMeasure.clef(at: 1, inSet: 1) }
 		(2 ..< testMeasure.noteCount[1]).forEach {
-			#expect(try testMeasure.clef(at: $0, inSet: 1) == newClef1)
+			do {
+				#expect(try testMeasure.clef(at: $0, inSet: 1) == newClef1)
+			} catch {
+				Issue.record("Should not have thrown")
+			}
 		}
 	}
 
@@ -1416,7 +1443,7 @@ import Testing
 		}
 	}
 
-	func test1ClefNotAtBeginningNoOriginal() async throws {
+	@Test func oneClefNotAtBeginningNoOriginal() async throws {
         let note = Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1))
 		var testMeasure = Measure(timeSignature: timeSignature, notes: [
 			[
@@ -1425,17 +1452,22 @@ import Testing
 		])
 		let newClef: Clef = .alto
 		try testMeasure.changeClef(.alto, at: 2)
-		(0 ..< 2).forEach { index in
-			#expect(throws: MeasureError.noClefSpecified) {
-				_ = try testMeasure.clef(at: index, inSet: 0)
-			}
+		#expect(throws: MeasureError.noClefSpecified) {
+			_ = try testMeasure.clef(at: 0, inSet: 0)
+		}
+		#expect(throws: MeasureError.noClefSpecified) {
+			_ = try testMeasure.clef(at: 1, inSet: 0)
 		}
 		(2 ..< testMeasure.noteCount[0]).forEach {
-			#expect(try testMeasure.clef(at: $0, inSet: 0) == newClef)
+			do {
+				#expect(try testMeasure.clef(at: $0, inSet: 0) == newClef)
+			} catch {
+				Issue.record("Should not have thrown")
+			}
 		}
 	}
 
-	func testClefsInvalidNoteIndex() async throws {
+	@Test func clefsInvalidNoteIndex() async throws {
         let note = Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1))
 		let testMeasure = Measure(timeSignature: timeSignature, notes: [
 			[
@@ -1447,7 +1479,7 @@ import Testing
 		}
 	}
 
-	func testClefsInvalidSetIndex() async throws {
+	@Test func clefsInvalidSetIndex() async throws {
         let note = Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1))
 		let testMeasure = Measure(timeSignature: timeSignature, notes: [
 			[
@@ -1463,7 +1495,7 @@ import Testing
 
 	// MARK: Failures
 
-	func testChangeClefInvalidNoteIndex() async throws {
+	@Test func changeClefInvalidNoteIndex() async throws {
         let note = Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1))
 		var measure = Measure(timeSignature: timeSignature, notes: [
 			[
@@ -1478,7 +1510,7 @@ import Testing
 		#expect(measure.clefs == [:])
 	}
 
-	func testChangeClefInvalidSetIndex() async throws {
+	@Test func changeClefInvalidSetIndex() async throws {
         let note = Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1))
 		var measure = Measure(timeSignature: timeSignature, notes: [
 			[
@@ -1495,7 +1527,7 @@ import Testing
 
 	// MARK: Successes
 
-	func testChangeClefAtBeginningNoOthers() async throws {
+	@Test func changeClefAtBeginningNoOthers() async throws {
         let eighth = Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1))
         let quarter = Note(noteDuration: .sixteenth, pitch: SpelledPitch(.c, .octave1))
 		var measure = Measure(timeSignature: timeSignature, notes: [
@@ -1513,7 +1545,7 @@ import Testing
 		#expect(measure.originalClef == nil)
 	}
 
-	func testChangeClefAtBeginningNoOthersSecondSet() async throws {
+	@Test func changeClefAtBeginningNoOthersSecondSet() async throws {
         let eighth = Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1))
         let quarter = Note(noteDuration: .sixteenth, pitch: SpelledPitch(.c, .octave1))
 		var measure = Measure(timeSignature: timeSignature, notes: [
@@ -1531,7 +1563,7 @@ import Testing
 		#expect(measure.originalClef == nil)
 	}
 
-	func testChangeClefAtBeginningAlreadyThere() async throws {
+	@Test func changeClefAtBeginningAlreadyThere() async throws {
         let eighth = Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1))
         let quarter = Note(noteDuration: .sixteenth, pitch: SpelledPitch(.c, .octave1))
 		var measure = Measure(timeSignature: timeSignature, notes: [
@@ -1550,7 +1582,7 @@ import Testing
 		#expect(measure.originalClef == nil)
 	}
 
-	func testChangeClefInMiddleNoOthers() async throws {
+	@Test func changeClefInMiddleNoOthers() async throws {
         let eighth = Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1))
         let quarter = Note(noteDuration: .sixteenth, pitch: SpelledPitch(.c, .octave1))
 		var measure = Measure(timeSignature: timeSignature, notes: [
@@ -1568,7 +1600,7 @@ import Testing
 		#expect(measure.originalClef == nil)
 	}
 
-	func testChangeClefInMiddleHasBeginning() async throws {
+	@Test func changeClefInMiddleHasBeginning() async throws {
         let eighth = Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1))
         let quarter = Note(noteDuration: .sixteenth, pitch: SpelledPitch(.c, .octave1))
 		var measure = Measure(timeSignature: timeSignature, notes: [
@@ -1586,7 +1618,7 @@ import Testing
 		#expect(measure.originalClef == nil)
 	}
 
-	func testChangeClefInMiddleHasEnd() async throws {
+	@Test func changeClefInMiddleHasEnd() async throws {
         let eighth = Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1))
         let quarter = Note(noteDuration: .sixteenth, pitch: SpelledPitch(.c, .octave1))
 		var measure = Measure(timeSignature: timeSignature, notes: [
@@ -1605,7 +1637,7 @@ import Testing
 		#expect(measure.originalClef == nil)
 	}
 
-	func testChangeClefInMiddleHasBeginningAndEnd() async throws {
+	@Test func changeClefInMiddleHasBeginningAndEnd() async throws {
         let eighth = Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1))
         let quarter = Note(noteDuration: .sixteenth, pitch: SpelledPitch(.c, .octave1))
 		var measure = Measure(timeSignature: timeSignature, notes: [
@@ -1625,7 +1657,7 @@ import Testing
 		print(measure.debugDescription)
 	}
 
-	func testChangeClefWithinTuplet() async throws {
+	@Test func changeClefWithinTuplet() async throws {
 		let quarter = Note(restDuration: .quarter)
         let eighth = Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1))
 		let tuplet = try Tuplet(3, .eighth, notes: [eighth, eighth, eighth])
@@ -1644,7 +1676,7 @@ import Testing
 
 	// MARK: Return False
 
-	func testChangeFirstClefIfNeededWhenNotEmpty() async throws {
+	@Test func changeFirstClefIfNeededWhenNotEmpty() async throws {
 		// Setup
         let eighth = Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1))
         let quarter = Note(noteDuration: .sixteenth, pitch: SpelledPitch(.c, .octave1))
@@ -1667,7 +1699,7 @@ import Testing
 
 	// MARK: Return True
 
-	func testChangeFirstClefIfNeededWhenEmtpy() async throws {
+	@Test func changeFirstClefIfNeededWhenEmtpy() async throws {
 		// Setup
         let eighth = Note(noteDuration: .eighth, pitch: SpelledPitch(.c, .octave1))
         let quarter = Note(noteDuration: .sixteenth, pitch: SpelledPitch(.c, .octave1))
@@ -1688,7 +1720,7 @@ import Testing
 
 	// MARK: - Collection Conformance
 
-	func testMapEmpty() async throws {
+	@Test func mapEmpty() async throws {
 		let mappedMeasureSlices = measure.compactMap { $0 }
 		let expectedMeasureSlices: [MeasureSlice] = []
 		#expect(mappedMeasureSlices.isEmpty)
@@ -1700,7 +1732,7 @@ import Testing
 		#expect(expectedMeasureSlices.isEmpty)
 	}
 
-	func testMapSingleNoteSet() async throws {
+	@Test func mapSingleNoteSet() async throws {
 		measure.append(Note(restDuration: .quarter))
 		measure.append(Note(restDuration: .quarter))
 		measure.append(Note(restDuration: .eighth))
@@ -1744,7 +1776,7 @@ import Testing
 		#expect(repeatedCount == expectedMeasureSlices.count)
 	}
 
-	func testMapMultipleNoteSets() async throws {
+	@Test func mapMultipleNoteSets() async throws {
 		measure.append(Note(restDuration: .quarter), inSet: 0)
 		measure.append(Note(restDuration: .sixteenth), inSet: 1)
 		measure.append(Note(restDuration: .quarter), inSet: 0)
@@ -1827,7 +1859,7 @@ import Testing
 		#expect(repeatedCount == expectedMeasureSlices.count)
 	}
 
-	func testReversed() async throws {
+	@Test func reversed() async throws {
 		measure.append(Note(restDuration: .whole), inSet: 0)
 		measure.append(Note(restDuration: .thirtySecond), inSet: 1)
 		measure.append(Note(restDuration: .quarter), inSet: 0)
@@ -1891,7 +1923,7 @@ import Testing
 		#expect(repeatedCount == expectedMeasureSlices.count)
 	}
 
-	func testIterator() async throws {
+	@Test func iterator() async throws {
 		measure.append(Note(restDuration: .whole), inSet: 0)
 		measure.append(Note(restDuration: .thirtySecond), inSet: 1)
 		measure.append(Note(restDuration: .quarter), inSet: 0)

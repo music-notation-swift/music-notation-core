@@ -99,7 +99,7 @@ import Testing
 		#expect(try negativeClef.pitch(at: StaffLocation(.line, -2)) == SpelledPitch(.b, .octave2))
 	}
 
-	@Test func testEqualityFailStandard() async throws {
+	@Test func equalityFailStandard() async throws {
 		#expect(Clef.treble != Clef.bass)
 	}
 

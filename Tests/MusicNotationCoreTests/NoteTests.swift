@@ -20,14 +20,14 @@ import Testing
 
 	// MARK: Failures
 
-	func testModifyTieBeginAndEndTryBegin() async throws {
+	@Test func modifyTieBeginAndEndTryBegin() async throws {
 		note.tie = .beginAndEnd
 		#expect(throws: NoteError.invalidRequestedTieState) {
 			try note.modifyTie(.begin)
 		}
 	}
 
-	func testModifyTieBeginAndEndTryEnd() async throws {
+	@Test func modifyTieBeginAndEndTryEnd() async throws {
 		note.tie = .beginAndEnd
 		#expect(throws: NoteError.invalidRequestedTieState) {
 			try note.modifyTie(.end)
@@ -36,49 +36,49 @@ import Testing
 
 	// MARK: Successes
 
-	func testModifyTieNilTryBegin() async throws {
+	@Test func modifyTieNilTryBegin() async throws {
 		note.tie = nil
 		try note.modifyTie(.begin)
 		#expect(note.tie == .begin)
 	}
 
-	func testModifyTieNilTryEnd() async throws {
+	@Test func modifyTieNilTryEnd() async throws {
 		note.tie = nil
 		try note.modifyTie(.end)
 		#expect(note.tie == .end)
 	}
 
-	func testModifyTieNilTryBeginAndEnd() async throws {
+	@Test func modifyTieNilTryBeginAndEnd() async throws {
 		note.tie = nil
 		try note.modifyTie(.beginAndEnd)
 		#expect(note.tie == .beginAndEnd)
 	}
 
-	func testModifyTieBeginTryEnd() async throws {
+	@Test func modifyTieBeginTryEnd() async throws {
 		note.tie = .begin
 		try note.modifyTie(.end)
 		#expect(note.tie == .beginAndEnd)
 	}
 
-	func testModifyTieEndTryBegin() async throws {
+	@Test func modifyTieEndTryBegin() async throws {
 		note.tie = .end
 		try note.modifyTie(.begin)
 		#expect(note.tie == .beginAndEnd)
 	}
 
-	func testModifyTieBeginTryBegin() async throws {
+	@Test func modifyTieBeginTryBegin() async throws {
 		note.tie = .begin
 		try note.modifyTie(.begin)
 		#expect(note.tie == .begin)
 	}
 
-	func testModifyTieBeginAndEndTryBeginAndEnd() async throws {
+	@Test func modifyTieBeginAndEndTryBeginAndEnd() async throws {
 		note.tie = .end
 		try note.modifyTie(.end)
 		#expect(note.tie == .end)
 	}
 
-	func testModifyTieEndTryEnd() async throws {
+	@Test func modifyTieEndTryEnd() async throws {
 		note.tie = .beginAndEnd
 		try note.modifyTie(.beginAndEnd)
 		#expect(note.tie == .beginAndEnd)
@@ -88,7 +88,7 @@ import Testing
 
 	// MARK: Failures
 
-	func testRemoveTieNilTryBeginAndEnd() async throws {
+	@Test func removeTieNilTryBeginAndEnd() async throws {
 		note.tie = nil
 
 		#expect(throws: NoteError.invalidRequestedTieState) {
@@ -96,7 +96,7 @@ import Testing
 		}
 	}
 
-	func testRemoveTieEndTryBegin() async throws {
+	@Test func removeTieEndTryBegin() async throws {
 		// Requested state doesn't match
 		note.tie = .end
 		#expect(throws: NoteError.invalidRequestedTieState) {
@@ -104,7 +104,7 @@ import Testing
 		}
 	}
 
-	func testRemoveTieBeginTryEnd() async throws {
+	@Test func removeTieBeginTryEnd() async throws {
 		// Requested state doesn't match
 		note.tie = .begin
 		#expect(throws: NoteError.invalidRequestedTieState) {
@@ -114,37 +114,37 @@ import Testing
 
 	// MARK: Successes
 
-	func testRemoveTieBegin() async throws {
+	@Test func removeTieBegin() async throws {
 		note.tie = .begin
 		try note.removeTie(.begin)
 		#expect(note.tie == nil)
 	}
 
-	func testRemoveTieEnd() async throws {
+	@Test func removeTieEnd() async throws {
 		note.tie = .end
 		try note.removeTie(.end)
 		#expect(note.tie == nil)
 	}
 
-	func testRemoveTieBeginAndEndTryBegin() async throws {
+	@Test func removeTieBeginAndEndTryBegin() async throws {
 		note.tie = .beginAndEnd
 		try note.removeTie(.begin)
 		#expect(note.tie == .end)
 	}
 
-	func testRemoveTieBeginAndEndTryEnd() async throws {
+	@Test func removeTieBeginAndEndTryEnd() async throws {
 		note.tie = .beginAndEnd
 		try note.removeTie(.end)
 		#expect(note.tie == .begin)
 	}
 
-	func testRemoveTieNilTryBegin() async throws {
+	@Test func removeTieNilTryBegin() async throws {
 		note.tie = nil
 		try note.removeTie(.begin)
 		#expect(note.tie == nil)
 	}
 
-	func testRemoveTieNilTryEnd() async throws {
+	@Test func removeTieNilTryEnd() async throws {
 		note.tie = nil
 		try note.removeTie(.end)
 		#expect(note.tie == nil)

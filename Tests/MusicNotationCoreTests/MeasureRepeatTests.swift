@@ -10,7 +10,7 @@
 import Testing
 
 @Suite final class MeasureRepeatTests {
-	static let timeSignature = TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120)
+	static let timeSignature = TimeSignature(numerator: 4, denominator: 4, tempo: 120)
 	static let key = Key(noteLetter: .c)
     static let note1 = Note(.eighth, pitch: SpelledPitch(.c, .octave1))
     static let note2 = Note(.quarter, pitch: SpelledPitch(.d, .octave1))

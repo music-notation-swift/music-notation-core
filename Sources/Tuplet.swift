@@ -74,10 +74,13 @@ public struct Tuplet: NoteCollection {
 	///    Tuplet(35, .sixteenth, inSpaceOf: 25, notes: [sixteenth1, ... sixteenth35])
 	///    ````
 	///
-	public init(_ count: Int, _ baseNoteDuration: NoteDuration, inSpaceOf baseCount: Int? = nil, notes: [NoteCollection]) throws {
-		guard count > 1 else {
-			throw TupletError.countMustBeLargerThan1
-		}
+	public init(
+        _ count: Int,
+        _ baseNoteDuration: NoteDuration,
+        inSpaceOf baseCount: Int? = nil,
+        notes: [NoteCollection]
+    ) throws {
+        guard count > 1 else { throw TupletError.countMustBeLargerThan1 }
 		groupingOrder = count
 		let fullTupletTicks = Double(count) * baseNoteDuration.ticks
 		let notesTicks = notes.reduce(0) { prev, noteCollection in
@@ -105,10 +108,9 @@ public struct Tuplet: NoteCollection {
 	// MARK: - Public Methods
 
 	public func note(at index: Int) throws -> Note {
-		guard flatIndexes.isValidIndex(index) else {
-			throw TupletError.invalidIndex
-		}
-		let fullIndexes = flatIndexes[index]
+		guard flatIndexes.isValidIndex(index) else { throw TupletError.invalidIndex }
+
+        let fullIndexes = flatIndexes[index]
 		var finalTuplet: Tuplet? = self
 		guard fullIndexes.count != 0 else {
 			assertionFailure("one of the index arrays was empty")
@@ -126,9 +128,7 @@ public struct Tuplet: NoteCollection {
 			}
 		}
 
-		guard fullIndexes.count != 1 else {
-			return try note(from: fullIndexes)
-		}
+		guard fullIndexes.count != 1 else { return try note(from: fullIndexes) }
 		for tupletIndex in 0 ..< fullIndexes.lastIndex {
 			finalTuplet = finalTuplet?.notes[fullIndexes[tupletIndex]] as? Tuplet
 		}

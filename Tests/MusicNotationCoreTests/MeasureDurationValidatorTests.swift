@@ -10,9 +10,9 @@
 import Testing
 
 @Suite final class MeasureDurationValidatorTests {
-	static let standardTimeSignature = TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120)
-	static let oddTimeSignature = TimeSignature(topNumber: 11, bottomNumber: 16, tempo: 86)
-	static let irrationalTimeSignature = TimeSignature(topNumber: 3, bottomNumber: 6, tempo: 120)
+    static let standardTimeSignature = TimeSignature(numerator: 4, denominator: 4, tempo: 120)
+	static let oddTimeSignature = TimeSignature(numerator: 11, denominator: 16, tempo: 86)
+	static let irrationalTimeSignature = TimeSignature(numerator: 3, denominator: 6, tempo: 120)
 
 	var fullMeasure: Measure!
 	var notFullMeasure: Measure!
@@ -326,7 +326,7 @@ import Testing
 	// MARK: Failures
 
 	@Test func baseNoteDurationForTooLargeBottomNumber() async throws {
-		let timeSignature = TimeSignature(topNumber: 4, bottomNumber: 256, tempo: 120)
+		let timeSignature = TimeSignature(numerator: 4, denominator: 256, tempo: 120)
 		let measure = Measure(timeSignature: timeSignature, key: Key(noteLetter: .c))
 		#expect(throws: MeasureDurationValidatorError.invalidBottomNumber) {
 			_ = try MeasureDurationValidator.baseNoteDuration(from: measure)

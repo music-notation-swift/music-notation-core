@@ -910,11 +910,7 @@ import Testing
 				.quarter,
 				notes: [quarterNote1, nestedTuplet, quarterNote1, quarterNote1, quarterNote1, quarterNote1]
 			)
-			let replacementTuplet = try Tuplet(
-				3,
-				.quarter,
-				notes: [quarterNote1, quarterNote1, quarterNote1]
-			)
+			let replacementTuplet = try Tuplet(3, .quarter, notes: [quarterNote1, quarterNote1, quarterNote1])
 			try tuplet.replaceNotes(in: 2 ... 5, with: replacementTuplet)
 		}
 	}
@@ -943,23 +939,25 @@ import Testing
 	}
 
 	@Test func replaceNotesWithFirstNoteBeginAndEndTieWithNoteSameDuration() async throws {
-		#expect(throws: TupletError.invalidTieState) {
-			var beginAndEnd = eighthNote!
-			beginAndEnd.tie = .beginAndEnd
-			var end = eighthNote!
-			end.tie = .end
-			var tuplet = try Tuplet(3, .eighth, notes: [beginAndEnd, end, eighthNote])
+        var beginAndEnd = eighthNote!
+        beginAndEnd.tie = .beginAndEnd
+        var end = eighthNote!
+        end.tie = .end
+        var tuplet = try Tuplet(3, .eighth, notes: [beginAndEnd, end, eighthNote])
+
+        #expect(throws: TupletError.invalidTieState) {
 			try tuplet.replaceNotes(in: 0 ... 1, with: quarterNote1)
 		}
 	}
 
 	@Test func replaceNotesWithLastNoteBeginAndEndTieWithNoteSameDuration() async throws {
-		#expect(throws: TupletError.invalidTieState) {
-			var beginAndEnd = eighthNote!
-			beginAndEnd.tie = .beginAndEnd
-			var begin = eighthNote!
-			begin.tie = .begin
-			var tuplet = try Tuplet(3, .eighth, notes: [eighthNote, begin, beginAndEnd])
+        var beginAndEnd = eighthNote!
+        beginAndEnd.tie = .beginAndEnd
+        var begin = eighthNote!
+        begin.tie = .begin
+        var tuplet = try Tuplet(3, .eighth, notes: [eighthNote, begin, beginAndEnd])
+
+        #expect(throws: TupletError.invalidTieState) {
 			try tuplet.replaceNotes(in: 1 ... 2, with: quarterNote1)
 		}
 	}

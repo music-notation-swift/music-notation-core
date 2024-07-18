@@ -29,7 +29,7 @@ import Testing
 
 	init() {
 		staff = Staff(clef: Constant.standardClef, instrument: .guitar6)
-		let timeSignature = TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120)
+		let timeSignature = TimeSignature(numerator: 4, denominator: 4, tempo: 120)
 		let key = Key(noteLetter: .c)
 		let note = Note(.sixteenth, pitch: SpelledPitch(.c, .octave1))
 		let note2 = Note(.sixteenth, pitch: SpelledPitch(.a, .octave1))
@@ -97,7 +97,7 @@ import Testing
 
 	@Test func insertMeasureInvalidIndex() async throws {
 		let measure = Measure(
-			timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
+			timeSignature: TimeSignature(numerator: 4, denominator: 4, tempo: 120),
 			key: Key(noteLetter: .c)
 		)
 
@@ -108,7 +108,7 @@ import Testing
 
 	@Test func insertMeasureInRepeatedMeasures() async throws {
 		let measure = Measure(
-			timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
+			timeSignature: TimeSignature(numerator: 4, denominator: 4, tempo: 120),
 			key: Key(noteLetter: .c)
 		)
 
@@ -125,7 +125,7 @@ import Testing
 
 	@Test func insertMeasureNoRepeat() async throws {
 		let measure = Measure(
-			timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
+			timeSignature: TimeSignature(numerator: 4, denominator: 4, tempo: 120),
 			key: Key(noteLetter: .c)
 		)
 
@@ -142,7 +142,7 @@ import Testing
 
 	@Test func insertMeasureNoRepeatAtEnd() async throws {
 		let measure = Measure(
-			timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
+			timeSignature: TimeSignature(numerator: 4, denominator: 4, tempo: 120),
 			key: Key(noteLetter: .c)
 		)
 
@@ -157,7 +157,7 @@ import Testing
 
 	@Test func insertMeasureInRepeat() async throws {
 		var measure = Measure(
-			timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
+			timeSignature: TimeSignature(numerator: 4, denominator: 4, tempo: 120),
 			key: Key(noteLetter: .c)
 		)
 		measure.lastClef = staff.clef
@@ -171,7 +171,7 @@ import Testing
 
 	@Test func insertMeasureInRepeatAtEnd() async throws {
 		var measure = Measure(
-			timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
+			timeSignature: TimeSignature(numerator: 4, denominator: 4, tempo: 120),
 			key: Key(noteLetter: .c)
 		)
 		measure.lastClef = staff.clef
@@ -185,7 +185,7 @@ import Testing
 
 	@Test func insertMeasureBeforeRepeat() async throws {
 		let measure = Measure(
-			timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
+			timeSignature: TimeSignature(numerator: 4, denominator: 4, tempo: 120),
 			key: Key(noteLetter: .c)
 		)
 
@@ -199,7 +199,7 @@ import Testing
 
 	@Test func insertMeasureNoRepeatWithWrongFlag() async throws {
 		let measure = Measure(
-			timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
+			timeSignature: TimeSignature(numerator: 4, denominator: 4, tempo: 120),
 			key: Key(noteLetter: .c)
 		)
 
@@ -215,7 +215,7 @@ import Testing
 
 	@Test func insertMeasureInMeasureRepeatWithWrongFlag() async throws {
 		var measure = Measure(
-			timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
+			timeSignature: TimeSignature(numerator: 4, denominator: 4, tempo: 120),
 			key: Key(noteLetter: .c)
 		)
 		measure.lastClef = staff.clef
@@ -832,7 +832,7 @@ import Testing
         let sixteenth = Note(.sixteenth, pitch: SpelledPitch(.c, .octave1))
         let quarter = Note(.quarter, pitch: SpelledPitch(.c, .octave1))
         staff.appendMeasure(
-            Measure(timeSignature: TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120),
+            Measure(timeSignature: TimeSignature(numerator: 4, denominator: 4, tempo: 120),
                     notes: [
 						[sixteenth, sixteenth, sixteenth, sixteenth, sixteenth, sixteenth, sixteenth, sixteenth],
                         [quarter, quarter, quarter, quarter]

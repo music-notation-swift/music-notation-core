@@ -15,7 +15,7 @@ import Testing
 
 	init() {
 		// Put setup code here. This method is called before the invocation of each test method in the class.
-		timeSignature = TimeSignature(topNumber: 4, bottomNumber: 4, tempo: 120)
+        timeSignature = TimeSignature(numerator: 4, denominator: 4, tempo: 120)
 		measure = Measure(
 			timeSignature: timeSignature,
             key: Key(noteLetter: .c)

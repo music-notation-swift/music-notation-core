@@ -62,7 +62,7 @@ public enum MeasureDurationValidator {
 		} catch {
 			return [.invalid]
 		}
-		let fullMeasureTicksBudget = Double(measure.timeSignature.topNumber) * baseDuration.ticks
+		let fullMeasureTicksBudget = Double(measure.timeSignature.numerator) * baseDuration.ticks
 
 		// Validate each set separately
 		return measure.notes.enumerated().map { setIndex, noteCollection in
@@ -104,7 +104,7 @@ public enum MeasureDurationValidator {
 			// TODO: Write TimeSignature validation, so this isn't possible
 			return 0
 		}
-		let fullMeasureTicksBudget = Double(measure.timeSignature.topNumber) * baseDuration.ticks
+		let fullMeasureTicksBudget = Double(measure.timeSignature.numerator) * baseDuration.ticks
 		let alreadyFilledTicks = measure.notes[setIndex].reduce(0.0) { prev, currentCollection in
 			prev + currentCollection.ticks
 		}
@@ -126,7 +126,7 @@ public enum MeasureDurationValidator {
 	///		- MeasureDurationValidatorError.invalidBottomNumber
 	///
 	internal static func baseNoteDuration(from measure: ImmutableMeasure) throws -> NoteDuration {
-		let bottomNumber = measure.timeSignature.bottomNumber
+		let bottomNumber = measure.timeSignature.denominator
 
 		// TODO: Replace `pow`, `floor`, and `log`
 		// https://github.com/drumnkyle/music-notation-core/issues/146

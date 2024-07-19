@@ -21,8 +21,10 @@ public enum Octave: Int, Sendable {
 }
 
 public enum Striking: Sendable {
-	case left, up
-	case right, down
+	case left
+    case up
+	case right
+    case down
 }
 
 public enum Accidental: Sendable {
@@ -55,8 +57,10 @@ public enum NoteLetter: Int, Sendable {
 	case b
 }
 
+/// Defines the type of instrument.
 public enum Instrument: Sendable {
-	case guitar6
+    case pitched
+    case tab(strings: Int)
 	case drums
 }
 

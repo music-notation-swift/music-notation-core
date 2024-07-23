@@ -16,30 +16,55 @@
 /// modern genres like electronic dance music, tempo will typically simply be stated in BPM.
 ///
 public struct Tempo: Sendable {
-    public enum TempoType {
+    public enum TempoType: Sendable {
+        case undefined
         case pause
-        case fixed
+        case linear
         case ramp
     }
 
-    public let value: Double
+    public enum NoteUnit: Sendable, Int {
+        case eight = 1
+        case quarter
+        case dottedQuarter
+        case half
+        case dottedHalf
+    }
+
+    public let type: TempoType
+    public let position: Double
+    public let value: Int
+    public let unit: NoteUnit
     public let text: String?
 
-    public init(_ tempoValue: Double, text: String? = nil) {
-        self.value = tempoValue
+    public init(
+        type: TempoType,
+        position: Double,
+        value: Int,
+        unit: NoteUnit,
+        text: String? = nil
+    ) {
+        self.type = type
+        self.position = position
+        self.value = value
+        self.unit = unit
         self.text = text
     }
 }
 
 extension Tempo: Equatable {
 	public static func == (lhs: Tempo, rhs: Tempo) -> Bool {
-		guard lhs.value == rhs.value, lhs.text == rhs.text else { return false }
+		guard lhs.type == rhs.type,
+              lhs.position == rhs.position,
+              lhs.value == rhs.value,
+              lhs.unit == rhs.unit,
+              lhs.text == rhs.text else { return false }
         return true
 	}
 }
 
 extension Tempo: CustomDebugStringConvertible {
 	public var debugDescription: String {
-		"\(value) \"(text)\")"
+        "type: \(type), position: \(position), value: \(value), unit: \(unit), label: \"(text)\")"
 	}
 }

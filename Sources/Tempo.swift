@@ -23,7 +23,7 @@ public struct Tempo: Sendable {
         case ramp
     }
 
-    public enum NoteUnit: Sendable, Int {
+    public enum NoteUnit: Int, Sendable {
         case eight = 1
         case quarter
         case dottedQuarter
@@ -62,9 +62,14 @@ extension Tempo: Equatable {
         return true
 	}
 }
+// Mark: - Debug
 
 extension Tempo: CustomDebugStringConvertible {
 	public var debugDescription: String {
         "type: \(type), position: \(position), value: \(value), unit: \(unit), label: \"(text)\")"
 	}
+}
+
+public enum TempoError: Error {
+    case invalidTempoIndex
 }

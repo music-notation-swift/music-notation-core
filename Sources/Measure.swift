@@ -929,7 +929,7 @@ public struct Measure: ImmutableMeasure, Equatable, RandomAccessCollection {
 	}
 }
 
-// Debug extensions
+// MARK: - Debug extensions
 extension Measure: CustomDebugStringConvertible {
 	public var debugDescription: String {
 		let notesString = notes.map { "\($0)" }.joined(separator: ",")

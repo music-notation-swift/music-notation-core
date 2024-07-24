@@ -20,9 +20,14 @@ public struct Score: RandomAccessCollection {
 	public typealias Iterator = IndexingIterator<[StavesHolder]>
 	public func makeIterator() -> Iterator 					{ stavesHolders.makeIterator() }
 
-	// MARK: - Main Properties
+    // MARK: - Main Properties
 
-	internal private(set) var stavesHolders: [StavesHolder] = []
+    public var tempoMap: [Tempo] = []
+    public var stylesheet = Stylesheet.defaultStylesheet()
+
+    // MARK: - Private Properties
+
+    internal private(set) var stavesHolders: [StavesHolder] = []
 }
 
 extension Score: CustomDebugStringConvertible {

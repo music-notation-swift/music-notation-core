@@ -66,7 +66,11 @@ extension Tempo: Equatable {
 
 extension Tempo: CustomDebugStringConvertible {
 	public var debugDescription: String {
-        "type: \(type), position: \(position), value: \(value), unit: \(unit), label: \"(text)\")"
+        if let text {
+            return "type: \(type), position: \(position), value: \(value), unit: \(unit), text: \(text)"
+        } else {
+            return "type: \(type), position: \(position), value: \(value), unit: \(unit)"
+        }
 	}
 }
 

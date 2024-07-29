@@ -1,7 +1,9 @@
 # Music Notation Core
 ==============
 
-![Swift](https://img.shields.io/badge/%20swift%206.0-orange.svg)
+![Swift 6.0](https://img.shields.io/badge/Swift-6.0-orange.svg)
+[![Swift Package Manager](https://img.shields.io/badge/SPM-compatible-brightgreen.svg)](https://github.com/apple/swift-package-manager)
+![Platform](https://img.shields.io/badge/platforms-macOS%20%7C%20iOS%20%7C%20tvOS-lightgrey.svg)
 
 This is a **work in progress**, Cross-Platform Music Notation API written in Swift. It is written so
 that it can be used in most any operating system, such as iOS, macOS, Android, Windows, and Linux
@@ -30,7 +32,25 @@ developed that will be able to make it so simple that a musician who is not nece
 would be able to create sheet music or tablature. There are also some open file formats that may be
 looked into, such as MusicXML (http://www.musicxml.com).
 
-## Including the library in your project
+## Contents
+
+- [Code Requirements](#code-requirements)
+- [Installation](#installation)
+- [Class Diagram](#class-diagram)
+- [Duration Calculator](#duration-calculator)
+- [Different Notes at Same Time](#different-notes-at-same-ime)
+- [Indexing Methodology](#indexing-methodology)
+- [Tuplet Design](#tuplet-design)
+- [License](#license)
+- [Contributing](#contributing)
+
+## Code Requirements
+
+- iOS 18 / macOS 15
+- Xcode 16
+- Swift 6
+
+## Installation
 
 ### Swift Package Manager
 

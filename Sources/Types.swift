@@ -91,3 +91,19 @@ public enum KeyType: Sendable {
 	case major
 	case minor
 }
+
+public struct Bend: Sendable {
+    let interval: Int
+    let duration: Int
+}
+
+public enum BendType: Sendable {
+    case bend(bendValue: Bend)
+    case release(releaseValue: Bend)
+    case bendAndRelease(bendValue: Bend, holdDuration: Int, releaseValue: Bend)
+    case hold
+    case prebend(interval: Int)
+    case prebendAndBend(interval: Int, bendValue: Bend)
+    case prebendAndRelease(interval: Int, releaseValue: Bend)
+}
+
